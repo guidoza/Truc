@@ -637,19 +637,26 @@ public class MainActivity extends Activity
 
     // Start the gameplay phase of the game.
     void startGame(boolean multiplayer) {
-        Button botoncambiarTurno = (Button) findViewById(R.id.botoncambiarturno);
 
-        if(!mMyId.equals(turno))botoncambiarTurno.setClickable(false);
-        Log.d("RRRRR",""+mMyId.equals(turno));
+        TextView tvJugador = (TextView) findViewById(R.id.tvbajo);
+        TextView tvJugador2 = (TextView) findViewById(R.id.tvbajo2);
+
+        if(mMyId.equals(idJugador1))tvJugador.setText(idJugador1);
+        if(mMyId.equals(idJugador2))tvJugador2.setText(idJugador2);
+
+        Button botoncambiarTurno = (Button) findViewById(R.id.botoncambiarturno);
+        Button botoncambiarTurno2 = (Button) findViewById(R.id.botoncambiarturno2);
+        botoncambiarTurno.setVisibility(View.INVISIBLE);
+        botoncambiarTurno2.setVisibility(View.INVISIBLE);
+        if(mMyId.equals(idJugador1) && mMyId.equals(turno))botoncambiarTurno.setVisibility(View.VISIBLE);
+        if(mMyId.equals(idJugador2) && mMyId.equals(turno))botoncambiarTurno2.setVisibility(View.VISIBLE);
+
 
         mMultiplayer = multiplayer;
         updateScoreDisplay();
         broadcastScore(false);
-        switchToScreen(R.id.screen_game);
-
-        TextView tvJugador = (TextView) findViewById(R.id.tvbajo);
-        tvJugador.setVisibility(View.VISIBLE);
-        tvJugador.setText(mMyId);
+        if(mMyId.equals(idJugador1))switchToScreen(R.id.screen_game2);
+        if(mMyId.equals(idJugador2))switchToScreen(R.id.screen_game2);
 
 
         // run the gameTick() method every second to update the game.
