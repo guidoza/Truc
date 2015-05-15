@@ -54,7 +54,7 @@
         <TextView style="@style/Blurb" android:text="@string/please_wait" />
     </LinearLayout>
 
-    <!-- GAMEPLAY SCREEN -->
+    <!-- GAMEPLAY SCREEN J1-->
     <LinearLayout android:id="@+id/screen_game" style="@style/LLScreen">
         <Button
             android:layout_width="wrap_content"
@@ -66,6 +66,21 @@
             android:layout_height="wrap_content"
             android:layout_gravity="top"
             android:id="@+id/tvbajo"
+            />
+
+    </LinearLayout>
+    <!-- GAMEPLAY SCREEN J2-->
+    <LinearLayout android:id="@+id/screen_game2" style="@style/LLScreen">
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Cambiar turno"
+            android:id="@+id/botoncambiarturno2"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top"
+            android:id="@+id/tvbajo2"
             />
 
     </LinearLayout>
