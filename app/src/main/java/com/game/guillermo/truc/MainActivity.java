@@ -23,6 +23,7 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -44,6 +45,7 @@ import com.google.android.gms.plus.Plus;
 import com.google.example.games.basegameutils.BaseGameUtils;
 
 
+import java.io.BufferedReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -51,25 +53,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-/**
- * Button Clicker 2000. A minimalistic game showing the multiplayer features of
- * the Google Play game services API. The objective of this game is clicking a
- * button. Whoever clicks the button the most times within a 20 second interval
- * wins. It's that simple. This game can be played with 2, 3 or 4 players. The
- * code is organized in sections in order to make understanding as clear as
- * possible. We start with the integration section where we show how the game
- * is integrated with the Google Play game services API, then move on to
- * game-specific UI and logic.
- *
- * INSTRUCTIONS: To run this sample, please set up
- * a project in the Developer Console. Then, place your app ID on
- * res/values/ids.xml. Also, change the package name to the package name you
- * used to create the client ID in Developer Console. Make sure you sign the
- * APK with the certificate whose fingerprint you entered in Developer Console
- * when creating your Client Id.
- *
- * @author Bruno Oliveira (btco), 2013-04-26
- */
+
 public class MainActivity extends Activity
     implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,
     View.OnClickListener, RealTimeMessageReceivedListener,
@@ -87,58 +71,61 @@ public class MainActivity extends Activity
     final static int RC_INVITATION_INBOX = 10001;
     final static int RC_WAITING_ROOM = 10002;
 
-  // Request code used to invoke sign in user interactions.
-  private static final int RC_SIGN_IN = 9001;
+    // Request code used to invoke sign in user interactions.
+    private static final int RC_SIGN_IN = 9001;
 
-  // Client used to interact with Google APIs.
-  private GoogleApiClient mGoogleApiClient;
+    // Client used to interact with Google APIs.
+    private GoogleApiClient mGoogleApiClient;
 
-  // Are we currently resolving a connection failure?
-  private boolean mResolvingConnectionFailure = false;
+    // Are we currently resolving a connection failure?
+    private boolean mResolvingConnectionFailure = false;
 
-  // Has the user clicked the sign-in button?
-  private boolean mSignInClicked = false;
+    // Has the user clicked the sign-in button?
+    private boolean mSignInClicked = false;
 
-  // Set to true to automatically start the sign in flow when the Activity starts.
-  // Set to false to require the user to click the button in order to sign in.
-  private boolean mAutoStartSignInFlow = true;
+    // Set to true to automatically start the sign in flow when the Activity starts.
+    // Set to false to require the user to click the button in order to sign in.
+    private boolean mAutoStartSignInFlow = true;
 
-    // Room ID where the currently active game is taking place; null if we're
-    // not playing.
+    // ID de la sala activa, null si no estamos jugando
     String mRoomId = null;
 
-    // Are we playing in multiplayer mode?
+    //Estamos en multiplayer?
     boolean mMultiplayer = false;
 
-    // The participants in the currently active game
+    //Lista de participantes en el juego activo
     ArrayList<Participant> mParticipants = null;
 
-    // My participant ID in the currently active game
+    //Id de mi participante
     String mMyId = null;
 
-    // If non-null, this is the id of the invitation we received via the
-    // invitation listener
+    //Id de la invitacion que recibimos
     String mIncomingInvitationId = null;
 
-    // Message buffer for sending messages
+    //Para enviar mensajes
     byte[] mMsgBuf = new byte[2];
+
+    ArrayList<String> ArrayJugadores = null;
+    String idJugador1 = "";
+    String idJugador2 = "";
+    String turno = "";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-    // Create the Google Api Client with access to Plus and Games
-    mGoogleApiClient = new GoogleApiClient.Builder(this)
-        .addConnectionCallbacks(this)
-        .addOnConnectionFailedListener(this)
-        .addApi(Plus.API).addScope(Plus.SCOPE_PLUS_LOGIN)
-        .addApi(Games.API).addScope(Games.SCOPE_GAMES)
-        .build();
+        // Creamos el nuevo cliente de Google con acceso a Plus y Games
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+            .addConnectionCallbacks(this)
+            .addOnConnectionFailedListener(this)
+            .addApi(Plus.API).addScope(Plus.SCOPE_PLUS_LOGIN)
+            .addApi(Games.API).addScope(Games.SCOPE_GAMES)
+            .build();
 
-    // set up a click listener for everything we care about
-    for (int id : CLICKABLES) {
-      findViewById(id).setOnClickListener(this);
+        //Listener para todos los elementos
+        for (int id : CLICKABLES) {
+            findViewById(id).setOnClickListener(this);
     }
   }
 
@@ -198,9 +185,8 @@ public class MainActivity extends Activity
                 // user wants to play against a random opponent right now
                 startQuickGame();
                 break;
-            case R.id.button_click_me:
-                // (gameplay) user clicked the "click me" button
-                scoreOnePoint();
+            case R.id.botoncambiarturno:
+                //Cambiarturno
                 break;
         }
     }
@@ -240,6 +226,8 @@ public class MainActivity extends Activity
                 if (responseCode == Activity.RESULT_OK) {
                     // ready to start playing
                     Log.d(TAG, "Starting game (waiting room returned OK).");
+                    Log.d("DDDDDD", "Starting game ");
+
                     startGame(true);
                 } else if (responseCode == GamesActivityResultCodes.RESULT_LEFT_ROOM) {
                     // player indicated that they want to leave the room
@@ -497,6 +485,10 @@ public class MainActivity extends Activity
         mRoomId = room.getRoomId();
         mParticipants = room.getParticipants();
         mMyId = room.getParticipantId(Games.Players.getCurrentPlayerId(mGoogleApiClient));
+        ArrayJugadores = room.getParticipantIds();
+        idJugador1 = ArrayJugadores.get(0);
+        idJugador2 = ArrayJugadores.get(1);
+        turno = idJugador1;
 
         // print out the list of participants (for debug purposes)
         Log.d(TAG, "Room ID: " + mRoomId);
@@ -645,12 +637,20 @@ public class MainActivity extends Activity
 
     // Start the gameplay phase of the game.
     void startGame(boolean multiplayer) {
+        Button botoncambiarTurno = (Button) findViewById(R.id.botoncambiarturno);
+
+        if(!mMyId.equals(turno))botoncambiarTurno.setClickable(false);
+        Log.d("RRRRR",""+mMyId.equals(turno));
+
         mMultiplayer = multiplayer;
         updateScoreDisplay();
         broadcastScore(false);
         switchToScreen(R.id.screen_game);
 
-        findViewById(R.id.button_click_me).setVisibility(View.VISIBLE);
+        TextView tvJugador = (TextView) findViewById(R.id.tvbajo);
+        tvJugador.setVisibility(View.VISIBLE);
+        tvJugador.setText(mMyId);
+
 
         // run the gameTick() method every second to update the game.
         final Handler h = new Handler();
@@ -671,12 +671,12 @@ public class MainActivity extends Activity
             --mSecondsLeft;
 
         // update countdown
-        ((TextView) findViewById(R.id.countdown)).setText("0:" +
-                (mSecondsLeft < 10 ? "0" : "") + String.valueOf(mSecondsLeft));
+       // ((TextView) findViewById(R.id.countdown)).setText("0:" +
+               // (mSecondsLeft < 10 ? "0" : "") + String.valueOf(mSecondsLeft));
 
         if (mSecondsLeft <= 0) {
             // finish game
-            findViewById(R.id.button_click_me).setVisibility(View.GONE);
+           // findViewById(R.id.button_click_me).setVisibility(View.GONE);
             broadcastScore(true);
         }
     }
@@ -782,7 +782,7 @@ public class MainActivity extends Activity
     final static int[] CLICKABLES = {
             R.id.button_accept_popup_invitation, R.id.button_invite_players,
             R.id.button_quick_game, R.id.button_see_invitations, R.id.button_sign_in,
-            R.id.button_sign_out, R.id.button_click_me, R.id.button_single_player,
+            R.id.button_sign_out, R.id.botoncambiarturno, R.id.button_single_player,
             R.id.button_single_player_2
     };
 
@@ -826,7 +826,7 @@ public class MainActivity extends Activity
 
     // updates the label that shows my score
     void updateScoreDisplay() {
-        ((TextView) findViewById(R.id.my_score)).setText(formatScore(mScore));
+       // ((TextView) findViewById(R.id.my_score)).setText(formatScore(mScore));
     }
 
     // formats a score as a three-digit number
@@ -839,7 +839,7 @@ public class MainActivity extends Activity
 
     // updates the screen with the scores from our peers
     void updatePeerScoresDisplay() {
-        ((TextView) findViewById(R.id.score0)).setText(formatScore(mScore) + " - Me");
+        /**((TextView) findViewById(R.id.score0)).setText(formatScore(mScore) + " - Me");
         int[] arr = {
                 R.id.score1, R.id.score2, R.id.score3
         };
@@ -861,7 +861,7 @@ public class MainActivity extends Activity
 
         for (; i < arr.length; ++i) {
             ((TextView) findViewById(arr[i])).setText("");
-        }
+        }**/
     }
 
     /*
