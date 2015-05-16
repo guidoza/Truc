@@ -25,6 +25,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -46,6 +47,7 @@ import com.google.example.games.basegameutils.BaseGameUtils;
 
 
 import java.io.BufferedReader;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -105,15 +107,16 @@ public class MainActivity extends Activity
     //Para enviar mensajes
     byte[] mMsgBuf = new byte[2];
 
-    ArrayList<String> ArrayJugadores = null;
-    String idJugador1 = "";
-    String idJugador2 = "";
-    String turno = "";
+    String idJugador1 = null;
+    String idJugador2 = null;
+    String turno = null;
+    Button botoncambiarTurno;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        botoncambiarTurno = (Button) findViewById(R.id.botoncambiarturno);
 
         // Creamos el nuevo cliente de Google con acceso a Plus y Games
         mGoogleApiClient = new GoogleApiClient.Builder(this)
@@ -138,6 +141,7 @@ public class MainActivity extends Activity
             case R.id.button_single_player_2:
                 // play a single-player game
                 resetGameVars();
+                resetTurno();
                 startGame(false);
                 break;
             case R.id.button_sign_in:
@@ -203,6 +207,7 @@ public class MainActivity extends Activity
         switchToScreen(R.id.screen_wait);
         keepScreenOn();
         resetGameVars();
+        resetTurno();
         Games.RealTimeMultiplayer.create(mGoogleApiClient, rtmConfigBuilder.build());
     }
 
@@ -227,7 +232,9 @@ public class MainActivity extends Activity
                     // ready to start playing
                     Log.d(TAG, "Starting game (waiting room returned OK).");
                     Log.d("DDDDDD", "Starting game ");
-
+                    idJugador1 = mParticipants.get(0).getParticipantId();
+                    idJugador2 = mParticipants.get(1).getParticipantId();
+                    turno = mParticipants.get(0).getParticipantId();
                     startGame(true);
                 } else if (responseCode == GamesActivityResultCodes.RESULT_LEFT_ROOM) {
                     // player indicated that they want to leave the room
@@ -291,6 +298,7 @@ public class MainActivity extends Activity
         switchToScreen(R.id.screen_wait);
         keepScreenOn();
         resetGameVars();
+        resetTurno();
         Games.RealTimeMultiplayer.create(mGoogleApiClient, rtmConfigBuilder.build());
         Log.d(TAG, "Room created, waiting for it to be ready...");
     }
@@ -322,6 +330,7 @@ public class MainActivity extends Activity
         switchToScreen(R.id.screen_wait);
         keepScreenOn();
         resetGameVars();
+        resetTurno();
         Games.RealTimeMultiplayer.join(mGoogleApiClient, roomConfigBuilder.build());
     }
 
@@ -485,11 +494,8 @@ public class MainActivity extends Activity
         mRoomId = room.getRoomId();
         mParticipants = room.getParticipants();
         mMyId = room.getParticipantId(Games.Players.getCurrentPlayerId(mGoogleApiClient));
-        ArrayJugadores = room.getParticipantIds();
-        idJugador1 = ArrayJugadores.get(0);
-        idJugador2 = ArrayJugadores.get(1);
-        turno = idJugador1;
 
+        Log.d("DDDD", "Turno para: " + turno);
         // print out the list of participants (for debug purposes)
         Log.d(TAG, "Room ID: " + mRoomId);
         Log.d(TAG, "My ID " + mMyId);
@@ -629,47 +635,62 @@ public class MainActivity extends Activity
 
     // Reset game variables in preparation for a new game.
     void resetGameVars() {
-        mSecondsLeft = GAME_DURATION;
+        botoncambiarTurno.setVisibility(View.VISIBLE);
+
+   /**     mSecondsLeft = GAME_DURATION;
         mScore = 0;
         mParticipantScore.clear();
-        mFinishedParticipants.clear();
+        mFinishedParticipants.clear();**/
     }
+    void resetTurno() {
+        turno = null;
+        idJugador1 = null;
+        idJugador2 = null;
+    }
+    void cambiarTurno(){
+        if(mMyId.equals(idJugador1) && turno.equals(idJugador1)) turno = idJugador2;
+        if(mMyId.equals(idJugador2) && turno.equals(idJugador2)) turno = idJugador1;
 
+    }
     // Start the gameplay phase of the game.
     void startGame(boolean multiplayer) {
 
-        TextView tvJugador = (TextView) findViewById(R.id.tvbajo);
-        TextView tvJugador2 = (TextView) findViewById(R.id.tvbajo2);
+        Log.d("DDDD",mParticipants.get(0).toString());
+        Log.d("DDDD",mParticipants.get(1).toString());
 
-        if(mMyId.equals(idJugador1))tvJugador.setText(idJugador1);
-        if(mMyId.equals(idJugador2))tvJugador2.setText(idJugador2);
+        TextView tvJugador1 = (TextView) findViewById(R.id.carta1);
+        TextView tvJugador2 = (TextView) findViewById(R.id.carta2);
+        TextView tvJugador3 = (TextView) findViewById(R.id.carta3);
 
-        Button botoncambiarTurno = (Button) findViewById(R.id.botoncambiarturno);
-        Button botoncambiarTurno2 = (Button) findViewById(R.id.botoncambiarturno2);
-        botoncambiarTurno.setVisibility(View.INVISIBLE);
-        botoncambiarTurno2.setVisibility(View.INVISIBLE);
-        if(mMyId.equals(idJugador1) && mMyId.equals(turno))botoncambiarTurno.setVisibility(View.VISIBLE);
-        if(mMyId.equals(idJugador2) && mMyId.equals(turno))botoncambiarTurno2.setVisibility(View.VISIBLE);
+        tvJugador1.setText(mMyId+" Carta1");
+        tvJugador2.setText(mMyId+" Carta2");
+        tvJugador3.setText(mMyId+" Carta3");
 
-
-        mMultiplayer = multiplayer;
-        updateScoreDisplay();
-        broadcastScore(false);
-        if(mMyId.equals(idJugador1))switchToScreen(R.id.screen_game2);
-        if(mMyId.equals(idJugador2))switchToScreen(R.id.screen_game2);
-
-
-        // run the gameTick() method every second to update the game.
-        final Handler h = new Handler();
-        h.postDelayed(new Runnable() {
+        botoncambiarTurno.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void run() {
-                if (mSecondsLeft <= 0)
-                    return;
-                gameTick();
-                h.postDelayed(this, 1000);
+            public void onClick(View view) {
+                cambiarTurno();
+                resetGameVars();
+                startGame(true);
+
+                byte[] message = turno.getBytes();
+                for (Participant p : mParticipants) {
+                    if (!p.getParticipantId().equals(mMyId)) {
+                        Games.RealTimeMultiplayer.sendReliableMessage(mGoogleApiClient, null, message,
+                                mRoomId, p.getParticipantId());
+                    }
+                }
             }
-        }, 1000);
+        });
+        if(mMyId.equals(turno)){
+            Toast.makeText(getApplicationContext(),"Es tu turno", Toast.LENGTH_SHORT).show();
+        }
+        if(!mMyId.equals(turno)){ botoncambiarTurno.setVisibility(View.INVISIBLE);
+              Toast.makeText(getApplicationContext(),"Esperando al Jugador", Toast.LENGTH_SHORT).show();}
+
+        switchToScreen(R.id.screen_game);
+        mMultiplayer = multiplayer;
+
     }
 
     // Game tick -- update countdown, check if game ended.
@@ -722,8 +743,16 @@ public class MainActivity extends Activity
     public void onRealTimeMessageReceived(RealTimeMessage rtm) {
         byte[] buf = rtm.getMessageData();
         String sender = rtm.getSenderParticipantId();
-        Log.d(TAG, "Message received: " + (char) buf[0] + "/" + (int) buf[1]);
-
+        try {
+            String turnoNuevo = new String(buf, "UTF-8");
+            Log.d("JJJJJJJ",turnoNuevo);
+            turno = turnoNuevo;
+            resetGameVars();
+            startGame(true);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+/*
         if (buf[0] == 'F' || buf[0] == 'U') {
             // score update.
             int existingScore = mParticipantScore.containsKey(sender) ?
@@ -748,7 +777,7 @@ public class MainActivity extends Activity
             if ((char) buf[0] == 'F') {
                 mFinishedParticipants.add(rtm.getSenderParticipantId());
             }
-        }
+        }*/
     }
 
     // Broadcast my score to everybody else.
@@ -789,7 +818,7 @@ public class MainActivity extends Activity
     final static int[] CLICKABLES = {
             R.id.button_accept_popup_invitation, R.id.button_invite_players,
             R.id.button_quick_game, R.id.button_see_invitations, R.id.button_sign_in,
-            R.id.button_sign_out, R.id.botoncambiarturno, R.id.button_single_player,
+            R.id.button_sign_out, R.id.button_single_player,
             R.id.button_single_player_2
     };
 

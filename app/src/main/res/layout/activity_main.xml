@@ -65,30 +65,24 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="top"
-            android:id="@+id/tvbajo"
+            android:id="@+id/carta1"
             />
-
-    </LinearLayout>
-    <!-- GAMEPLAY SCREEN J2-->
-    <LinearLayout android:id="@+id/screen_game2" style="@style/LLScreen">
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Cambiar turno"
-            android:id="@+id/botoncambiarturno2"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="top"
-            android:id="@+id/tvbajo2"
+            android:id="@+id/carta2"
             />
-        <Button
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="jhcfsbdjyvbhsjfhvsf"
-            android:id="@+id/fsdfsdf"/>
+            android:layout_gravity="top"
+            android:id="@+id/carta3"
+            />
+
 
     </LinearLayout>
+
 
 
 </FrameLayout>
