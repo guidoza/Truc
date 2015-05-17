@@ -110,13 +110,36 @@ public class MainActivity extends Activity
     String idJugador1 = null;
     String idJugador2 = null;
     String turno = null;
-    Button botoncambiarTurno;
+    TextView tvJugador1;
+    TextView tvJugador2;
+    TextView tvJugador3;
+    TextView tvCartaMesa1;
+    TextView tvCartaMesa2;
+    TextView tvCartaMesa3;
+    TextView tvMesaRival1;
+    TextView tvMesaRival2;
+    TextView tvMesaRival3;
+    boolean tirada1 = false;
+    boolean tirada2 = false;
+    boolean tirada3 = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        botoncambiarTurno = (Button) findViewById(R.id.botoncambiarturno);
+
+        tvJugador1 = (TextView) findViewById(R.id.carta1Jugador);
+        tvJugador2 = (TextView) findViewById(R.id.carta2Jugador);
+        tvJugador3 = (TextView) findViewById(R.id.carta3Jugador);
+
+        tvCartaMesa1 = (TextView) findViewById(R.id.carta1Mesa);
+        tvCartaMesa2 = (TextView) findViewById(R.id.carta2Mesa);
+        tvCartaMesa3 = (TextView) findViewById(R.id.carta3Mesa);
+
+        tvMesaRival1 = (TextView) findViewById(R.id.carta1MesaRival);
+        tvMesaRival2 = (TextView) findViewById(R.id.carta2MesaRival);
+        tvMesaRival3 = (TextView) findViewById(R.id.carta3MesaRival);
+
 
         // Creamos el nuevo cliente de Google con acceso a Plus y Games
         mGoogleApiClient = new GoogleApiClient.Builder(this)
@@ -188,9 +211,6 @@ public class MainActivity extends Activity
             case R.id.button_quick_game:
                 // user wants to play against a random opponent right now
                 startQuickGame();
-                break;
-            case R.id.botoncambiarturno:
-                //Cambiarturno
                 break;
         }
     }
@@ -635,7 +655,9 @@ public class MainActivity extends Activity
 
     // Reset game variables in preparation for a new game.
     void resetGameVars() {
-        botoncambiarTurno.setVisibility(View.VISIBLE);
+        tvJugador1.setEnabled(true);
+        tvJugador2.setEnabled(true);
+        tvJugador3.setEnabled(true);
 
    /**     mSecondsLeft = GAME_DURATION;
         mScore = 0;
@@ -655,38 +677,87 @@ public class MainActivity extends Activity
     // Start the gameplay phase of the game.
     void startGame(boolean multiplayer) {
 
-        Log.d("DDDD",mParticipants.get(0).toString());
-        Log.d("DDDD",mParticipants.get(1).toString());
+        tvJugador1.setText("$Carta1");
+        tvJugador2.setText("$Carta2");
+        tvJugador3.setText("$Carta3");
 
-        TextView tvJugador1 = (TextView) findViewById(R.id.carta1);
-        TextView tvJugador2 = (TextView) findViewById(R.id.carta2);
-        TextView tvJugador3 = (TextView) findViewById(R.id.carta3);
-
-        tvJugador1.setText(mMyId+" Carta1");
-        tvJugador2.setText(mMyId+" Carta2");
-        tvJugador3.setText(mMyId+" Carta3");
-
-        botoncambiarTurno.setOnClickListener(new View.OnClickListener() {
+        tvJugador1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                tvJugador1.setVisibility(View.INVISIBLE);
+                if(tvCartaMesa1.getText().toString().equals("")){tvCartaMesa1.setText(tvJugador1.getText().toString());}
+                else if(tvCartaMesa2.getText().toString().equals("")){tvCartaMesa2.setText(tvJugador1.getText().toString());}
+                else if(tvCartaMesa3.getText().toString().equals("")){tvCartaMesa3.setText(tvJugador1.getText().toString());}
                 cambiarTurno();
                 resetGameVars();
                 startGame(true);
 
                 byte[] message = turno.getBytes();
+                byte[] message2 = tvJugador1.getText().toString().getBytes();
                 for (Participant p : mParticipants) {
                     if (!p.getParticipantId().equals(mMyId)) {
                         Games.RealTimeMultiplayer.sendReliableMessage(mGoogleApiClient, null, message,
+                                mRoomId, p.getParticipantId());
+                        Games.RealTimeMultiplayer.sendReliableMessage(mGoogleApiClient, null, message2,
                                 mRoomId, p.getParticipantId());
                     }
                 }
             }
         });
+        tvJugador2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                tvJugador2.setVisibility(View.INVISIBLE);
+                if(tvCartaMesa1.getText().toString().equals("")){tvCartaMesa1.setText(tvJugador2.getText().toString());}
+                else if(tvCartaMesa2.getText().toString().equals("")){tvCartaMesa2.setText(tvJugador2.getText().toString());}
+                else if(tvCartaMesa3.getText().toString().equals("")){tvCartaMesa3.setText(tvJugador2.getText().toString());}                cambiarTurno();
+                resetGameVars();
+                startGame(true);
+
+                byte[] message = turno.getBytes();
+                byte[] message2 = tvJugador2.getText().toString().getBytes();
+                for (Participant p : mParticipants) {
+                    if (!p.getParticipantId().equals(mMyId)) {
+                        Games.RealTimeMultiplayer.sendReliableMessage(mGoogleApiClient, null, message,
+                                mRoomId, p.getParticipantId());
+                        Games.RealTimeMultiplayer.sendReliableMessage(mGoogleApiClient, null, message2,
+                                mRoomId, p.getParticipantId());
+                    }
+                }
+            }
+        });
+        tvJugador3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                tvJugador3.setVisibility(View.INVISIBLE);
+                if(tvCartaMesa1.getText().toString().equals("")){tvCartaMesa1.setText(tvJugador3.getText().toString());}
+                else if(tvCartaMesa2.getText().toString().equals("")){tvCartaMesa2.setText(tvJugador3.getText().toString());}
+                else if(tvCartaMesa3.getText().toString().equals("")){tvCartaMesa3.setText(tvJugador3.getText().toString());}                cambiarTurno();
+                resetGameVars();
+                startGame(true);
+
+                byte[] message = turno.getBytes();
+                byte[] message2 = tvJugador3.getText().toString().getBytes();
+                for (Participant p : mParticipants) {
+                    if (!p.getParticipantId().equals(mMyId)) {
+                        Games.RealTimeMultiplayer.sendReliableMessage(mGoogleApiClient, null, message,
+                                mRoomId, p.getParticipantId());
+                        Games.RealTimeMultiplayer.sendReliableMessage(mGoogleApiClient, null, message2,
+                                mRoomId, p.getParticipantId());
+                    }
+                }
+            }
+        });
+
+
         if(mMyId.equals(turno)){
             Toast.makeText(getApplicationContext(),"Es tu turno", Toast.LENGTH_SHORT).show();
         }
-        if(!mMyId.equals(turno)){ botoncambiarTurno.setVisibility(View.INVISIBLE);
-              Toast.makeText(getApplicationContext(),"Esperando al Jugador", Toast.LENGTH_SHORT).show();}
+        if(!mMyId.equals(turno)){
+            tvJugador1.setEnabled(false);
+            tvJugador2.setEnabled(false);
+            tvJugador3.setEnabled(false);
+            Toast.makeText(getApplicationContext(),"Esperando al Jugador", Toast.LENGTH_SHORT).show();}
 
         switchToScreen(R.id.screen_game);
         mMultiplayer = multiplayer;
@@ -744,11 +815,18 @@ public class MainActivity extends Activity
         byte[] buf = rtm.getMessageData();
         String sender = rtm.getSenderParticipantId();
         try {
-            String turnoNuevo = new String(buf, "UTF-8");
-            Log.d("JJJJJJJ",turnoNuevo);
-            turno = turnoNuevo;
-            resetGameVars();
-            startGame(true);
+            if(buf[0] == '$' && tvMesaRival1.getText().toString().equals("")){
+                tvMesaRival1.setText(new String(buf, "UTF-8"));
+            } else if(buf[0] == '$' && tvMesaRival2.getText().toString().equals("")){
+                tvMesaRival2.setText(new String(buf, "UTF-8"));
+            } else if(buf[0] == '$' && tvMesaRival3.getText().toString().equals("")){
+                tvMesaRival3.setText(new String(buf, "UTF-8"));
+            } else {
+                String turnoNuevo = new String(buf, "UTF-8");
+                turno = turnoNuevo;
+                resetGameVars();
+                startGame(true);
+            }
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
