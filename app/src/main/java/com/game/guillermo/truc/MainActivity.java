@@ -46,7 +46,13 @@ import com.google.android.gms.plus.Plus;
 import com.google.example.games.basegameutils.BaseGameUtils;
 
 
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserException;
+import org.xmlpull.v1.XmlPullParserFactory;
+
 import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -119,9 +125,8 @@ public class MainActivity extends Activity
     TextView tvMesaRival1;
     TextView tvMesaRival2;
     TextView tvMesaRival3;
-    boolean tirada1 = false;
-    boolean tirada2 = false;
-    boolean tirada3 = false;
+    private List<Carta> baraja = new ArrayList<>();
+    private List<Carta> manoJugador = new ArrayList<>();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -165,6 +170,7 @@ public class MainActivity extends Activity
                 // play a single-player game
                 resetGameVars();
                 resetTurno();
+                repartir();
                 startGame(false);
                 break;
             case R.id.button_sign_in:
@@ -255,6 +261,7 @@ public class MainActivity extends Activity
                     idJugador1 = mParticipants.get(0).getParticipantId();
                     idJugador2 = mParticipants.get(1).getParticipantId();
                     turno = mParticipants.get(0).getParticipantId();
+                    repartir();
                     startGame(true);
                 } else if (responseCode == GamesActivityResultCodes.RESULT_LEFT_ROOM) {
                     // player indicated that they want to leave the room
@@ -677,78 +684,28 @@ public class MainActivity extends Activity
     // Start the gameplay phase of the game.
     void startGame(boolean multiplayer) {
 
-        tvJugador1.setText("$Carta1");
-        tvJugador2.setText("$Carta2");
-        tvJugador3.setText("$Carta3");
+        tvJugador1.setText("$"+ manoJugador.get(0).getNumero()+" de "+manoJugador.get(0).getPalo());
+        tvJugador2.setText("$"+ manoJugador.get(1).getNumero()+" de "+manoJugador.get(1).getPalo());
+        tvJugador3.setText("$"+ manoJugador.get(2).getNumero()+" de "+manoJugador.get(2).getPalo());
 
         tvJugador1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                tvJugador1.setVisibility(View.INVISIBLE);
-                if(tvCartaMesa1.getText().toString().equals("")){tvCartaMesa1.setText(tvJugador1.getText().toString());}
-                else if(tvCartaMesa2.getText().toString().equals("")){tvCartaMesa2.setText(tvJugador1.getText().toString());}
-                else if(tvCartaMesa3.getText().toString().equals("")){tvCartaMesa3.setText(tvJugador1.getText().toString());}
-                cambiarTurno();
-                resetGameVars();
-                startGame(true);
-
-                byte[] message = turno.getBytes();
-                byte[] message2 = tvJugador1.getText().toString().getBytes();
-                for (Participant p : mParticipants) {
-                    if (!p.getParticipantId().equals(mMyId)) {
-                        Games.RealTimeMultiplayer.sendReliableMessage(mGoogleApiClient, null, message,
-                                mRoomId, p.getParticipantId());
-                        Games.RealTimeMultiplayer.sendReliableMessage(mGoogleApiClient, null, message2,
-                                mRoomId, p.getParticipantId());
-                    }
-                }
+                cartaSeleccionada(view);
             }
         });
         tvJugador2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                tvJugador2.setVisibility(View.INVISIBLE);
-                if(tvCartaMesa1.getText().toString().equals("")){tvCartaMesa1.setText(tvJugador2.getText().toString());}
-                else if(tvCartaMesa2.getText().toString().equals("")){tvCartaMesa2.setText(tvJugador2.getText().toString());}
-                else if(tvCartaMesa3.getText().toString().equals("")){tvCartaMesa3.setText(tvJugador2.getText().toString());}                cambiarTurno();
-                resetGameVars();
-                startGame(true);
-
-                byte[] message = turno.getBytes();
-                byte[] message2 = tvJugador2.getText().toString().getBytes();
-                for (Participant p : mParticipants) {
-                    if (!p.getParticipantId().equals(mMyId)) {
-                        Games.RealTimeMultiplayer.sendReliableMessage(mGoogleApiClient, null, message,
-                                mRoomId, p.getParticipantId());
-                        Games.RealTimeMultiplayer.sendReliableMessage(mGoogleApiClient, null, message2,
-                                mRoomId, p.getParticipantId());
-                    }
-                }
+                cartaSeleccionada(view);
             }
         });
         tvJugador3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                tvJugador3.setVisibility(View.INVISIBLE);
-                if(tvCartaMesa1.getText().toString().equals("")){tvCartaMesa1.setText(tvJugador3.getText().toString());}
-                else if(tvCartaMesa2.getText().toString().equals("")){tvCartaMesa2.setText(tvJugador3.getText().toString());}
-                else if(tvCartaMesa3.getText().toString().equals("")){tvCartaMesa3.setText(tvJugador3.getText().toString());}                cambiarTurno();
-                resetGameVars();
-                startGame(true);
-
-                byte[] message = turno.getBytes();
-                byte[] message2 = tvJugador3.getText().toString().getBytes();
-                for (Participant p : mParticipants) {
-                    if (!p.getParticipantId().equals(mMyId)) {
-                        Games.RealTimeMultiplayer.sendReliableMessage(mGoogleApiClient, null, message,
-                                mRoomId, p.getParticipantId());
-                        Games.RealTimeMultiplayer.sendReliableMessage(mGoogleApiClient, null, message2,
-                                mRoomId, p.getParticipantId());
-                    }
-                }
+                cartaSeleccionada(view);
             }
         });
-
 
         if(mMyId.equals(turno)){
             Toast.makeText(getApplicationContext(),"Es tu turno", Toast.LENGTH_SHORT).show();
@@ -763,7 +720,33 @@ public class MainActivity extends Activity
         mMultiplayer = multiplayer;
 
     }
+    void cartaSeleccionada(View view){
+        TextView aux = (TextView)view;
+        view.setVisibility(View.INVISIBLE);
+        if(tvCartaMesa1.getText().toString().equals("")){tvCartaMesa1.setText(aux.getText().toString());}
+        else if(tvCartaMesa2.getText().toString().equals("")){tvCartaMesa2.setText(aux.getText().toString());}
+        else if(tvCartaMesa3.getText().toString().equals("")){tvCartaMesa3.setText(aux.getText().toString());}                cambiarTurno();
+        /*if(comprobarSiHayGanador()){
+            Toast.makeText(getApplicationContext(),"Se acabó", Toast.LENGTH_SHORT).show();
+            return;
+        }*/
+        resetGameVars();
+        startGame(true);
 
+        byte[] message = turno.getBytes();
+        byte[] message2 = aux.getText().toString().getBytes();
+        for (Participant p : mParticipants) {
+            if (!p.getParticipantId().equals(mMyId)) {
+                Games.RealTimeMultiplayer.sendReliableMessage(mGoogleApiClient, null, message,
+                        mRoomId, p.getParticipantId());
+                Games.RealTimeMultiplayer.sendReliableMessage(mGoogleApiClient, null, message2,
+                        mRoomId, p.getParticipantId());
+            }
+        }
+    }
+    //boolean comprobarSiHayGanador(){
+      //  if()
+    //}
     // Game tick -- update countdown, check if game ended.
     void gameTick() {
         if (mSecondsLeft > 0)
@@ -995,5 +978,86 @@ public class MainActivity extends Activity
     // Clears the flag that keeps the screen on.
     void stopKeepingScreenOn() {
         getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+    }
+
+
+    public List<Carta> crearBaraja(){
+        Carta carta;
+        List<Carta> baraja = new ArrayList<>();
+
+        try {
+            //Leemos el archivo baraja.xml situado en raw
+            BufferedReader reader = new BufferedReader(new InputStreamReader(getResources().openRawResource(R.raw.baraja)));
+            XmlPullParser parser = XmlPullParserFactory.newInstance().newPullParser();
+            parser.setInput(reader);
+            int eventType = parser.next();
+            //Hasta que se acabe el documento
+            while (eventType != XmlPullParser.END_DOCUMENT) {
+                //Por cada tag "carta"
+                if ((eventType == XmlPullParser.START_TAG) && (parser.getName().equalsIgnoreCase("carta"))) {
+                    //Recoger informacion de cada carta
+                    String numero = parser.getAttributeValue(null, "numero");
+                    String palo = parser.getAttributeValue(null, "palo");
+                    String valor = parser.getAttributeValue(null, "valor");
+                    carta = new Carta(numero, palo, valor);
+                    //Por cada question, la añadimos a la lista
+                    baraja.add(carta);
+                }
+                eventType = parser.next();
+            }
+
+        } catch (XmlPullParserException | IOException e) {
+            e.printStackTrace();
+        }
+        //Devolvemos la lista
+        return baraja;
+    }
+    public int[] crearAleatorio() {
+        int[] list = new int[3];
+        int[] list2 = new int[3];
+        list[0] = (int) Math.floor(Math.random() * 21);
+        int aux = (int) Math.floor(Math.random() * 21);
+        while(list[0] == aux){
+            aux = (int) Math.floor(Math.random() * 21);
+        }
+        list[1] = aux;
+        int aux2 = (int) Math.floor(Math.random() * 21);
+        while(list[0] == aux2 || list[1] == aux2){
+            aux2 = (int) Math.floor(Math.random() * 21);
+        }
+        list[2] = aux2;
+        int aux3 = (int) Math.floor(Math.random() * 21);
+        while(list[0] == aux3 || list[1] == aux3 || list[2] == aux3){
+            aux3 = (int) Math.floor(Math.random() * 21);
+        }
+        list2[0] = aux3;
+        int aux4 = (int) Math.floor(Math.random() * 21);
+        while(list[0] == aux4 || list[1] == aux4 || list[2] == aux4 || list2[0] == aux4){
+            aux4 = (int) Math.floor(Math.random() * 21);
+        }
+        list2[1] = aux4;
+        int aux5 = (int) Math.floor(Math.random() * 21);
+        while(list[0] == aux5 || list[1] == aux5 || list[2] == aux5 || list2[0] == aux5 || list2[1] == aux5){
+            aux5 = (int) Math.floor(Math.random() * 21);
+        }
+        list2[2] = aux5;
+
+        if (mMyId.equals(idJugador1)){
+            return list;
+        }
+        else if(mMyId.equals(idJugador2)){
+            return list2;
+        }
+        return null;
+    }
+
+    public void repartir(){
+        baraja = crearBaraja();
+        int[] aleatorios = crearAleatorio();
+
+        manoJugador.add(0, baraja.get(aleatorios[0]));
+        manoJugador.add(1, baraja.get(aleatorios[1]));
+        manoJugador.add(2, baraja.get(aleatorios[2]));
+
     }
 }
