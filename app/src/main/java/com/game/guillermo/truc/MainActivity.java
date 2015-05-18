@@ -127,6 +127,9 @@ public class MainActivity extends Activity
     TextView tvMesaRival3;
     private List<Carta> baraja = new ArrayList<>();
     private List<Carta> manoJugador = new ArrayList<>();
+    Carta carta1;
+    Carta carta2;
+    Carta carta3;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -262,6 +265,9 @@ public class MainActivity extends Activity
                     idJugador2 = mParticipants.get(1).getParticipantId();
                     turno = mParticipants.get(0).getParticipantId();
                     repartir();
+                    carta1 = new Carta(manoJugador.get(0).getNumero(), manoJugador.get(0).getPalo(), manoJugador.get(0).getValor());
+                    carta2 = new Carta(manoJugador.get(1).getNumero(), manoJugador.get(1).getPalo(), manoJugador.get(1).getValor());
+                    carta3 = new Carta(manoJugador.get(2).getNumero(), manoJugador.get(2).getPalo(), manoJugador.get(2).getValor());
                     startGame(true);
                 } else if (responseCode == GamesActivityResultCodes.RESULT_LEFT_ROOM) {
                     // player indicated that they want to leave the room
@@ -684,9 +690,9 @@ public class MainActivity extends Activity
     // Start the gameplay phase of the game.
     void startGame(boolean multiplayer) {
 
-        tvJugador1.setText("$"+ manoJugador.get(0).getNumero()+" de "+manoJugador.get(0).getPalo());
-        tvJugador2.setText("$"+ manoJugador.get(1).getNumero()+" de "+manoJugador.get(1).getPalo());
-        tvJugador3.setText("$"+ manoJugador.get(2).getNumero()+" de "+manoJugador.get(2).getPalo());
+        tvJugador1.setText(carta1.getNumero() + " de " + carta1.getPalo());
+        tvJugador2.setText(carta2.getNumero()+" de "+carta2.getPalo());
+        tvJugador3.setText(carta3.getNumero() + " de " + carta3.getPalo());
 
         tvJugador1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -725,21 +731,22 @@ public class MainActivity extends Activity
         view.setVisibility(View.INVISIBLE);
         if(tvCartaMesa1.getText().toString().equals("")){tvCartaMesa1.setText(aux.getText().toString());}
         else if(tvCartaMesa2.getText().toString().equals("")){tvCartaMesa2.setText(aux.getText().toString());}
-        else if(tvCartaMesa3.getText().toString().equals("")){tvCartaMesa3.setText(aux.getText().toString());}                cambiarTurno();
-        /*if(comprobarSiHayGanador()){
-            Toast.makeText(getApplicationContext(),"Se acabó", Toast.LENGTH_SHORT).show();
-            return;
-        }*/
+        else if(tvCartaMesa3.getText().toString().equals("")){tvCartaMesa3.setText(aux.getText().toString());}
+
+        cambiarTurno();
         resetGameVars();
         startGame(true);
 
-        byte[] message = turno.getBytes();
-        byte[] message2 = aux.getText().toString().getBytes();
+        byte[] messageTurno = turno.getBytes();
+        byte[] messageCarta = new byte[0];
+        if(view == tvJugador1) messageCarta = ("$"+carta1.toString()).getBytes();
+        if(view == tvJugador2) messageCarta = ("$"+carta2.toString()).getBytes();
+        if(view == tvJugador3) messageCarta = ("$"+carta3.toString()).getBytes();
         for (Participant p : mParticipants) {
             if (!p.getParticipantId().equals(mMyId)) {
-                Games.RealTimeMultiplayer.sendReliableMessage(mGoogleApiClient, null, message,
+                Games.RealTimeMultiplayer.sendReliableMessage(mGoogleApiClient, null, messageTurno,
                         mRoomId, p.getParticipantId());
-                Games.RealTimeMultiplayer.sendReliableMessage(mGoogleApiClient, null, message2,
+                Games.RealTimeMultiplayer.sendReliableMessage(mGoogleApiClient, null, messageCarta,
                         mRoomId, p.getParticipantId());
             }
         }
@@ -799,11 +806,30 @@ public class MainActivity extends Activity
         String sender = rtm.getSenderParticipantId();
         try {
             if(buf[0] == '$' && tvMesaRival1.getText().toString().equals("")){
-                tvMesaRival1.setText(new String(buf, "UTF-8"));
+                String sBuf = new String(buf, "UTF-8");
+                String arrayBuf[] = sBuf.split(" ");
+                int valor = Integer.parseInt(arrayBuf[2]);
+                String palo = arrayBuf[1];
+                //String arrayBuf2[] = arrayBuf[0].split("$");
+                String numeroCarta = arrayBuf[0].substring(1);
+                tvMesaRival1.setText(numeroCarta+" de "+palo);
+
             } else if(buf[0] == '$' && tvMesaRival2.getText().toString().equals("")){
-                tvMesaRival2.setText(new String(buf, "UTF-8"));
+                String sBuf = new String(buf, "UTF-8");
+                String arrayBuf[] = sBuf.split(" ");
+                int valor = Integer.parseInt(arrayBuf[2]);
+                String palo = arrayBuf[1];
+                //String arrayBuf2[] = arrayBuf[0].split("$");
+                String numeroCarta = arrayBuf[0].substring(1);
+                tvMesaRival2.setText(numeroCarta+" de "+palo);
             } else if(buf[0] == '$' && tvMesaRival3.getText().toString().equals("")){
-                tvMesaRival3.setText(new String(buf, "UTF-8"));
+                String sBuf = new String(buf, "UTF-8");
+                String arrayBuf[] = sBuf.split(" ");
+                int valor = Integer.parseInt(arrayBuf[2]);
+                String palo = arrayBuf[1];
+                //String arrayBuf2[] = arrayBuf[0].split("$");
+                String numeroCarta = arrayBuf[0].substring(1);
+                tvMesaRival3.setText(numeroCarta+" de "+palo);
             } else {
                 String turnoNuevo = new String(buf, "UTF-8");
                 turno = turnoNuevo;

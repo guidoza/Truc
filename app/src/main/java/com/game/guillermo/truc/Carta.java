@@ -50,4 +50,8 @@ public class Carta {
         return true;
     }
 
+    public String toString(){
+        return  this.numero +" "+ this.palo +" "+ this.valor;
+
+    }
 }
