@@ -130,6 +130,9 @@ public class MainActivity extends Activity
     Carta carta1;
     Carta carta2;
     Carta carta3;
+    int miValor=0, valor1 = 0, valor2 = 0, valor3 = 0;
+    int ronda = 1;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -691,7 +694,7 @@ public class MainActivity extends Activity
     void startGame(boolean multiplayer) {
 
         tvJugador1.setText(carta1.getNumero() + " de " + carta1.getPalo());
-        tvJugador2.setText(carta2.getNumero()+" de "+carta2.getPalo());
+        tvJugador2.setText(carta2.getNumero() + " de " + carta2.getPalo());
         tvJugador3.setText(carta3.getNumero() + " de " + carta3.getPalo());
 
         tvJugador1.setOnClickListener(new View.OnClickListener() {
@@ -713,14 +716,23 @@ public class MainActivity extends Activity
             }
         });
 
-        if(mMyId.equals(turno)){
+        if(mMyId.equals(turno) && ronda != 4){
+
             Toast.makeText(getApplicationContext(),"Es tu turno", Toast.LENGTH_SHORT).show();
+
         }
-        if(!mMyId.equals(turno)){
+        if(!mMyId.equals(turno) && ronda != 4){
+
             tvJugador1.setEnabled(false);
             tvJugador2.setEnabled(false);
             tvJugador3.setEnabled(false);
-            Toast.makeText(getApplicationContext(),"Esperando al Jugador", Toast.LENGTH_SHORT).show();}
+            Toast.makeText(getApplicationContext(),"Esperando al Jugador", Toast.LENGTH_SHORT).show();
+
+        }
+
+        if(valor1 != 0 && valor2 == 0) ronda = 2;
+        if(valor1 != 0 && valor2 != 0) ronda = 3;
+        if(ronda == 4) Toast.makeText(getApplicationContext(), "Oh, has perdido la partida", Toast.LENGTH_SHORT).show();
 
         switchToScreen(R.id.screen_game);
         mMultiplayer = multiplayer;
@@ -732,10 +744,24 @@ public class MainActivity extends Activity
         if(tvCartaMesa1.getText().toString().equals("")){tvCartaMesa1.setText(aux.getText().toString());}
         else if(tvCartaMesa2.getText().toString().equals("")){tvCartaMesa2.setText(aux.getText().toString());}
         else if(tvCartaMesa3.getText().toString().equals("")){tvCartaMesa3.setText(aux.getText().toString());}
-
-        cambiarTurno();
-        resetGameVars();
-        startGame(true);
+        if(view == tvJugador1) miValor = Integer.parseInt(carta1.getValor());
+        if(view == tvJugador2) miValor = Integer.parseInt(carta2.getValor());
+        if(view == tvJugador3) miValor = Integer.parseInt(carta3.getValor());
+        Log.d("OOOOOO",""+soyGanadorRonda());
+        Log.d("OOOOOO","miValor: "+miValor);
+        Log.d("OOOOOO","valor1: "+valor1);
+        Log.d("OOOOOO","valor2: "+valor2);
+        Log.d("OOOOOO","valor3: "+valor3);
+        if(soyGanadorRonda()){
+            if(ronda == 3){
+                Toast.makeText(getApplicationContext(), "Enhorabuena has ganado la partida", Toast.LENGTH_SHORT).show();
+                ronda = 4;
+            }else startGame(true);
+        } else {
+            cambiarTurno();
+            resetGameVars();
+            startGame(true);
+        }
 
         byte[] messageTurno = turno.getBytes();
         byte[] messageCarta = new byte[0];
@@ -751,9 +777,13 @@ public class MainActivity extends Activity
             }
         }
     }
-    //boolean comprobarSiHayGanador(){
-      //  if()
-    //}
+    boolean soyGanadorRonda(){
+        if(ronda == 1 && miValor>valor1 && valor1!=0)return true;
+        if(ronda == 2 && miValor>valor2 && valor2!=0)return true;
+        if(ronda == 3 && miValor>valor3 && valor3!=0)return true;
+
+        return false;
+    }
     // Game tick -- update countdown, check if game ended.
     void gameTick() {
         if (mSecondsLeft > 0)
@@ -809,6 +839,7 @@ public class MainActivity extends Activity
                 String sBuf = new String(buf, "UTF-8");
                 String arrayBuf[] = sBuf.split(" ");
                 int valor = Integer.parseInt(arrayBuf[2]);
+                valor1 = valor;
                 String palo = arrayBuf[1];
                 //String arrayBuf2[] = arrayBuf[0].split("$");
                 String numeroCarta = arrayBuf[0].substring(1);
@@ -818,6 +849,7 @@ public class MainActivity extends Activity
                 String sBuf = new String(buf, "UTF-8");
                 String arrayBuf[] = sBuf.split(" ");
                 int valor = Integer.parseInt(arrayBuf[2]);
+                valor2 = valor;
                 String palo = arrayBuf[1];
                 //String arrayBuf2[] = arrayBuf[0].split("$");
                 String numeroCarta = arrayBuf[0].substring(1);
@@ -826,6 +858,7 @@ public class MainActivity extends Activity
                 String sBuf = new String(buf, "UTF-8");
                 String arrayBuf[] = sBuf.split(" ");
                 int valor = Integer.parseInt(arrayBuf[2]);
+                valor3 = valor;
                 String palo = arrayBuf[1];
                 //String arrayBuf2[] = arrayBuf[0].split("$");
                 String numeroCarta = arrayBuf[0].substring(1);
