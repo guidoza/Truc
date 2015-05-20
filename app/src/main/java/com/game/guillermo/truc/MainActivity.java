@@ -132,6 +132,7 @@ public class MainActivity extends Activity
     Carta carta3;
     int miValor=0, valor1 = 0, valor2 = 0, valor3 = 0;
     int ronda = 1;
+    ArrayList<String> misRondasGanadas = new ArrayList<>();
 
 
     @Override
@@ -717,10 +718,9 @@ public class MainActivity extends Activity
         });
 
         if(mMyId.equals(turno) && ronda != 4){
-
             Toast.makeText(getApplicationContext(),"Es tu turno", Toast.LENGTH_SHORT).show();
-
         }
+
         if(!mMyId.equals(turno) && ronda != 4){
 
             tvJugador1.setEnabled(false);
@@ -728,11 +728,12 @@ public class MainActivity extends Activity
             tvJugador3.setEnabled(false);
             Toast.makeText(getApplicationContext(),"Esperando al Jugador", Toast.LENGTH_SHORT).show();
 
+        }else if(!mMyId.equals(turno) && ronda == 4){
+            Toast.makeText(getApplicationContext(), "Oh, has perdido la partida", Toast.LENGTH_SHORT).show();
         }
 
         if(valor1 != 0 && valor2 == 0) ronda = 2;
         if(valor1 != 0 && valor2 != 0) ronda = 3;
-        if(ronda == 4) Toast.makeText(getApplicationContext(), "Oh, has perdido la partida", Toast.LENGTH_SHORT).show();
 
         switchToScreen(R.id.screen_game);
         mMultiplayer = multiplayer;
@@ -753,9 +754,17 @@ public class MainActivity extends Activity
         Log.d("OOOOOO","valor2: "+valor2);
         Log.d("OOOOOO","valor3: "+valor3);
         if(soyGanadorRonda()){
-            if(ronda == 3){
-                Toast.makeText(getApplicationContext(), "Enhorabuena has ganado la partida", Toast.LENGTH_SHORT).show();
+            //if(ronda == 1 || ronda == 2) misRondasGanadas.add(mMyId);
+            if(ronda == 3 /*|| misRondasGanadas.size() == 2*/){
                 ronda = 4;
+                Toast.makeText(getApplicationContext(), "Enhorabuena has ganado la partida", Toast.LENGTH_SHORT).show();
+                byte[] messageFinalDePartida = ("R "+String.valueOf(ronda)).getBytes();
+                for (Participant p : mParticipants) {
+                    if (!p.getParticipantId().equals(mMyId)) {
+                        Games.RealTimeMultiplayer.sendReliableMessage(mGoogleApiClient, null, messageFinalDePartida,
+                                mRoomId, p.getParticipantId());
+                    }
+                }
             }else startGame(true);
         } else {
             cambiarTurno();
@@ -854,6 +863,7 @@ public class MainActivity extends Activity
                 //String arrayBuf2[] = arrayBuf[0].split("$");
                 String numeroCarta = arrayBuf[0].substring(1);
                 tvMesaRival2.setText(numeroCarta+" de "+palo);
+
             } else if(buf[0] == '$' && tvMesaRival3.getText().toString().equals("")){
                 String sBuf = new String(buf, "UTF-8");
                 String arrayBuf[] = sBuf.split(" ");
@@ -863,6 +873,13 @@ public class MainActivity extends Activity
                 //String arrayBuf2[] = arrayBuf[0].split("$");
                 String numeroCarta = arrayBuf[0].substring(1);
                 tvMesaRival3.setText(numeroCarta+" de "+palo);
+
+            } else if(buf[0] == 'R'){
+                String sBuf = new String(buf, "UTF-8");
+                String arrayBuf[] = sBuf.split(" ");
+                String ronda = arrayBuf[1];
+                this.ronda = Integer.parseInt(ronda);
+
             } else {
                 String turnoNuevo = new String(buf, "UTF-8");
                 turno = turnoNuevo;
