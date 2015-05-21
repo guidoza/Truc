@@ -16,6 +16,7 @@
 package com.game.guillermo.truc;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -135,7 +136,8 @@ public class MainActivity extends Activity
     int misRondasGanadas = 0;
     boolean partidaFinalizada = false;
     boolean casoTiroPrimero = false;
-
+    AlertDialog.Builder dialogoNuevaPartida;
+    AlertDialog dialog;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -153,6 +155,12 @@ public class MainActivity extends Activity
         tvMesaRival1 = (TextView) findViewById(R.id.carta1MesaRival);
         tvMesaRival2 = (TextView) findViewById(R.id.carta2MesaRival);
         tvMesaRival3 = (TextView) findViewById(R.id.carta3MesaRival);
+
+
+        dialogoNuevaPartida = new AlertDialog.Builder(this);
+        dialogoNuevaPartida.setTitle("Importante");
+        dialogoNuevaPartida.setMessage("Este es un programa solo de prueba y no la versión completa");
+
 
 
         // Creamos el nuevo cliente de Google con acceso a Plus y Games
@@ -718,8 +726,6 @@ public class MainActivity extends Activity
                 cartaSeleccionada(view);
             }
         });
-        //Toast.makeText(getApplicationContext(), "Enhorabuena has ganado la partida", Toast.LENGTH_SHORT).show();
-        //Toast.makeText(getApplicationContext(), "Oh! has perdido la partida", Toast.LENGTH_SHORT).show();
 
         if(mMyId.equals(turno) && misRondasGanadas<2 && !partidaFinalizada){
             Toast.makeText(getApplicationContext(),"Es tu turno", Toast.LENGTH_SHORT).show();
@@ -733,13 +739,19 @@ public class MainActivity extends Activity
 
         }
 
-        if(partidaFinalizada) Toast.makeText(getApplicationContext(), "Oh! has perdido la partida", Toast.LENGTH_SHORT).show();
+        if(partidaFinalizada){
+            Toast.makeText(getApplicationContext(), "Oh! has perdido la partida", Toast.LENGTH_SHORT).show();
+            dialog = dialogoNuevaPartida.create();
+            dialog.show();
+            cerrarDialogo(5000);
+        }
 
         switchToScreen(R.id.screen_game);
         mMultiplayer = multiplayer;
 
     }
     void cartaSeleccionada(View view){
+        //Actualizando textViews
         TextView aux = (TextView)view;
         view.setVisibility(View.INVISIBLE);
         if(tvCartaMesa1.getText().toString().equals("")){tvCartaMesa1.setText(aux.getText().toString());}
@@ -760,13 +772,6 @@ public class MainActivity extends Activity
             }
         }
 
-        Log.d("OOOOOO", "" + soyGanadorRonda());
-        Log.d("OOOOOO", "miValor: " + miValor);
-        Log.d("OOOOOO", "valor1: " + valor1);
-        Log.d("OOOOOO", "valor2: " + valor2);
-        Log.d("OOOOOO", "valor3: " + valor3);
-        Log.d("OOOOOO","Ronda: "+ronda);
-
         //Caso en el que ganas tirando segundo
         if(soyGanadorRonda()){
             if(ronda == 1) misRondasGanadas = 1;
@@ -774,8 +779,6 @@ public class MainActivity extends Activity
             else if(ronda == 2 && misRondasGanadas == 0) misRondasGanadas = 1;
             if(ronda == 3) misRondasGanadas = 2;
             actualizaRonda();
-            Log.d("OOOOOO", "Mis rondas ganadas: " + misRondasGanadas);
-            Log.d("OOOOOO", "Nueva ronda: " + ronda);
 
             byte[] messageRonda = ("R "+String.valueOf(ronda)).getBytes();
             for (Participant p : mParticipants) {
@@ -794,12 +797,13 @@ public class MainActivity extends Activity
                     }
                 }
                 Toast.makeText(getApplicationContext(), "Enhorabuena has ganado la partida", Toast.LENGTH_SHORT).show();
-                return;
+                dialog = dialogoNuevaPartida.create();
+                dialog.show();
+                cerrarDialogo(5000);
             }else startGame(true);
 
         //Caso en el que tiras primero, o pierdes tirando segundo
         }else {
-            Log.d("OOOOOO", "Caso en el que tiro primero?: " + casoTiroPrimero);
             //Caso en el que pierdo tirando segundo
             if(!casoTiroPrimero){
                 //Enviar mensaje para que el jugaddor sume rondas ganadas
@@ -808,7 +812,6 @@ public class MainActivity extends Activity
                     if (!p.getParticipantId().equals(mMyId)) {
                         Games.RealTimeMultiplayer.sendReliableMessage(mGoogleApiClient, null, messageGanadorRonda,
                                 mRoomId, p.getParticipantId());
-                        Log.d("OOOOOO", "Enviando mensaje porque he perdido");
                     }
                 }
             }
@@ -817,11 +820,11 @@ public class MainActivity extends Activity
             //casoTiroPrimero = false;
             if(ronda == 3 && misRondasGanadas < 2 && !casoTiroPrimero){
                 Toast.makeText(getApplicationContext(), "Oh! has perdido la partida", Toast.LENGTH_SHORT).show();
-                return;
+                dialog = dialogoNuevaPartida.create();
+                dialog.show();
+                cerrarDialogo(5000);
             }else{
                 casoTiroPrimero = false;
-                Log.d("OOOOOO", "Mis rondas ganadas: " + misRondasGanadas);
-                Log.d("OOOOOO", "Nueva ronda: " + ronda);
                 cambiarTurno();
                 resetGameVars();
                 startGame(true);
@@ -860,6 +863,16 @@ public class MainActivity extends Activity
         if(valor1 != 0 && valor2 == 0) ronda = 2;
         if(valor1 != 0 && valor2 != 0) ronda = 3;
 
+    }
+
+    public void cerrarDialogo(int milisegundos) {
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            public void run() {
+                // acciones que se ejecutan tras los milisegundos
+                dialog.dismiss();
+            }
+        }, milisegundos);
     }
 
     /*
@@ -928,14 +941,18 @@ public class MainActivity extends Activity
                 Log.d("OOOOOO", "Nueva ronda: " + ronda);
                 if(misRondasGanadas == 2){
                     Toast.makeText(getApplicationContext(), "Enhorabuena has ganado la partida", Toast.LENGTH_SHORT).show();
-                    return;
+                    dialog = dialogoNuevaPartida.create();
+                    dialog.show();
+                    cerrarDialogo(5000);
                 }else{
                 startGame(true);
                 }
 
             }else if(buf[0] == 'W'){
                 Toast.makeText(getApplicationContext(), "Oh! has perdido la partida", Toast.LENGTH_SHORT).show();
-                return;
+                dialog = dialogoNuevaPartida.create();
+                dialog.show();
+                cerrarDialogo(5000);
 
             } else {
                 String turnoNuevo = new String(buf, "UTF-8");
@@ -1148,30 +1165,30 @@ public class MainActivity extends Activity
     public int[] crearAleatorio() {
         int[] list = new int[3];
         int[] list2 = new int[3];
-        list[0] = (int) Math.floor(Math.random() * 21);
-        int aux = (int) Math.floor(Math.random() * 21);
+        list[0] = (int) (Math.random() * 21);
+        int aux = (int) (Math.random() * 21);
         while(list[0] == aux){
-            aux = (int) Math.floor(Math.random() * 21);
+            aux = (int) (Math.random() * 21);
         }
         list[1] = aux;
-        int aux2 = (int) Math.floor(Math.random() * 21);
+        int aux2 = (int) (Math.random() * 21);
         while(list[0] == aux2 || list[1] == aux2){
             aux2 = (int) Math.floor(Math.random() * 21);
         }
         list[2] = aux2;
-        int aux3 = (int) Math.floor(Math.random() * 21);
+        int aux3 = (int) (Math.random() * 21);
         while(list[0] == aux3 || list[1] == aux3 || list[2] == aux3){
             aux3 = (int) Math.floor(Math.random() * 21);
         }
         list2[0] = aux3;
-        int aux4 = (int) Math.floor(Math.random() * 21);
+        int aux4 = (int) (Math.random() * 21);
         while(list[0] == aux4 || list[1] == aux4 || list[2] == aux4 || list2[0] == aux4){
             aux4 = (int) Math.floor(Math.random() * 21);
         }
         list2[1] = aux4;
-        int aux5 = (int) Math.floor(Math.random() * 21);
+        int aux5 = (int) (Math.random() * 21);
         while(list[0] == aux5 || list[1] == aux5 || list[2] == aux5 || list2[0] == aux5 || list2[1] == aux5){
-            aux5 = (int) Math.floor(Math.random() * 21);
+            aux5 = (int) (Math.random() * 21);
         }
         list2[2] = aux5;
 
