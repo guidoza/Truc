@@ -133,7 +133,8 @@ public class MainActivity extends Activity
     int miValor=0, valor1 = 0, valor2 = 0, valor3 = 0;
     int ronda = 1;
     int misRondasGanadas = 0;
-    Boolean actualizado = false;
+    boolean partidaFinalizada = false;
+    boolean casoTiroPrimero = false;
 
 
     @Override
@@ -717,28 +718,22 @@ public class MainActivity extends Activity
                 cartaSeleccionada(view);
             }
         });
+        //Toast.makeText(getApplicationContext(), "Enhorabuena has ganado la partida", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getApplicationContext(), "Oh! has perdido la partida", Toast.LENGTH_SHORT).show();
 
-        if(misRondasGanadas == 2) actualizado = true;
-
-        if(mMyId.equals(turno) && ronda != 4 && misRondasGanadas<2){
+        if(mMyId.equals(turno) && misRondasGanadas<2 && !partidaFinalizada){
             Toast.makeText(getApplicationContext(),"Es tu turno", Toast.LENGTH_SHORT).show();
-        }else if (mMyId.equals(turno) && ronda != 4 && misRondasGanadas == 2){
-            Toast.makeText(getApplicationContext(), "Enhorabuena has ganado la partida", Toast.LENGTH_SHORT).show();
         }
 
-        if(!mMyId.equals(turno) && ronda != 4 && !actualizado) {
+        if(!mMyId.equals(turno) && misRondasGanadas<2 && !partidaFinalizada) {
             tvJugador1.setEnabled(false);
             tvJugador2.setEnabled(false);
             tvJugador3.setEnabled(false);
             Toast.makeText(getApplicationContext(), "Esperando al Jugador", Toast.LENGTH_SHORT).show();
 
-        }else if(!mMyId.equals(turno) && actualizado){
-            Toast.makeText(getApplicationContext(), "Enhorabuena has ganado la partida", Toast.LENGTH_SHORT).show();
-
-        }else if(!mMyId.equals(turno) && ronda == 4 && misRondasGanadas<2){
-            Toast.makeText(getApplicationContext(), "Oh, has perdido la partida", Toast.LENGTH_SHORT).show();
         }
 
+        if(partidaFinalizada) Toast.makeText(getApplicationContext(), "Oh! has perdido la partida", Toast.LENGTH_SHORT).show();
 
         switchToScreen(R.id.screen_game);
         mMultiplayer = multiplayer;
@@ -765,71 +760,75 @@ public class MainActivity extends Activity
             }
         }
 
-        Log.d("OOOOOO",""+soyGanadorRonda());
-        Log.d("OOOOOO","miValor: "+miValor);
-        Log.d("OOOOOO","valor1: "+valor1);
-        Log.d("OOOOOO","valor2: "+valor2);
-        Log.d("OOOOOO","valor3: "+valor3);
+        Log.d("OOOOOO", "" + soyGanadorRonda());
+        Log.d("OOOOOO", "miValor: " + miValor);
+        Log.d("OOOOOO", "valor1: " + valor1);
+        Log.d("OOOOOO", "valor2: " + valor2);
+        Log.d("OOOOOO", "valor3: " + valor3);
         Log.d("OOOOOO","Ronda: "+ronda);
 
+        //Caso en el que ganas tirando segundo
         if(soyGanadorRonda()){
             if(ronda == 1) misRondasGanadas = 1;
             if(ronda == 2 && misRondasGanadas == 1) misRondasGanadas = 2;
             else if(ronda == 2 && misRondasGanadas == 0) misRondasGanadas = 1;
             if(ronda == 3) misRondasGanadas = 2;
+            actualizaRonda();
+            Log.d("OOOOOO", "Mis rondas ganadas: " + misRondasGanadas);
+            Log.d("OOOOOO", "Nueva ronda: " + ronda);
 
-
-            if(valor1 != 0 && valor2 == 0){ ronda = 2;
-                Log.d("DDDDD","Actualizando la ronda:" +ronda);}
-            if(valor1 != 0 && valor2 != 0) ronda = 3;
-
-            if(misRondasGanadas == 2){
-                ronda = 4;
-                Toast.makeText(getApplicationContext(), "Enhorabuena has ganado la partida", Toast.LENGTH_SHORT).show();
-                byte[] messageFinalDePartida = ("R "+String.valueOf(ronda)).getBytes();
-                for (Participant p : mParticipants) {
-                    if (!p.getParticipantId().equals(mMyId)) {
-                        Games.RealTimeMultiplayer.sendReliableMessage(mGoogleApiClient, null, messageFinalDePartida,
-                                mRoomId, p.getParticipantId());
-                        Log.d("DDDDD", "Mandando mensaje de ronda = 4");
-                    }
-                }
-            }else{
-
-                startGame(true);
-            }
-
-
-        } else {
-
-            if((valor1 != 0 && ronda == 1 && misRondasGanadas == 0) || (valor2 != 0 && ronda == 2 && misRondasGanadas == 0)
-                    || (valor2 != 0 && ronda == 2 && misRondasGanadas == 1) || (valor3 != 0 && ronda == 3 && misRondasGanadas == 1)){
-            byte[] messageGanadorRonda = "G".getBytes();
+            byte[] messageRonda = ("R "+String.valueOf(ronda)).getBytes();
             for (Participant p : mParticipants) {
                 if (!p.getParticipantId().equals(mMyId)) {
-                    Games.RealTimeMultiplayer.sendReliableMessage(mGoogleApiClient, null, messageGanadorRonda,
+                    Games.RealTimeMultiplayer.sendReliableMessage(mGoogleApiClient, null, messageRonda,
                             mRoomId, p.getParticipantId());
-                    Log.d("DDDDD", "Mensaje ganador de la ronda enviado");
                 }
             }
-            }
-            if(valor1 != 0 && valor2 == 0){ ronda = 2;
-                Log.d("DDDDD","Actualizando la ronda:" +ronda);}
-            if(valor1 != 0 && valor2 != 0) ronda = 3;
-
-
-
-            if(valor2 != 0 && ronda >= 2 && misRondasGanadas == 0){
-                Toast.makeText(getApplicationContext(), "Oh, has perdido la partida", Toast.LENGTH_SHORT).show();
+            //He ganado la partida
+            if (misRondasGanadas == 2){
+                byte[] messageGanadorPartida = "W".getBytes();
+                for (Participant p : mParticipants) {
+                    if (!p.getParticipantId().equals(mMyId)) {
+                        Games.RealTimeMultiplayer.sendReliableMessage(mGoogleApiClient, null, messageGanadorPartida,
+                                mRoomId, p.getParticipantId());
+                    }
+                }
+                Toast.makeText(getApplicationContext(), "Enhorabuena has ganado la partida", Toast.LENGTH_SHORT).show();
                 return;
-            }else {
+            }else startGame(true);
+
+        //Caso en el que tiras primero, o pierdes tirando segundo
+        }else {
+            Log.d("OOOOOO", "Caso en el que tiro primero?: " + casoTiroPrimero);
+            //Caso en el que pierdo tirando segundo
+            if(!casoTiroPrimero){
+                //Enviar mensaje para que el jugaddor sume rondas ganadas
+                byte[] messageGanadorRonda = "G".getBytes();
+                for (Participant p : mParticipants) {
+                    if (!p.getParticipantId().equals(mMyId)) {
+                        Games.RealTimeMultiplayer.sendReliableMessage(mGoogleApiClient, null, messageGanadorRonda,
+                                mRoomId, p.getParticipantId());
+                        Log.d("OOOOOO", "Enviando mensaje porque he perdido");
+                    }
+                }
+            }
+            //Caso tiro primero o continuo
+            actualizaRonda();
+            //casoTiroPrimero = false;
+            if(ronda == 3 && misRondasGanadas < 2 && !casoTiroPrimero){
+                Toast.makeText(getApplicationContext(), "Oh! has perdido la partida", Toast.LENGTH_SHORT).show();
+                return;
+            }else{
+                casoTiroPrimero = false;
+                Log.d("OOOOOO", "Mis rondas ganadas: " + misRondasGanadas);
+                Log.d("OOOOOO", "Nueva ronda: " + ronda);
                 cambiarTurno();
                 resetGameVars();
                 startGame(true);
             }
-
         }
-        Log.d("OOOOOO","Mis rondas ganadas: "+misRondasGanadas);
+
+        //Comunicar el turno al oponente, gane o pierda
         byte[] messageTurno = turno.getBytes();
         for (Participant p : mParticipants) {
             if (!p.getParticipantId().equals(mMyId)) {
@@ -840,38 +839,27 @@ public class MainActivity extends Activity
     }
 
     boolean soyGanadorRonda(){
-        if(ronda == 1 && miValor>valor1 && valor1!=0)return true;
-        if(ronda == 2 && miValor>valor2 && valor2!=0)return true;
-        if(ronda == 3 && miValor>valor3 && valor3!=0)return true;
-
+        if(ronda == 1 && valor1 == 0) casoTiroPrimero = true;
+        if(ronda == 1 && miValor>valor1 && valor1!=0){
+            casoTiroPrimero = false;
+            return true;
+        }
+        if(ronda == 2 && valor2 == 0) casoTiroPrimero = true;
+        if(ronda == 2 && miValor>valor2 && valor2!=0){
+            casoTiroPrimero = false;
+            return true;
+        }
+        if(ronda == 3 && valor3 == 0) casoTiroPrimero = true;
+        if(ronda == 3 && miValor>valor3 && valor3!=0){
+            casoTiroPrimero = false;
+            return true;
+        }
         return false;
     }
-    // Game tick -- update countdown, check if game ended.
-    void gameTick() {
-        if (mSecondsLeft > 0)
-            --mSecondsLeft;
+    void actualizaRonda(){
+        if(valor1 != 0 && valor2 == 0) ronda = 2;
+        if(valor1 != 0 && valor2 != 0) ronda = 3;
 
-        // update countdown
-       // ((TextView) findViewById(R.id.countdown)).setText("0:" +
-               // (mSecondsLeft < 10 ? "0" : "") + String.valueOf(mSecondsLeft));
-
-        if (mSecondsLeft <= 0) {
-            // finish game
-           // findViewById(R.id.button_click_me).setVisibility(View.GONE);
-            broadcastScore(true);
-        }
-    }
-
-    // indicates the player scored one point
-    void scoreOnePoint() {
-        if (mSecondsLeft <= 0)
-            return; // too late!
-        ++mScore;
-        updateScoreDisplay();
-        updatePeerScoresDisplay();
-
-        // broadcast our new score to our peers
-        broadcastScore(false);
     }
 
     /*
@@ -935,11 +923,19 @@ public class MainActivity extends Activity
 
             } else if(buf[0] == 'G'){
                 misRondasGanadas++;
-                Log.d("DDDDD","Actualizando las rondas ganadas:" +misRondasGanadas);
-                if(valor1 != 0 && valor2 == 0){ ronda = 2;
-                    Log.d("DDDDD","Actualizando la ronda:" +ronda);}
-                if(valor1 != 0 && valor2 != 0) ronda = 3;
-                if(misRondasGanadas == 2) startGame(true);
+                actualizaRonda();
+                Log.d("OOOOOO", "Mis rondas ganadas: " + misRondasGanadas);
+                Log.d("OOOOOO", "Nueva ronda: " + ronda);
+                if(misRondasGanadas == 2){
+                    Toast.makeText(getApplicationContext(), "Enhorabuena has ganado la partida", Toast.LENGTH_SHORT).show();
+                    return;
+                }else{
+                startGame(true);
+                }
+
+            }else if(buf[0] == 'W'){
+                Toast.makeText(getApplicationContext(), "Oh! has perdido la partida", Toast.LENGTH_SHORT).show();
+                return;
 
             } else {
                 String turnoNuevo = new String(buf, "UTF-8");
