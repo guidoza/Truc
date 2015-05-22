@@ -138,6 +138,7 @@ public class MainActivity extends Activity
     AlertDialog.Builder dialogoNuevaPartida;
     AlertDialog dialog;
     String remoteId;
+    String mano;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -267,11 +268,7 @@ public class MainActivity extends Activity
                 if (responseCode == Activity.RESULT_OK) {
                     // ready to start playing
                     Log.d(TAG, "Starting game (waiting room returned OK).");
-
-                    repartir();
-                    carta1 = new Carta(manoJugador.get(0).getNumero(), manoJugador.get(0).getPalo(), manoJugador.get(0).getValor());
-                    carta2 = new Carta(manoJugador.get(1).getNumero(), manoJugador.get(1).getPalo(), manoJugador.get(1).getValor());
-                    carta3 = new Carta(manoJugador.get(2).getNumero(), manoJugador.get(2).getPalo(), manoJugador.get(2).getValor());
+                    inicializarMano();
                     startGame(true);
                 } else if (responseCode == GamesActivityResultCodes.RESULT_LEFT_ROOM) {
                     // player indicated that they want to leave the room
@@ -549,6 +546,7 @@ public class MainActivity extends Activity
         }
 
         turno = idJugador1;
+        mano = idJugador1;
 
         // print out the list of participants (for debug purposes)
         Log.d(TAG, "Room ID: " + mRoomId);
@@ -920,6 +918,12 @@ public class MainActivity extends Activity
             public void run() {
                 // acciones que se ejecutan tras los milisegundos
                 dialog.dismiss();
+                resetAll();
+                resetGameVars();
+                cambiarMano();
+                inicializarMano();
+                startGame(true);
+
             }
         }, milisegundos);
     }
@@ -1274,5 +1278,17 @@ public class MainActivity extends Activity
         manoJugador.add(1, baraja.get(aleatorios[1]));
         manoJugador.add(2, baraja.get(aleatorios[2]));
 
+    }
+    public void inicializarMano(){
+        repartir();
+        carta1 = new Carta(manoJugador.get(0).getNumero(), manoJugador.get(0).getPalo(), manoJugador.get(0).getValor());
+        carta2 = new Carta(manoJugador.get(1).getNumero(), manoJugador.get(1).getPalo(), manoJugador.get(1).getValor());
+        carta3 = new Carta(manoJugador.get(2).getNumero(), manoJugador.get(2).getPalo(), manoJugador.get(2).getValor());
+    }
+    public void cambiarMano(){
+        if(turno.equals(idJugador1)) mano = idJugador2;
+        if(turno.equals(idJugador2)) mano = idJugador1;
+
+        turno = mano;
     }
 }
