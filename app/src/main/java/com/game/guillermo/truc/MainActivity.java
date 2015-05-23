@@ -827,6 +827,7 @@ public class MainActivity extends Activity
                 }
                 Toast.makeText(getApplicationContext(), "Enhorabuena has ganado la partida", Toast.LENGTH_SHORT).show();
                 dialog = dialogoNuevaPartida.create();
+                dialog.setCanceledOnTouchOutside(false);
                 dialog.show();
                 cerrarDialogo(5000);
             }else{
@@ -855,6 +856,7 @@ public class MainActivity extends Activity
                 Log.d("LLLLLLL", "Al sumar en el mensaje G, llega a 2 y pierdo");
                 Toast.makeText(getApplicationContext(), "Oh! has perdido la partida", Toast.LENGTH_SHORT).show();
                 dialog = dialogoNuevaPartida.create();
+                dialog.setCanceledOnTouchOutside(false);
                 dialog.show();
                 cerrarDialogo(5000);
             }else{
@@ -999,6 +1001,7 @@ public class MainActivity extends Activity
                     Log.d("LLLLLLL", "Gano tras llegar a 2 rondas ganadas");
                     Toast.makeText(getApplicationContext(), "Enhorabuena has ganado la partida", Toast.LENGTH_SHORT).show();
                     dialog = dialogoNuevaPartida.create();
+                    dialog.setCanceledOnTouchOutside(false);
                     dialog.show();
                     cerrarDialogo(5000);
                 }/*else{
@@ -1009,6 +1012,7 @@ public class MainActivity extends Activity
                 Log.d("LLLLLLL", "Me ganan tras haber tirado primero en la ultima ronda");
                 Toast.makeText(getApplicationContext(), "Oh! has perdido la partida", Toast.LENGTH_SHORT).show();
                 dialog = dialogoNuevaPartida.create();
+                dialog.setCanceledOnTouchOutside(false);
                 dialog.show();
                 cerrarDialogo(5000);
 
