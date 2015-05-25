@@ -25,6 +25,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -117,15 +118,15 @@ public class MainActivity extends Activity
     String idJugador1 = null;
     String idJugador2 = null;
     String turno = null;
-    TextView tvJugador1;
-    TextView tvJugador2;
-    TextView tvJugador3;
-    TextView tvCartaMesa1;
-    TextView tvCartaMesa2;
-    TextView tvCartaMesa3;
-    TextView tvMesaRival1;
-    TextView tvMesaRival2;
-    TextView tvMesaRival3;
+    ImageView tvJugador1;
+    ImageView tvJugador2;
+    ImageView tvJugador3;
+    ImageView tvCartaMesa1;
+    ImageView tvCartaMesa2;
+    ImageView tvCartaMesa3;
+    ImageView tvMesaRival1;
+    ImageView tvMesaRival2;
+    ImageView tvMesaRival3;
     private List<Carta> baraja = new ArrayList<>();
     private List<Carta> manoJugador = new ArrayList<>();
     Carta carta1;
@@ -145,17 +146,17 @@ public class MainActivity extends Activity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        tvJugador1 = (TextView) findViewById(R.id.carta1Jugador);
-        tvJugador2 = (TextView) findViewById(R.id.carta2Jugador);
-        tvJugador3 = (TextView) findViewById(R.id.carta3Jugador);
+        tvJugador1 = (ImageView) findViewById(R.id.carta1Jugador);
+        tvJugador2 = (ImageView) findViewById(R.id.carta2Jugador);
+        tvJugador3 = (ImageView) findViewById(R.id.carta3Jugador);
 
-        tvCartaMesa1 = (TextView) findViewById(R.id.carta1Mesa);
-        tvCartaMesa2 = (TextView) findViewById(R.id.carta2Mesa);
-        tvCartaMesa3 = (TextView) findViewById(R.id.carta3Mesa);
+        tvCartaMesa1 = (ImageView) findViewById(R.id.carta1Mesa);
+        tvCartaMesa2 = (ImageView) findViewById(R.id.carta2Mesa);
+        tvCartaMesa3 = (ImageView) findViewById(R.id.carta3Mesa);
 
-        tvMesaRival1 = (TextView) findViewById(R.id.carta1MesaRival);
-        tvMesaRival2 = (TextView) findViewById(R.id.carta2MesaRival);
-        tvMesaRival3 = (TextView) findViewById(R.id.carta3MesaRival);
+        tvMesaRival1 = (ImageView) findViewById(R.id.carta1MesaRival);
+        tvMesaRival2 = (ImageView) findViewById(R.id.carta2MesaRival);
+        tvMesaRival3 = (ImageView) findViewById(R.id.carta3MesaRival);
 
 
         dialogoNuevaPartida = new AlertDialog.Builder(this);
@@ -729,9 +730,12 @@ public class MainActivity extends Activity
     void startGame(boolean multiplayer) {
 
 
-        tvJugador1.setText(carta1.getNumero() + " de " + carta1.getPalo());
+       /* tvJugador1.setText(carta1.getNumero() + " de " + carta1.getPalo());
         tvJugador2.setText(carta2.getNumero() + " de " + carta2.getPalo());
-        tvJugador3.setText(carta3.getNumero() + " de " + carta3.getPalo());
+        tvJugador3.setText(carta3.getNumero() + " de " + carta3.getPalo()); */
+        asignarImagenCarta(carta1,tvJugador1);
+        asignarImagenCarta(carta2,tvJugador2);
+        asignarImagenCarta(carta3,tvJugador3);
 
         tvJugador1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -770,18 +774,27 @@ public class MainActivity extends Activity
     }
     void cartaSeleccionada(View view){
         //Actualizando textViews
-        TextView aux = (TextView)view;
+        //ImageView aux = (ImageView)view;
+        Carta aux = new Carta(null ,null,null);
         view.setVisibility(View.INVISIBLE);
+
+        if(view.equals(tvJugador1))  aux=carta1;
+        if(view.equals(tvJugador2))  aux=carta2;
+        if(view.equals(tvJugador3))  aux=carta3;
+
         if(tvCartaMesa1.getVisibility() == View.INVISIBLE){
-            tvCartaMesa1.setText(aux.getText().toString());
+            //tvCartaMesa1.setText(aux.getText().toString());
+            asignarImagenCarta(aux,tvCartaMesa1);
             tvCartaMesa1.setVisibility(View.VISIBLE);
         }
         else if(tvCartaMesa2.getVisibility() == View.INVISIBLE){
-            tvCartaMesa2.setText(aux.getText().toString());
+            //tvCartaMesa2.setText(aux.getText().toString());
+            asignarImagenCarta(aux,tvCartaMesa2);
             tvCartaMesa2.setVisibility(View.VISIBLE);
         }
         else if(tvCartaMesa3.getVisibility() == View.INVISIBLE){
-            tvCartaMesa3.setText(aux.getText().toString());
+            //tvCartaMesa3.setText(aux.getText().toString());
+            asignarImagenCarta(aux,tvCartaMesa3);
             tvCartaMesa3.setVisibility(View.VISIBLE);
         }
         if(view == tvJugador1) miValor = Integer.parseInt(carta1.getValor());
@@ -961,7 +974,9 @@ public class MainActivity extends Activity
                 String palo = arrayBuf[1];
                 //String arrayBuf2[] = arrayBuf[0].split("$");
                 String numeroCarta = arrayBuf[0].substring(1);
-                tvMesaRival1.setText(numeroCarta+" de "+palo);
+                Carta newCarta = new Carta(numeroCarta,palo,arrayBuf[2]);
+                //tvMesaRival1.setText(numeroCarta+" de "+palo);
+                asignarImagenCarta(newCarta,tvMesaRival1);
                 tvMesaRival1.setVisibility(View.VISIBLE);
 
             } else if(buf[0] == '$' && tvMesaRival2.getVisibility()==View.INVISIBLE){
@@ -972,7 +987,9 @@ public class MainActivity extends Activity
                 String palo = arrayBuf[1];
                 //String arrayBuf2[] = arrayBuf[0].split("$");
                 String numeroCarta = arrayBuf[0].substring(1);
-                tvMesaRival2.setText(numeroCarta+" de "+palo);
+                Carta newCarta = new Carta(numeroCarta,palo,arrayBuf[2]);
+                //tvMesaRival2.setText(numeroCarta+" de "+palo);
+                asignarImagenCarta(newCarta,tvMesaRival2);
                 tvMesaRival2.setVisibility(View.VISIBLE);
 
             } else if(buf[0] == '$' && tvMesaRival3.getVisibility()==View.INVISIBLE){
@@ -983,7 +1000,9 @@ public class MainActivity extends Activity
                 String palo = arrayBuf[1];
                 //String arrayBuf2[] = arrayBuf[0].split("$");
                 String numeroCarta = arrayBuf[0].substring(1);
-                tvMesaRival3.setText(numeroCarta+" de "+palo);
+                Carta newCarta = new Carta(numeroCarta,palo,arrayBuf[2]);
+                asignarImagenCarta(newCarta,tvMesaRival3);
+                //tvMesaRival3.setText(numeroCarta+" de "+palo);
                 tvMesaRival3.setVisibility(View.VISIBLE);
 
             } else if(buf[0] == 'R'){
@@ -1283,16 +1302,90 @@ public class MainActivity extends Activity
         manoJugador.add(2, baraja.get(aleatorios[2]));
 
     }
+
     public void inicializarMano(){
         repartir();
         carta1 = new Carta(manoJugador.get(0).getNumero(), manoJugador.get(0).getPalo(), manoJugador.get(0).getValor());
         carta2 = new Carta(manoJugador.get(1).getNumero(), manoJugador.get(1).getPalo(), manoJugador.get(1).getValor());
         carta3 = new Carta(manoJugador.get(2).getNumero(), manoJugador.get(2).getPalo(), manoJugador.get(2).getValor());
     }
+
     public void cambiarMano(){
         if(turno.equals(idJugador1)) mano = idJugador2;
         if(turno.equals(idJugador2)) mano = idJugador1;
 
         turno = mano;
+    }
+
+    public void asignarImagenCarta(Carta carta, ImageView view){
+        String sCarta = carta.getNumero() + carta.getPalo();
+        switch(sCarta){
+            case "1bastos":
+                view.setImageResource(R.drawable.uno_bastos);
+                break;
+            case "1espadas":
+                view.setImageResource(R.drawable.uno_espadas);
+                break;
+            case "3oros":
+                view.setImageResource(R.drawable.tres_oros);
+                break;
+            case "3espadas":
+                view.setImageResource(R.drawable.tres_espadas);
+                break;
+            case "3copas":
+                view.setImageResource(R.drawable.tres_copas);
+                break;
+            case "3bastos":
+                view.setImageResource(R.drawable.tres_bastos);
+                break;
+            case "5bastos":
+                view.setImageResource(R.drawable.cinco_bastos);
+                break;
+            case "5copas":
+                view.setImageResource(R.drawable.cinco_copas);
+                break;
+            case "5espadas":
+                view.setImageResource(R.drawable.cinco_espadas);
+                break;
+            case "5oros":
+                view.setImageResource(R.drawable.cinco_oros);
+                break;
+            case "4bastos":
+                view.setImageResource(R.drawable.cuatro_bastos);
+                break;
+            case "4copas":
+                view.setImageResource(R.drawable.cuatro_copas);
+                break;
+            case "4espadas":
+                view.setImageResource(R.drawable.cuatro_espadas);
+                break;
+            case "4oros":
+                view.setImageResource(R.drawable.cuatro_oros);
+                break;
+            case "6bastos":
+                view.setImageResource(R.drawable.seis_bastos);
+                break;
+            case "6copas":
+                view.setImageResource(R.drawable.seis_copas);
+                break;
+            case "6espadas":
+                view.setImageResource(R.drawable.seis_espadas);
+                break;
+            case "6oros":
+                view.setImageResource(R.drawable.seis_oros);
+                break;
+            case "7bastos":
+                view.setImageResource(R.drawable.siete_bastos);
+                break;
+            case "7copas":
+                view.setImageResource(R.drawable.siete_copas);
+                break;
+            case "7espadas":
+                view.setImageResource(R.drawable.siete_espadas);
+                break;
+            case "7oros":
+                view.setImageResource(R.drawable.siete_oros);
+                break;
+        }
     }
 }
