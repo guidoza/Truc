@@ -15,9 +15,11 @@
 
 package com.game.guillermo.truc;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -29,6 +31,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.github.clans.fab.FloatingActionButton;
+import com.github.clans.fab.FloatingActionMenu;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.games.Games;
@@ -141,10 +145,61 @@ public class MainActivity extends Activity
     String remoteId;
     String mano;
 
+    private FloatingActionButton fabTruc;
+    private FloatingActionButton fabEnvid;
+    private FloatingActionButton fabMeVoy;
+
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
+        View.OnClickListener clickListener = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String text = "";
+
+                switch (v.getId()) {
+                    case R.id.fab12:
+                        text = fabTruc.getLabelText();
+                        break;
+                    case R.id.fab22:
+                        text = fabEnvid.getLabelText();
+                        break;
+                    case R.id.fab32:
+                        text = fabMeVoy.getLabelText();
+                        break;
+                }
+
+                Toast.makeText(MainActivity.this, text, Toast.LENGTH_SHORT).show();
+            }
+        };
+
+        final FloatingActionMenu menu = (FloatingActionMenu) findViewById(R.id.menu);
+        menu.showMenuButton(true);
+        menu.setOnMenuToggleListener(new FloatingActionMenu.OnMenuToggleListener() {
+            @Override
+            public void onMenuToggle(boolean opened) {
+                String text = "";
+                if (opened) {
+                    //Bloquear todos los elementos
+                } else {
+                    //Desbloquear todos los elementos
+                }
+            }
+        });
+
+        fabTruc = (FloatingActionButton) findViewById(R.id.fab12);
+        fabEnvid = (FloatingActionButton) findViewById(R.id.fab22);
+        fabMeVoy = (FloatingActionButton) findViewById(R.id.fab32);
+
+        fabTruc.setOnClickListener(clickListener);
+        fabEnvid.setOnClickListener(clickListener);
+        fabMeVoy.setOnClickListener(clickListener);
+
+
 
         tvJugador1 = (ImageView) findViewById(R.id.carta1Jugador);
         tvJugador2 = (ImageView) findViewById(R.id.carta2Jugador);
@@ -184,6 +239,8 @@ public class MainActivity extends Activity
     Intent intent;
 
         switch (v.getId()) {
+            case R.id.button_single_player_2:
+                switchToScreen(R.id.screen_game);
             case R.id.button_sign_in:
                 // user wants to sign in
                 // Check to see the developer who's running this sample code read the instructions :-)
@@ -1318,7 +1375,7 @@ public class MainActivity extends Activity
     }
 
     public void asignarImagenCarta(Carta carta, ImageView view){
-        String sCarta = carta.getNumero() + carta.getPalo();
+ /*       String sCarta = carta.getNumero() + carta.getPalo();
         switch(sCarta){
             case "1bastos":
                 view.setImageResource(R.drawable.uno_bastos);
@@ -1386,6 +1443,6 @@ public class MainActivity extends Activity
             case "7oros":
                 view.setImageResource(R.drawable.siete_oros);
                 break;
-        }
+        }*/
     }
 }
