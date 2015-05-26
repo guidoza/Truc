@@ -31,6 +31,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 import com.google.android.gms.common.ConnectionResult;
@@ -199,8 +200,6 @@ public class MainActivity extends Activity
         fabEnvid.setOnClickListener(clickListener);
         fabMeVoy.setOnClickListener(clickListener);
 
-
-
         tvJugador1 = (ImageView) findViewById(R.id.carta1Jugador);
         tvJugador2 = (ImageView) findViewById(R.id.carta2Jugador);
         tvJugador3 = (ImageView) findViewById(R.id.carta3Jugador);
@@ -233,6 +232,19 @@ public class MainActivity extends Activity
             findViewById(id).setOnClickListener(this);
     }
   }
+    private void showSingleChoice(String title, int array) {
+        new MaterialDialog.Builder(this)
+                .title(title)
+                .items(array)
+                .itemsCallbackSingleChoice(2, new MaterialDialog.ListCallbackSingleChoice() {
+                    @Override
+                    public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+                        return true; // allow selection
+                    }
+                })
+                .positiveText("Elegir")
+                .show();
+    }
 
   @Override
   public void onClick(View v) {
@@ -1375,7 +1387,7 @@ public class MainActivity extends Activity
     }
 
     public void asignarImagenCarta(Carta carta, ImageView view){
- /*       String sCarta = carta.getNumero() + carta.getPalo();
+        String sCarta = carta.getNumero() + carta.getPalo();
         switch(sCarta){
             case "1bastos":
                 view.setImageResource(R.drawable.uno_bastos);
@@ -1443,6 +1455,6 @@ public class MainActivity extends Activity
             case "7oros":
                 view.setImageResource(R.drawable.siete_oros);
                 break;
-        }*/
+        }
     }
 }

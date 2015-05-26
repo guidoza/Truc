@@ -25,5 +25,7 @@ dependencies {
     compile 'com.google.android.gms:play-services:7.3.0'
     compile project(':BaseGameUtils')
     compile 'com.github.clans:fab:1.5.0'
+    compile 'com.afollestad:material-dialogs:0.7.4.2'
+
 
 }
