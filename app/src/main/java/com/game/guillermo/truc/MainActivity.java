@@ -160,11 +160,14 @@ public class MainActivity extends Activity
     int puntos = 0;
     int puntosTotalesMios = 0;
     int puntosTotalesJugador2 = 0;
+    String ganadorRonda1 = null;
 
     private FloatingActionButton fabTruc;
     private FloatingActionButton fabEnvid;
     private FloatingActionButton fabMeVoy;
     MaterialDialog.Builder materialDialog;
+    MaterialDialog.ButtonCallback callbackReinicio;
+
 
 
     @Override
@@ -207,6 +210,17 @@ public class MainActivity extends Activity
                 }
             }
         });
+        callbackReinicio= new MaterialDialog.ButtonCallback() {
+            @Override
+            public void onPositive(MaterialDialog dialog) {
+                super.onPositive(dialog);
+                resetAll();
+                resetGameVars();
+                cambiarMano();
+                inicializarMano();
+                startGame(true);
+            }
+        };
 
         fabTruc = (FloatingActionButton) findViewById(R.id.fab12);
         fabEnvid = (FloatingActionButton) findViewById(R.id.fab22);
@@ -272,6 +286,13 @@ public class MainActivity extends Activity
                 .cancelable(false);
         materialDialog.show();
     }
+    private void showProgressDialog() {
+            new MaterialDialog.Builder(this)
+                    .title("Repartiendo...")
+                    .content(R.string.please_wait)
+                    .progress(true, 0)
+                    .show();
+        }
 
   @Override
   public void onClick(View v) {
@@ -797,6 +818,8 @@ public class MainActivity extends Activity
         tvMesaRival1.setVisibility(View.INVISIBLE);
         tvMesaRival2.setVisibility(View.INVISIBLE);
         tvMesaRival3.setVisibility(View.INVISIBLE);
+        hayEmpate = false;
+        ganadorRonda1 = null;
 
     }
 
@@ -829,7 +852,7 @@ public class MainActivity extends Activity
        /* tvJugador1.setText(carta1.getNumero() + " de " + carta1.getPalo());
         tvJugador2.setText(carta2.getNumero() + " de " + carta2.getPalo());
         tvJugador3.setText(carta3.getNumero() + " de " + carta3.getPalo()); */
-        asignarImagenCarta(carta1,tvJugador1);
+        asignarImagenCarta(carta1, tvJugador1);
         asignarImagenCarta(carta2,tvJugador2);
         asignarImagenCarta(carta3,tvJugador3);
 
@@ -881,9 +904,9 @@ public class MainActivity extends Activity
         Carta aux = new Carta(null ,null,null);
         view.setVisibility(View.INVISIBLE);
 
-        if(view.equals(tvJugador1))  aux=carta1;
-        if(view.equals(tvJugador2))  aux=carta2;
-        if(view.equals(tvJugador3))  aux=carta3;
+        if(view.equals(tvJugador1)){  aux=carta1; miValor = Integer.parseInt(carta1.getValor());}
+        if(view.equals(tvJugador2)){  aux=carta2; miValor = Integer.parseInt(carta2.getValor());}
+        if(view.equals(tvJugador3)){  aux=carta3; miValor = Integer.parseInt(carta3.getValor());}
 
         if(tvCartaMesa1.getVisibility() == View.INVISIBLE){
             //tvCartaMesa1.setText(aux.getText().toString());
@@ -904,85 +927,47 @@ public class MainActivity extends Activity
         if(view == tvJugador2) miValor = Integer.parseInt(carta2.getValor());
         if(view == tvJugador3) miValor = Integer.parseInt(carta3.getValor());
 
-        byte[] messageCarta = new byte[0];
-        if(view == tvJugador1) messageCarta = ("$"+carta1.toString()).getBytes();
-        if(view == tvJugador2) messageCarta = ("$"+carta2.toString()).getBytes();
-        if(view == tvJugador3) messageCarta = ("$"+carta3.toString()).getBytes();
-        for (Participant p : mParticipants) {
-            if (!p.getParticipantId().equals(mMyId)) {
-                Games.RealTimeMultiplayer.sendReliableMessage(mGoogleApiClient, null, messageCarta,
-                        mRoomId, p.getParticipantId());
-            }
-        }
+        byte[] messageCarta = ("$"+aux.toString()).getBytes();
+        enviarValorCarta(messageCarta);
         tiroPrimero();
-        Log.d("EEEEEE", "" + casoTiroPrimero);
-        Log.d("EEEEEE", "" + hayEmpate());
+
         //Caso en el que NO hay empate
         if(!hayEmpate()) {
             //Caso en el que ganas tirando segundo
             if (soyGanadorRonda()) {
-                Log.d("LLLLLLL", "Caso en el que gano la ronda");
-                if (ronda == 1) misRondasGanadas = 1;
+                if (ronda == 1){
+                    misRondasGanadas = 1;
+                    ganadorRonda1 = mMyId;
+                }
                 if (ronda == 2 && misRondasGanadas == 1) misRondasGanadas = 2;
                 else if (ronda == 2 && misRondasGanadas == 0) misRondasGanadas = 1;
                 if (ronda == 3) misRondasGanadas = 2;
                 //actualizaRonda();
+                enviarMensajeRonda();
 
-                byte[] messageRonda = ("R " + String.valueOf(ronda)).getBytes();
-                for (Participant p : mParticipants) {
-                    if (!p.getParticipantId().equals(mMyId)) {
-                        Games.RealTimeMultiplayer.sendReliableMessage(mGoogleApiClient, null, messageRonda,
-                                mRoomId, p.getParticipantId());
-                    }
-                }
                 //He ganado la partida
                 if (misRondasGanadas == 2) {
-                    byte[] messageGanadorPartida = "W".getBytes();
-                    for (Participant p : mParticipants) {
-                        if (!p.getParticipantId().equals(mMyId)) {
-                            Games.RealTimeMultiplayer.sendReliableMessage(mGoogleApiClient, null, messageGanadorPartida,
-                                    mRoomId, p.getParticipantId());
-                            Log.d("LLLLLLL", "He ganado la ronda, y la partida");
-                        }
-                    }
-                    Toast.makeText(getApplicationContext(), "Enhorabuena has ganado la partida", Toast.LENGTH_SHORT).show();
-                    dialog = dialogoNuevaPartida.create();
-                    dialog.setCanceledOnTouchOutside(false);
-                    dialog.show();
-                    cerrarDialogo(5000);
+                    enviarMensajeHasPerdido();
+                    showBasicAlert("Enhorabuena", "Has ganado la mano");
+                    materialDialog.callback(callbackReinicio);
                 } else {
                     Toast.makeText(getApplicationContext(), "Es tu turno", Toast.LENGTH_SHORT).show();
-                    Log.d("LLLLLLL", "Caso en el que gano la ronda, pero aun no la partida");
                 }
 
                 //Caso en el que tiras primero, o pierdes tirando segundo
             } else {
-                Log.d("LLLLLLL", "Caso en el que tiras primero, o pierdes tirando segundo");
                 //Caso en el que pierdo tirando segundo
                 if (!casoTiroPrimero) {
                     //Enviar mensaje para que el jugaddor sume rondas ganadas
-                    byte[] messageGanadorRonda = "G".getBytes();
-                    for (Participant p : mParticipants) {
-                        if (!p.getParticipantId().equals(mMyId)) {
-                            Games.RealTimeMultiplayer.sendReliableMessage(mGoogleApiClient, null, messageGanadorRonda,
-                                    mRoomId, p.getParticipantId());
-                            Log.d("LLLLLLL", "No tiro primero, envio mensaje G comunicando que sume rondasGanadas");
-                        }
-                    }
+                    enviarMensajeSumaRonda();
                 }
                 //Caso tiro primero o continuo
-                //actualizaRonda();
-                //casoTiroPrimero = false;
                 if ((ronda == 2 && misRondasGanadas == 0) || (ronda == 3 && misRondasGanadas < 2) && !casoTiroPrimero) {
-                    Log.d("LLLLLLL", "Al sumar en el mensaje G, llega a 2 y pierdo");
-                    Toast.makeText(getApplicationContext(), "Oh! has perdido la partida", Toast.LENGTH_SHORT).show();
-                    dialog = dialogoNuevaPartida.create();
-                    dialog.setCanceledOnTouchOutside(false);
-                    dialog.show();
-                    cerrarDialogo(5000);
+                    //Pierdes en la segunda ronda o en la tercera
+                    showBasicAlert("Lástima", "Has perdido la mano");
+                    materialDialog.callback(callbackReinicio);
                 } else {
-                    Log.d("LLLLLLL", "Caso en el que tiras primero o todavia no hay ganador");
-                    //casoTiroPrimero = false;
+                    //Caso en el que tiras primero o todavia no hay ganador");
                     cambiarTurno();
                     resetGameVars();
                     Toast.makeText(getApplicationContext(), "Esperando al Jugador", Toast.LENGTH_SHORT).show();
@@ -991,39 +976,24 @@ public class MainActivity extends Activity
                     tvJugador3.setEnabled(false);
                 }
             }
-            Log.d("LLLLLLL", "Ronda: " + ronda);
-            Log.d("LLLLLLL", "Mis rondasGanadas: " + misRondasGanadas);
-            Log.d("LLLLLLL", "Caso tiro primero: " + casoTiroPrimero);
             if (((ronda == 3 || (!soyGanadorRonda() && ronda == 2)) && misRondasGanadas < 2 && !casoTiroPrimero) || misRondasGanadas == 2) {
                 return;
             } else {
                 casoTiroPrimero = false;
                 actualizaRonda();
-                Log.d("LLLLLLL", "Comunicando turno");
                 //Comunicar el turno al oponente, gane o pierda
-                byte[] messageTurno = turno.getBytes();
-                for (Participant p : mParticipants) {
-                    if (!p.getParticipantId().equals(mMyId)) {
-                        Games.RealTimeMultiplayer.sendReliableMessage(mGoogleApiClient, null, messageTurno,
-                                mRoomId, p.getParticipantId());
-                    }
-                }
+                enviarMensajeTurno();
             }
         }else{
-        /* Caso en el que hay empate */
+        //Caso en el que hay empate
         if (ronda == 1){
-            byte[] messageEmpatePrimero = ("E").getBytes();
-            for (Participant p : mParticipants) {
-                if (!p.getParticipantId().equals(mMyId)) {
-                    Games.RealTimeMultiplayer.sendReliableMessage(mGoogleApiClient, null, messageEmpatePrimero,
-                            mRoomId, p.getParticipantId());
-                }
-            }
+            enviarMensajeHayEmpate();
             casoEmpatePrimero();
-        }else casoEmpateSegundoTercero();
+        }else{
+            enviarMensajeHayEmpate();
+            casoEmpateSegundoTercero();
         }
-
-
+        }
 
     }
     void tiroPrimero(){
@@ -1053,31 +1023,21 @@ public class MainActivity extends Activity
     boolean hayEmpate(){
         if(ronda == 1 && miValor == valor1 && !casoTiroPrimero){
             hayEmpate = true;
-            Log.d("EEEEEE", "ronda1" + hayEmpate);
             return true;
         }
         if(ronda == 2 && miValor == valor2 && !casoTiroPrimero){
             hayEmpate = true;
-            Log.d("EEEEEE", "ronda2" + hayEmpate);
             return true;
         }
         if(ronda == 3 && miValor == valor3 && !casoTiroPrimero){
             hayEmpate = true;
-            Log.d("EEEEEE", "ronda3" + hayEmpate);
             return true;
         }
         return false;
     }
     void casoEmpatePrimero(){
         showBasicAlert("Empate en la primera ronda!", "La carta que eljas será mostrada arriba");
-
-        byte[] messageRonda = ("R " + String.valueOf(ronda)).getBytes();
-        for (Participant p : mParticipants) {
-            if (!p.getParticipantId().equals(mMyId)) {
-                Games.RealTimeMultiplayer.sendReliableMessage(mGoogleApiClient, null, messageRonda,
-                        mRoomId, p.getParticipantId());
-            }
-        }
+        //Si no soy mano, cambio turno
         if(!mMyId.equals(mano)) {
             resetGameVars();
             Toast.makeText(getApplicationContext(), "Esperando al Jugador", Toast.LENGTH_SHORT).show();
@@ -1085,24 +1045,26 @@ public class MainActivity extends Activity
             tvJugador2.setEnabled(false);
             tvJugador3.setEnabled(false);
             cambiarTurno();
-            byte[] messageTurno = turno.getBytes();
-            for (Participant p : mParticipants) {
-                if (!p.getParticipantId().equals(mMyId)) {
-                    Games.RealTimeMultiplayer.sendReliableMessage(mGoogleApiClient, null, messageTurno,
-                            mRoomId, p.getParticipantId());
-                }
-            }
+            enviarMensajeTurno();
         }
-
-
+        //Si soy mano espero a carta seleccionada tras empate
     }
     void casoEmpateSegundoTercero(){
-
+        //Caso en el que gano
+        if(ganadorRonda1!=null){
+            enviarMensajeHasPerdido();
+            showBasicAlert("Enhorabuena", "Has ganado la mano");
+            materialDialog.callback(callbackReinicio);
+        //Caso en el que pierdo
+        }else{
+            enviarMensajeSumaRonda();
+            showBasicAlert("Lástima", "Has perdido la mano");
+            materialDialog.callback(callbackReinicio);
+        }
     }
 
     void cartaSeleccionadaEmpate(View view){
-        //Actualizando textViews
-        //ImageView aux = (ImageView)view;
+
         Carta aux = new Carta(null ,null,null);
         if(view.equals(tvJugador1)){ aux=carta1; miValor = Integer.parseInt(carta1.getValor());}
         if(view.equals(tvJugador2)){ aux=carta2; miValor = Integer.parseInt(carta2.getValor());}
@@ -1127,65 +1089,25 @@ public class MainActivity extends Activity
             asignarImagenCarta(aux,tvCartaMesa3);
             tvCartaMesa3.setVisibility(View.VISIBLE);
         }
-        byte[] messageCarta;
-        messageCarta = ("$"+aux.toString()).getBytes();
-        for (Participant p : mParticipants) {
-            if (!p.getParticipantId().equals(mMyId)) {
-                Games.RealTimeMultiplayer.sendReliableMessage(mGoogleApiClient, null, messageCarta,
-                        mRoomId, p.getParticipantId());
-            }
-        }
+        byte[] messageCarta = ("$"+aux.toString()).getBytes();
+        enviarValorCarta(messageCarta);
+        // Si soy mano, tiro y cambio turno
         if(mMyId.equals(mano)){
             cambiarTurno();
-            byte[] messageTurno = turno.getBytes();
-            for (Participant p : mParticipants) {
-                if (!p.getParticipantId().equals(mMyId)) {
-                    Games.RealTimeMultiplayer.sendReliableMessage(mGoogleApiClient, null, messageTurno,
-                            mRoomId, p.getParticipantId());
-                }
-            }
+            enviarMensajeTurno();
             Toast.makeText(getApplicationContext(), "Esperando al Jugador", Toast.LENGTH_SHORT).show();
+        //Si no soy mano, compruebo quien gana
         } else if(soyGanadorRonda()){
+            //Caso en el que gano
             showBasicAlert("Enhorabuena", "Has ganado la mano");
-            materialDialog.cancelListener(new DialogInterface.OnCancelListener() {
-                @Override
-                public void onCancel(DialogInterface dialogInterface) {
-                    resetAll();
-                    resetGameVars();
-                    cambiarMano();
-                    inicializarMano();
-                    startGame(true);
-                }
-            });
-            byte[] messageGanadorPartida = "W".getBytes();
-            for (Participant p : mParticipants) {
-                if (!p.getParticipantId().equals(mMyId)) {
-                    Games.RealTimeMultiplayer.sendReliableMessage(mGoogleApiClient, null, messageGanadorPartida,
-                            mRoomId, p.getParticipantId());
-                    Log.d("LLLLLLL", "He ganado la ronda, y la partida");
-                }
-            }
+            materialDialog.callback(callbackReinicio);
+            enviarMensajeHasPerdido();
 
         }else{
+            //Caso en el que pierdo
             showBasicAlert("Lástima", "Has perdido la mano");
-            materialDialog.cancelListener(new DialogInterface.OnCancelListener() {
-                @Override
-                public void onCancel(DialogInterface dialogInterface) {
-                    resetAll();
-                    resetGameVars();
-                    cambiarMano();
-                    inicializarMano();
-                    startGame(true);
-                }
-            });
-            byte[] messageGanadorRonda = "G".getBytes();
-            for (Participant p : mParticipants) {
-                if (!p.getParticipantId().equals(mMyId)) {
-                    Games.RealTimeMultiplayer.sendReliableMessage(mGoogleApiClient, null, messageGanadorRonda,
-                            mRoomId, p.getParticipantId());
-                    Log.d("LLLLLLL", "No tiro primero, envio mensaje G comunicando que sume rondasGanadas");
-                }
-            }
+            materialDialog.callback(callbackReinicio);
+            enviarMensajeSumaRonda();
         }
     }
 
@@ -1209,6 +1131,73 @@ public class MainActivity extends Activity
 
             }
         }, milisegundos);
+    }
+
+
+
+    /*  MESSAGE SECTION
+     *
+     *
+     *
+     *
+     *
+     */
+
+    public void enviarValorCarta(byte[] messageCarta){
+        byte[] message = messageCarta;
+        for (Participant p : mParticipants) {
+            if (!p.getParticipantId().equals(mMyId)) {
+                Games.RealTimeMultiplayer.sendReliableMessage(mGoogleApiClient, null, message,
+                        mRoomId, p.getParticipantId());
+            }
+        }
+    }
+    public void enviarMensajeRonda(){
+        byte[] messageRonda = ("R " + String.valueOf(ronda)).getBytes();
+        for (Participant p : mParticipants) {
+            if (!p.getParticipantId().equals(mMyId)) {
+                Games.RealTimeMultiplayer.sendReliableMessage(mGoogleApiClient, null, messageRonda,
+                        mRoomId, p.getParticipantId());
+            }
+        }
+    }
+    public void enviarMensajeTurno(){
+        byte[] messageTurno = turno.getBytes();
+        for (Participant p : mParticipants) {
+            if (!p.getParticipantId().equals(mMyId)) {
+                Games.RealTimeMultiplayer.sendReliableMessage(mGoogleApiClient, null, messageTurno,
+                        mRoomId, p.getParticipantId());
+            }
+        }
+    }
+    public void enviarMensajeHasPerdido(){
+        byte[] messageGanadorPartida = "W".getBytes();
+        for (Participant p : mParticipants) {
+            if (!p.getParticipantId().equals(mMyId)) {
+                Games.RealTimeMultiplayer.sendReliableMessage(mGoogleApiClient, null, messageGanadorPartida,
+                        mRoomId, p.getParticipantId());
+                Log.d("LLLLLLL", "He ganado la ronda, y la partida");
+            }
+        }
+    }
+    public void enviarMensajeHayEmpate(){
+        byte[] messageEmpatePrimero = ("E").getBytes();
+        for (Participant p : mParticipants) {
+            if (!p.getParticipantId().equals(mMyId)) {
+                Games.RealTimeMultiplayer.sendReliableMessage(mGoogleApiClient, null, messageEmpatePrimero,
+                        mRoomId, p.getParticipantId());
+            }
+        }
+    }
+    public void enviarMensajeSumaRonda(){
+        byte[] messageGanadorRonda = "G".getBytes();
+        for (Participant p : mParticipants) {
+            if (!p.getParticipantId().equals(mMyId)) {
+                Games.RealTimeMultiplayer.sendReliableMessage(mGoogleApiClient, null, messageGanadorRonda,
+                        mRoomId, p.getParticipantId());
+                Log.d("LLLLLLL", "No tiro primero, envio mensaje G comunicando que sume rondasGanadas");
+            }
+        }
     }
 
     /*
@@ -1281,45 +1270,35 @@ public class MainActivity extends Activity
                 actualizaRonda();
 
             } else if(buf[0] == 'G'){
+                //Si ha habido empate
                 if(hayEmpate){
                     showBasicAlert("Enhorabuena", "Has ganado la mano");
-                    materialDialog.cancelListener(new DialogInterface.OnCancelListener() {
-                        @Override
-                        public void onCancel(DialogInterface dialogInterface) {
-                            resetAll();
-                            resetGameVars();
-                            cambiarMano();
-                            inicializarMano();
-                            startGame(true);
-                        }
-                    });
+                    materialDialog.callback(callbackReinicio);
                 }else{
+                //Sumo rondas ganadas
+                if(ronda == 1){
+                    ganadorRonda1 = mMyId;
+                }
                 misRondasGanadas++;
                 actualizaRonda();
-                Log.d("LLLLLLL", "Actualizo mis rondas ganadas(mensaje G)");
-                if(misRondasGanadas == 2){
-                    Log.d("LLLLLLL", "Gano tras llegar a 2 rondas ganadas");
-                    Toast.makeText(getApplicationContext(), "Enhorabuena has ganado la partida", Toast.LENGTH_SHORT).show();
-                    dialog = dialogoNuevaPartida.create();
-                    dialog.setCanceledOnTouchOutside(false);
-                    dialog.show();
-                    cerrarDialogo(5000);
+                //Si llego a 2 he ganado
+                    if (misRondasGanadas == 2) {
+                        showBasicAlert("Enhorabuena", "Has ganado la mano");
+                    materialDialog.callback(callbackReinicio);
                 }
-                }/*else{
-                startGame(true);
-                }*/
+                }
 
             }else if(buf[0] == 'W'){
-                Log.d("LLLLLLL", "Me ganan tras haber tirado primero en la ultima ronda");
-                Toast.makeText(getApplicationContext(), "Oh! has perdido la partida", Toast.LENGTH_SHORT).show();
-                dialog = dialogoNuevaPartida.create();
-                dialog.setCanceledOnTouchOutside(false);
-                dialog.show();
-                cerrarDialogo(5000);
+                //Caso en que pierdo
+                showBasicAlert("Lástima!", "Has perdido la mano");
+                materialDialog.callback(callbackReinicio);
 
             }else if(buf[0] == 'E'){
-                showBasicAlert("Empate en la primera ronda!", "La carta que eljas será mostrada arriba");
-                hayEmpate = true;
+                //Mensaje que actualiza si hay empate en la primera ronda
+                if(ronda == 1){
+                    showBasicAlert("Empate en la primera ronda!", "La carta que eljas será mostrada arriba");
+                    hayEmpate = true;
+                }else hayEmpate = true;
 
             }else {
                 String turnoNuevo = new String(buf, "UTF-8");
@@ -1597,8 +1576,8 @@ public class MainActivity extends Activity
     }
 
     public void cambiarMano(){
-        if(turno.equals(idJugador1)) mano = idJugador2;
-        if(turno.equals(idJugador2)) mano = idJugador1;
+        if(mano.equals(idJugador1)) mano = idJugador2;
+        if(mano.equals(idJugador2)) mano = idJugador1;
 
         turno = mano;
     }
