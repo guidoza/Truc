@@ -161,6 +161,10 @@ public class MainActivity extends Activity
     int puntosTotalesMios = 0;
     int puntosTotalesJugador2 = 0;
     String ganadorRonda1 = null;
+    String sCartasJ2 = "";
+    int[] list = new int[3];
+    int[] list2 = new int[3];
+    int[] numCarta = new int[3];
 
     private FloatingActionButton fabTruc;
     private FloatingActionButton fabEnvid;
@@ -1200,6 +1204,17 @@ public class MainActivity extends Activity
         }
     }
 
+    public void enviarMensajeRepartir(){
+        byte[] messageRepartir = ("S "+sCartasJ2).getBytes();
+        for (Participant p : mParticipants) {
+            if (!p.getParticipantId().equals(mMyId)) {
+                Games.RealTimeMultiplayer.sendReliableMessage(mGoogleApiClient, null, messageRepartir,
+                        mRoomId, p.getParticipantId());
+
+            }
+        }
+    }
+
     /*
      * COMMUNICATIONS SECTION. Methods that implement the game's network
      * protocol.
@@ -1293,12 +1308,21 @@ public class MainActivity extends Activity
                 showBasicAlert("Lástima!", "Has perdido la mano");
                 materialDialog.callback(callbackReinicio);
 
-            }else if(buf[0] == 'E'){
+            }else if(buf[0] == 'E') {
                 //Mensaje que actualiza si hay empate en la primera ronda
-                if(ronda == 1){
+                if (ronda == 1) {
                     showBasicAlert("Empate en la primera ronda!", "La carta que eljas será mostrada arriba");
                     hayEmpate = true;
-                }else hayEmpate = true;
+                } else hayEmpate = true;
+
+            }else if(buf[0] == 'S'){
+                String sBuf = new String(buf, "UTF-8");
+                String[] arrayCartasJ2 = sBuf.split(" ");
+                numCarta[0] = Integer.parseInt(arrayCartasJ2[1]);
+                numCarta[1] = Integer.parseInt(arrayCartasJ2[2]);
+                numCarta[2] = Integer.parseInt(arrayCartasJ2[3]);
+
+
 
             }else {
                 String turnoNuevo = new String(buf, "UTF-8");
@@ -1520,59 +1544,66 @@ public class MainActivity extends Activity
         return baraja;
     }
     public int[] crearAleatorio() {
-        int[] list = new int[3];
-        int[] list2 = new int[3];
-        list[0] = (int) (Math.random() * 21);
-        int aux = (int) (Math.random() * 21);
-        while(list[0] == aux){
-            aux = (int) (Math.random() * 21);
-        }
-        list[1] = aux;
-        int aux2 = (int) (Math.random() * 21);
-        while(list[0] == aux2 || list[1] == aux2){
-            aux2 = (int) Math.floor(Math.random() * 21);
-        }
-        list[2] = aux2;
-        int aux3 = (int) (Math.random() * 21);
-        while(list[0] == aux3 || list[1] == aux3 || list[2] == aux3){
-            aux3 = (int) Math.floor(Math.random() * 21);
-        }
-        list2[0] = aux3;
-        int aux4 = (int) (Math.random() * 21);
-        while(list[0] == aux4 || list[1] == aux4 || list[2] == aux4 || list2[0] == aux4){
-            aux4 = (int) Math.floor(Math.random() * 21);
-        }
-        list2[1] = aux4;
-        int aux5 = (int) (Math.random() * 21);
-        while(list[0] == aux5 || list[1] == aux5 || list[2] == aux5 || list2[0] == aux5 || list2[1] == aux5){
-            aux5 = (int) (Math.random() * 21);
-        }
-        list2[2] = aux5;
 
         if (mMyId.equals(idJugador1)){
-            return list;
+
+            list[0] = (int) (Math.random() * 22);
+            int aux = (int) (Math.random() * 22);
+            while(list[0] == aux){
+                aux = (int) (Math.random() * 22);
+            }
+            list[1] = aux;
+            int aux2 = (int) (Math.random() * 22);
+            while(list[0] == aux2 || list[1] == aux2){
+                aux2 = (int) Math.floor(Math.random() * 21);
+            }
+            list[2] = aux2;
+            int aux3 = (int) (Math.random() * 22);
+            while(list[0] == aux3 || list[1] == aux3 || list[2] == aux3){
+                aux3 = (int) Math.floor(Math.random() * 21);
+            }
+            list2[0] = aux3;
+            int aux4 = (int) (Math.random() * 22);
+            while(list[0] == aux4 || list[1] == aux4 || list[2] == aux4 || list2[0] == aux4){
+                aux4 = (int) Math.floor(Math.random() * 21);
+            }
+            list2[1] = aux4;
+            int aux5 = (int) (Math.random() * 22);
+            while(list[0] == aux5 || list[1] == aux5 || list[2] == aux5 || list2[0] == aux5 || list2[1] == aux5){
+                aux5 = (int) (Math.random() * 22);
+            }
+            list2[2] = aux5;
+
+            sCartasJ2 = list2[0]+" "+list2[1]+" "+list2[2];
+
         }
-        else if(mMyId.equals(idJugador2)){
-            return list2;
-        }
-        return null;
+        return list;
     }
 
-    public void repartir(){
-        baraja = crearBaraja();
-        int[] aleatorios = crearAleatorio();
+    public void repartir(int[] numeros){
 
-        manoJugador.add(0, baraja.get(aleatorios[0]));
-        manoJugador.add(1, baraja.get(aleatorios[1]));
-        manoJugador.add(2, baraja.get(aleatorios[2]));
+        baraja = crearBaraja();
+        manoJugador.add(0, baraja.get(numeros[0]));
+        manoJugador.add(1, baraja.get(numeros[1]));
+        manoJugador.add(2, baraja.get(numeros[2]));
 
     }
 
     public void inicializarMano(){
-        repartir();
-        carta1 = new Carta(manoJugador.get(0).getNumero(), manoJugador.get(0).getPalo(), manoJugador.get(0).getValor());
-        carta2 = new Carta(manoJugador.get(1).getNumero(), manoJugador.get(1).getPalo(), manoJugador.get(1).getValor());
-        carta3 = new Carta(manoJugador.get(2).getNumero(), manoJugador.get(2).getPalo(), manoJugador.get(2).getValor());
+        if(mMyId.equals(idJugador1)){
+            repartir(crearAleatorio());
+            carta1 = new Carta(manoJugador.get(0).getNumero(), manoJugador.get(0).getPalo(), manoJugador.get(0).getValor());
+            carta2 = new Carta(manoJugador.get(1).getNumero(), manoJugador.get(1).getPalo(), manoJugador.get(1).getValor());
+            carta3 = new Carta(manoJugador.get(2).getNumero(), manoJugador.get(2).getPalo(), manoJugador.get(2).getValor());
+            enviarMensajeRepartir();
+        }
+        else{
+            repartir(numCarta);
+            carta1 = new Carta(manoJugador.get(0).getNumero(), manoJugador.get(0).getPalo(), manoJugador.get(0).getValor());
+            carta2 = new Carta(manoJugador.get(1).getNumero(), manoJugador.get(1).getPalo(), manoJugador.get(1).getValor());
+            carta3 = new Carta(manoJugador.get(2).getNumero(), manoJugador.get(2).getPalo(), manoJugador.get(2).getValor());
+        }
+
     }
 
     public void cambiarMano(){
