@@ -166,6 +166,7 @@ public class MainActivity extends Activity
     int[] list2 = new int[3];
     int[] numCarta = new int[3];
     boolean mostrarRepartiendo = false;
+    Carta aux;
 
     private FloatingActionButton fabTruc;
     private FloatingActionButton fabEnvid;
@@ -382,6 +383,7 @@ public class MainActivity extends Activity
                 if (responseCode == Activity.RESULT_OK) {
                     // ready to start playing
                     Log.d(TAG, "Starting game (waiting room returned OK).");
+                    showProgressDialog("¡Empezamos!");
                     inicializarMano();
                 } else if (responseCode == GamesActivityResultCodes.RESULT_LEFT_ROOM) {
                     // player indicated that they want to leave the room
@@ -824,11 +826,6 @@ public class MainActivity extends Activity
         tvJugador1.setEnabled(true);
         tvJugador2.setEnabled(true);
         tvJugador3.setEnabled(true);
-
-   /**     mSecondsLeft = GAME_DURATION;
-        mScore = 0;
-        mParticipantScore.clear();
-        mFinishedParticipants.clear();**/
     }
     void resetTurno() {
         turno = null;
@@ -843,13 +840,9 @@ public class MainActivity extends Activity
     // Start the gameplay phase of the game.
     void startGame(boolean multiplayer) {
 
-
-       /* tvJugador1.setText(carta1.getNumero() + " de " + carta1.getPalo());
-        tvJugador2.setText(carta2.getNumero() + " de " + carta2.getPalo());
-        tvJugador3.setText(carta3.getNumero() + " de " + carta3.getPalo()); */
         asignarImagenCarta(carta1, tvJugador1);
-        asignarImagenCarta(carta2,tvJugador2);
-        asignarImagenCarta(carta3,tvJugador3);
+        asignarImagenCarta(carta2, tvJugador2);
+        asignarImagenCarta(carta3, tvJugador3);
 
         tvJugador1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -894,36 +887,12 @@ public class MainActivity extends Activity
 
     }
     void cartaSeleccionada(View view){
-        //Actualizando textViews
-        //ImageView aux = (ImageView)view;
-        Carta aux = new Carta(null ,null,null);
-        view.setVisibility(View.INVISIBLE);
 
-        if(view.equals(tvJugador1)){  aux=carta1; miValor = Integer.parseInt(carta1.getValor());}
-        if(view.equals(tvJugador2)){  aux=carta2; miValor = Integer.parseInt(carta2.getValor());}
-        if(view.equals(tvJugador3)){  aux=carta3; miValor = Integer.parseInt(carta3.getValor());}
-
-        if(tvCartaMesa1.getVisibility() == View.INVISIBLE){
-            //tvCartaMesa1.setText(aux.getText().toString());
-            asignarImagenCarta(aux,tvCartaMesa1);
-            tvCartaMesa1.setVisibility(View.VISIBLE);
-        }
-        else if(tvCartaMesa2.getVisibility() == View.INVISIBLE){
-            //tvCartaMesa2.setText(aux.getText().toString());
-            asignarImagenCarta(aux,tvCartaMesa2);
-            tvCartaMesa2.setVisibility(View.VISIBLE);
-        }
-        else if(tvCartaMesa3.getVisibility() == View.INVISIBLE){
-            //tvCartaMesa3.setText(aux.getText().toString());
-            asignarImagenCarta(aux,tvCartaMesa3);
-            tvCartaMesa3.setVisibility(View.VISIBLE);
-        }
-        if(view == tvJugador1) miValor = Integer.parseInt(carta1.getValor());
-        if(view == tvJugador2) miValor = Integer.parseInt(carta2.getValor());
-        if(view == tvJugador3) miValor = Integer.parseInt(carta3.getValor());
+        ponerCartaSobreMesa(view);
 
         //Caso en el que NO hay empate
         if(!hayEmpate()) {
+            //Envio el valor de la carta y compruebo si tiro primero
             byte[] messageCarta = ("$"+aux.toString()).getBytes();
             enviarValorCarta(messageCarta);
             tiroPrimero();
@@ -965,7 +934,6 @@ public class MainActivity extends Activity
                 } else {
                     //Caso en el que tiras primero o todavia no hay ganador");
                     cambiarTurno();
-                    resetGameVars();
                     Toast.makeText(getApplicationContext(), "Esperando al Jugador", Toast.LENGTH_SHORT).show();
                     tvJugador1.setEnabled(false);
                     tvJugador2.setEnabled(false);
@@ -1119,16 +1087,12 @@ public class MainActivity extends Activity
 
     }
 
-    public void cerrarDialogo(int milisegundos) {
+    public void cerrarDialogoAndStart(int milisegundos) {
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             public void run() {
                 // acciones que se ejecutan tras los milisegundos
-                dialog.dismiss();
-                resetAll();
-                resetGameVars();
-                cambiarMano();
-                inicializarMano();
+                repartiendo.cancel();
                 startGame(true);
 
             }
@@ -1329,6 +1293,8 @@ public class MainActivity extends Activity
                 } else hayEmpate = true;
 
             }else if(buf[0] == 'S'){
+                resetAll();
+                resetGameVars();
                 Log.d("TTTTTT", "Recibo las cartas");
                 String sBuf = new String(buf, "UTF-8");
                 Log.d("TTTTTT", sBuf.toString());
@@ -1341,12 +1307,8 @@ public class MainActivity extends Activity
                 carta1 = new Carta(manoJugador.get(0).getNumero(), manoJugador.get(0).getPalo(), manoJugador.get(0).getValor());
                 carta2 = new Carta(manoJugador.get(1).getNumero(), manoJugador.get(1).getPalo(), manoJugador.get(1).getValor());
                 carta3 = new Carta(manoJugador.get(2).getNumero(), manoJugador.get(2).getPalo(), manoJugador.get(2).getValor());
-                if(repartiendo != null){
-                    repartiendo.cancel();
-                    Log.d("TTTTTT", "Cierro el dialogo");
-                }
+                cerrarDialogoAndStart(2000);
                 Log.d("TTTTTT", "Start game");
-                startGame(true);
 
             }else if(buf[0] == 'M') {
                 Log.d("TTTTTT", "Recibo el mensaje con la nueva mano");
@@ -1356,11 +1318,6 @@ public class MainActivity extends Activity
                 Log.d("TTTTTT","Mano: " +mano+" ID: "+mMyId);
                 turno = mano;
                 inicializarMano();
-                if(repartiendo != null){
-                    repartiendo.cancel();
-                    Log.d("TTTTTT", "calcelo el dialogo");
-                }
-                //startGame(true);
 
 
             }
@@ -1630,15 +1587,21 @@ public class MainActivity extends Activity
     }
 
     public void inicializarMano(){
+        //Preparando la partida
+        resetAll();
+        resetGameVars();
+        //Si soy mano reparto
         if(mMyId.equals(mano)){
             repartir(crearAleatorio());
             carta1 = new Carta(manoJugador.get(0).getNumero(), manoJugador.get(0).getPalo(), manoJugador.get(0).getValor());
             carta2 = new Carta(manoJugador.get(1).getNumero(), manoJugador.get(1).getPalo(), manoJugador.get(1).getValor());
             carta3 = new Carta(manoJugador.get(2).getNumero(), manoJugador.get(2).getPalo(), manoJugador.get(2).getValor());
+            //Mando las cartas
             enviarMensajeRepartir();
+            cerrarDialogoAndStart(2000);
             Log.d("TTTTTT", "Envio las cartas y start game");
-            startGame(true);
         }
+        //Sino soy mano, espero las cartas
 
     }
 
@@ -1653,8 +1616,6 @@ public class MainActivity extends Activity
         Log.d("TTTTTT", "Cambio mano");
     }
     public void repartirTrasMano(){
-        resetGameVars();
-        resetAll();
         Log.d("TTTTTT", "Mano: " + mano + " ID: " + mMyId);
         if(mMyId.equals(mano)){
             cambiarMano();
@@ -1733,6 +1694,30 @@ public class MainActivity extends Activity
             case "7oros":
                 view.setImageResource(R.drawable.siete_oros);
                 break;
+        }
+    }
+    void ponerCartaSobreMesa(View view){
+
+        view.setVisibility(View.INVISIBLE);
+
+        if(view.equals(tvJugador1)){  aux=carta1; miValor = Integer.parseInt(carta1.getValor());}
+        if(view.equals(tvJugador2)){  aux=carta2; miValor = Integer.parseInt(carta2.getValor());}
+        if(view.equals(tvJugador3)){  aux=carta3; miValor = Integer.parseInt(carta3.getValor());}
+
+        if(tvCartaMesa1.getVisibility() == View.INVISIBLE){
+            //tvCartaMesa1.setText(aux.getText().toString());
+            asignarImagenCarta(aux,tvCartaMesa1);
+            tvCartaMesa1.setVisibility(View.VISIBLE);
+        }
+        else if(tvCartaMesa2.getVisibility() == View.INVISIBLE){
+            //tvCartaMesa2.setText(aux.getText().toString());
+            asignarImagenCarta(aux,tvCartaMesa2);
+            tvCartaMesa2.setVisibility(View.VISIBLE);
+        }
+        else if(tvCartaMesa3.getVisibility() == View.INVISIBLE){
+            //tvCartaMesa3.setText(aux.getText().toString());
+            asignarImagenCarta(aux,tvCartaMesa3);
+            tvCartaMesa3.setVisibility(View.VISIBLE);
         }
     }
 }
