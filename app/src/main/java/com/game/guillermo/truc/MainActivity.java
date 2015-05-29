@@ -916,6 +916,10 @@ public class MainActivity extends Activity
 
                 } else {
                     Toast.makeText(getApplicationContext(), "Es tu turno", Toast.LENGTH_SHORT).show();
+                    casoTiroPrimero = false;
+                    actualizaRonda();
+                    //Comunicar el turno al oponente, gane o pierda
+                    enviarMensajeTurno();
                 }
 
                 //Caso en el que tiras primero, o pierdes tirando segundo
@@ -925,7 +929,7 @@ public class MainActivity extends Activity
                     //Enviar mensaje para que el jugaddor sume rondas ganadas
                     enviarMensajeSumaRonda();
                 }
-                //Caso tiro primero o continuo
+                //Caso continuo
                 if ((ronda == 2 && misRondasGanadas == 0) || (ronda == 3 && misRondasGanadas < 2) && !casoTiroPrimero) {
                     //Pierdes en la segunda ronda o en la tercera
                     showProgressDialog("Lástima, has perdido la mano!");
@@ -938,16 +942,21 @@ public class MainActivity extends Activity
                     tvJugador1.setEnabled(false);
                     tvJugador2.setEnabled(false);
                     tvJugador3.setEnabled(false);
+
+                    casoTiroPrimero = false;
+                    actualizaRonda();
+                    //Comunicar el turno al oponente, gane o pierda
+                    enviarMensajeTurno();
                 }
             }
-            if (((ronda == 3 || (!soyGanadorRonda() && ronda == 2)) && misRondasGanadas < 2 && !casoTiroPrimero) || misRondasGanadas == 2) {
+           /* if (((ronda == 3 || (!soyGanadorRonda() && ronda == 2)) && misRondasGanadas < 2 && !casoTiroPrimero) || misRondasGanadas == 2) {
                 return;
             } else {
                 casoTiroPrimero = false;
                 actualizaRonda();
                 //Comunicar el turno al oponente, gane o pierda
                 enviarMensajeTurno();
-            }
+            }*/
         }else{
         //Caso en el que hay empate
         if (ronda == 1){
@@ -955,7 +964,7 @@ public class MainActivity extends Activity
             casoEmpatePrimero();
         }else{
             enviarMensajeHayEmpate();
-            casoEmpateSegundoTercero();
+            casoEmpateTercero();
         }
         }
 
@@ -994,10 +1003,6 @@ public class MainActivity extends Activity
             hayEmpate = true;
             return true;
         }
-        if(ronda == 2 && miValor == valor2 && !casoTiroPrimero){
-            hayEmpate = true;
-            return true;
-        }
         if(ronda == 3 && miValor == valor3 && !casoTiroPrimero){
             hayEmpate = true;
             return true;
@@ -1018,12 +1023,11 @@ public class MainActivity extends Activity
         }
         //Si soy mano espero a carta seleccionada tras empate
     }
-    void casoEmpateSegundoTercero(){
+    void casoEmpateTercero(){
         //Caso en el que gano
-        if(ganadorRonda1!=null){
+        if(ganadorRonda1.equals(mMyId)){
             enviarMensajeHasPerdido();
             showProgressDialog("Enhorabuena, has ganado la mano!");
-            Log.d("AAAAAAAAA", "Donde queria");
             repartirTrasMano();
         //Caso en el que pierdo
         }else{
@@ -1263,6 +1267,7 @@ public class MainActivity extends Activity
 
             } else if(buf[0] == 'G'){
                 //Si ha habido empate
+                Log.d("TTTTTT","SUmo mis rondas ganadas");
                 if(hayEmpate){
                     showProgressDialog("Enhorabuena, has ganado la mano!");
                     repartirTrasMano();
