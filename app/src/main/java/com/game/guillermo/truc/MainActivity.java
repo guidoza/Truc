@@ -15,19 +15,16 @@
 
 package com.game.guillermo.truc;
 
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.Build;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -54,7 +51,6 @@ import com.google.android.gms.plus.Plus;
 import com.google.example.games.basegameutils.BaseGameUtils;
 
 
-import org.w3c.dom.Text;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
@@ -158,6 +154,8 @@ public class MainActivity extends Activity
     final static int ENVID = 2;
     final static int TORNE = 4;
     int puntos = 0;
+    int miEnvid = 0;
+    boolean hayEnvid = false;
     int puntosTotalesMios = 0;
     int puntosTotalesJugador2 = 0;
     String ganadorRonda1 = null;
@@ -167,7 +165,10 @@ public class MainActivity extends Activity
     int[] numCarta = new int[3];
     boolean mostrarRepartiendo = false;
     Carta aux;
+    int envidOtro = 0;
+    String ganadorEnvid = null;
 
+    private FloatingActionMenu menu;
     private FloatingActionButton fabTruc;
     private FloatingActionButton fabEnvid;
     private FloatingActionButton fabMeVoy;
@@ -193,7 +194,7 @@ public class MainActivity extends Activity
                         text = fabTruc.getLabelText();
                         break;
                     case R.id.fab22:
-                        text = fabEnvid.getLabelText();
+                        envido();
                         break;
                     case R.id.fab32:
                         text = fabMeVoy.getLabelText();
@@ -204,7 +205,7 @@ public class MainActivity extends Activity
             }
         };
 
-        final FloatingActionMenu menu = (FloatingActionMenu) findViewById(R.id.menu);
+        menu = (FloatingActionMenu) findViewById(R.id.menu);
         menu.showMenuButton(true);
         menu.setOnMenuToggleListener(new FloatingActionMenu.OnMenuToggleListener() {
             @Override
@@ -263,16 +264,54 @@ public class MainActivity extends Activity
     private void showSingleChoiceAlert(String title, int array) {
         new MaterialDialog.Builder(this)
                 .title(title)
+                .titleColorRes(R.color.menuItems)
                 .items(array)
+                .itemColorRes(R.color.menuItems)
                 .itemsCallbackSingleChoice(2, new MaterialDialog.ListCallbackSingleChoice() {
                     @Override
                     public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
-                        return true; // allow selection
+                        switch (which) {
+                            //Quiero
+                            case 0:
+                                menu.removeMenuButton(fabEnvid);
+                                miEnvid = comprobarEnvid();
+                                hayEnvid = true;
+                                if (miEnvid > envidOtro && mMyId.equals(idJugador1)) {
+                                    ganadorEnvid = idJugador1;
+                                } else if (miEnvid > envidOtro && mMyId.equals(idJugador2)) {
+                                    ganadorEnvid = idJugador2;
+                                } else if (miEnvid < envidOtro && mMyId.equals(idJugador1)) {
+                                    ganadorEnvid = idJugador2;
+                                } else if (miEnvid < envidOtro && mMyId.equals(idJugador2)) {
+                                    ganadorEnvid = idJugador1;
+                                } else if (miEnvid == envidOtro && mMyId.equals(idJugador1) && mMyId.equals(mano)) {
+                                    ganadorEnvid = idJugador1;
+                                } else if (miEnvid == envidOtro && mMyId.equals(idJugador1) && !mMyId.equals(mano)) {
+                                    ganadorEnvid = idJugador2;
+                                } else if (miEnvid == envidOtro && mMyId.equals(idJugador2) && mMyId.equals(mano)) {
+                                    ganadorEnvid = idJugador2;
+                                } else if (miEnvid == envidOtro && mMyId.equals(idJugador2) && !mMyId.equals(mano)) {
+                                    ganadorEnvid = idJugador1;
+                                }
+                                enviarMensajeHayEnvidAndGanador(ganadorEnvid);
+                                Log.d("ENVIDOOOOOOO", "Ganador envid: " + ganadorEnvid + ", mi envid: " + miEnvid);
+                                break;
+                            //Vuelvo
+                            case 1:
+                                break;
+                            //Falta
+                            case 2:
+                                break;
+                            //No quiero
+                            case 3:
+                                break;
+                        }
+                        return true;
                     }
                 })
                 .positiveText("Elegir")
                 .cancelable(false)
-                .show();
+                .show().getWindow().setBackgroundDrawable(new ColorDrawable(0x30000000));
     }
     private void showBasicAlert(String title, String message) {
         materialDialog = new MaterialDialog.Builder(this)
@@ -290,6 +329,63 @@ public class MainActivity extends Activity
                     .cancelable(false);
             repartiendo = materialDialog.show();
         }
+    private void envido(){
+        menu.close(true);
+        menu.removeMenuButton(fabEnvid);
+        Toast.makeText(getApplicationContext(), "Esperando al Jugador", Toast.LENGTH_SHORT).show();
+        tvJugador1.setEnabled(false);
+        tvJugador2.setEnabled(false);
+        tvJugador3.setEnabled(false);
+        menu.setClickable(false);
+        miEnvid = comprobarEnvid();
+        enviarMensajeEnvid(miEnvid);
+    }
+    private int comprobarEnvid(){
+        String palo1 = carta1.getPalo();
+        String palo2 = carta2.getPalo();
+        String palo3 = carta3.getPalo();
+        boolean todosMismoPalo = false;
+        int maximo = 0;
+
+        if(palo1.equals(palo2) && palo1.equals(palo3)) todosMismoPalo = true;
+
+        if(todosMismoPalo){
+            if(carta1.getNumero().compareTo(carta2.getNumero()) > 0){
+                if(carta2.getNumero().compareTo(carta3.getNumero()) > 0) {
+                    return Integer.parseInt(carta1.getNumero()) + Integer.parseInt(carta2.getNumero()) + 20;
+                }else { return Integer.parseInt(carta1.getNumero()) + Integer.parseInt(carta3.getNumero()) + 20 ; }
+            }else{
+                if(carta1.getNumero().compareTo(carta3.getNumero()) > 0){
+                    return Integer.parseInt(carta1.getNumero()) + Integer.parseInt(carta2.getNumero()) + 20;
+                }else  return Integer.parseInt(carta3.getNumero()) + Integer.parseInt(carta2.getNumero()) + 20;
+
+            }
+
+        }
+
+        else {
+            if(palo1.equals(palo2))  return Integer.parseInt(carta1.getNumero()) + Integer.parseInt(carta2.getNumero()) + 20;
+            else if(palo1.equals(palo3)) return Integer.parseInt(carta1.getNumero()) + Integer.parseInt(carta3.getNumero()) + 20;
+            else if(palo2.equals(palo3)) return Integer.parseInt(carta3.getNumero()) + Integer.parseInt(carta2.getNumero()) + 20;
+        }
+
+        maximo = Integer.parseInt(carta3.getNumero());
+        if(carta1.getNumero().compareTo(carta2.getNumero()) > 0){
+            if(carta2.getNumero().compareTo(carta3.getNumero()) > 0) {
+                maximo = Integer.parseInt(carta1.getNumero());
+            }else{
+                if(carta1.getNumero().compareTo(carta3.getNumero()) > 0){
+                    maximo = Integer.parseInt(carta2.getNumero());
+                }
+            }
+        }
+
+
+        return maximo;
+
+
+
+    }
 
   @Override
   public void onClick(View v) {
@@ -357,7 +453,7 @@ public class MainActivity extends Activity
         rtmConfigBuilder.setAutoMatchCriteria(autoMatchCriteria);
         switchToScreen(R.id.screen_wait);
         keepScreenOn();
-        resetGameVars();
+        desbloquearCartas();
         resetAll();
         resetTurno();
         Games.RealTimeMultiplayer.create(mGoogleApiClient, rtmConfigBuilder.build());
@@ -446,7 +542,7 @@ public class MainActivity extends Activity
         }
         switchToScreen(R.id.screen_wait);
         keepScreenOn();
-        resetGameVars();
+        desbloquearCartas();
         Games.RealTimeMultiplayer.create(mGoogleApiClient, rtmConfigBuilder.build());
         Log.d(TAG, "Room created, waiting for it to be ready...");
     }
@@ -477,7 +573,7 @@ public class MainActivity extends Activity
                 .setRoomStatusUpdateListener(this);
         switchToScreen(R.id.screen_wait);
         keepScreenOn();
-        resetGameVars();
+        desbloquearCartas();
         Games.RealTimeMultiplayer.join(mGoogleApiClient, roomConfigBuilder.build());
     }
 
@@ -822,7 +918,7 @@ public class MainActivity extends Activity
 
 
     // Reset game variables in preparation for a new game.
-    void resetGameVars() {
+    void desbloquearCartas() {
         tvJugador1.setEnabled(true);
         tvJugador2.setEnabled(true);
         tvJugador3.setEnabled(true);
@@ -932,6 +1028,7 @@ public class MainActivity extends Activity
                 //Caso continuo
                 if ((ronda == 2 && misRondasGanadas == 0) || (ronda == 3 && misRondasGanadas < 2) && !casoTiroPrimero) {
                     //Pierdes en la segunda ronda o en la tercera
+                    enviarMensajeSumaRonda();
                     showProgressDialog("Lástima, has perdido la mano!");
                     repartirTrasMano();
 
@@ -1013,7 +1110,7 @@ public class MainActivity extends Activity
         showBasicAlert("Empate en la primera ronda!", "La carta que elijas será mostrada arriba");
         //Si no soy mano, cambio turno
         if(!mMyId.equals(mano)) {
-            resetGameVars();
+            desbloquearCartas();
             Toast.makeText(getApplicationContext(), "Esperando al Jugador", Toast.LENGTH_SHORT).show();
             tvJugador1.setEnabled(false);
             tvJugador2.setEnabled(false);
@@ -1189,6 +1286,24 @@ public class MainActivity extends Activity
             }
         }
     }
+    public void enviarMensajeEnvid(int envid){
+        byte[] messageEnvid = ("N "+envid).getBytes();
+        for (Participant p : mParticipants) {
+            if (!p.getParticipantId().equals(mMyId)) {
+                Games.RealTimeMultiplayer.sendReliableMessage(mGoogleApiClient, null, messageEnvid,
+                        mRoomId, p.getParticipantId());
+            }
+        }
+    }
+    public void enviarMensajeHayEnvidAndGanador(String ganador){
+        byte[] messageEnvid = ("K "+ganador).getBytes();
+        for (Participant p : mParticipants) {
+            if (!p.getParticipantId().equals(mMyId)) {
+                Games.RealTimeMultiplayer.sendReliableMessage(mGoogleApiClient, null, messageEnvid,
+                        mRoomId, p.getParticipantId());
+            }
+        }
+    }
 
     /*
      * COMMUNICATIONS SECTION. Methods that implement the game's network
@@ -1299,7 +1414,7 @@ public class MainActivity extends Activity
 
             }else if(buf[0] == 'S'){
                 resetAll();
-                resetGameVars();
+                desbloquearCartas();
                 Log.d("TTTTTT", "Recibo las cartas");
                 String sBuf = new String(buf, "UTF-8");
                 Log.d("TTTTTT", sBuf.toString());
@@ -1326,10 +1441,30 @@ public class MainActivity extends Activity
 
 
             }
+            else if(buf[0] == 'N') {
+                String aux = new String(buf, "UTF-8");
+                String suEnvid[] = aux.split(" ");
+                envidOtro = Integer.parseInt(suEnvid[1]);
+                showSingleChoiceAlert("Tu rival ha envidado", R.array.envid);
+
+
+
+            }
+            else if(buf[0] == 'K') {
+                String aux = new String(buf, "UTF-8");
+                String ganador[] = aux.split(" ");
+                hayEnvid = true;
+                ganadorEnvid = ganador[1];
+                desbloquearCartas();
+                menu.setEnabled(true);
+                Log.d("ENVIDOOOOOOO", "Ganador envid: " + ganadorEnvid + ", mi envid: " + miEnvid);
+
+
+            }
             else {
                 String turnoNuevo = new String(buf, "UTF-8");
                 turno = turnoNuevo;
-                resetGameVars();
+                desbloquearCartas();
                 if(mMyId.equals(turno) && misRondasGanadas<2){
                     Toast.makeText(getApplicationContext(),"Es tu turno", Toast.LENGTH_SHORT).show();
                 }
@@ -1594,7 +1729,7 @@ public class MainActivity extends Activity
     public void inicializarMano(){
         //Preparando la partida
         resetAll();
-        resetGameVars();
+        desbloquearCartas();
         //Si soy mano reparto
         if(mMyId.equals(mano)){
             repartir(crearAleatorio());
