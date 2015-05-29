@@ -889,12 +889,12 @@ public class MainActivity extends Activity
     void cartaSeleccionada(View view){
 
         ponerCartaSobreMesa(view);
-
+        //Envio el valor de la carta
+        byte[] messageCarta = ("$"+aux.toString()).getBytes();
+        enviarValorCarta(messageCarta);
         //Caso en el que NO hay empate
         if(!hayEmpate()) {
-            //Envio el valor de la carta y compruebo si tiro primero
-            byte[] messageCarta = ("$"+aux.toString()).getBytes();
-            enviarValorCarta(messageCarta);
+            //Compruebo si tiro primero
             tiroPrimero();
             //Caso en el que ganas tirando segundo
             if (soyGanadorRonda()) {
