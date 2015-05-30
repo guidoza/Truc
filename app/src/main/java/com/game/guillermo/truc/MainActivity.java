@@ -332,10 +332,10 @@ public class MainActivity extends Activity
                 .cancelable(false);
         dialogEnvid = materialDialog.show();
     }
-    private void showProgressDialog(String title) {
+    private void showProgressDialog(String content) {
             materialDialog = new MaterialDialog.Builder(this)
-                    .title(title)
-                    .content("Repartiendo...")
+                    .title("Repartiendo...")
+                    .content(content)
                     .progress(true, 0)
                     .cancelable(false);
             repartiendo = materialDialog.show();
@@ -1213,29 +1213,17 @@ public class MainActivity extends Activity
             }
         }, milisegundos);
     }
-    public void cerrarDialogoEnvidAndShowRepartiendo(int milisegundos) {
-        Handler handler2 = new Handler();
-        handler2.postDelayed(new Runnable() {
-            public void run() {
-                // acciones que se ejecutan tras los milisegundos
-                dialogEnvid.cancel();
-                if(ganador){
-                    showProgressDialog("Enhorabuena, has ganado la mano!");
-                }else showProgressDialog("Lástima, has perdido la mano!");
-
-            }
-        }, milisegundos);
-    }
     public void mostrarResultadosGanadorMano(){
         if(hayEnvid){
             ganador = true;
             if(ganadorEnvid.equals(mMyId)){
-                showBasicAlertFinal("Ganaste el envid", "Tu envid: "+miEnvid+" Envid rival: "+envidOtro);
-                cerrarDialogoEnvidAndShowRepartiendo(3000);
+                String content = "Enhorabuena, ganas la mano\nGanaste el envid:\nTu envid: "+miEnvid+" Envid rival: "+envidOtro;
+                showProgressDialog(content);
 
             }else{
-                showBasicAlertFinal("Perdiste el envid", "Tu envid: "+miEnvid+" Envid rival: "+envidOtro);
-                cerrarDialogoEnvidAndShowRepartiendo(3000);}
+                String content = "Enhorabuena, ganas la mano\nPerdiste el envid:\nTu envid: "+miEnvid+" Envid rival: "+envidOtro;
+                showProgressDialog(content);
+            }
         } else {
             showProgressDialog("Enhorabuena, has ganado la mano!");
         }
@@ -1245,12 +1233,13 @@ public class MainActivity extends Activity
         if(hayEnvid){
             ganador = false;
             if(ganadorEnvid.equals(mMyId)){
-                showBasicAlertFinal("Ganaste el envid", "Tu envid: "+miEnvid+" Envid rival: "+envidOtro);
-                cerrarDialogoEnvidAndShowRepartiendo(3000);
+                String content = "Lástima, pierdes la mano\nGanaste el envid:\nTu envid: "+miEnvid+" Envid rival: "+envidOtro;
+                showProgressDialog(content);
 
             }else{
-                showBasicAlertFinal("Perdiste el envid", "Tu envid: "+miEnvid+" Envid rival: "+envidOtro);
-                cerrarDialogoEnvidAndShowRepartiendo(3000);}
+                String content = "Lástima, pierdes la mano\nPerdiste el envid:\nTu envid: "+miEnvid+" Envid rival: "+envidOtro;
+                showProgressDialog(content);
+            }
         } else {
             showProgressDialog("Lástima, has perdido la mano!");
         }
@@ -1481,7 +1470,7 @@ public class MainActivity extends Activity
                 carta1 = new Carta(manoJugador.get(0).getNumero(), manoJugador.get(0).getPalo(), manoJugador.get(0).getValor());
                 carta2 = new Carta(manoJugador.get(1).getNumero(), manoJugador.get(1).getPalo(), manoJugador.get(1).getValor());
                 carta3 = new Carta(manoJugador.get(2).getNumero(), manoJugador.get(2).getPalo(), manoJugador.get(2).getValor());
-                cerrarDialogoAndStart(3000);
+                cerrarDialogoAndStart(6000);
                 Log.d("TTTTTT", "Start game");
 
             }else if(buf[0] == 'M') {
@@ -1793,7 +1782,7 @@ public class MainActivity extends Activity
             carta3 = new Carta(manoJugador.get(2).getNumero(), manoJugador.get(2).getPalo(), manoJugador.get(2).getValor());
             //Mando las cartas
             enviarMensajeRepartir();
-            cerrarDialogoAndStart(3000);
+            cerrarDialogoAndStart(6000);
             Log.d("TTTTTT", "Envio las cartas y start game");
         }
         //Sino soy mano, espero las cartas
