@@ -175,7 +175,6 @@ public class MainActivity extends Activity
     Carta aux;
     int envidOtro = 0;
     String ganadorEnvid = null;
-    boolean ganador = false;
 
     private FloatingActionMenu menu;
     private FloatingActionButton fabTruc;
@@ -288,7 +287,7 @@ public class MainActivity extends Activity
                                 miEnvid = comprobarEnvid();
                                 hayEnvid = true;
                                 comprobarGanadorEnvid();
-                                enviarMensajeHayEnvidAndGanador(ganadorEnvid);
+                                enviarMensajeHayEnvidAndGanador(ganadorEnvid, 1);
                                 break;
                             //Vuelvo
                             case 1:
@@ -323,9 +322,11 @@ public class MainActivity extends Activity
                         switch (which) {
                             //Quiero
                             case 0:
+                                hayEnvid = true;
                                 fabEnvid.setEnabled(false);
                                 comprobarGanadorEnvid();
-                                enviarMensajeHayEnvidAndGanador(ganadorEnvid);
+                                enviarMensajeHayEnvidAndGanador(ganadorEnvid, 2);
+                                desbloquearCartas();
                                 break;
                             //Falta
                             case 1:
@@ -333,9 +334,7 @@ public class MainActivity extends Activity
                                 break;
                             //No quiero
                             case 2:
-                                tvJugador1.setEnabled(true);
-                                tvJugador2.setEnabled(true);
-                                tvJugador3.setEnabled(true);
+                                desbloquearCartas();
                                 menu.setClickable(true);
                                 fabEnvid.setEnabled(false);
                                 enviarMensajeNoQuiero(2);
@@ -360,14 +359,14 @@ public class MainActivity extends Activity
                         switch (which) {
                             //Quiero
                             case 0:
+                                hayEnvid = true;
+                                if(mMyId.equals(turno))desbloquearCartas();
                                 fabEnvid.setEnabled(false);
                                 comprobarGanadorEnvid();
-                                enviarMensajeHayEnvidAndGanador(ganadorEnvid);
+                                enviarMensajeHayEnvidAndGanador(ganadorEnvid, 3);
                                 break;
                             case 1:
-                                tvJugador1.setEnabled(true);
-                                tvJugador2.setEnabled(true);
-                                tvJugador3.setEnabled(true);
+                                if(mMyId.equals(turno))desbloquearCartas();
                                 menu.setClickable(true);
                                 fabEnvid.setEnabled(false);
                                 enviarMensajeNoQuiero(3);
@@ -1011,7 +1010,6 @@ public class MainActivity extends Activity
         hayEmpate = false;
         ganadorRonda1 = null;
         miEnvid = 0;
-        ganador = false;
         fabEnvid.setEnabled(true);
         hayEnvid = false;
         ganadorEnvid = "";
@@ -1076,6 +1074,7 @@ public class MainActivity extends Activity
             tvJugador1.setEnabled(false);
             tvJugador2.setEnabled(false);
             tvJugador3.setEnabled(false);
+            fabEnvid.setEnabled(false);
             Toast.makeText(getApplicationContext(), "Esperando al Jugador", Toast.LENGTH_SHORT).show();
 
         }
@@ -1320,8 +1319,6 @@ public class MainActivity extends Activity
             LayoutInflater inflater = getLayoutInflater();
             ViewGroup container = null;
 
-
-            ganador = true;
             if(ganadorEnvid.equals(mMyId)){
                 View layout = inflater.inflate(R.layout.progres_content, container);
                 String content = "Tu envid: "+miEnvid+" Envid rival: "+envidOtro;
@@ -1340,8 +1337,8 @@ public class MainActivity extends Activity
     public void mostrarResultadosPerdedorMano(){
         LayoutInflater inflater = getLayoutInflater();
         ViewGroup container = null;
+
         if(hayEnvid){
-            ganador = false;
             if(ganadorEnvid.equals(mMyId)){
                 View layout = inflater.inflate(R.layout.progres_content3, container);
                 String content = "Lástima, pierdes la mano\nGanaste el envid:\nTu envid: "+miEnvid+" Envid rival: "+envidOtro;
@@ -1459,8 +1456,8 @@ public class MainActivity extends Activity
             }
         }
     }
-    public void enviarMensajeHayEnvidAndGanador(String ganador){
-        byte[] messageEnvid = ("K "+ganador+" "+miEnvid).getBytes();
+    public void enviarMensajeHayEnvidAndGanador(String ganador, int caso){
+        byte[] messageEnvid = ("K "+ganador+" "+miEnvid+" "+caso).getBytes();
         for (Participant p : mParticipants) {
             if (!p.getParticipantId().equals(mMyId)) {
                 Games.RealTimeMultiplayer.sendReliableMessage(mGoogleApiClient, null, messageEnvid,
@@ -1639,16 +1636,32 @@ public class MainActivity extends Activity
 
             }
             else if(buf[0] == 'K') {
-                textoAccion.setText("Quiero el envid");
-                cerrarAccion(3000);
+                menu.setClickable(true);
                 String aux = new String(buf, "UTF-8");
                 String ganador[] = aux.split(" ");
                 hayEnvid = true;
                 ganadorEnvid = ganador[1];
                 envidOtro = Integer.parseInt(ganador[2]);
-                desbloquearCartas();
-                menu.setClickable(true);
-                Log.d("ENVIDOOOOOOO", "Ganador envid: " + ganadorEnvid + ", mi envid: " + miEnvid);
+                int caso = Integer.parseInt(ganador[3]);
+                switch (caso){
+                    case 1:
+                        textoAccion.setText("Quiero el envid");
+                        cerrarAccion(3000);
+                        break;
+                    case 2:
+                        textoAccion.setText("Quiero el vuelvo");
+                        cerrarAccion(3000);
+                        break;
+                    case 3:
+                        textoAccion.setText("Quiero la falta");
+                        cerrarAccion(3000);
+                        break;
+                }
+
+
+                if(mMyId.equals(turno)){
+                    desbloquearCartas();
+                }
 
 
             }
@@ -1678,7 +1691,9 @@ public class MainActivity extends Activity
                         cerrarAccion(3000);
                         break;
                 }
-
+                if(mMyId.equals(turno)){
+                    desbloquearCartas();
+                }
 
             }
             else if(buf[0] == 'F') {
@@ -1694,6 +1709,9 @@ public class MainActivity extends Activity
                 turno = turnoNuevo;
                 desbloquearCartas();
                 if(mMyId.equals(turno) && misRondasGanadas<2){
+                    if(ronda == 1)fabEnvid.setEnabled(true);
+                    if(ronda > 1)fabEnvid.setEnabled(false);
+
                     Toast.makeText(getApplicationContext(),"Es tu turno", Toast.LENGTH_SHORT).show();
                 }
 
@@ -1701,6 +1719,8 @@ public class MainActivity extends Activity
                     tvJugador1.setEnabled(false);
                     tvJugador2.setEnabled(false);
                     tvJugador3.setEnabled(false);
+                    fabEnvid.setEnabled(false);
+
                     Toast.makeText(getApplicationContext(), "Esperando al Jugador", Toast.LENGTH_SHORT).show();
                     Log.d("LLLLLLL", "Me han comunicado cambio de turno");
 
