@@ -1274,11 +1274,17 @@ public class MainActivity extends Activity
 
 
     /*  MESSAGE SECTION
-     *
-     *
-     *
-     *
-     *
+     * E: Mensaje de hay empate.
+     * R: Mensaje de ronda.
+     * W: Mensaje indicador de que he ganado la mano.
+     * G: Indica que he perdido la ronda y el otro jugador debe de sumar rondas ganadas.
+     * S: Mensaje de repartir las cartas.
+     * M: Mensaje de actualizar la mano.
+     * N: Mensaje indicador de que he envidado.
+     * K: Mensaje de envid aceptado y notificación de ganador de envid.
+     * V: Mensaje que indica que vuelvo a envidar (cuando mi rival me ha envidado).
+     * X: Mensaje de que NO quiero envid o truc (Envid -> 1, Truc -> 2).
+     * F: Mensaje de la falta del envid.
      */
 
     public void enviarValorCarta(byte[] messageCarta){
