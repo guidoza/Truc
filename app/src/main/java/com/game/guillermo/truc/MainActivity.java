@@ -23,15 +23,20 @@ import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
+import android.text.Layout;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.afollestad.materialdialogs.GravityEnum;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.afollestad.materialdialogs.Theme;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 import com.google.android.gms.common.ConnectionResult;
@@ -325,13 +330,7 @@ public class MainActivity extends Activity
                 .cancelable(false);
         materialDialog.show();
     }
-    private void showBasicAlertFinal(String title, String message) {
-        materialDialog = new MaterialDialog.Builder(this)
-                .title(title)
-                .content(message)
-                .cancelable(false);
-        dialogEnvid = materialDialog.show();
-    }
+
     private void showProgressDialog(String content) {
             materialDialog = new MaterialDialog.Builder(this)
                     .title("Repartiendo...")
@@ -340,6 +339,15 @@ public class MainActivity extends Activity
                     .cancelable(false);
             repartiendo = materialDialog.show();
         }
+    private void showProgressCustomDialog(View content) {
+        materialDialog = new MaterialDialog.Builder(this)
+                .title("Repartiendo...")
+                .titleGravity(GravityEnum.CENTER)
+                .customView(content, false)
+                .cancelable(false)
+                .theme(Theme.DARK);
+        repartiendo = materialDialog.show();
+    }
     private void envido(){
         menu.close(true);
         Toast.makeText(getApplicationContext(), "Esperando al Jugador", Toast.LENGTH_SHORT).show();
@@ -490,6 +498,7 @@ public class MainActivity extends Activity
                 if (responseCode == Activity.RESULT_OK) {
                     // ready to start playing
                     Log.d(TAG, "Starting game (waiting room returned OK).");
+
                     showProgressDialog("¡Empezamos!");
                     inicializarMano();
                 } else if (responseCode == GamesActivityResultCodes.RESULT_LEFT_ROOM) {
@@ -1215,33 +1224,43 @@ public class MainActivity extends Activity
     }
     public void mostrarResultadosGanadorMano(){
         if(hayEnvid){
+            LayoutInflater inflater = getLayoutInflater();
+            ViewGroup container = null;
+
+
             ganador = true;
             if(ganadorEnvid.equals(mMyId)){
-                String content = "Enhorabuena, ganas la mano\nGanaste el envid:\nTu envid: "+miEnvid+" Envid rival: "+envidOtro;
-                showProgressDialog(content);
+                View layout = inflater.inflate(R.layout.progres_content, container);
+                String content = "Tu envid: "+miEnvid+" Envid rival: "+envidOtro;
+                showProgressCustomDialog(layout);
 
             }else{
-                String content = "Enhorabuena, ganas la mano\nPerdiste el envid:\nTu envid: "+miEnvid+" Envid rival: "+envidOtro;
-                showProgressDialog(content);
+                View layout = inflater.inflate(R.layout.progres_content2, container);
+                String content = "Tu envid: "+miEnvid+" Envid rival: "+envidOtro;
+                showProgressCustomDialog(layout);
             }
         } else {
-            showProgressDialog("Enhorabuena, has ganado la mano!");
+            showProgressDialog("Enhorabuena, ganas la mano");
         }
         repartirTrasMano();
     }
     public void mostrarResultadosPerdedorMano(){
+        LayoutInflater inflater = getLayoutInflater();
+        ViewGroup container = null;
         if(hayEnvid){
             ganador = false;
             if(ganadorEnvid.equals(mMyId)){
+                View layout = inflater.inflate(R.layout.progres_content3, container);
                 String content = "Lástima, pierdes la mano\nGanaste el envid:\nTu envid: "+miEnvid+" Envid rival: "+envidOtro;
-                showProgressDialog(content);
+                showProgressCustomDialog(layout);
 
             }else{
+                View layout = inflater.inflate(R.layout.progres_content4, container);
                 String content = "Lástima, pierdes la mano\nPerdiste el envid:\nTu envid: "+miEnvid+" Envid rival: "+envidOtro;
-                showProgressDialog(content);
+                showProgressCustomDialog(layout);
             }
         } else {
-            showProgressDialog("Lástima, has perdido la mano!");
+            showProgressDialog("Lástima, pierdes la mano");
         }
         repartirTrasMano();
     }

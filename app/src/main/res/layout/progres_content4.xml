@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/progres">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/progres_ganador_truc"
+        android:background="@drawable/fondo_boton_perdedor"
+        android:text="Lástima, pierdes la mano"
+        android:layout_margin="5dp"
+        android:padding="5dp"
+        android:textColor="#FFFFFF"
+        android:layout_gravity="center" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/progres_ganador_envid"
+        android:background="@drawable/fondo_boton_perdedor"
+        android:text="Perdiste el envid:"
+        android:layout_margin="5dp"
+        android:padding="5dp"
+        android:textColor="#FFFFFF"
+        android:layout_gravity="center" />
+
+
+    <ProgressBar
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/progressBar"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:indeterminate="true"
+        />
+
+</LinearLayout>
