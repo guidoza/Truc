@@ -58,6 +58,7 @@ import com.google.android.gms.plus.Plus;
 import com.google.example.games.basegameutils.BaseGameUtils;
 
 
+import org.w3c.dom.Text;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
@@ -187,6 +188,7 @@ public class MainActivity extends Activity
 
 
 
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -282,37 +284,24 @@ public class MainActivity extends Activity
                         switch (which) {
                             //Quiero
                             case 0:
-                                menu.removeMenuButton(fabEnvid);
+                                fabEnvid.setEnabled(false);
                                 miEnvid = comprobarEnvid();
                                 hayEnvid = true;
-                                if (miEnvid > envidOtro && mMyId.equals(idJugador1)) {
-                                    ganadorEnvid = idJugador1;
-                                } else if (miEnvid > envidOtro && mMyId.equals(idJugador2)) {
-                                    ganadorEnvid = idJugador2;
-                                } else if (miEnvid < envidOtro && mMyId.equals(idJugador1)) {
-                                    ganadorEnvid = idJugador2;
-                                } else if (miEnvid < envidOtro && mMyId.equals(idJugador2)) {
-                                    ganadorEnvid = idJugador1;
-                                } else if (miEnvid == envidOtro && mMyId.equals(idJugador1) && mMyId.equals(mano)) {
-                                    ganadorEnvid = idJugador1;
-                                } else if (miEnvid == envidOtro && mMyId.equals(idJugador1) && !mMyId.equals(mano)) {
-                                    ganadorEnvid = idJugador2;
-                                } else if (miEnvid == envidOtro && mMyId.equals(idJugador2) && mMyId.equals(mano)) {
-                                    ganadorEnvid = idJugador2;
-                                } else if (miEnvid == envidOtro && mMyId.equals(idJugador2) && !mMyId.equals(mano)) {
-                                    ganadorEnvid = idJugador1;
-                                }
+                                comprobarGanadorEnvid();
                                 enviarMensajeHayEnvidAndGanador(ganadorEnvid);
-                                Log.d("ENVIDOOOOOOO", "Ganador envid: " + ganadorEnvid + ", mi envid: " + miEnvid);
                                 break;
                             //Vuelvo
                             case 1:
+                                enviarMensajeVuelvoAEnvidar();
                                 break;
                             //Falta
                             case 2:
+                                enviarMensajeLaFalta();
                                 break;
                             //No quiero
                             case 3:
+                                fabEnvid.setEnabled(false);
+                                enviarMensajeNoQuiero(1);
                                 break;
                         }
                         return true;
@@ -321,6 +310,94 @@ public class MainActivity extends Activity
                 .positiveText("Elegir")
                 .cancelable(false)
                 .show().getWindow().setBackgroundDrawable(new ColorDrawable(0x30000000));
+    }
+    private void showSingleChoiceAlertVuelvo(String title, int array) {
+        new MaterialDialog.Builder(this)
+                .title(title)
+                .titleColorRes(R.color.menuItems)
+                .items(array)
+                .itemColorRes(R.color.menuItems)
+                .itemsCallbackSingleChoice(2, new MaterialDialog.ListCallbackSingleChoice() {
+                    @Override
+                    public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+                        switch (which) {
+                            //Quiero
+                            case 0:
+                                fabEnvid.setEnabled(false);
+                                comprobarGanadorEnvid();
+                                enviarMensajeHayEnvidAndGanador(ganadorEnvid);
+                                break;
+                            //Falta
+                            case 1:
+                                enviarMensajeLaFalta();
+                                break;
+                            //No quiero
+                            case 2:
+                                tvJugador1.setEnabled(true);
+                                tvJugador2.setEnabled(true);
+                                tvJugador3.setEnabled(true);
+                                menu.setClickable(true);
+                                fabEnvid.setEnabled(false);
+                                enviarMensajeNoQuiero(2);
+                                break;
+                        }
+                        return true;
+                    }
+                })
+                .positiveText("Elegir")
+                .cancelable(false)
+                .show().getWindow().setBackgroundDrawable(new ColorDrawable(0x30000000));
+    }
+    private void showSingleChoiceAlertFalta(String title, int array) {
+        new MaterialDialog.Builder(this)
+                .title(title)
+                .titleColorRes(R.color.menuItems)
+                .items(array)
+                .itemColorRes(R.color.menuItems)
+                .itemsCallbackSingleChoice(2, new MaterialDialog.ListCallbackSingleChoice() {
+                    @Override
+                    public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+                        switch (which) {
+                            //Quiero
+                            case 0:
+                                fabEnvid.setEnabled(false);
+                                comprobarGanadorEnvid();
+                                enviarMensajeHayEnvidAndGanador(ganadorEnvid);
+                                break;
+                            case 1:
+                                tvJugador1.setEnabled(true);
+                                tvJugador2.setEnabled(true);
+                                tvJugador3.setEnabled(true);
+                                menu.setClickable(true);
+                                fabEnvid.setEnabled(false);
+                                enviarMensajeNoQuiero(3);
+                                break;
+                        }
+                        return true;
+                    }
+                })
+                .positiveText("Elegir")
+                .cancelable(false)
+                .show().getWindow().setBackgroundDrawable(new ColorDrawable(0x30000000));
+    }
+    private void comprobarGanadorEnvid(){
+        if (miEnvid > envidOtro && mMyId.equals(idJugador1)) {
+            ganadorEnvid = idJugador1;
+        } else if (miEnvid > envidOtro && mMyId.equals(idJugador2)) {
+            ganadorEnvid = idJugador2;
+        } else if (miEnvid < envidOtro && mMyId.equals(idJugador1)) {
+            ganadorEnvid = idJugador2;
+        } else if (miEnvid < envidOtro && mMyId.equals(idJugador2)) {
+            ganadorEnvid = idJugador1;
+        } else if (miEnvid == envidOtro && mMyId.equals(idJugador1) && mMyId.equals(mano)) {
+            ganadorEnvid = idJugador1;
+        } else if (miEnvid == envidOtro && mMyId.equals(idJugador1) && !mMyId.equals(mano)) {
+            ganadorEnvid = idJugador2;
+        } else if (miEnvid == envidOtro && mMyId.equals(idJugador2) && mMyId.equals(mano)) {
+            ganadorEnvid = idJugador2;
+        } else if (miEnvid == envidOtro && mMyId.equals(idJugador2) && !mMyId.equals(mano)) {
+            ganadorEnvid = idJugador1;
+        }
     }
     private void showBasicAlert(String title, String message) {
         materialDialog = new MaterialDialog.Builder(this)
@@ -1228,6 +1305,16 @@ public class MainActivity extends Activity
             }
         }, milisegundos);
     }
+    public void cerrarAccion(int milisegundos) {
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            public void run() {
+                // acciones que se ejecutan tras los milisegundos
+                textoAccion.setText("");
+
+            }
+        }, milisegundos);
+    }
     public void mostrarResultadosGanadorMano(){
         if(hayEnvid){
             LayoutInflater inflater = getLayoutInflater();
@@ -1381,6 +1468,33 @@ public class MainActivity extends Activity
             }
         }
     }
+    public void enviarMensajeVuelvoAEnvidar(){
+        byte[] messageVuelvo = ("V "+miEnvid).getBytes();
+        for (Participant p : mParticipants) {
+            if (!p.getParticipantId().equals(mMyId)) {
+                Games.RealTimeMultiplayer.sendReliableMessage(mGoogleApiClient, null, messageVuelvo,
+                        mRoomId, p.getParticipantId());
+            }
+        }
+    }
+    public void enviarMensajeNoQuiero(int caso){
+        byte[] messageNoQuiero = ("X "+caso).getBytes();
+        for (Participant p : mParticipants) {
+            if (!p.getParticipantId().equals(mMyId)) {
+                Games.RealTimeMultiplayer.sendReliableMessage(mGoogleApiClient, null, messageNoQuiero,
+                        mRoomId, p.getParticipantId());
+            }
+        }
+    }
+    public void enviarMensajeLaFalta(){
+        byte[] messageFalta = ("F "+miEnvid).getBytes();
+        for (Participant p : mParticipants) {
+            if (!p.getParticipantId().equals(mMyId)) {
+                Games.RealTimeMultiplayer.sendReliableMessage(mGoogleApiClient, null, messageFalta,
+                        mRoomId, p.getParticipantId());
+            }
+        }
+    }
 
     /*
      * COMMUNICATIONS SECTION. Methods that implement the game's network
@@ -1525,6 +1639,8 @@ public class MainActivity extends Activity
 
             }
             else if(buf[0] == 'K') {
+                textoAccion.setText("Quiero el envid");
+                cerrarAccion(3000);
                 String aux = new String(buf, "UTF-8");
                 String ganador[] = aux.split(" ");
                 hayEnvid = true;
@@ -1533,6 +1649,43 @@ public class MainActivity extends Activity
                 desbloquearCartas();
                 menu.setClickable(true);
                 Log.d("ENVIDOOOOOOO", "Ganador envid: " + ganadorEnvid + ", mi envid: " + miEnvid);
+
+
+            }
+            else if(buf[0] == 'V') {
+                String aux = new String(buf, "UTF-8");
+                String otro[] = aux.split(" ");
+                envidOtro = Integer.parseInt(otro[1]);
+                showSingleChoiceAlertVuelvo("Tu rival ha vuelto a envidar", R.array.envid2);
+
+
+            }
+            else if(buf[0] == 'X') {
+                String aux = new String(buf, "UTF-8");
+                String otro[] = aux.split(" ");
+                int caso = Integer.parseInt(otro[1]);
+                switch (caso){
+                    case 1:
+                        textoAccion.setText("No quiero el envid");
+                        cerrarAccion(3000);
+                        break;
+                    case 2:
+                        textoAccion.setText("No quiero el vuelvo");
+                        cerrarAccion(3000);
+                        break;
+                    case 3:
+                        textoAccion.setText("No quiero la falta");
+                        cerrarAccion(3000);
+                        break;
+                }
+
+
+            }
+            else if(buf[0] == 'F') {
+                String aux = new String(buf, "UTF-8");
+                String otro[] = aux.split(" ");
+                envidOtro = Integer.parseInt(otro[1]);
+                showSingleChoiceAlertFalta("Tu rival ha envidado la falta", R.array.envid3);
 
 
             }
