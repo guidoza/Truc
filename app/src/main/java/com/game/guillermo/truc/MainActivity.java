@@ -357,7 +357,7 @@ public class MainActivity extends Activity
         menu.setClickable(false);
         miEnvid = comprobarEnvid();
         enviarMensajeEnvid(miEnvid);
-        menu.removeMenuButton(fabEnvid);
+        fabEnvid.setEnabled(false);
     }
     private int comprobarEnvid(){
         String palo1 = carta1.getPalo();
@@ -934,26 +934,8 @@ public class MainActivity extends Activity
         hayEmpate = false;
         ganadorRonda1 = null;
         miEnvid = 0;
-
-        if(hayEnvid){
-            menu.removeMenuButton(fabMeVoy);
-            menu.removeMenuButton(fabTruc);
-            menu.addMenuButton(fabTruc);
-            menu.addMenuButton(fabEnvid);
-            menu.addMenuButton(fabMeVoy);
-        }else {
-            menu.removeMenuButton(fabMeVoy);
-            menu.removeMenuButton(fabTruc);
-            menu.removeMenuButton(fabEnvid);
-            fabTruc.setLabelText("Truque!");
-            fabEnvid.setLabelText("Envide!");
-            fabMeVoy.setLabelText("Me voy!");
-            menu.addMenuButton(fabTruc);
-            menu.addMenuButton(fabEnvid);
-            menu.addMenuButton(fabMeVoy);
-
-        }
-
+        ganador = false;
+        fabEnvid.setEnabled(true);
         hayEnvid = false;
         ganadorEnvid = "";
         envidOtro = 0;
