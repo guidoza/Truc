@@ -60,7 +60,8 @@
     <LinearLayout android:id="@+id/screen_game"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:background="#088A4B">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -89,6 +90,16 @@
                      android:layout_gravity="end"/>
                 </LinearLayout>
 
+        <com.game.guillermo.truc.CircleImageView
+            android:id="@+id/imgPerfilRival"
+            android:layout_width="75dp"
+            android:layout_height="75dp"
+            android:layout_centerInParent="true"
+            android:src="@drawable/tomelloso"
+            fab:border_width="2dp"
+            fab:border_color="#FFF"
+            android:layout_gravity="right"/>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -109,7 +120,7 @@
                     />
                 <ImageView
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:id="@+id/carta2MesaRival"
                     android:layout_weight="1"
                     />
@@ -140,17 +151,18 @@
                     />
                 <ImageView
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:id="@+id/carta3Mesa"
                     />
             </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal"
-                android:layout_weight="1">
 
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:layout_weight="1">
                 <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -169,53 +181,59 @@
                     android:layout_weight="1"
                     android:id="@+id/carta3Jugador"
                     />
-            </LinearLayout>
+                    </LinearLayout>
 
-            <com.github.clans.fab.FloatingActionMenu
-                android:id="@+id/menu"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom|end"
-                android:layout_marginRight="10dp"
-                android:layout_marginBottom="10dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginTop="10dp"
-                fab:menu_labels_style="@style/MenuLabelsStyle"
-                fab:menu_labels_showAnimation="@anim/jump_from_down"
-                fab:menu_labels_hideAnimation="@anim/jump_to_down"
-                fab:menu_animationDelayPerItem="0">
 
-                <com.github.clans.fab.FloatingActionButton
-                    android:id="@+id/fab12"
-                    android:layout_width="wrap_content"
+           <!-- <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:layout_weight="1"> -->
+                <com.github.clans.fab.FloatingActionMenu
+                    android:id="@+id/menu"
+                    android:layout_width="150dp"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_edit"
-                    fab:fab_label="Truque!"
-                    style="@style/MenuButtonsStyle" />
+                    android:layout_gravity="bottom|end"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginLeft="260dp"
+                    android:layout_marginTop="-160dp"
+                    fab:menu_labels_style="@style/MenuLabelsStyle"
+                    fab:menu_labels_showAnimation="@anim/jump_from_down"
+                    fab:menu_labels_hideAnimation="@anim/jump_to_down"
+                    fab:menu_animationDelayPerItem="0">
 
-                <com.github.clans.fab.FloatingActionButton
-                    android:id="@+id/fab22"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ic_edit"
-                    fab:fab_label="Envide!"
-                    style="@style/MenuButtonsStyle" />
+                    <com.github.clans.fab.FloatingActionButton
+                        android:id="@+id/fab12"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_edit"
+                        fab:fab_label="Truque!"
+                        style="@style/MenuButtonsStyle" />
 
-                <com.github.clans.fab.FloatingActionButton
-                    android:id="@+id/fab32"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ic_edit"
-                    fab:fab_label="Me voy!"
-                    style="@style/MenuButtonsStyle" />
+                    <com.github.clans.fab.FloatingActionButton
+                        android:id="@+id/fab22"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_edit"
+                        fab:fab_label="Envide!"
+                        style="@style/MenuButtonsStyle" />
 
-            </com.github.clans.fab.FloatingActionMenu>
+                    <com.github.clans.fab.FloatingActionButton
+                        android:id="@+id/fab32"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_edit"
+                        fab:fab_label="Me voy!"
+                        style="@style/MenuButtonsStyle" />
 
-        </LinearLayout>
+                </com.github.clans.fab.FloatingActionMenu>
+
+        <!-- </RelativeLayout> -->
 
 
     </LinearLayout>
 
-
+</LinearLayout>
 
 </FrameLayout>
