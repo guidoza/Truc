@@ -933,7 +933,30 @@ public class MainActivity extends Activity
         tvMesaRival3.setVisibility(View.INVISIBLE);
         hayEmpate = false;
         ganadorRonda1 = null;
+        miEnvid = 0;
 
+        if(hayEnvid){
+            menu.removeMenuButton(fabMeVoy);
+            menu.removeMenuButton(fabTruc);
+            menu.addMenuButton(fabTruc);
+            menu.addMenuButton(fabEnvid);
+            menu.addMenuButton(fabMeVoy);
+        }else {
+            menu.removeMenuButton(fabMeVoy);
+            menu.removeMenuButton(fabTruc);
+            menu.removeMenuButton(fabEnvid);
+            fabTruc.setLabelText("Truque!");
+            fabEnvid.setLabelText("Envide!");
+            fabMeVoy.setLabelText("Me voy!");
+            menu.addMenuButton(fabTruc);
+            menu.addMenuButton(fabEnvid);
+            menu.addMenuButton(fabMeVoy);
+
+        }
+
+        hayEnvid = false;
+        ganadorEnvid = "";
+        envidOtro = 0;
     }
 
 
@@ -1046,6 +1069,7 @@ public class MainActivity extends Activity
                 }
                 //Caso continuo
                 if ((ronda == 2 && misRondasGanadas == 0) || (ronda == 3 && misRondasGanadas < 2) && !casoTiroPrimero) {
+                    enviarMensajeSumaRonda();
                     //Pierdes en la segunda ronda o en la tercera
                     enviarMensajeSumaRonda();
                     mostrarResultadosPerdedorMano();
