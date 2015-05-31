@@ -175,6 +175,8 @@ public class MainActivity extends Activity
     Carta aux;
     int envidOtro = 0;
     String ganadorEnvid = null;
+    boolean todosMismoPalo = false;
+    int maximo = 0;
 
     private FloatingActionMenu menu;
     private FloatingActionButton fabTruc;
@@ -228,6 +230,7 @@ public class MainActivity extends Activity
                 }
             }
         });
+        menu.setClosedOnTouchOutside(true);
 
         fabTruc = (FloatingActionButton) findViewById(R.id.fab12);
         fabEnvid = (FloatingActionButton) findViewById(R.id.fab22);
@@ -290,10 +293,12 @@ public class MainActivity extends Activity
                                 break;
                             //Vuelvo
                             case 1:
+                                miEnvid = comprobarEnvid();
                                 enviarMensajeVuelvoAEnvidar();
                                 break;
                             //Falta
                             case 2:
+                                miEnvid = comprobarEnvid();
                                 enviarMensajeLaFalta();
                                 break;
                             //No quiero
@@ -433,8 +438,7 @@ public class MainActivity extends Activity
         String palo1 = carta1.getPalo();
         String palo2 = carta2.getPalo();
         String palo3 = carta3.getPalo();
-        boolean todosMismoPalo = false;
-        int maximo = 0;
+
 
         if(palo1.equals(palo2) && palo1.equals(palo3)) todosMismoPalo = true;
 
@@ -458,18 +462,9 @@ public class MainActivity extends Activity
             else if(palo2.equals(palo3)) return Integer.parseInt(carta3.getNumero()) + Integer.parseInt(carta2.getNumero()) + 20;
         }
 
-        maximo = Integer.parseInt(carta3.getNumero());
-        if(carta1.getNumero().compareTo(carta2.getNumero()) > 0){
-            if(carta2.getNumero().compareTo(carta3.getNumero()) > 0) {
-                maximo = Integer.parseInt(carta1.getNumero());
-            }else{
-                if(carta1.getNumero().compareTo(carta3.getNumero()) > 0){
-                    maximo = Integer.parseInt(carta2.getNumero());
-                }
-            }
+        for(int i = 0; i<3; i++){
+            if(maximo < Integer.parseInt(manoJugador.get(i).getNumero())) maximo = Integer.parseInt(manoJugador.get(i).getNumero());
         }
-
-
         return maximo;
 
 
@@ -1006,8 +1001,10 @@ public class MainActivity extends Activity
         miEnvid = 0;
         fabEnvid.setEnabled(true);
         hayEnvid = false;
-        ganadorEnvid = "";
+        ganadorEnvid = null;
         envidOtro = 0;
+        todosMismoPalo = false;
+        maximo = 0;
     }
 
 
@@ -1316,11 +1313,13 @@ public class MainActivity extends Activity
             if(ganadorEnvid.equals(mMyId)){
                 View layout = inflater.inflate(R.layout.progres_content, container);
                 String content = "Tu envid: "+miEnvid+" Envid rival: "+envidOtro;
+                Log.d("TTTTTTT", content);
                 showProgressCustomDialog(layout);
 
             }else{
                 View layout = inflater.inflate(R.layout.progres_content2, container);
                 String content = "Tu envid: "+miEnvid+" Envid rival: "+envidOtro;
+                Log.d("TTTTTTT", content);
                 showProgressCustomDialog(layout);
             }
         } else {
@@ -1336,11 +1335,13 @@ public class MainActivity extends Activity
             if(ganadorEnvid.equals(mMyId)){
                 View layout = inflater.inflate(R.layout.progres_content3, container);
                 String content = "Lástima, pierdes la mano\nGanaste el envid:\nTu envid: "+miEnvid+" Envid rival: "+envidOtro;
+                Log.d("TTTTTTT", content);
                 showProgressCustomDialog(layout);
 
             }else{
                 View layout = inflater.inflate(R.layout.progres_content4, container);
                 String content = "Lástima, pierdes la mano\nPerdiste el envid:\nTu envid: "+miEnvid+" Envid rival: "+envidOtro;
+                Log.d("TTTTTTT", content);
                 showProgressCustomDialog(layout);
             }
         } else {
@@ -1510,217 +1511,196 @@ public class MainActivity extends Activity
         byte[] buf = rtm.getMessageData();
         String sender = rtm.getSenderParticipantId();
         try {
-            if(buf[0] == '$' && tvMesaRival1.getVisibility()==View.INVISIBLE){
-                String sBuf = new String(buf, "UTF-8");
-                String arrayBuf[] = sBuf.split(" ");
-                int valor = Integer.parseInt(arrayBuf[2]);
-                if(hayEmpate){
-                    valorEmpate = valor;
-                } else valor1 = valor;
-                String palo = arrayBuf[1];
-                //String arrayBuf2[] = arrayBuf[0].split("$");
-                String numeroCarta = arrayBuf[0].substring(1);
-                Carta newCarta = new Carta(numeroCarta,palo,arrayBuf[2]);
-                //tvMesaRival1.setText(numeroCarta+" de "+palo);
-                asignarImagenCarta(newCarta,tvMesaRival1);
-                tvMesaRival1.setVisibility(View.VISIBLE);
+            switch (buf[0]){
+                case '$':
+                    String sBuf = new String(buf, "UTF-8");
+                    String arrayBuf[] = sBuf.split(" ");
+                    String palo = arrayBuf[1];
+                    String numeroCarta = arrayBuf[0].substring(1);
+                    Carta newCarta = new Carta(numeroCarta,palo,arrayBuf[2]);
+                    int valor = Integer.parseInt(arrayBuf[2]);
 
-            } else if(buf[0] == '$' && tvMesaRival2.getVisibility()==View.INVISIBLE){
-                String sBuf = new String(buf, "UTF-8");
-                String arrayBuf[] = sBuf.split(" ");
-                int valor = Integer.parseInt(arrayBuf[2]);
-                if(hayEmpate){
-                    valorEmpate = valor;
-                } else valor2 = valor;
-                String palo = arrayBuf[1];
-                //String arrayBuf2[] = arrayBuf[0].split("$");
-                String numeroCarta = arrayBuf[0].substring(1);
-                Carta newCarta = new Carta(numeroCarta,palo,arrayBuf[2]);
-                //tvMesaRival2.setText(numeroCarta+" de "+palo);
-                asignarImagenCarta(newCarta,tvMesaRival2);
-                tvMesaRival2.setVisibility(View.VISIBLE);
-
-            } else if(buf[0] == '$' && tvMesaRival3.getVisibility()==View.INVISIBLE){
-                String sBuf = new String(buf, "UTF-8");
-                String arrayBuf[] = sBuf.split(" ");
-                int valor = Integer.parseInt(arrayBuf[2]);
-                if(hayEmpate){
-                    valorEmpate = valor;
-                } else valor3 = valor;
-                String palo = arrayBuf[1];
-                //String arrayBuf2[] = arrayBuf[0].split("$");
-                String numeroCarta = arrayBuf[0].substring(1);
-                Carta newCarta = new Carta(numeroCarta,palo,arrayBuf[2]);
-                asignarImagenCarta(newCarta,tvMesaRival3);
-                //tvMesaRival3.setText(numeroCarta+" de "+palo);
-                tvMesaRival3.setVisibility(View.VISIBLE);
-
-            } else if(buf[0] == 'R'){
-                /*String sBuf = new String(buf, "UTF-8");
-                String arrayBuf[] = sBuf.split(" ");
-                String ronda = arrayBuf[1];
-                this.ronda = Integer.parseInt(ronda);*/
-                actualizaRonda();
-
-            } else if(buf[0] == 'G'){
-                //Si ha habido empate
-                Log.d("TTTTTT","SUmo mis rondas ganadas");
-                if(hayEmpate){
-                    mostrarResultadosGanadorMano();
-                }else{
-                //Sumo rondas ganadas
-                if(ronda == 1){
-                    ganadorRonda1 = mMyId;
-                }
-                misRondasGanadas++;
-                actualizaRonda();
-                //Si llego a 2 he ganado
-                    if (misRondasGanadas == 2) {
+                    if(tvMesaRival1.getVisibility()==View.INVISIBLE){
+                        if(hayEmpate){
+                            valorEmpate = valor;
+                        } else valor1 = valor;
+                        asignarImagenCarta(newCarta,tvMesaRival1);
+                        tvMesaRival1.setVisibility(View.VISIBLE);
+                    }else if(tvMesaRival2.getVisibility()==View.INVISIBLE){
+                        if(hayEmpate){
+                            valorEmpate = valor;
+                        } else valor2 = valor;
+                        asignarImagenCarta(newCarta,tvMesaRival2);
+                        tvMesaRival2.setVisibility(View.VISIBLE);
+                    }else if(tvMesaRival3.getVisibility()==View.INVISIBLE){
+                        if(hayEmpate){
+                            valorEmpate = valor;
+                        } else valor3 = valor;
+                        asignarImagenCarta(newCarta,tvMesaRival3);
+                        tvMesaRival3.setVisibility(View.VISIBLE);
+                    }
+                    break;
+                case 'R':
+                    actualizaRonda();
+                    break;
+                case 'W':
+                    //Caso en que pierdo
+                    mostrarResultadosPerdedorMano();
+                    break;
+                case 'G':
+                    //Si ha habido empate
+                    Log.d("TTTTTT","SUmo mis rondas ganadas");
+                    if(hayEmpate){
                         mostrarResultadosGanadorMano();
+                    }else{
+                        //Sumo rondas ganadas
+                        if(ronda == 1){
+                            ganadorRonda1 = mMyId;
                         }
-                }
+                        misRondasGanadas++;
+                        actualizaRonda();
+                        //Si llego a 2 he ganado
+                        if (misRondasGanadas == 2) {
+                            mostrarResultadosGanadorMano();
+                        }
+                    }
+                    break;
+                case 'E':
+                    //Mensaje que actualiza si hay empate en la primera ronda
+                    if (ronda == 1) {
+                        showBasicAlert("Empate en la primera ronda!", "La carta que eljas será mostrada arriba");
+                        hayEmpate = true;
+                    } else hayEmpate = true;
+                    break;
 
-            }else if(buf[0] == 'W'){
-                //Caso en que pierdo
-                mostrarResultadosPerdedorMano();
-
-            }else if(buf[0] == 'E') {
-                //Mensaje que actualiza si hay empate en la primera ronda
-                if (ronda == 1) {
-                    showBasicAlert("Empate en la primera ronda!", "La carta que eljas será mostrada arriba");
-                    hayEmpate = true;
-                } else hayEmpate = true;
-
-            }else if(buf[0] == 'S'){
-                resetAll();
-                desbloquearCartas();
-                Log.d("TTTTTT", "Recibo las cartas");
-                String sBuf = new String(buf, "UTF-8");
-                Log.d("TTTTTT", sBuf.toString());
-                String[] arrayCartasJ2 = sBuf.split(" ");
-                Log.d("TTTTTT", arrayCartasJ2.toString());
-                numCarta[0] = Integer.parseInt(arrayCartasJ2[1]);
-                numCarta[1] = Integer.parseInt(arrayCartasJ2[2]);
-                numCarta[2] = Integer.parseInt(arrayCartasJ2[3]);
-                repartir(numCarta);
-                carta1 = new Carta(manoJugador.get(0).getNumero(), manoJugador.get(0).getPalo(), manoJugador.get(0).getValor());
-                carta2 = new Carta(manoJugador.get(1).getNumero(), manoJugador.get(1).getPalo(), manoJugador.get(1).getValor());
-                carta3 = new Carta(manoJugador.get(2).getNumero(), manoJugador.get(2).getPalo(), manoJugador.get(2).getValor());
-                cerrarDialogoAndStart(6000);
-                Log.d("TTTTTT", "Start game");
-
-            }else if(buf[0] == 'M') {
-                Log.d("TTTTTT", "Recibo el mensaje con la nueva mano");
-                String aux = new String(buf, "UTF-8");
-                String nuevaMano[] = aux.split(" ");
-                mano = nuevaMano[1];
-                Log.d("TTTTTT","Mano: " +mano+" ID: "+mMyId);
-                turno = mano;
-                inicializarMano();
-
-
-            }
-            else if(buf[0] == 'N') {
-                String aux = new String(buf, "UTF-8");
-                String suEnvid[] = aux.split(" ");
-                envidOtro = Integer.parseInt(suEnvid[1]);
-                showSingleChoiceAlert("Tu rival ha envidado", R.array.envid);
-                fabEnvid.setEnabled(false);
-
-
-
-            }
-            else if(buf[0] == 'K') {
-                menu.setClickable(true);
-                String aux = new String(buf, "UTF-8");
-                String ganador[] = aux.split(" ");
-                hayEnvid = true;
-                ganadorEnvid = ganador[1];
-                envidOtro = Integer.parseInt(ganador[2]);
-                int caso = Integer.parseInt(ganador[3]);
-                switch (caso){
-                    case 1:
-                        textoAccion.setText("Quiero el envid");
-                        cerrarAccion(3000);
-                        break;
-                    case 2:
-                        textoAccion.setText("Quiero el vuelvo");
-                        cerrarAccion(3000);
-                        break;
-                    case 3:
-                        textoAccion.setText("Quiero la falta");
-                        cerrarAccion(3000);
-                        break;
-                }
-
-
-                if(mMyId.equals(turno)){
+                case 'S':
+                    resetAll();
                     desbloquearCartas();
-                }
+                    Log.d("TTTTTT", "Recibo las cartas");
+                    String ssBuf = new String(buf, "UTF-8");
+                    Log.d("TTTTTT", ssBuf.toString());
+                    String[] arrayCartasJ2 = ssBuf.split(" ");
+                    Log.d("TTTTTT", arrayCartasJ2.toString());
+                    numCarta[0] = Integer.parseInt(arrayCartasJ2[1]);
+                    numCarta[1] = Integer.parseInt(arrayCartasJ2[2]);
+                    numCarta[2] = Integer.parseInt(arrayCartasJ2[3]);
+                    repartir(numCarta);
+                    carta1 = new Carta(manoJugador.get(0).getNumero(), manoJugador.get(0).getPalo(), manoJugador.get(0).getValor());
+                    carta2 = new Carta(manoJugador.get(1).getNumero(), manoJugador.get(1).getPalo(), manoJugador.get(1).getValor());
+                    carta3 = new Carta(manoJugador.get(2).getNumero(), manoJugador.get(2).getPalo(), manoJugador.get(2).getValor());
+                    cerrarDialogoAndStart(6000);
+                    Log.d("TTTTTT", "Start game");
+                    break;
 
+                case 'M':
+                    Log.d("TTTTTT", "Recibo el mensaje con la nueva mano");
+                    String aux = new String(buf, "UTF-8");
+                    String nuevaMano[] = aux.split(" ");
+                    mano = nuevaMano[1];
+                    Log.d("TTTTTT","Mano: " +mano+" ID: "+mMyId);
+                    turno = mano;
+                    inicializarMano();
+                    break;
 
-            }
-            else if(buf[0] == 'V') {
-                String aux = new String(buf, "UTF-8");
-                String otro[] = aux.split(" ");
-                envidOtro = Integer.parseInt(otro[1]);
-                showSingleChoiceAlertVuelvo("Tu rival ha vuelto a envidar", R.array.envid2);
-
-
-            }
-            else if(buf[0] == 'X') {
-                String aux = new String(buf, "UTF-8");
-                String otro[] = aux.split(" ");
-                int caso = Integer.parseInt(otro[1]);
-                switch (caso){
-                    case 1:
-                        textoAccion.setText("No quiero el envid");
-                        cerrarAccion(3000);
-                        break;
-                    case 2:
-                        textoAccion.setText("No quiero el vuelvo");
-                        cerrarAccion(3000);
-                        break;
-                    case 3:
-                        textoAccion.setText("No quiero la falta");
-                        cerrarAccion(3000);
-                        break;
-                }
-                if(mMyId.equals(turno)){
-                    desbloquearCartas();
-                }
-
-            }
-            else if(buf[0] == 'F') {
-                String aux = new String(buf, "UTF-8");
-                String otro[] = aux.split(" ");
-                envidOtro = Integer.parseInt(otro[1]);
-                showSingleChoiceAlertFalta("Tu rival ha envidado la falta", R.array.envid3);
-
-
-            }
-            else {
-                String turnoNuevo = new String(buf, "UTF-8");
-                turno = turnoNuevo;
-                desbloquearCartas();
-                if(mMyId.equals(turno) && misRondasGanadas<2){
-                    if(ronda == 1 && !hayEnvid)fabEnvid.setEnabled(true);
-                    if(ronda > 1 && !hayEnvid)fabEnvid.setEnabled(false);
-
-                    Toast.makeText(getApplicationContext(),"Es tu turno", Toast.LENGTH_SHORT).show();
-                }
-
-                if(!mMyId.equals(turno) && misRondasGanadas<2) {
-                    tvJugador1.setEnabled(false);
-                    tvJugador2.setEnabled(false);
-                    tvJugador3.setEnabled(false);
+                case 'N':
+                    String aux1 = new String(buf, "UTF-8");
+                    String suEnvid[] = aux1.split(" ");
+                    envidOtro = Integer.parseInt(suEnvid[1]);
+                    showSingleChoiceAlert("Tu rival ha envidado", R.array.envid);
                     fabEnvid.setEnabled(false);
+                    break;
 
-                    Toast.makeText(getApplicationContext(), "Esperando al Jugador", Toast.LENGTH_SHORT).show();
-                    Log.d("LLLLLLL", "Me han comunicado cambio de turno");
+                case 'K':
+                    menu.setClickable(true);
+                    String aux2 = new String(buf, "UTF-8");
+                    String ganador[] = aux2.split(" ");
+                    hayEnvid = true;
+                    ganadorEnvid = ganador[1];
+                    envidOtro = Integer.parseInt(ganador[2]);
+                    int caso = Integer.parseInt(ganador[3]);
+                    switch (caso){
+                        case 1:
+                            textoAccion.setText("Quiero el envid");
+                            cerrarAccion(3000);
+                            break;
+                        case 2:
+                            textoAccion.setText("Quiero el vuelvo");
+                            cerrarAccion(3000);
+                            break;
+                        case 3:
+                            textoAccion.setText("Quiero la falta");
+                            cerrarAccion(3000);
+                            break;
+                    }
 
-                }
+
+                    if(mMyId.equals(turno)){
+                        desbloquearCartas();
+                    }
+                    break;
+
+                case 'V':
+                    String aux3 = new String(buf, "UTF-8");
+                    String otro[] = aux3.split(" ");
+                    envidOtro = Integer.parseInt(otro[1]);
+                    showSingleChoiceAlertVuelvo("Tu rival ha vuelto a envidar", R.array.envid2);
+                    break;
+
+                case 'X':
+                    String aux4 = new String(buf, "UTF-8");
+                    String otro1[] = aux4.split(" ");
+                    int caso1 = Integer.parseInt(otro1[1]);
+                    switch (caso1){
+                        case 1:
+                            textoAccion.setText("No quiero el envid");
+                            cerrarAccion(3000);
+                            break;
+                        case 2:
+                            textoAccion.setText("No quiero el vuelvo");
+                            cerrarAccion(3000);
+                            break;
+                        case 3:
+                            textoAccion.setText("No quiero la falta");
+                            cerrarAccion(3000);
+                            break;
+                    }
+                    if(mMyId.equals(turno)){
+                        desbloquearCartas();
+                    }
+                    break;
+
+                case 'F':
+                    String aux5 = new String(buf, "UTF-8");
+                    String otro2[] = aux5.split(" ");
+                    envidOtro = Integer.parseInt(otro2[1]);
+                    showSingleChoiceAlertFalta("Tu rival ha envidado la falta", R.array.envid3);
+                    break;
+
+                default:
+                    String turnoNuevo = new String(buf, "UTF-8");
+                    turno = turnoNuevo;
+                    desbloquearCartas();
+                    if(mMyId.equals(turno) && misRondasGanadas<2){
+                        if(ronda == 1 && !hayEnvid)fabEnvid.setEnabled(true);
+                        if(ronda > 1 && !hayEnvid)fabEnvid.setEnabled(false);
+
+                        Toast.makeText(getApplicationContext(),"Es tu turno", Toast.LENGTH_SHORT).show();
+                    }
+
+                    if(!mMyId.equals(turno) && misRondasGanadas<2) {
+                        tvJugador1.setEnabled(false);
+                        tvJugador2.setEnabled(false);
+                        tvJugador3.setEnabled(false);
+                        fabEnvid.setEnabled(false);
+
+                        Toast.makeText(getApplicationContext(), "Esperando al Jugador", Toast.LENGTH_SHORT).show();
+                        Log.d("LLLLLLL", "Me han comunicado cambio de turno");
+
+                    }
+                    break;
+
             }
+
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
