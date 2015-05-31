@@ -283,7 +283,6 @@ public class MainActivity extends Activity
                         switch (which) {
                             //Quiero
                             case 0:
-                                fabEnvid.setEnabled(false);
                                 miEnvid = comprobarEnvid();
                                 hayEnvid = true;
                                 comprobarGanadorEnvid();
@@ -299,7 +298,6 @@ public class MainActivity extends Activity
                                 break;
                             //No quiero
                             case 3:
-                                fabEnvid.setEnabled(false);
                                 enviarMensajeNoQuiero(1);
                                 break;
                         }
@@ -323,7 +321,6 @@ public class MainActivity extends Activity
                             //Quiero
                             case 0:
                                 hayEnvid = true;
-                                fabEnvid.setEnabled(false);
                                 comprobarGanadorEnvid();
                                 enviarMensajeHayEnvidAndGanador(ganadorEnvid, 2);
                                 desbloquearCartas();
@@ -336,7 +333,6 @@ public class MainActivity extends Activity
                             case 2:
                                 desbloquearCartas();
                                 menu.setClickable(true);
-                                fabEnvid.setEnabled(false);
                                 enviarMensajeNoQuiero(2);
                                 break;
                         }
@@ -361,14 +357,12 @@ public class MainActivity extends Activity
                             case 0:
                                 hayEnvid = true;
                                 if(mMyId.equals(turno))desbloquearCartas();
-                                fabEnvid.setEnabled(false);
                                 comprobarGanadorEnvid();
                                 enviarMensajeHayEnvidAndGanador(ganadorEnvid, 3);
                                 break;
                             case 1:
                                 if(mMyId.equals(turno))desbloquearCartas();
                                 menu.setClickable(true);
-                                fabEnvid.setEnabled(false);
                                 enviarMensajeNoQuiero(3);
                                 break;
                         }
@@ -1631,6 +1625,7 @@ public class MainActivity extends Activity
                 String suEnvid[] = aux.split(" ");
                 envidOtro = Integer.parseInt(suEnvid[1]);
                 showSingleChoiceAlert("Tu rival ha envidado", R.array.envid);
+                fabEnvid.setEnabled(false);
 
 
 
@@ -1709,8 +1704,8 @@ public class MainActivity extends Activity
                 turno = turnoNuevo;
                 desbloquearCartas();
                 if(mMyId.equals(turno) && misRondasGanadas<2){
-                    if(ronda == 1)fabEnvid.setEnabled(true);
-                    if(ronda > 1)fabEnvid.setEnabled(false);
+                    if(ronda == 1 && !hayEnvid)fabEnvid.setEnabled(true);
+                    if(ronda > 1 && !hayEnvid)fabEnvid.setEnabled(false);
 
                     Toast.makeText(getApplicationContext(),"Es tu turno", Toast.LENGTH_SHORT).show();
                 }
