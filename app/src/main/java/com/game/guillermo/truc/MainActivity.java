@@ -72,9 +72,9 @@ import java.util.Set;
 
 
 public class MainActivity extends Activity
-    implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,
-    View.OnClickListener, RealTimeMessageReceivedListener,
-    RoomStatusUpdateListener, RoomUpdateListener, OnInvitationReceivedListener {
+        implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,
+        View.OnClickListener, RealTimeMessageReceivedListener,
+        RoomStatusUpdateListener, RoomUpdateListener, OnInvitationReceivedListener {
 
     /*
      * API INTEGRATION SECTION. This section contains the code that integrates
@@ -135,6 +135,7 @@ public class MainActivity extends Activity
     ImageView tvMesaRival2;
     ImageView tvMesaRival3;
     TextView marcador;
+    TextView marcador2;
     TextView textoAccion;
     private List<Carta> baraja = new ArrayList<>();
     private List<Carta> manoJugador = new ArrayList<>();
@@ -157,7 +158,8 @@ public class MainActivity extends Activity
     final static int NO_QUIERO_ENVID = 1;
     final static int ENVID = 2;
     final static int TORNE = 4;
-    int puntos = 0;
+    int puntosTruc = 0;
+    int puntosEnvid = 0;
     int miEnvid = 0;
     boolean hayEnvid = false;
     int puntosTotalesMios = 0;
@@ -270,26 +272,27 @@ public class MainActivity extends Activity
 
         textoAccion = (TextView) findViewById(R.id.textoJugador2);
         marcador = (TextView) findViewById(R.id.marcador);
+        marcador2 = (TextView) findViewById(R.id.marcador2);
 
         dialogoNuevaPartida = new AlertDialog.Builder(this);
         dialogoNuevaPartida.setTitle("Importante");
-        dialogoNuevaPartida.setMessage("Este es un programa solo de prueba y no la versiÃ³n completa");
+        dialogoNuevaPartida.setMessage("Este es un programa solo de prueba y no la versión completa");
 
 
 
         // Creamos el nuevo cliente de Google con acceso a Plus y Games
         mGoogleApiClient = new GoogleApiClient.Builder(this)
-            .addConnectionCallbacks(this)
-            .addOnConnectionFailedListener(this)
-            .addApi(Plus.API).addScope(Plus.SCOPE_PLUS_LOGIN)
-            .addApi(Games.API).addScope(Games.SCOPE_GAMES)
-            .build();
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .addApi(Plus.API).addScope(Plus.SCOPE_PLUS_LOGIN)
+                .addApi(Games.API).addScope(Games.SCOPE_GAMES)
+                .build();
 
         //Listener para todos los elementos
         for (int id : CLICKABLES) {
             findViewById(id).setOnClickListener(this);
+        }
     }
-  }
     private void showSingleChoiceAlertEnvid(String title, int array) {
         new MaterialDialog.Builder(this)
                 .title(title)
@@ -305,6 +308,7 @@ public class MainActivity extends Activity
                                 miEnvid = comprobarEnvid();
                                 hayEnvid = true;
                                 comprobarGanadorEnvid();
+                                if(ganadorEnvid.equals(mMyId))puntosEnvid = ENVID;
                                 enviarMensajeHayEnvidAndGanador(ganadorEnvid, 1);
                                 break;
                             //Vuelvo
@@ -344,6 +348,7 @@ public class MainActivity extends Activity
                                 hayEnvid = true;
                                 comprobarGanadorEnvid();
                                 enviarMensajeHayEnvidAndGanador(ganadorEnvid, 2);
+                                if(ganadorEnvid.equals(mMyId))puntosEnvid = TORNE;
                                 desbloquearCartas();
                                 break;
                             //Falta
@@ -379,6 +384,8 @@ public class MainActivity extends Activity
                                 hayEnvid = true;
                                 if(mMyId.equals(turno))desbloquearCartas();
                                 comprobarGanadorEnvid();
+                                //puntos a sumar por la falta
+                                //if(ganadorEnvid.equals(mMyId))puntosEnvid = ;
                                 enviarMensajeHayEnvidAndGanador(ganadorEnvid, 3);
                                 break;
                             case 1:
@@ -560,13 +567,13 @@ public class MainActivity extends Activity
     }
 
     private void showProgressDialog(String content) {
-            materialDialog = new MaterialDialog.Builder(this)
-                    .title("Repartiendo...")
-                    .content(content)
-                    .progress(true, 0)
-                    .cancelable(false);
-            repartiendo = materialDialog.show();
-        }
+        materialDialog = new MaterialDialog.Builder(this)
+                .title("Repartiendo...")
+                .content(content)
+                .progress(true, 0)
+                .cancelable(false);
+        repartiendo = materialDialog.show();
+    }
     private void showProgressCustomDialog(View content) {
         materialDialog = new MaterialDialog.Builder(this)
                 .title("Repartiendo...")
@@ -664,9 +671,9 @@ public class MainActivity extends Activity
         fabTruc.setEnabled(false);
     }
 
-  @Override
-  public void onClick(View v) {
-    Intent intent;
+    @Override
+    public void onClick(View v) {
+        Intent intent;
 
         switch (v.getId()) {
             case R.id.button_single_player_2:
@@ -677,14 +684,14 @@ public class MainActivity extends Activity
                 // NOTE: this check is here only because this is a sample! Don't include this
                 // check in your actual production app.
                 if (!BaseGameUtils.verifySampleSetup(this, R.string.app_id)) {
-                  Log.w(TAG, "*** Warning: setup problems detected. Sign in may not work!");
+                    Log.w(TAG, "*** Warning: setup problems detected. Sign in may not work!");
                 }
 
                 // start the sign-in flow
                 Log.d(TAG, "Sign-in button clicked");
                 mSignInClicked = true;
                 mGoogleApiClient.connect();
-            break;
+                break;
             case R.id.button_sign_out:
                 // user wants to sign out
                 // sign out.
@@ -738,7 +745,7 @@ public class MainActivity extends Activity
 
     @Override
     public void onActivityResult(int requestCode, int responseCode,
-            Intent intent) {
+                                 Intent intent) {
         super.onActivityResult(requestCode, responseCode, intent);
 
         switch (requestCode) {
@@ -757,7 +764,7 @@ public class MainActivity extends Activity
                     // ready to start playing
                     Log.d(TAG, "Starting game (waiting room returned OK).");
 
-                    showProgressDialog("Â¡Empezamos!");
+                    showProgressDialog("¡Empezamos!");
                     inicializarMano();
                 } else if (responseCode == GamesActivityResultCodes.RESULT_LEFT_ROOM) {
                     // player indicated that they want to leave the room
@@ -771,13 +778,13 @@ public class MainActivity extends Activity
                 break;
             case RC_SIGN_IN:
                 Log.d(TAG, "onActivityResult with requestCode == RC_SIGN_IN, responseCode="
-                    + responseCode + ", intent=" + intent);
+                        + responseCode + ", intent=" + intent);
                 mSignInClicked = false;
                 mResolvingConnectionFailure = false;
                 if (responseCode == RESULT_OK) {
-                  mGoogleApiClient.connect();
+                    mGoogleApiClient.connect();
                 } else {
-                  BaseGameUtils.showActivityResultError(this,requestCode,responseCode, R.string.signin_other_error);
+                    BaseGameUtils.showActivityResultError(this,requestCode,responseCode, R.string.signin_other_error);
                 }
                 break;
         }
@@ -867,13 +874,13 @@ public class MainActivity extends Activity
         stopKeepingScreenOn();
 
         if (mGoogleApiClient == null || !mGoogleApiClient.isConnected()){
-          switchToScreen(R.id.screen_sign_in);
+            switchToScreen(R.id.screen_sign_in);
         }
         else {
-          switchToScreen(R.id.screen_wait);
+            switchToScreen(R.id.screen_wait);
         }
         super.onStop();
-      }
+    }
 
     // Activity just got to the foreground. We switch to the wait screen because we will now
     // go through the sign-in flow (remember that, yes, every time the Activity comes back to the
@@ -883,11 +890,11 @@ public class MainActivity extends Activity
     public void onStart() {
         switchToScreen(R.id.screen_wait);
         if (mGoogleApiClient != null && mGoogleApiClient.isConnected()) {
-          Log.w(TAG,
-              "GameHelper: client was already connected on onStart()");
+            Log.w(TAG,
+                    "GameHelper: client was already connected on onStart()");
         } else {
-          Log.d(TAG,"Connecting client.");
-          mGoogleApiClient.connect();
+            Log.d(TAG,"Connecting client.");
+            mGoogleApiClient.connect();
         }
         super.onStart();
     }
@@ -957,52 +964,52 @@ public class MainActivity extends Activity
 
     @Override
     public void onConnected(Bundle connectionHint) {
-      Log.d(TAG, "onConnected() called. Sign in successful!");
+        Log.d(TAG, "onConnected() called. Sign in successful!");
 
-      Log.d(TAG, "Sign-in succeeded.");
+        Log.d(TAG, "Sign-in succeeded.");
 
-      // register listener so we are notified if we receive an invitation to play
-      // while we are in the game
-      Games.Invitations.registerInvitationListener(mGoogleApiClient, this);
+        // register listener so we are notified if we receive an invitation to play
+        // while we are in the game
+        Games.Invitations.registerInvitationListener(mGoogleApiClient, this);
 
-      if (connectionHint != null) {
-        Log.d(TAG, "onConnected: connection hint provided. Checking for invite.");
-        Invitation inv = connectionHint
-            .getParcelable(Multiplayer.EXTRA_INVITATION);
-        if (inv != null && inv.getInvitationId() != null) {
-          // retrieve and cache the invitation ID
-          Log.d(TAG,"onConnected: connection hint has a room invite!");
-          acceptInviteToRoom(inv.getInvitationId());
-          return;
+        if (connectionHint != null) {
+            Log.d(TAG, "onConnected: connection hint provided. Checking for invite.");
+            Invitation inv = connectionHint
+                    .getParcelable(Multiplayer.EXTRA_INVITATION);
+            if (inv != null && inv.getInvitationId() != null) {
+                // retrieve and cache the invitation ID
+                Log.d(TAG,"onConnected: connection hint has a room invite!");
+                acceptInviteToRoom(inv.getInvitationId());
+                return;
+            }
         }
-      }
-      switchToMainScreen();
+        switchToMainScreen();
 
     }
 
     @Override
     public void onConnectionSuspended(int i) {
-      Log.d(TAG, "onConnectionSuspended() called. Trying to reconnect.");
-      mGoogleApiClient.connect();
+        Log.d(TAG, "onConnectionSuspended() called. Trying to reconnect.");
+        mGoogleApiClient.connect();
     }
 
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
-      Log.d(TAG, "onConnectionFailed() called, result: " + connectionResult);
+        Log.d(TAG, "onConnectionFailed() called, result: " + connectionResult);
 
-      if (mResolvingConnectionFailure) {
-        Log.d(TAG, "onConnectionFailed() ignoring connection failure; already resolving.");
-        return;
-      }
+        if (mResolvingConnectionFailure) {
+            Log.d(TAG, "onConnectionFailed() ignoring connection failure; already resolving.");
+            return;
+        }
 
-      if (mSignInClicked || mAutoStartSignInFlow) {
-        mAutoStartSignInFlow = false;
-        mSignInClicked = false;
-        mResolvingConnectionFailure = BaseGameUtils.resolveConnectionFailure(this, mGoogleApiClient,
-            connectionResult, RC_SIGN_IN, getString(R.string.signin_other_error));
-      }
+        if (mSignInClicked || mAutoStartSignInFlow) {
+            mAutoStartSignInFlow = false;
+            mSignInClicked = false;
+            mResolvingConnectionFailure = BaseGameUtils.resolveConnectionFailure(this, mGoogleApiClient,
+                    connectionResult, RC_SIGN_IN, getString(R.string.signin_other_error));
+        }
 
-      switchToScreen(R.id.screen_sign_in);
+        switchToScreen(R.id.screen_sign_in);
     }
 
     // Called when we are connected to the room. We're not ready to play yet! (maybe not everybody
@@ -1338,20 +1345,20 @@ public class MainActivity extends Activity
                 enviarMensajeTurno();
             }*/
         }else{
-        //Caso en el que hay empate
-        if (ronda == 1){
-            enviarMensajeHayEmpate();
-            casoEmpatePrimero();
-        }else{
-            enviarMensajeHayEmpate();
-            casoEmpateTercero();
-        }
+            //Caso en el que hay empate
+            if (ronda == 1){
+                enviarMensajeHayEmpate();
+                casoEmpatePrimero();
+            }else{
+                enviarMensajeHayEmpate();
+                casoEmpateTercero();
+            }
         }
 
     }
 
     void casoEmpatePrimero(){
-        showBasicAlert("Empate en la primera ronda!", "La carta que elijas serÃ¡ mostrada arriba");
+        showBasicAlert("Empate en la primera ronda!", "La carta que elijas será mostrada arriba");
         //Si no soy mano, cambio turno
         if(!mMyId.equals(mano)) {
             desbloquearCartas();
@@ -1370,7 +1377,7 @@ public class MainActivity extends Activity
             enviarMensajeHasPerdido();
             mostrarResultadosGanadorMano();
 
-        //Caso en el que pierdo
+            //Caso en el que pierdo
         }else{
             enviarMensajeSumaRonda();
             mostrarResultadosPerdedorMano();
@@ -1410,7 +1417,7 @@ public class MainActivity extends Activity
             cambiarTurno();
             enviarMensajeTurno();
             Toast.makeText(getApplicationContext(), "Esperando al Jugador", Toast.LENGTH_SHORT).show();
-        //Si no soy mano, compruebo quien gana
+            //Si no soy mano, compruebo quien gana
         } else if(soyGanadorRondaEmpate()){
             //Caso en el que gano
             enviarMensajeHasPerdido();
@@ -1499,6 +1506,19 @@ public class MainActivity extends Activity
         }, milisegundos);
     }
     public void mostrarResultadosGanadorMano(){
+
+        if(hayTruc && !hayRetruc){
+            puntosTruc = TRUC;
+        }else if(hayTruc && hayRetruc && !hayCuatreVal){
+            puntosTruc = RETRUC;
+        }else if(hayTruc && hayRetruc && hayCuatreVal && !hayJocFora){
+            puntosTruc = CUATRE_VAL;
+        }else if(hayTruc && hayRetruc && hayCuatreVal && hayJocFora){
+            //Se acaba la partida
+        }else{
+            puntosTruc = NO_QUIERO_TRUC;
+        }
+
         if(hayEnvid){
             LayoutInflater inflater = getLayoutInflater();
             ViewGroup container = null;
@@ -1507,12 +1527,16 @@ public class MainActivity extends Activity
                 View layout = inflater.inflate(R.layout.progres_content, container);
                 String content = "Tu envid: "+miEnvid+" Envid rival: "+envidOtro;
                 Log.d("TTTTTTT", content);
+                puntosTotalesMios += puntosTruc + puntosEnvid;
+                actualizarMarcador2(puntosTotalesMios);
                 showProgressCustomDialog(layout);
 
             }else{
                 View layout = inflater.inflate(R.layout.progres_content2, container);
                 String content = "Tu envid: "+miEnvid+" Envid rival: "+envidOtro;
                 Log.d("TTTTTTT", content);
+                puntosTotalesMios += puntosTruc + puntosEnvid;
+                actualizarMarcador2(puntosTotalesMios);
                 showProgressCustomDialog(layout);
             }
         } else {
@@ -1527,18 +1551,22 @@ public class MainActivity extends Activity
         if(hayEnvid){
             if(ganadorEnvid.equals(mMyId)){
                 View layout = inflater.inflate(R.layout.progres_content3, container);
-                String content = "LÃ¡stima, pierdes la mano\nGanaste el envid:\nTu envid: "+miEnvid+" Envid rival: "+envidOtro;
+                String content = "Lástima, pierdes la mano\nGanaste el envid:\nTu envid: "+miEnvid+" Envid rival: "+envidOtro;
                 Log.d("TTTTTTT", content);
+                puntosTotalesMios += puntosTruc + puntosEnvid;
+                actualizarMarcador2(puntosTotalesMios);
                 showProgressCustomDialog(layout);
 
             }else{
                 View layout = inflater.inflate(R.layout.progres_content4, container);
-                String content = "LÃ¡stima, pierdes la mano\nPerdiste el envid:\nTu envid: "+miEnvid+" Envid rival: "+envidOtro;
+                String content = "Lástima, pierdes la mano\nPerdiste el envid:\nTu envid: "+miEnvid+" Envid rival: "+envidOtro;
                 Log.d("TTTTTTT", content);
+                puntosTotalesMios += puntosTruc + puntosEnvid;
+                actualizarMarcador2(puntosTotalesMios);
                 showProgressCustomDialog(layout);
             }
         } else {
-            showProgressDialog("LÃ¡stima, pierdes la mano");
+            showProgressDialog("Lástima, pierdes la mano");
         }
         repartirTrasMano();
     }
@@ -1553,7 +1581,7 @@ public class MainActivity extends Activity
      * S: Mensaje de repartir las cartas.
      * M: Mensaje de actualizar la mano.
      * N: Mensaje indicador de que he envidado.
-     * K: Mensaje de envid aceptado y notificaciÃ³n de ganador de envid.
+     * K: Mensaje de envid aceptado y notificación de ganador de envid.
      * V: Mensaje que indica que vuelvo a envidar (cuando mi rival me ha envidado).
      * X: Mensaje de que NO quiero envid o truc (Envid -> 1, Truc -> 2).
      * F: Mensaje de la falta del envid.
@@ -1773,6 +1801,16 @@ public class MainActivity extends Activity
         }
     }
 
+    public void actualizarMarcador2(int puntosTotales){
+        byte[] messageMarcador = ("Z "+puntosTotales).getBytes();
+        for (Participant p : mParticipants) {
+            if (!p.getParticipantId().equals(mMyId)) {
+                Games.RealTimeMultiplayer.sendReliableMessage(mGoogleApiClient, null, messageMarcador,
+                        mRoomId, p.getParticipantId());
+            }
+        }
+    }
+
 
 
 
@@ -1860,12 +1898,15 @@ public class MainActivity extends Activity
                 case 'E':
                     //Mensaje que actualiza si hay empate en la primera ronda
                     if (ronda == 1) {
-                        showBasicAlert("Empate en la primera ronda!", "La carta que eljas serÃ¡ mostrada arriba");
+                        showBasicAlert("Empate en la primera ronda!", "La carta que eljas será mostrada arriba");
                         hayEmpate = true;
                     } else hayEmpate = true;
                     break;
 
                 case 'S':
+                    marcador.setText("Yo: "+puntosTotalesMios);
+                    marcador2.setText("Rival: "+puntosTotalesJugador2);
+
                     resetAll();
                     desbloquearCartas();
                     Log.d("TTTTTT", "Recibo las cartas");
@@ -1924,6 +1965,10 @@ public class MainActivity extends Activity
                             cerrarAccion(3000);
                             break;
                     }
+                    if(ganadorEnvid.equals(mMyId) && caso == 1)puntosEnvid = ENVID;
+                    if(ganadorEnvid.equals(mMyId) && caso == 2)puntosEnvid = TORNE;
+                    //Calcular la falta
+                    //if(ganadorEnvid.equals(mMyId) && caso == 3)puntosEnvid = ENVID;
 
                     if(mMyId.equals(turno)){
                         desbloquearCartas();
@@ -2023,7 +2068,7 @@ public class MainActivity extends Activity
                     break;
 
                 case 'C':
-                    showSingleChoiceAlertCuatreVal("Â¡Cuatre val!", R.array.truc3);
+                    showSingleChoiceAlertCuatreVal("¡Cuatre val!", R.array.truc3);
                     break;
 
                 case 'B':
@@ -2038,7 +2083,7 @@ public class MainActivity extends Activity
                     break;
 
                 case 'J':
-                    showSingleChoiceAlertJocFora("Â¡Joc fora!", R.array.envid3);
+                    showSingleChoiceAlertJocFora("¡Joc fora!", R.array.envid3);
                     break;
 
                 case 'Y':
@@ -2050,6 +2095,12 @@ public class MainActivity extends Activity
                     if(mMyId.equals(turno)){
                         desbloquearCartas();
                     }
+                    break;
+
+                case 'Z':
+                    String aux8 = new String(buf, "UTF-8");
+                    String otro5[] = aux8.split(" ");
+                    puntosTotalesJugador2 = Integer.parseInt(otro5[1]);
                     break;
 
                 default:
@@ -2190,7 +2241,7 @@ public class MainActivity extends Activity
 
     // updates the label that shows my score
     void updateScoreDisplay() {
-       // ((TextView) findViewById(R.id.my_score)).setText(formatScore(mScore));
+        // ((TextView) findViewById(R.id.my_score)).setText(formatScore(mScore));
     }
 
     // formats a score as a three-digit number
@@ -2204,28 +2255,28 @@ public class MainActivity extends Activity
     // updates the screen with the scores from our peers
     void updatePeerScoresDisplay() {
         /**((TextView) findViewById(R.id.score0)).setText(formatScore(mScore) + " - Me");
-        int[] arr = {
-                R.id.score1, R.id.score2, R.id.score3
-        };
-        int i = 0;
+         int[] arr = {
+         R.id.score1, R.id.score2, R.id.score3
+         };
+         int i = 0;
 
-        if (mRoomId != null) {
-            for (Participant p : mParticipants) {
-                String pid = p.getParticipantId();
-                if (pid.equals(mMyId))
-                    continue;
-                if (p.getStatus() != Participant.STATUS_JOINED)
-                    continue;
-                int score = mParticipantScore.containsKey(pid) ? mParticipantScore.get(pid) : 0;
-                ((TextView) findViewById(arr[i])).setText(formatScore(score) + " - " +
-                        p.getDisplayName());
-                ++i;
-            }
-        }
+         if (mRoomId != null) {
+         for (Participant p : mParticipants) {
+         String pid = p.getParticipantId();
+         if (pid.equals(mMyId))
+         continue;
+         if (p.getStatus() != Participant.STATUS_JOINED)
+         continue;
+         int score = mParticipantScore.containsKey(pid) ? mParticipantScore.get(pid) : 0;
+         ((TextView) findViewById(arr[i])).setText(formatScore(score) + " - " +
+         p.getDisplayName());
+         ++i;
+         }
+         }
 
-        for (; i < arr.length; ++i) {
-            ((TextView) findViewById(arr[i])).setText("");
-        }**/
+         for (; i < arr.length; ++i) {
+         ((TextView) findViewById(arr[i])).setText("");
+         }**/
     }
 
     /*
@@ -2267,7 +2318,7 @@ public class MainActivity extends Activity
                     String palo = parser.getAttributeValue(null, "palo");
                     String valor = parser.getAttributeValue(null, "valor");
                     carta = new Carta(numero, palo, valor);
-                    //Por cada question, la aÃ±adimos a la lista
+                    //Por cada question, la añadimos a la lista
                     baraja.add(carta);
                 }
                 eventType = parser.next();
@@ -2326,6 +2377,8 @@ public class MainActivity extends Activity
     }
 
     public void inicializarMano(){
+        marcador.setText("Yo: "+puntosTotalesMios);
+        marcador2.setText("Rival: "+puntosTotalesJugador2);
         //Preparando la partida
         resetAll();
         desbloquearCartas();
