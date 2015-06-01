@@ -17,13 +17,10 @@ package com.game.guillermo.truc;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.SearchManager;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
-import android.text.Layout;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -58,7 +55,6 @@ import com.google.android.gms.plus.Plus;
 import com.google.example.games.basegameutils.BaseGameUtils;
 
 
-import org.w3c.dom.Text;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
@@ -177,17 +173,22 @@ public class MainActivity extends Activity
     String ganadorEnvid = null;
     boolean todosMismoPalo = false;
     int maximo = 0;
+    boolean hayTruc = false;
+    boolean hayRetruc = false;
+    boolean hayCuatreVal = false;
+    boolean hayJocFora = false;
 
     private FloatingActionMenu menu;
     private FloatingActionButton fabTruc;
+    private FloatingActionButton fabRetruc;
+    private FloatingActionButton fabCuatreVal;
+    private FloatingActionButton fabJocFora;
     private FloatingActionButton fabEnvid;
     private FloatingActionButton fabMeVoy;
     MaterialDialog.Builder materialDialog;
     MaterialDialog repartiendo;
     MaterialDialog dialogEnvid;
     MaterialDialog.ButtonCallback callbackReinicio;
-
-
 
 
     @Override
@@ -203,7 +204,16 @@ public class MainActivity extends Activity
 
                 switch (v.getId()) {
                     case R.id.fab12:
-                        text = fabTruc.getLabelText();
+                        truco();
+                        break;
+                    case R.id.fab13:
+                        retruco();
+                        break;
+                    case R.id.fab14:
+                        quatreVal();
+                        break;
+                    case R.id.fab15:
+                        jocFora();
                         break;
                     case R.id.fab22:
                         envido();
@@ -233,6 +243,9 @@ public class MainActivity extends Activity
         menu.setClosedOnTouchOutside(true);
 
         fabTruc = (FloatingActionButton) findViewById(R.id.fab12);
+        fabRetruc = (FloatingActionButton) findViewById(R.id.fab13);
+        fabCuatreVal = (FloatingActionButton) findViewById(R.id.fab14);
+        fabJocFora = (FloatingActionButton) findViewById(R.id.fab15);
         fabEnvid = (FloatingActionButton) findViewById(R.id.fab22);
         fabMeVoy = (FloatingActionButton) findViewById(R.id.fab32);
 
@@ -274,7 +287,7 @@ public class MainActivity extends Activity
             findViewById(id).setOnClickListener(this);
     }
   }
-    private void showSingleChoiceAlert(String title, int array) {
+    private void showSingleChoiceAlertEnvid(String title, int array) {
         new MaterialDialog.Builder(this)
                 .title(title)
                 .titleColorRes(R.color.menuItems)
@@ -378,6 +391,143 @@ public class MainActivity extends Activity
                 .cancelable(false)
                 .show().getWindow().setBackgroundDrawable(new ColorDrawable(0x30000000));
     }
+
+    private void showSingleChoiceAlertTruco(String title, int array) {
+        new MaterialDialog.Builder(this)
+                .title(title)
+                .titleColorRes(R.color.menuItems)
+                .items(array)
+                .itemColorRes(R.color.menuItems)
+                .itemsCallbackSingleChoice(2, new MaterialDialog.ListCallbackSingleChoice() {
+                    @Override
+                    public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+                        switch (which) {
+                            //Quiero
+                            case 0:
+                                hayTruc = true;
+                                enviarMensajeQuieroTruc();
+                                break;
+                            //Retruque
+                            case 1:
+                                hayRetruc = true;
+                                enviarMensajeRetruc();
+                                break;
+                            //No quiero
+                            case 2:
+                                enviarMensajeNoQuieroTruc(1);
+                                mostrarResultadosPerdedorMano();
+                                break;
+                        }
+                        return true;
+                    }
+                })
+                .positiveText("Elegir")
+                .cancelable(false)
+                .show().getWindow().setBackgroundDrawable(new ColorDrawable(0x30000000));
+    }
+
+    private void showSingleChoiceAlertRetruc(String title, int array) {
+        new MaterialDialog.Builder(this)
+                .title(title)
+                .titleColorRes(R.color.menuItems)
+                .items(array)
+                .itemColorRes(R.color.menuItems)
+                .itemsCallbackSingleChoice(2, new MaterialDialog.ListCallbackSingleChoice() {
+                    @Override
+                    public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+                        switch (which) {
+                            //Quiero
+                            case 0:
+                                hayRetruc = true;
+                                enviarMensajeQuieroRetruc();
+                                desbloquearCartas();
+                                break;
+                            //Cuatre val
+                            case 1:
+                                enviarMensajeCuatreVal();
+                                break;
+                            //No quiero
+                            case 2:
+                                desbloquearCartas();
+                                menu.setClickable(true);
+                                enviarMensajeNoQuieroTruc(2);
+                                mostrarResultadosPerdedorMano();
+                                break;
+                        }
+                        return true;
+                    }
+                })
+                .positiveText("Elegir")
+                .cancelable(false)
+                .show().getWindow().setBackgroundDrawable(new ColorDrawable(0x30000000));
+    }
+
+    private void showSingleChoiceAlertCuatreVal(String title, int array) {
+        new MaterialDialog.Builder(this)
+                .title(title)
+                .titleColorRes(R.color.menuItems)
+                .items(array)
+                .itemColorRes(R.color.menuItems)
+                .itemsCallbackSingleChoice(2, new MaterialDialog.ListCallbackSingleChoice() {
+                    @Override
+                    public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+                        switch (which) {
+                            //Quiero
+                            case 0:
+                                hayCuatreVal = true;
+                                enviarMensajeQuieroCuatreVal();
+                                desbloquearCartas();
+                                break;
+                            //Joc fora
+                            case 1:
+                                enviarMensajeJocFora();
+                                break;
+                            //No quiero
+                            case 2:
+                                desbloquearCartas();
+                                menu.setClickable(true);
+                                enviarMensajeNoQuieroTruc(3);
+                                mostrarResultadosPerdedorMano();
+                                break;
+                        }
+                        return true;
+                    }
+                })
+                .positiveText("Elegir")
+                .cancelable(false)
+                .show().getWindow().setBackgroundDrawable(new ColorDrawable(0x30000000));
+    }
+    private void showSingleChoiceAlertJocFora(String title, int array) {
+        new MaterialDialog.Builder(this)
+                .title(title)
+                .titleColorRes(R.color.menuItems)
+                .items(array)
+                .itemColorRes(R.color.menuItems)
+                .itemsCallbackSingleChoice(2, new MaterialDialog.ListCallbackSingleChoice() {
+                    @Override
+                    public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+                        switch (which) {
+                            //Quiero
+                            case 0:
+                                hayJocFora = true;
+                                enviarMensajeQuieroJocFora();
+                                desbloquearCartas();
+                                break;
+                            //No quiero
+                            case 1:
+                                enviarMensajeNoQuieroTruc(4);
+                                mostrarResultadosPerdedorMano();
+                                break;
+
+                        }
+                        return true;
+                    }
+                })
+                .positiveText("Elegir")
+                .cancelable(false)
+                .show().getWindow().setBackgroundDrawable(new ColorDrawable(0x30000000));
+    }
+
     private void comprobarGanadorEnvid(){
         if (miEnvid > envidOtro && mMyId.equals(idJugador1)) {
             ganadorEnvid = idJugador1;
@@ -434,6 +584,7 @@ public class MainActivity extends Activity
         enviarMensajeEnvid(miEnvid);
         fabEnvid.setEnabled(false);
     }
+
     private int comprobarEnvid(){
         String palo1 = carta1.getPalo();
         String palo2 = carta2.getPalo();
@@ -467,8 +618,47 @@ public class MainActivity extends Activity
         }
         return maximo;
 
+    }
 
-
+    public void truco(){
+        menu.close(true);
+        Toast.makeText(getApplicationContext(), "Esperando al Jugador", Toast.LENGTH_SHORT).show();
+        tvJugador1.setEnabled(false);
+        tvJugador2.setEnabled(false);
+        tvJugador3.setEnabled(false);
+        menu.setClickable(false);
+        enviarMensajeTruc();
+        fabTruc.setEnabled(false);
+    }
+    public void retruco(){
+        menu.close(true);
+        Toast.makeText(getApplicationContext(), "Esperando al Jugador", Toast.LENGTH_SHORT).show();
+        tvJugador1.setEnabled(false);
+        tvJugador2.setEnabled(false);
+        tvJugador3.setEnabled(false);
+        menu.setClickable(false);
+        enviarMensajeRetruc();
+        fabTruc.setEnabled(false);
+    }
+    public void quatreVal(){
+        menu.close(true);
+        Toast.makeText(getApplicationContext(), "Esperando al Jugador", Toast.LENGTH_SHORT).show();
+        tvJugador1.setEnabled(false);
+        tvJugador2.setEnabled(false);
+        tvJugador3.setEnabled(false);
+        menu.setClickable(false);
+        enviarMensajeCuatreVal();
+        fabTruc.setEnabled(false);
+    }
+    public void jocFora(){
+        menu.close(true);
+        Toast.makeText(getApplicationContext(), "Esperando al Jugador", Toast.LENGTH_SHORT).show();
+        tvJugador1.setEnabled(false);
+        tvJugador2.setEnabled(false);
+        tvJugador3.setEnabled(false);
+        menu.setClickable(false);
+        enviarMensajeJocFora();
+        fabTruc.setEnabled(false);
     }
 
   @Override
@@ -1352,7 +1542,7 @@ public class MainActivity extends Activity
 
 
 
-    /*  MESSAGE SECTION
+    /*  MESSAGE SECTION LEYENDA
      * E: Mensaje de hay empate.
      * R: Mensaje de ronda.
      * W: Mensaje indicador de que he ganado la mano.
@@ -1364,6 +1554,8 @@ public class MainActivity extends Activity
      * V: Mensaje que indica que vuelvo a envidar (cuando mi rival me ha envidado).
      * X: Mensaje de que NO quiero envid o truc (Envid -> 1, Truc -> 2).
      * F: Mensaje de la falta del envid.
+     * T: Mensaje de truco.
+     * Q: Mensaje de quiero truc cuando me han trucado.
      */
 
     public void enviarValorCarta(byte[] messageCarta){
@@ -1488,6 +1680,103 @@ public class MainActivity extends Activity
         }
     }
 
+    public void enviarMensajeTruc(){
+        byte[] messageTruco = ("T").getBytes();
+        for (Participant p : mParticipants) {
+            if (!p.getParticipantId().equals(mMyId)) {
+                Games.RealTimeMultiplayer.sendReliableMessage(mGoogleApiClient, null, messageTruco,
+                        mRoomId, p.getParticipantId());
+            }
+        }
+    }
+
+    public void enviarMensajeQuieroTruc(){
+        byte[] messageQuieroTruc = ("Q").getBytes();
+        for (Participant p : mParticipants) {
+            if (!p.getParticipantId().equals(mMyId)) {
+                Games.RealTimeMultiplayer.sendReliableMessage(mGoogleApiClient, null, messageQuieroTruc,
+                        mRoomId, p.getParticipantId());
+            }
+        }
+    }
+
+    public void enviarMensajeRetruc(){
+        byte[] messageRetruc = ("L").getBytes();
+        for (Participant p : mParticipants) {
+            if (!p.getParticipantId().equals(mMyId)) {
+                Games.RealTimeMultiplayer.sendReliableMessage(mGoogleApiClient, null, messageRetruc,
+                        mRoomId, p.getParticipantId());
+            }
+        }
+    }
+
+    public void enviarMensajeQuieroRetruc(){
+        byte[] messageQuieroRetruc = ("I").getBytes();
+        for (Participant p : mParticipants) {
+            if (!p.getParticipantId().equals(mMyId)) {
+                Games.RealTimeMultiplayer.sendReliableMessage(mGoogleApiClient, null, messageQuieroRetruc,
+                        mRoomId, p.getParticipantId());
+            }
+        }
+    }
+
+    public void enviarMensajeCuatreVal(){
+        byte[] messageCuatreVal = ("C").getBytes();
+        for (Participant p : mParticipants) {
+            if (!p.getParticipantId().equals(mMyId)) {
+                Games.RealTimeMultiplayer.sendReliableMessage(mGoogleApiClient, null, messageCuatreVal,
+                        mRoomId, p.getParticipantId());
+            }
+        }
+    }
+
+    public void enviarMensajeQuieroCuatreVal(){
+        byte[] messageQuieroCuatreVal = ("B").getBytes();
+        for (Participant p : mParticipants) {
+            if (!p.getParticipantId().equals(mMyId)) {
+                Games.RealTimeMultiplayer.sendReliableMessage(mGoogleApiClient, null, messageQuieroCuatreVal,
+                        mRoomId, p.getParticipantId());
+            }
+        }
+    }
+
+    public void enviarMensajeJocFora(){
+        byte[] messageJocFora = ("J").getBytes();
+        for (Participant p : mParticipants) {
+            if (!p.getParticipantId().equals(mMyId)) {
+                Games.RealTimeMultiplayer.sendReliableMessage(mGoogleApiClient, null, messageJocFora,
+                        mRoomId, p.getParticipantId());
+            }
+        }
+    }
+
+    public void enviarMensajeQuieroJocFora(){
+        byte[] messageQuieroJocFora = ("Y").getBytes();
+        for (Participant p : mParticipants) {
+            if (!p.getParticipantId().equals(mMyId)) {
+                Games.RealTimeMultiplayer.sendReliableMessage(mGoogleApiClient, null, messageQuieroJocFora,
+                        mRoomId, p.getParticipantId());
+            }
+        }
+    }
+
+    public void enviarMensajeNoQuieroTruc(int caso){
+        byte[] messageNoQuieroTruc = ("D "+caso).getBytes();
+        for (Participant p : mParticipants) {
+            if (!p.getParticipantId().equals(mMyId)) {
+                Games.RealTimeMultiplayer.sendReliableMessage(mGoogleApiClient, null, messageNoQuieroTruc,
+                        mRoomId, p.getParticipantId());
+            }
+        }
+    }
+
+
+
+
+
+
+
+
     /*
      * COMMUNICATIONS SECTION. Methods that implement the game's network
      * protocol.
@@ -1606,7 +1895,7 @@ public class MainActivity extends Activity
                     String aux1 = new String(buf, "UTF-8");
                     String suEnvid[] = aux1.split(" ");
                     envidOtro = Integer.parseInt(suEnvid[1]);
-                    showSingleChoiceAlert("Tu rival ha envidado", R.array.envid);
+                    showSingleChoiceAlertEnvid("Tu rival ha envidado", R.array.envid);
                     fabEnvid.setEnabled(false);
                     break;
 
@@ -1632,7 +1921,6 @@ public class MainActivity extends Activity
                             cerrarAccion(3000);
                             break;
                     }
-
 
                     if(mMyId.equals(turno)){
                         desbloquearCartas();
@@ -1669,11 +1957,96 @@ public class MainActivity extends Activity
                     }
                     break;
 
+                case 'D':
+                    String aux7 = new String(buf, "UTF-8");
+                    String otro4[] = aux7.split(" ");
+                    int caso2 = Integer.parseInt(otro4[1]);
+                    switch (caso2){
+                        case 1:
+                            textoAccion.setText("No quiero el truc");
+                            cerrarAccion(3000);
+                            break;
+                        case 2:
+                            textoAccion.setText("No quiero el retruc");
+                            cerrarAccion(3000);
+                            break;
+                        case 3:
+                            textoAccion.setText("No quiero el cuatre val");
+                            cerrarAccion(3000);
+                            break;
+                        case 4:
+                            textoAccion.setText("No quiero el joc fora");
+                            cerrarAccion(3000);
+                            break;
+                    }
+                    mostrarResultadosGanadorMano();
+                    break;
+
                 case 'F':
                     String aux5 = new String(buf, "UTF-8");
                     String otro2[] = aux5.split(" ");
                     envidOtro = Integer.parseInt(otro2[1]);
                     showSingleChoiceAlertFalta("Tu rival ha envidado la falta", R.array.envid3);
+                    break;
+
+                case 'T':
+                    showSingleChoiceAlertTruco("Tu rival ha trucado", R.array.truc1);
+                    break;
+
+                case 'Q':
+                    menu.setClickable(true);
+                    hayTruc = true;
+                    textoAccion.setText("Quiero el truc");
+                    cerrarAccion(3000);
+
+                    if(mMyId.equals(turno)){
+                        desbloquearCartas();
+                    }
+                    break;
+
+                case 'L':
+                    showSingleChoiceAlertRetruc("Tu rival ha retrucado", R.array.truc2);
+                    break;
+
+                case 'I':
+                    menu.setClickable(true);
+                    hayRetruc = true;
+                    textoAccion.setText("Quiero el retruc");
+                    cerrarAccion(3000);
+
+                    if(mMyId.equals(turno)){
+                        desbloquearCartas();
+                    }
+                    break;
+
+                case 'C':
+                    showSingleChoiceAlertCuatreVal("¡Cuatre val!", R.array.truc3);
+                    break;
+
+                case 'B':
+                    menu.setClickable(true);
+                    hayCuatreVal = true;
+                    textoAccion.setText("Quiero el cuatre val");
+                    cerrarAccion(3000);
+
+                    if(mMyId.equals(turno)){
+                        desbloquearCartas();
+                    }
+                    break;
+
+                case 'J':
+                    showSingleChoiceAlertJocFora("¡Joc fora!", R.array.envid3);
+                    break;
+
+                case 'Y':
+                    menu.setClickable(true);
+                    hayJocFora = true;
+                    textoAccion.setText("Quiero el joc fora");
+                    cerrarAccion(3000);
+
+                    if(mMyId.equals(turno)){
+                        desbloquearCartas();
+                    }
                     break;
 
                 default:
