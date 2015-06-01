@@ -250,6 +250,9 @@ public class MainActivity extends Activity
         fabMeVoy = (FloatingActionButton) findViewById(R.id.fab32);
 
         fabTruc.setOnClickListener(clickListener);
+        fabRetruc.setOnClickListener(clickListener);
+        fabCuatreVal.setOnClickListener(clickListener);
+        fabJocFora.setOnClickListener(clickListener);
         fabEnvid.setOnClickListener(clickListener);
         fabMeVoy.setOnClickListener(clickListener);
 
