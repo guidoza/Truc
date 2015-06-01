@@ -147,7 +147,6 @@ public class MainActivity extends Activity
     int misRondasGanadas = 0;
     boolean casoTiroPrimero = false;
     AlertDialog.Builder dialogoNuevaPartida;
-    AlertDialog dialog;
     String remoteId;
     String mano;
     boolean hayEmpate = false;
@@ -169,7 +168,6 @@ public class MainActivity extends Activity
     int[] list = new int[3];
     int[] list2 = new int[3];
     int[] numCarta = new int[3];
-    boolean mostrarRepartiendo = false;
     Carta aux;
     int envidOtro = 0;
     String ganadorEnvid = null;
@@ -189,8 +187,7 @@ public class MainActivity extends Activity
     private FloatingActionButton fabMeVoy;
     MaterialDialog.Builder materialDialog;
     MaterialDialog repartiendo;
-    MaterialDialog dialogEnvid;
-    MaterialDialog.ButtonCallback callbackReinicio;
+
 
 
     @Override
@@ -276,7 +273,7 @@ public class MainActivity extends Activity
 
         dialogoNuevaPartida = new AlertDialog.Builder(this);
         dialogoNuevaPartida.setTitle("Importante");
-        dialogoNuevaPartida.setMessage("Este es un programa solo de prueba y no la versión completa");
+        dialogoNuevaPartida.setMessage("Este es un programa solo de prueba y no la versiï¿½n completa");
 
 
 
@@ -419,7 +416,6 @@ public class MainActivity extends Activity
                                 break;
                             //Retruque
                             case 1:
-                                hayRetruc = true;
                                 enviarMensajeRetruc();
                                 break;
                             //No quiero
@@ -450,7 +446,6 @@ public class MainActivity extends Activity
                             case 0:
                                 hayRetruc = true;
                                 enviarMensajeQuieroRetruc();
-                                desbloquearCartas();
                                 break;
                             //Cuatre val
                             case 1:
@@ -458,8 +453,6 @@ public class MainActivity extends Activity
                                 break;
                             //No quiero
                             case 2:
-                                desbloquearCartas();
-                                menu.setClickable(true);
                                 enviarMensajeNoQuieroTruc(2);
                                 mostrarResultadosPerdedorMano();
                                 break;
@@ -486,7 +479,6 @@ public class MainActivity extends Activity
                             case 0:
                                 hayCuatreVal = true;
                                 enviarMensajeQuieroCuatreVal();
-                                desbloquearCartas();
                                 break;
                             //Joc fora
                             case 1:
@@ -494,8 +486,6 @@ public class MainActivity extends Activity
                                 break;
                             //No quiero
                             case 2:
-                                desbloquearCartas();
-                                menu.setClickable(true);
                                 enviarMensajeNoQuieroTruc(3);
                                 mostrarResultadosPerdedorMano();
                                 break;
@@ -764,7 +754,7 @@ public class MainActivity extends Activity
                     // ready to start playing
                     Log.d(TAG, "Starting game (waiting room returned OK).");
 
-                    showProgressDialog("¡Empezamos!");
+                    showProgressDialog("ï¿½Empezamos!");
                     inicializarMano();
                 } else if (responseCode == GamesActivityResultCodes.RESULT_LEFT_ROOM) {
                     // player indicated that they want to leave the room
@@ -1205,6 +1195,12 @@ public class MainActivity extends Activity
         envidOtro = 0;
         todosMismoPalo = false;
         maximo = 0;
+        puntosEnvid = 0;
+        puntosTruc = 0;
+        hayTruc = false;
+        hayRetruc = false;
+        hayCuatreVal = false;
+        hayJocFora = false;
     }
 
 
@@ -1358,7 +1354,7 @@ public class MainActivity extends Activity
     }
 
     void casoEmpatePrimero(){
-        showBasicAlert("Empate en la primera ronda!", "La carta que elijas será mostrada arriba");
+        showBasicAlert("Empate en la primera ronda!", "La carta que elijas serï¿½ mostrada arriba");
         //Si no soy mano, cambio turno
         if(!mMyId.equals(mano)) {
             desbloquearCartas();
@@ -1507,17 +1503,12 @@ public class MainActivity extends Activity
     }
     public void mostrarResultadosGanadorMano(){
 
-        if(hayTruc && !hayRetruc){
-            puntosTruc = TRUC;
-        }else if(hayTruc && hayRetruc && !hayCuatreVal){
-            puntosTruc = RETRUC;
-        }else if(hayTruc && hayRetruc && hayCuatreVal && !hayJocFora){
-            puntosTruc = CUATRE_VAL;
-        }else if(hayTruc && hayRetruc && hayCuatreVal && hayJocFora){
-            //Se acaba la partida
-        }else{
-            puntosTruc = NO_QUIERO_TRUC;
-        }
+        if(!hayTruc) puntosTruc = NO_QUIERO_TRUC;
+        if(hayTruc && !hayRetruc) puntosTruc = TRUC;
+        if(hayRetruc && !hayCuatreVal) puntosTruc = RETRUC;
+        if(hayCuatreVal && !hayJocFora) puntosTruc = CUATRE_VAL;
+        //Joc fora
+        //if(hayJocFora) puntosTruc = ;
 
         if(hayEnvid){
             LayoutInflater inflater = getLayoutInflater();
@@ -1540,6 +1531,8 @@ public class MainActivity extends Activity
                 showProgressCustomDialog(layout);
             }
         } else {
+            puntosTotalesMios += puntosTruc + puntosEnvid;
+            actualizarMarcador2(puntosTotalesMios);
             showProgressDialog("Enhorabuena, ganas la mano");
         }
         repartirTrasMano();
@@ -1551,7 +1544,7 @@ public class MainActivity extends Activity
         if(hayEnvid){
             if(ganadorEnvid.equals(mMyId)){
                 View layout = inflater.inflate(R.layout.progres_content3, container);
-                String content = "Lástima, pierdes la mano\nGanaste el envid:\nTu envid: "+miEnvid+" Envid rival: "+envidOtro;
+                String content = "Lï¿½stima, pierdes la mano\nGanaste el envid:\nTu envid: "+miEnvid+" Envid rival: "+envidOtro;
                 Log.d("TTTTTTT", content);
                 puntosTotalesMios += puntosTruc + puntosEnvid;
                 actualizarMarcador2(puntosTotalesMios);
@@ -1559,14 +1552,16 @@ public class MainActivity extends Activity
 
             }else{
                 View layout = inflater.inflate(R.layout.progres_content4, container);
-                String content = "Lástima, pierdes la mano\nPerdiste el envid:\nTu envid: "+miEnvid+" Envid rival: "+envidOtro;
+                String content = "Lï¿½stima, pierdes la mano\nPerdiste el envid:\nTu envid: "+miEnvid+" Envid rival: "+envidOtro;
                 Log.d("TTTTTTT", content);
                 puntosTotalesMios += puntosTruc + puntosEnvid;
                 actualizarMarcador2(puntosTotalesMios);
                 showProgressCustomDialog(layout);
             }
         } else {
-            showProgressDialog("Lástima, pierdes la mano");
+            puntosTotalesMios += puntosTruc + puntosEnvid;
+            actualizarMarcador2(puntosTotalesMios);
+            showProgressDialog("Lï¿½stima, pierdes la mano");
         }
         repartirTrasMano();
     }
@@ -1581,7 +1576,7 @@ public class MainActivity extends Activity
      * S: Mensaje de repartir las cartas.
      * M: Mensaje de actualizar la mano.
      * N: Mensaje indicador de que he envidado.
-     * K: Mensaje de envid aceptado y notificación de ganador de envid.
+     * K: Mensaje de envid aceptado y notificaciï¿½n de ganador de envid.
      * V: Mensaje que indica que vuelvo a envidar (cuando mi rival me ha envidado).
      * X: Mensaje de que NO quiero envid o truc (Envid -> 1, Truc -> 2).
      * F: Mensaje de la falta del envid.
@@ -1898,7 +1893,7 @@ public class MainActivity extends Activity
                 case 'E':
                     //Mensaje que actualiza si hay empate en la primera ronda
                     if (ronda == 1) {
-                        showBasicAlert("Empate en la primera ronda!", "La carta que eljas será mostrada arriba");
+                        showBasicAlert("Empate en la primera ronda!", "La carta que eljas serï¿½ mostrada arriba");
                         hayEmpate = true;
                     } else hayEmpate = true;
                     break;
@@ -2057,6 +2052,7 @@ public class MainActivity extends Activity
                     break;
 
                 case 'I':
+                    desbloquearCartas();
                     menu.setClickable(true);
                     hayRetruc = true;
                     textoAccion.setText("Quiero el retruc");
@@ -2068,7 +2064,7 @@ public class MainActivity extends Activity
                     break;
 
                 case 'C':
-                    showSingleChoiceAlertCuatreVal("¡Cuatre val!", R.array.truc3);
+                    showSingleChoiceAlertCuatreVal("ï¿½Cuatre val!", R.array.truc3);
                     break;
 
                 case 'B':
@@ -2083,7 +2079,7 @@ public class MainActivity extends Activity
                     break;
 
                 case 'J':
-                    showSingleChoiceAlertJocFora("¡Joc fora!", R.array.envid3);
+                    showSingleChoiceAlertJocFora("ï¿½Joc fora!", R.array.envid3);
                     break;
 
                 case 'Y':
@@ -2318,7 +2314,7 @@ public class MainActivity extends Activity
                     String palo = parser.getAttributeValue(null, "palo");
                     String valor = parser.getAttributeValue(null, "valor");
                     carta = new Carta(numero, palo, valor);
-                    //Por cada question, la añadimos a la lista
+                    //Por cada question, la aï¿½adimos a la lista
                     baraja.add(carta);
                 }
                 eventType = parser.next();
