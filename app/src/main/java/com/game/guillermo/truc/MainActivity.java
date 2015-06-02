@@ -18,8 +18,12 @@ package com.game.guillermo.truc;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.ColorDrawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Handler;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -28,14 +32,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.GravityEnum;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.afollestad.materialdialogs.Theme;
-import com.github.clans.fab.FloatingActionButton;
-import com.github.clans.fab.FloatingActionMenu;
+import com.akexorcist.roundcornerprogressbar.RoundCornerProgressBar;
+import com.akexorcist.roundcornerprogressbar.TextRoundCornerProgressBar;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.games.Games;
@@ -52,6 +57,7 @@ import com.google.android.gms.games.multiplayer.realtime.RoomConfig;
 import com.google.android.gms.games.multiplayer.realtime.RoomStatusUpdateListener;
 import com.google.android.gms.games.multiplayer.realtime.RoomUpdateListener;
 import com.google.android.gms.plus.Plus;
+import com.google.android.gms.plus.model.people.Person;
 import com.google.example.games.basegameutils.BaseGameUtils;
 
 
@@ -61,6 +67,7 @@ import org.xmlpull.v1.XmlPullParserFactory;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
@@ -178,15 +185,14 @@ public class MainActivity extends Activity
     boolean hayCuatreVal = false;
     boolean hayJocFora = false;
 
-    private FloatingActionMenu menu;
-    private FloatingActionButton fabTruc;
-    private FloatingActionButton fabRetruc;
-    private FloatingActionButton fabCuatreVal;
-    private FloatingActionButton fabJocFora;
-    private FloatingActionButton fabEnvid;
-    private FloatingActionButton fabMeVoy;
     MaterialDialog.Builder materialDialog;
     MaterialDialog repartiendo;
+
+    ImageView imgPerfilRival;
+    ImageView imgPerfil;
+    RoundCornerProgressBar progressBar1;
+    CountDownTimer mCountDownTimer;
+    int segundos =30;
 
 
 
@@ -200,7 +206,7 @@ public class MainActivity extends Activity
             @Override
             public void onClick(View v) {
                 String text = "";
-
+/*
                 switch (v.getId()) {
                     case R.id.fab12:
                         truco();
@@ -218,42 +224,13 @@ public class MainActivity extends Activity
                         envido();
                         break;
                     case R.id.fab32:
-                        text = fabMeVoy.getLabelText();
                         break;
-                }
+                }*/
 
                 Toast.makeText(MainActivity.this, text, Toast.LENGTH_SHORT).show();
             }
         };
 
-        menu = (FloatingActionMenu) findViewById(R.id.menu);
-        menu.showMenuButton(true);
-        menu.setOnMenuToggleListener(new FloatingActionMenu.OnMenuToggleListener() {
-            @Override
-            public void onMenuToggle(boolean opened) {
-                String text = "";
-                if (opened) {
-                    //Bloquear todos los elementos
-                } else {
-                    //Desbloquear todos los elementos
-                }
-            }
-        });
-        menu.setClosedOnTouchOutside(true);
-
-        fabTruc = (FloatingActionButton) findViewById(R.id.fab12);
-        fabRetruc = (FloatingActionButton) findViewById(R.id.fab13);
-        fabCuatreVal = (FloatingActionButton) findViewById(R.id.fab14);
-        fabJocFora = (FloatingActionButton) findViewById(R.id.fab15);
-        fabEnvid = (FloatingActionButton) findViewById(R.id.fab22);
-        fabMeVoy = (FloatingActionButton) findViewById(R.id.fab32);
-
-        fabTruc.setOnClickListener(clickListener);
-        fabRetruc.setOnClickListener(clickListener);
-        fabCuatreVal.setOnClickListener(clickListener);
-        fabJocFora.setOnClickListener(clickListener);
-        fabEnvid.setOnClickListener(clickListener);
-        fabMeVoy.setOnClickListener(clickListener);
 
         tvJugador1 = (ImageView) findViewById(R.id.carta1Jugador);
         tvJugador2 = (ImageView) findViewById(R.id.carta2Jugador);
@@ -270,11 +247,31 @@ public class MainActivity extends Activity
         textoAccion = (TextView) findViewById(R.id.textoJugador2);
         marcador = (TextView) findViewById(R.id.marcador);
         marcador2 = (TextView) findViewById(R.id.marcador2);
+        imgPerfilRival = (ImageView) findViewById(R.id.imgPerfilRival);
+        imgPerfil = (ImageView) findViewById(R.id.imgPerfil);
 
-        dialogoNuevaPartida = new AlertDialog.Builder(this);
-        dialogoNuevaPartida.setTitle("Importante");
-        dialogoNuevaPartida.setMessage("Este es un programa solo de prueba y no la versi�n completa");
 
+        progressBar1 = (RoundCornerProgressBar) findViewById(R.id.progres_segundos_1);
+        progressBar1.setMax(30); progressBar1.setProgressColor(getResources().getColor(R.color.menuItems));
+        progressBar1.setProgress(segundos);
+        mCountDownTimer=new CountDownTimer(30000,1000) {
+
+            @Override
+            public void onTick(long millisUntilFinished) {
+                Log.v("Log_tag", "Tick of Progress"+ segundos + millisUntilFinished);
+                segundos--;
+                progressBar1.setProgress(segundos);
+
+            }
+
+            @Override
+            public void onFinish() {
+                //Do what you want
+                segundos--;
+                progressBar1.setProgress(segundos);
+            }
+        };
+        mCountDownTimer.start();
 
 
         // Creamos el nuevo cliente de Google con acceso a Plus y Games
@@ -355,7 +352,6 @@ public class MainActivity extends Activity
                             //No quiero
                             case 2:
                                 desbloquearCartas();
-                                menu.setClickable(true);
                                 enviarMensajeNoQuiero(2);
                                 break;
                         }
@@ -387,7 +383,6 @@ public class MainActivity extends Activity
                                 break;
                             case 1:
                                 if(mMyId.equals(turno))desbloquearCartas();
-                                menu.setClickable(true);
                                 enviarMensajeNoQuiero(3);
                                 break;
                         }
@@ -574,15 +569,12 @@ public class MainActivity extends Activity
         repartiendo = materialDialog.show();
     }
     private void envido(){
-        menu.close(true);
         Toast.makeText(getApplicationContext(), "Esperando al Jugador", Toast.LENGTH_SHORT).show();
         tvJugador1.setEnabled(false);
         tvJugador2.setEnabled(false);
         tvJugador3.setEnabled(false);
-        menu.setClickable(false);
         miEnvid = comprobarEnvid();
         enviarMensajeEnvid(miEnvid);
-        fabEnvid.setEnabled(false);
     }
 
     private int comprobarEnvid(){
@@ -614,51 +606,40 @@ public class MainActivity extends Activity
         }
 
         for(int i = 0; i<3; i++){
-            if(maximo < Integer.parseInt(manoJugador.get(i).getNumero())) maximo = Integer.parseInt(manoJugador.get(i).getNumero());
+            if(maximo < Integer.parseInt(manoJugador.get(i).getNumero()))
+                maximo = Integer.parseInt(manoJugador.get(i).getNumero());
         }
         return maximo;
 
     }
 
     public void truco(){
-        menu.close(true);
         Toast.makeText(getApplicationContext(), "Esperando al Jugador", Toast.LENGTH_SHORT).show();
         tvJugador1.setEnabled(false);
         tvJugador2.setEnabled(false);
         tvJugador3.setEnabled(false);
-        menu.setClickable(false);
         enviarMensajeTruc();
-        fabTruc.setEnabled(false);
     }
     public void retruco(){
-        menu.close(true);
         Toast.makeText(getApplicationContext(), "Esperando al Jugador", Toast.LENGTH_SHORT).show();
         tvJugador1.setEnabled(false);
         tvJugador2.setEnabled(false);
         tvJugador3.setEnabled(false);
-        menu.setClickable(false);
         enviarMensajeRetruc();
-        fabTruc.setEnabled(false);
     }
     public void quatreVal(){
-        menu.close(true);
         Toast.makeText(getApplicationContext(), "Esperando al Jugador", Toast.LENGTH_SHORT).show();
         tvJugador1.setEnabled(false);
         tvJugador2.setEnabled(false);
         tvJugador3.setEnabled(false);
-        menu.setClickable(false);
         enviarMensajeCuatreVal();
-        fabTruc.setEnabled(false);
     }
     public void jocFora(){
-        menu.close(true);
         Toast.makeText(getApplicationContext(), "Esperando al Jugador", Toast.LENGTH_SHORT).show();
         tvJugador1.setEnabled(false);
         tvJugador2.setEnabled(false);
         tvJugador3.setEnabled(false);
-        menu.setClickable(false);
         enviarMensajeJocFora();
-        fabTruc.setEnabled(false);
     }
 
     @Override
@@ -1038,6 +1019,22 @@ public class MainActivity extends Activity
         Log.d(TAG, "Room ID: " + mRoomId);
         Log.d(TAG, "My ID " + mMyId);
         Log.d(TAG, "<< CONNECTED TO ROOM>>");
+
+
+        if (mRoomId != null) {
+            for (Participant p : mParticipants) {
+                String pid = p.getParticipantId();
+
+                if (pid.equals(mMyId)) {
+                    new LoadProfileImage(imgPerfil).execute(p.getIconImageUrl());
+
+                }else {
+                    new LoadProfileImage(imgPerfilRival).execute(p.getIconImageUrl());
+                }
+            }
+        }
+
+        //getProfileInformation();
     }
 
     // Called when we've successfully left the room (this happens a result of voluntarily leaving
@@ -1189,7 +1186,6 @@ public class MainActivity extends Activity
         hayEmpate = false;
         ganadorRonda1 = null;
         miEnvid = 0;
-        fabEnvid.setEnabled(true);
         hayEnvid = false;
         ganadorEnvid = null;
         envidOtro = 0;
@@ -1261,7 +1257,6 @@ public class MainActivity extends Activity
             tvJugador1.setEnabled(false);
             tvJugador2.setEnabled(false);
             tvJugador3.setEnabled(false);
-            fabEnvid.setEnabled(false);
             Toast.makeText(getApplicationContext(), "Esperando al Jugador", Toast.LENGTH_SHORT).show();
 
         }
@@ -1935,11 +1930,9 @@ public class MainActivity extends Activity
                     String suEnvid[] = aux1.split(" ");
                     envidOtro = Integer.parseInt(suEnvid[1]);
                     showSingleChoiceAlertEnvid("Tu rival ha envidado", R.array.envid);
-                    fabEnvid.setEnabled(false);
                     break;
 
                 case 'K':
-                    menu.setClickable(true);
                     String aux2 = new String(buf, "UTF-8");
                     String ganador[] = aux2.split(" ");
                     hayEnvid = true;
@@ -2037,7 +2030,6 @@ public class MainActivity extends Activity
                     break;
 
                 case 'Q':
-                    menu.setClickable(true);
                     hayTruc = true;
                     textoAccion.setText("Quiero el truc");
                     cerrarAccion(3000);
@@ -2053,7 +2045,6 @@ public class MainActivity extends Activity
 
                 case 'I':
                     desbloquearCartas();
-                    menu.setClickable(true);
                     hayRetruc = true;
                     textoAccion.setText("Quiero el retruc");
                     cerrarAccion(3000);
@@ -2068,7 +2059,6 @@ public class MainActivity extends Activity
                     break;
 
                 case 'B':
-                    menu.setClickable(true);
                     hayCuatreVal = true;
                     textoAccion.setText("Quiero el cuatre val");
                     cerrarAccion(3000);
@@ -2083,7 +2073,6 @@ public class MainActivity extends Activity
                     break;
 
                 case 'Y':
-                    menu.setClickable(true);
                     hayJocFora = true;
                     textoAccion.setText("Quiero el joc fora");
                     cerrarAccion(3000);
@@ -2104,8 +2093,8 @@ public class MainActivity extends Activity
                     turno = turnoNuevo;
                     desbloquearCartas();
                     if(mMyId.equals(turno) && misRondasGanadas<2){
-                        if(ronda == 1 && !hayEnvid)fabEnvid.setEnabled(true);
-                        if(ronda > 1 && !hayEnvid)fabEnvid.setEnabled(false);
+                      /*  if(ronda == 1 && !hayEnvid)fabEnvid.setEnabled(true);
+                        if(ronda > 1 && !hayEnvid)fabEnvid.setEnabled(false);*/
 
                         Toast.makeText(getApplicationContext(),"Es tu turno", Toast.LENGTH_SHORT).show();
                     }
@@ -2114,7 +2103,7 @@ public class MainActivity extends Activity
                         tvJugador1.setEnabled(false);
                         tvJugador2.setEnabled(false);
                         tvJugador3.setEnabled(false);
-                        fabEnvid.setEnabled(false);
+                        //fabEnvid.setEnabled(false);
 
                         Toast.makeText(getApplicationContext(), "Esperando al Jugador", Toast.LENGTH_SHORT).show();
                         Log.d("LLLLLLL", "Me han comunicado cambio de turno");
@@ -2374,7 +2363,7 @@ public class MainActivity extends Activity
 
     public void inicializarMano(){
         marcador.setText("Yo: "+puntosTotalesMios);
-        marcador2.setText("Rival: "+puntosTotalesJugador2);
+        marcador2.setText("Rival: " + puntosTotalesJugador2);
         //Preparando la partida
         resetAll();
         desbloquearCartas();
@@ -2508,4 +2497,66 @@ public class MainActivity extends Activity
             tvCartaMesa3.setVisibility(View.VISIBLE);
         }
     }
+    private void getProfileInformation() {
+        try {
+            if (Plus.PeopleApi.getCurrentPerson(mGoogleApiClient) != null) {
+                Person currentPerson = Plus.PeopleApi
+                        .getCurrentPerson(mGoogleApiClient);
+                String personName = currentPerson.getDisplayName();
+                String personPhotoUrl = currentPerson.getImage().getUrl();
+                String personGooglePlusProfile = currentPerson.getUrl();
+                String email = Plus.AccountApi.getAccountName(mGoogleApiClient);
+
+                textoAccion.setText(personName);
+                Log.e(TAG, "Name: " + personName + ", plusProfile: "
+                        + personGooglePlusProfile + ", email: " + email
+                        + ", Image: " + personPhotoUrl);
+
+
+                // by default the profile url gives 50x50 px image only
+                // we can replace the value with whatever dimension we want by
+                // replacing sz=X
+                personPhotoUrl = personPhotoUrl.substring(0,
+                        personPhotoUrl.length() - 2)
+                        +75;
+
+                new LoadProfileImage(imgPerfilRival).execute(personPhotoUrl);
+
+            } else {
+                Toast.makeText(getApplicationContext(),
+                        "Person information is null", Toast.LENGTH_LONG).show();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Background Async task to load user profile picture from url
+     * */
+    private class LoadProfileImage extends AsyncTask<String, Void, Bitmap> {
+        ImageView bmImage;
+
+        public LoadProfileImage(ImageView bmImage) {
+            this.bmImage = bmImage;
+        }
+
+        protected Bitmap doInBackground(String... urls) {
+            String urldisplay = urls[0];
+            Bitmap mIcon11 = null;
+            try {
+                InputStream in = new java.net.URL(urldisplay).openStream();
+                mIcon11 = BitmapFactory.decodeStream(in);
+            } catch (Exception e) {
+                Log.e("Error", e.getMessage());
+                e.printStackTrace();
+            }
+            return mIcon11;
+        }
+
+        protected void onPostExecute(Bitmap result) {
+            bmImage.setImageBitmap(result);
+        }
+    }
+
 }
