@@ -190,7 +190,8 @@ public class MainActivity extends Activity
 
     ImageView imgPerfilRival;
     ImageView imgPerfil;
-    RoundCornerProgressBar progressBar1;
+    ProgressBar progressBar1;
+    ProgressBar progressBar2;
     CountDownTimer mCountDownTimer;
     int segundos =30;
 
@@ -251,9 +252,10 @@ public class MainActivity extends Activity
         imgPerfil = (ImageView) findViewById(R.id.imgPerfil);
 
 
-        progressBar1 = (RoundCornerProgressBar) findViewById(R.id.progres_segundos_1);
-        progressBar1.setMax(30); progressBar1.setProgressColor(getResources().getColor(R.color.menuItems));
+        progressBar1 = (ProgressBar) findViewById(R.id.progres_segundos_1);
         progressBar1.setProgress(segundos);
+        progressBar2 = (ProgressBar) findViewById(R.id.progres_segundos_2);
+        progressBar2.setProgress(segundos);
         mCountDownTimer=new CountDownTimer(30000,1000) {
 
             @Override
@@ -261,6 +263,7 @@ public class MainActivity extends Activity
                 Log.v("Log_tag", "Tick of Progress"+ segundos + millisUntilFinished);
                 segundos--;
                 progressBar1.setProgress(segundos);
+                progressBar2.setProgress(segundos);
 
             }
 
@@ -269,6 +272,7 @@ public class MainActivity extends Activity
                 //Do what you want
                 segundos--;
                 progressBar1.setProgress(segundos);
+                progressBar2.setProgress(segundos);
             }
         };
         mCountDownTimer.start();
