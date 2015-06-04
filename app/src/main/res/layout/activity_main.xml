@@ -65,9 +65,10 @@
 
 
         <FrameLayout
+            android:id="@+id/marco"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="0.20">
+            android:layout_weight="0.15">
 
 
                     <LinearLayout
@@ -133,84 +134,103 @@
 
 
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="100dp"
-                        android:orientation="horizontal"
-                        android:layout_marginTop="120dp">
+                            <RelativeLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="120dp"
+                                android:layout_marginTop="120dp">
 
-                        <ImageView
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:id="@+id/carta1MesaRival"
-                            android:layout_weight="1"
-                            />
-                        <ImageView
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:id="@+id/carta2MesaRival"
-                            android:layout_weight="1"
-
-                            />
-                        <ImageView
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:id="@+id/carta3MesaRival"
-                            android:layout_weight="1"
-
-                            />
-                    </LinearLayout>
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="100dp"
-                        android:orientation="horizontal"
-                        android:layout_marginTop="160dp">
-
-                        <ImageView
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:id="@+id/carta1Mesa"
-                            />
-                        <ImageView
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:id="@+id/carta2Mesa"
-                            />
-                        <ImageView
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:id="@+id/carta3Mesa"
-                            />
-                    </LinearLayout>
+                                <ImageView
+                                    android:layout_width="80dp"
+                                    android:layout_height="match_parent"
+                                    android:id="@+id/carta1MesaRival"
+                                    android:layout_marginLeft="30dp"
+                                    android:layout_alignParentLeft="true"
+                                    />
+                                <ImageView
+                                    android:layout_width="80dp"
+                                    android:layout_height="match_parent"
+                                    android:id="@+id/carta2MesaRival"
+                                    android:layout_toRightOf="@+id/carta1MesaRival"
+                                    android:layout_marginLeft="20dp"
+                                    />
+                                <ImageView
+                                    android:layout_width="80dp"
+                                    android:layout_height="match_parent"
+                                    android:id="@+id/carta3MesaRival"
+                                    android:layout_alignParentRight="true"
+                                    android:layout_marginRight="10dp"
+                                    />
+                            </RelativeLayout>
 
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="150dp"
-                        android:layout_marginTop="270dp"
-                        android:orientation="horizontal">
-                        <ImageView
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:id="@+id/carta1Jugador"
-                            />
-                        <ImageView
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:id="@+id/carta2Jugador"
-                            />
-                        <ImageView
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:id="@+id/carta3Jugador"
-                            />
-                    </LinearLayout>
+
+
+                            <RelativeLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="450dp">
+
+                                <RelativeLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="120dp"
+                                    android:layout_marginTop="180dp">
+
+                                    <ImageView
+                                        android:layout_width="80dp"
+                                        android:layout_height="match_parent"
+                                        android:id="@+id/carta1Mesa"
+                                        android:layout_marginLeft="20dp"
+                                        android:layout_alignParentLeft="true"
+                                        />
+                                    <ImageView
+                                        android:layout_width="80dp"
+                                        android:layout_height="match_parent"
+                                        android:id="@+id/carta2Mesa"
+                                        android:layout_centerInParent="true"
+                                        />
+                                    <ImageView
+                                        android:layout_width="80dp"
+                                        android:layout_height="match_parent"
+                                        android:id="@+id/carta3Mesa"
+                                        android:layout_alignParentRight="true"
+                                        android:layout_marginRight="20dp"
+                                        />
+                                </RelativeLayout>
+
+
+                                <ImageView
+                                    android:layout_width="100dp"
+                                    android:layout_height="160dp"
+                                    android:id="@+id/carta1Jugador"
+                                    android:src="@drawable/seis_espadas"
+                                    android:layout_alignParentBottom="true"
+                                    android:layout_marginBottom="30dp"
+                                    android:layout_alignParentLeft="true"
+                                    android:layout_alignParentStart="true"
+                                    android:layout_marginLeft="100dp"
+                                    android:layout_marginStart="50dp" />
+                                <ImageView
+                                    android:layout_width="100dp"
+                                    android:layout_height="160dp"
+                                    android:id="@+id/carta2Jugador"
+                                    android:src="@drawable/siete_espadas"
+                                    android:layout_alignParentBottom="true"
+                                    android:layout_marginBottom="30dp"
+                                    android:layout_centerHorizontal="true"
+                                    />
+                                <ImageView
+                                    android:layout_width="100dp"
+                                    android:layout_height="160dp"
+                                    android:id="@+id/carta3Jugador"
+                                    android:src="@drawable/uno_espadas"
+                                    android:layout_alignParentBottom="true"
+                                    android:layout_marginBottom="30dp"
+                                    android:layout_alignParentRight="true"
+                                    android:layout_alignParentEnd="true"
+                                    android:layout_marginRight="100dp"
+                                    android:layout_marginEnd="50dp"
+                                    />
+
+                            </RelativeLayout>
 
 
 
@@ -252,7 +272,8 @@
                     android:layout_height="50dp"
                     android:layout_weight="1"
                     android:background="@drawable/bocadillo2"
-                    android:layout_margin="10dp"/>
+                    android:layout_margin="10dp"
+                    />
 
             </LinearLayout>
 

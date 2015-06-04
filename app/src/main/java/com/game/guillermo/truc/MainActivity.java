@@ -17,22 +17,29 @@ package com.game.guillermo.truc;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.ClipData;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.PointF;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.util.Log;
+import android.view.DragEvent;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -149,7 +156,7 @@ public class MainActivity extends Activity
     Carta carta1;
     Carta carta2;
     Carta carta3;
-    int miValor=0, valor1 = 0, valor2 = 0, valor3 = 0, valorEmpate = 0;
+    int miValor = 0, valor1 = 0, valor2 = 0, valor3 = 0, valorEmpate = 0;
     int ronda = 1;
     int misRondasGanadas = 0;
     boolean casoTiroPrimero = false;
@@ -193,8 +200,15 @@ public class MainActivity extends Activity
     ProgressBar progressBar1;
     ProgressBar progressBar2;
     CountDownTimer mCountDownTimer;
-    int segundos =30;
+    int segundos = 30;
 
+    LinearLayout tablero;
+    LinearLayout layoutCartaMesa1;
+    LinearLayout layoutCartaMesa2;
+    LinearLayout layoutCartaMesa3;
+    private ViewGroup marco;
+    private float xDelta;
+    private float yDelta;
 
 
     @Override
@@ -256,11 +270,11 @@ public class MainActivity extends Activity
         progressBar1.setProgress(segundos);
         progressBar2 = (ProgressBar) findViewById(R.id.progres_segundos_2);
         progressBar2.setProgress(segundos);
-        mCountDownTimer=new CountDownTimer(30000,1000) {
+        mCountDownTimer = new CountDownTimer(30000, 1000) {
 
             @Override
             public void onTick(long millisUntilFinished) {
-                Log.v("Log_tag", "Tick of Progress"+ segundos + millisUntilFinished);
+                Log.v("Log_tag", "Tick of Progress" + segundos + millisUntilFinished);
                 segundos--;
                 progressBar1.setProgress(segundos);
                 progressBar2.setProgress(segundos);
@@ -276,7 +290,7 @@ public class MainActivity extends Activity
             }
         };
         mCountDownTimer.start();
-
+        mCountDownTimer.cancel();
 
         // Creamos el nuevo cliente de Google con acceso a Plus y Games
         mGoogleApiClient = new GoogleApiClient.Builder(this)
@@ -291,6 +305,8 @@ public class MainActivity extends Activity
             findViewById(id).setOnClickListener(this);
         }
     }
+
+
     private void showSingleChoiceAlertEnvid(String title, int array) {
         new MaterialDialog.Builder(this)
                 .title(title)
@@ -306,7 +322,7 @@ public class MainActivity extends Activity
                                 miEnvid = comprobarEnvid();
                                 hayEnvid = true;
                                 comprobarGanadorEnvid();
-                                if(ganadorEnvid.equals(mMyId))puntosEnvid = ENVID;
+                                if (ganadorEnvid.equals(mMyId)) puntosEnvid = ENVID;
                                 enviarMensajeHayEnvidAndGanador(ganadorEnvid, 1);
                                 break;
                             //Vuelvo
@@ -331,6 +347,7 @@ public class MainActivity extends Activity
                 .cancelable(false)
                 .show().getWindow().setBackgroundDrawable(new ColorDrawable(0x30000000));
     }
+
     private void showSingleChoiceAlertVuelvo(String title, int array) {
         new MaterialDialog.Builder(this)
                 .title(title)
@@ -346,7 +363,7 @@ public class MainActivity extends Activity
                                 hayEnvid = true;
                                 comprobarGanadorEnvid();
                                 enviarMensajeHayEnvidAndGanador(ganadorEnvid, 2);
-                                if(ganadorEnvid.equals(mMyId))puntosEnvid = TORNE;
+                                if (ganadorEnvid.equals(mMyId)) puntosEnvid = TORNE;
                                 desbloquearCartas();
                                 break;
                             //Falta
@@ -366,6 +383,7 @@ public class MainActivity extends Activity
                 .cancelable(false)
                 .show().getWindow().setBackgroundDrawable(new ColorDrawable(0x30000000));
     }
+
     private void showSingleChoiceAlertFalta(String title, int array) {
         new MaterialDialog.Builder(this)
                 .title(title)
@@ -379,14 +397,14 @@ public class MainActivity extends Activity
                             //Quiero
                             case 0:
                                 hayEnvid = true;
-                                if(mMyId.equals(turno))desbloquearCartas();
+                                if (mMyId.equals(turno)) desbloquearCartas();
                                 comprobarGanadorEnvid();
                                 //puntos a sumar por la falta
                                 //if(ganadorEnvid.equals(mMyId))puntosEnvid = ;
                                 enviarMensajeHayEnvidAndGanador(ganadorEnvid, 3);
                                 break;
                             case 1:
-                                if(mMyId.equals(turno))desbloquearCartas();
+                                if (mMyId.equals(turno)) desbloquearCartas();
                                 enviarMensajeNoQuiero(3);
                                 break;
                         }
@@ -496,6 +514,7 @@ public class MainActivity extends Activity
                 .cancelable(false)
                 .show().getWindow().setBackgroundDrawable(new ColorDrawable(0x30000000));
     }
+
     private void showSingleChoiceAlertJocFora(String title, int array) {
         new MaterialDialog.Builder(this)
                 .title(title)
@@ -527,7 +546,7 @@ public class MainActivity extends Activity
                 .show().getWindow().setBackgroundDrawable(new ColorDrawable(0x30000000));
     }
 
-    private void comprobarGanadorEnvid(){
+    private void comprobarGanadorEnvid() {
         if (miEnvid > envidOtro && mMyId.equals(idJugador1)) {
             ganadorEnvid = idJugador1;
         } else if (miEnvid > envidOtro && mMyId.equals(idJugador2)) {
@@ -546,6 +565,7 @@ public class MainActivity extends Activity
             ganadorEnvid = idJugador1;
         }
     }
+
     private void showBasicAlert(String title, String message) {
         materialDialog = new MaterialDialog.Builder(this)
                 .title(title)
@@ -563,6 +583,7 @@ public class MainActivity extends Activity
                 .cancelable(false);
         repartiendo = materialDialog.show();
     }
+
     private void showProgressCustomDialog(View content) {
         materialDialog = new MaterialDialog.Builder(this)
                 .title("Repartiendo...")
@@ -572,7 +593,8 @@ public class MainActivity extends Activity
                 .theme(Theme.DARK);
         repartiendo = materialDialog.show();
     }
-    private void envido(){
+
+    private void envido() {
         Toast.makeText(getApplicationContext(), "Esperando al Jugador", Toast.LENGTH_SHORT).show();
         tvJugador1.setEnabled(false);
         tvJugador2.setEnabled(false);
@@ -581,64 +603,71 @@ public class MainActivity extends Activity
         enviarMensajeEnvid(miEnvid);
     }
 
-    private int comprobarEnvid(){
+    private int comprobarEnvid() {
         String palo1 = carta1.getPalo();
         String palo2 = carta2.getPalo();
         String palo3 = carta3.getPalo();
 
 
-        if(palo1.equals(palo2) && palo1.equals(palo3)) todosMismoPalo = true;
+        if (palo1.equals(palo2) && palo1.equals(palo3)) todosMismoPalo = true;
 
-        if(todosMismoPalo){
-            if(carta1.getNumero().compareTo(carta2.getNumero()) > 0){
-                if(carta2.getNumero().compareTo(carta3.getNumero()) > 0) {
+        if (todosMismoPalo) {
+            if (carta1.getNumero().compareTo(carta2.getNumero()) > 0) {
+                if (carta2.getNumero().compareTo(carta3.getNumero()) > 0) {
                     return Integer.parseInt(carta1.getNumero()) + Integer.parseInt(carta2.getNumero()) + 20;
-                }else { return Integer.parseInt(carta1.getNumero()) + Integer.parseInt(carta3.getNumero()) + 20 ; }
-            }else{
-                if(carta1.getNumero().compareTo(carta3.getNumero()) > 0){
+                } else {
+                    return Integer.parseInt(carta1.getNumero()) + Integer.parseInt(carta3.getNumero()) + 20;
+                }
+            } else {
+                if (carta1.getNumero().compareTo(carta3.getNumero()) > 0) {
                     return Integer.parseInt(carta1.getNumero()) + Integer.parseInt(carta2.getNumero()) + 20;
-                }else  return Integer.parseInt(carta3.getNumero()) + Integer.parseInt(carta2.getNumero()) + 20;
+                } else
+                    return Integer.parseInt(carta3.getNumero()) + Integer.parseInt(carta2.getNumero()) + 20;
 
             }
 
+        } else {
+            if (palo1.equals(palo2))
+                return Integer.parseInt(carta1.getNumero()) + Integer.parseInt(carta2.getNumero()) + 20;
+            else if (palo1.equals(palo3))
+                return Integer.parseInt(carta1.getNumero()) + Integer.parseInt(carta3.getNumero()) + 20;
+            else if (palo2.equals(palo3))
+                return Integer.parseInt(carta3.getNumero()) + Integer.parseInt(carta2.getNumero()) + 20;
         }
 
-        else {
-            if(palo1.equals(palo2))  return Integer.parseInt(carta1.getNumero()) + Integer.parseInt(carta2.getNumero()) + 20;
-            else if(palo1.equals(palo3)) return Integer.parseInt(carta1.getNumero()) + Integer.parseInt(carta3.getNumero()) + 20;
-            else if(palo2.equals(palo3)) return Integer.parseInt(carta3.getNumero()) + Integer.parseInt(carta2.getNumero()) + 20;
-        }
-
-        for(int i = 0; i<3; i++){
-            if(maximo < Integer.parseInt(manoJugador.get(i).getNumero()))
+        for (int i = 0; i < 3; i++) {
+            if (maximo < Integer.parseInt(manoJugador.get(i).getNumero()))
                 maximo = Integer.parseInt(manoJugador.get(i).getNumero());
         }
         return maximo;
 
     }
 
-    public void truco(){
+    public void truco() {
         Toast.makeText(getApplicationContext(), "Esperando al Jugador", Toast.LENGTH_SHORT).show();
         tvJugador1.setEnabled(false);
         tvJugador2.setEnabled(false);
         tvJugador3.setEnabled(false);
         enviarMensajeTruc();
     }
-    public void retruco(){
+
+    public void retruco() {
         Toast.makeText(getApplicationContext(), "Esperando al Jugador", Toast.LENGTH_SHORT).show();
         tvJugador1.setEnabled(false);
         tvJugador2.setEnabled(false);
         tvJugador3.setEnabled(false);
         enviarMensajeRetruc();
     }
-    public void quatreVal(){
+
+    public void quatreVal() {
         Toast.makeText(getApplicationContext(), "Esperando al Jugador", Toast.LENGTH_SHORT).show();
         tvJugador1.setEnabled(false);
         tvJugador2.setEnabled(false);
         tvJugador3.setEnabled(false);
         enviarMensajeCuatreVal();
     }
-    public void jocFora(){
+
+    public void jocFora() {
         Toast.makeText(getApplicationContext(), "Esperando al Jugador", Toast.LENGTH_SHORT).show();
         tvJugador1.setEnabled(false);
         tvJugador2.setEnabled(false);
@@ -653,6 +682,14 @@ public class MainActivity extends Activity
         switch (v.getId()) {
             case R.id.button_single_player_2:
                 switchToScreen(R.id.screen_game);
+                tvJugador1.animate().rotation(-20).setDuration(750);
+                tvJugador3.animate().rotation(20).setDuration(750);
+                tvJugador1.animate().translationX(tvJugador1.getX() - 100).setDuration(750);
+                tvJugador3.animate().translationX(tvJugador3.getX() + 100).setDuration(750);
+                tvJugador1.animate().translationY(tvJugador1.getY() + 40).setDuration(750);
+                tvJugador3.animate().translationY(tvJugador3.getY() + 40).setDuration(750);
+
+
             case R.id.button_sign_in:
                 // user wants to sign in
                 // Check to see the developer who's running this sample code read the instructions :-)
@@ -759,7 +796,7 @@ public class MainActivity extends Activity
                 if (responseCode == RESULT_OK) {
                     mGoogleApiClient.connect();
                 } else {
-                    BaseGameUtils.showActivityResultError(this,requestCode,responseCode, R.string.signin_other_error);
+                    BaseGameUtils.showActivityResultError(this, requestCode, responseCode, R.string.signin_other_error);
                 }
                 break;
         }
@@ -848,10 +885,9 @@ public class MainActivity extends Activity
         // stop trying to keep the screen on
         stopKeepingScreenOn();
 
-        if (mGoogleApiClient == null || !mGoogleApiClient.isConnected()){
+        if (mGoogleApiClient == null || !mGoogleApiClient.isConnected()) {
             switchToScreen(R.id.screen_sign_in);
-        }
-        else {
+        } else {
             switchToScreen(R.id.screen_wait);
         }
         super.onStop();
@@ -867,9 +903,11 @@ public class MainActivity extends Activity
         if (mGoogleApiClient != null && mGoogleApiClient.isConnected()) {
             Log.w(TAG,
                     "GameHelper: client was already connected on onStart()");
+            switchToScreen(R.id.screen_main);
         } else {
-            Log.d(TAG,"Connecting client.");
+            Log.d(TAG, "Connecting client.");
             mGoogleApiClient.connect();
+            switchToScreen(R.id.screen_main);
         }
         super.onStart();
     }
@@ -953,7 +991,7 @@ public class MainActivity extends Activity
                     .getParcelable(Multiplayer.EXTRA_INVITATION);
             if (inv != null && inv.getInvitationId() != null) {
                 // retrieve and cache the invitation ID
-                Log.d(TAG,"onConnected: connection hint has a room invite!");
+                Log.d(TAG, "onConnected: connection hint has a room invite!");
                 acceptInviteToRoom(inv.getInvitationId());
                 return;
             }
@@ -1000,18 +1038,17 @@ public class MainActivity extends Activity
         remoteId = null;
 
         ArrayList<String> ids = room.getParticipantIds();
-        for(int i = 0; i<ids.size(); i++){
+        for (int i = 0; i < ids.size(); i++) {
             String aux = ids.get(i);
-            if(!aux.equals(mMyId)){
+            if (!aux.equals(mMyId)) {
                 remoteId = aux;
                 break;
             }
         }
-        if(mMyId.compareTo(remoteId) > 0){
+        if (mMyId.compareTo(remoteId) > 0) {
             idJugador1 = mMyId;
             idJugador2 = remoteId;
-        }
-        else{
+        } else {
             idJugador1 = remoteId;
             idJugador2 = mMyId;
         }
@@ -1032,7 +1069,7 @@ public class MainActivity extends Activity
                 if (pid.equals(mMyId)) {
                     new LoadProfileImage(imgPerfil).execute(p.getIconImageUrl());
 
-                }else {
+                } else {
                     new LoadProfileImage(imgPerfilRival).execute(p.getIconImageUrl());
                 }
             }
@@ -1172,9 +1209,12 @@ public class MainActivity extends Activity
     final static int GAME_DURATION = 20; // game duration, seconds.
     int mScore = 0; // user's current score
 
-    void resetAll(){
+    void resetAll() {
         miValor = 0;
-        valor1 = 0; valor2 = 0; valor3 = 0; valorEmpate =0;
+        valor1 = 0;
+        valor2 = 0;
+        valor3 = 0;
+        valorEmpate = 0;
         ronda = 1;
         misRondasGanadas = 0;
         casoTiroPrimero = false;
@@ -1201,6 +1241,7 @@ public class MainActivity extends Activity
         hayRetruc = false;
         hayCuatreVal = false;
         hayJocFora = false;
+
     }
 
 
@@ -1210,16 +1251,19 @@ public class MainActivity extends Activity
         tvJugador2.setEnabled(true);
         tvJugador3.setEnabled(true);
     }
+
     void resetTurno() {
         turno = null;
         idJugador1 = null;
         idJugador2 = null;
     }
-    void cambiarTurno(){
-        if(mMyId.equals(idJugador1) && turno.equals(idJugador1)) turno = idJugador2;
-        if(mMyId.equals(idJugador2) && turno.equals(idJugador2)) turno = idJugador1;
+
+    void cambiarTurno() {
+        if (mMyId.equals(idJugador1) && turno.equals(idJugador1)) turno = idJugador2;
+        if (mMyId.equals(idJugador2) && turno.equals(idJugador2)) turno = idJugador1;
 
     }
+
     // Start the gameplay phase of the game.
     void startGame(boolean multiplayer) {
 
@@ -1227,37 +1271,16 @@ public class MainActivity extends Activity
         asignarImagenCarta(carta2, tvJugador2);
         asignarImagenCarta(carta3, tvJugador3);
 
-        tvJugador1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(!hayEmpate){
-                    cartaSeleccionada(view);
-                }else cartaSeleccionadaEmpate(view);
+        tvJugador1.setOnTouchListener(new MyTouchListener());
+        tvJugador2.setOnTouchListener(new MyTouchListener());
+        tvJugador3.setOnTouchListener(new MyTouchListener());
 
-            }
-        });
-        tvJugador2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(!hayEmpate){
-                    cartaSeleccionada(view);
-                }else cartaSeleccionadaEmpate(view);
-            }
-        });
-        tvJugador3.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (!hayEmpate) {
-                    cartaSeleccionada(view);
-                } else cartaSeleccionadaEmpate(view);
-            }
-        });
 
-        if(mMyId.equals(turno) && ronda == 1){
-            Toast.makeText(getApplicationContext(),"Es tu turno", Toast.LENGTH_SHORT).show();
+        if (mMyId.equals(turno) && ronda == 1) {
+            Toast.makeText(getApplicationContext(), "Es tu turno", Toast.LENGTH_SHORT).show();
         }
 
-        if(!mMyId.equals(turno) && ronda == 1) {
+        if (!mMyId.equals(turno) && ronda == 1) {
             tvJugador1.setEnabled(false);
             tvJugador2.setEnabled(false);
             tvJugador3.setEnabled(false);
@@ -1269,19 +1292,19 @@ public class MainActivity extends Activity
         mMultiplayer = multiplayer;
 
     }
-    void cartaSeleccionada(View view){
 
-        ponerCartaSobreMesa(view);
+    void cartaSeleccionada() {
+
         //Envio el valor de la carta
-        byte[] messageCarta = ("$"+aux.toString()).getBytes();
+        byte[] messageCarta = ("$" + aux.toString()).getBytes();
         enviarValorCarta(messageCarta);
         //Caso en el que NO hay empate
-        if(!hayEmpate()) {
+        if (!hayEmpate()) {
             //Compruebo si tiro primero
             tiroPrimero();
             //Caso en el que ganas tirando segundo
             if (soyGanadorRonda()) {
-                if (ronda == 1){
+                if (ronda == 1) {
                     misRondasGanadas = 1;
                     ganadorRonda1 = mMyId;
                 }
@@ -1339,12 +1362,12 @@ public class MainActivity extends Activity
                 //Comunicar el turno al oponente, gane o pierda
                 enviarMensajeTurno();
             }*/
-        }else{
+        } else {
             //Caso en el que hay empate
-            if (ronda == 1){
+            if (ronda == 1) {
                 enviarMensajeHayEmpate();
                 casoEmpatePrimero();
-            }else{
+            } else {
                 enviarMensajeHayEmpate();
                 casoEmpateTercero();
             }
@@ -1352,10 +1375,10 @@ public class MainActivity extends Activity
 
     }
 
-    void casoEmpatePrimero(){
+    void casoEmpatePrimero() {
         showBasicAlert("Empate en la primera ronda!", "La carta que elijas ser� mostrada arriba");
         //Si no soy mano, cambio turno
-        if(!mMyId.equals(mano)) {
+        if (!mMyId.equals(mano)) {
             desbloquearCartas();
             Toast.makeText(getApplicationContext(), "Esperando al Jugador", Toast.LENGTH_SHORT).show();
             tvJugador1.setEnabled(false);
@@ -1366,59 +1389,36 @@ public class MainActivity extends Activity
         }
         //Si soy mano espero a carta seleccionada tras empate
     }
-    void casoEmpateTercero(){
+
+    void casoEmpateTercero() {
         //Caso en el que gano
-        if(ganadorRonda1.equals(mMyId)){
+        if (ganadorRonda1.equals(mMyId)) {
             enviarMensajeHasPerdido();
             mostrarResultadosGanadorMano();
 
             //Caso en el que pierdo
-        }else{
+        } else {
             enviarMensajeSumaRonda();
             mostrarResultadosPerdedorMano();
         }
     }
 
-    void cartaSeleccionadaEmpate(View view){
+    void cartaSeleccionadaEmpate() {
 
-        Carta aux = new Carta(null ,null,null);
-        if(view.equals(tvJugador1)){ aux=carta1; miValor = Integer.parseInt(carta1.getValor());}
-        if(view.equals(tvJugador2)){ aux=carta2; miValor = Integer.parseInt(carta2.getValor());}
-        if(view.equals(tvJugador3)){ aux=carta3; miValor = Integer.parseInt(carta3.getValor());}
-
-        tvJugador1.setVisibility(View.INVISIBLE);
-        tvJugador2.setVisibility(View.INVISIBLE);
-        tvJugador3.setVisibility(View.INVISIBLE);
-
-        if(tvCartaMesa1.getVisibility() == View.INVISIBLE){
-            //tvCartaMesa1.setText(aux.getText().toString());
-            asignarImagenCarta(aux,tvCartaMesa1);
-            tvCartaMesa1.setVisibility(View.VISIBLE);
-        }
-        else if(tvCartaMesa2.getVisibility() == View.INVISIBLE){
-            //tvCartaMesa2.setText(aux.getText().toString());
-            asignarImagenCarta(aux,tvCartaMesa2);
-            tvCartaMesa2.setVisibility(View.VISIBLE);
-        }
-        else if(tvCartaMesa3.getVisibility() == View.INVISIBLE){
-            //tvCartaMesa3.setText(aux.getText().toString());
-            asignarImagenCarta(aux,tvCartaMesa3);
-            tvCartaMesa3.setVisibility(View.VISIBLE);
-        }
-        byte[] messageCarta = ("$"+aux.toString()).getBytes();
+        byte[] messageCarta = ("$" + aux.toString()).getBytes();
         enviarValorCarta(messageCarta);
         // Si soy mano, tiro y cambio turno
-        if(mMyId.equals(mano)){
+        if (mMyId.equals(mano)) {
             cambiarTurno();
             enviarMensajeTurno();
             Toast.makeText(getApplicationContext(), "Esperando al Jugador", Toast.LENGTH_SHORT).show();
             //Si no soy mano, compruebo quien gana
-        } else if(soyGanadorRondaEmpate()){
+        } else if (soyGanadorRondaEmpate()) {
             //Caso en el que gano
             enviarMensajeHasPerdido();
             mostrarResultadosGanadorMano();
 
-        }else{
+        } else {
             //Caso en el que pierdo
             enviarMensajeSumaRonda();
             mostrarResultadosPerdedorMano();
@@ -1432,50 +1432,53 @@ public class MainActivity extends Activity
      *
      *
      */
-    void tiroPrimero(){
-        if(ronda == 1 && valor1 == 0) casoTiroPrimero = true;
-        if(ronda == 2 && valor2 == 0) casoTiroPrimero = true;
-        if(ronda == 3 && valor3 == 0) casoTiroPrimero = true;
+    void tiroPrimero() {
+        if (ronda == 1 && valor1 == 0) casoTiroPrimero = true;
+        if (ronda == 2 && valor2 == 0) casoTiroPrimero = true;
+        if (ronda == 3 && valor3 == 0) casoTiroPrimero = true;
     }
-    boolean soyGanadorRonda(){
+
+    boolean soyGanadorRonda() {
         //Ronda 1
-        if(ronda == 1 && miValor>valor1 && valor1!=0){
+        if (ronda == 1 && miValor > valor1 && valor1 != 0) {
             casoTiroPrimero = false;
             return true;
         }
         //Ronda 2
-        if(ronda == 2 && miValor>valor2 && valor2!=0){
+        if (ronda == 2 && miValor > valor2 && valor2 != 0) {
             casoTiroPrimero = false;
             return true;
         }
         //Ronda 3
-        if(ronda == 3 && miValor>valor3 && valor3!=0){
+        if (ronda == 3 && miValor > valor3 && valor3 != 0) {
             casoTiroPrimero = false;
             return true;
         }
         return false;
     }
-    boolean soyGanadorRondaEmpate(){
-        if(miValor>valorEmpate){
+
+    boolean soyGanadorRondaEmpate() {
+        if (miValor > valorEmpate) {
             return true;
         }
         return false;
     }
-    boolean hayEmpate(){
-        if(ronda == 1 && miValor == valor1 && !casoTiroPrimero){
+
+    boolean hayEmpate() {
+        if (ronda == 1 && miValor == valor1 && !casoTiroPrimero) {
             hayEmpate = true;
             return true;
         }
-        if(ronda == 3 && miValor == valor3 && !casoTiroPrimero){
+        if (ronda == 3 && miValor == valor3 && !casoTiroPrimero) {
             hayEmpate = true;
             return true;
         }
         return false;
     }
 
-    void actualizaRonda(){
-        if(valor1 != 0 && valor2 == 0) ronda = 2;
-        if(valor1 != 0 && valor2 != 0) ronda = 3;
+    void actualizaRonda() {
+        if (valor1 != 0 && valor2 == 0) ronda = 2;
+        if (valor1 != 0 && valor2 != 0) ronda = 3;
 
     }
 
@@ -1490,6 +1493,7 @@ public class MainActivity extends Activity
             }
         }, milisegundos);
     }
+
     public void cerrarAccion(int milisegundos) {
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
@@ -1500,30 +1504,31 @@ public class MainActivity extends Activity
             }
         }, milisegundos);
     }
-    public void mostrarResultadosGanadorMano(){
 
-        if(!hayTruc) puntosTruc = NO_QUIERO_TRUC;
-        if(hayTruc && !hayRetruc) puntosTruc = TRUC;
-        if(hayRetruc && !hayCuatreVal) puntosTruc = RETRUC;
-        if(hayCuatreVal && !hayJocFora) puntosTruc = CUATRE_VAL;
+    public void mostrarResultadosGanadorMano() {
+
+        if (!hayTruc) puntosTruc = NO_QUIERO_TRUC;
+        if (hayTruc && !hayRetruc) puntosTruc = TRUC;
+        if (hayRetruc && !hayCuatreVal) puntosTruc = RETRUC;
+        if (hayCuatreVal && !hayJocFora) puntosTruc = CUATRE_VAL;
         //Joc fora
         //if(hayJocFora) puntosTruc = ;
 
-        if(hayEnvid){
+        if (hayEnvid) {
             LayoutInflater inflater = getLayoutInflater();
             ViewGroup container = null;
 
-            if(ganadorEnvid.equals(mMyId)){
+            if (ganadorEnvid.equals(mMyId)) {
                 View layout = inflater.inflate(R.layout.progres_content, container);
-                String content = "Tu envid: "+miEnvid+" Envid rival: "+envidOtro;
+                String content = "Tu envid: " + miEnvid + " Envid rival: " + envidOtro;
                 Log.d("TTTTTTT", content);
                 puntosTotalesMios += puntosTruc + puntosEnvid;
                 actualizarMarcador2(puntosTotalesMios);
                 showProgressCustomDialog(layout);
 
-            }else{
+            } else {
                 View layout = inflater.inflate(R.layout.progres_content2, container);
-                String content = "Tu envid: "+miEnvid+" Envid rival: "+envidOtro;
+                String content = "Tu envid: " + miEnvid + " Envid rival: " + envidOtro;
                 Log.d("TTTTTTT", content);
                 puntosTotalesMios += puntosTruc + puntosEnvid;
                 actualizarMarcador2(puntosTotalesMios);
@@ -1536,22 +1541,23 @@ public class MainActivity extends Activity
         }
         repartirTrasMano();
     }
-    public void mostrarResultadosPerdedorMano(){
+
+    public void mostrarResultadosPerdedorMano() {
         LayoutInflater inflater = getLayoutInflater();
         ViewGroup container = null;
 
-        if(hayEnvid){
-            if(ganadorEnvid.equals(mMyId)){
+        if (hayEnvid) {
+            if (ganadorEnvid.equals(mMyId)) {
                 View layout = inflater.inflate(R.layout.progres_content3, container);
-                String content = "L�stima, pierdes la mano\nGanaste el envid:\nTu envid: "+miEnvid+" Envid rival: "+envidOtro;
+                String content = "L�stima, pierdes la mano\nGanaste el envid:\nTu envid: " + miEnvid + " Envid rival: " + envidOtro;
                 Log.d("TTTTTTT", content);
                 puntosTotalesMios += puntosTruc + puntosEnvid;
                 actualizarMarcador2(puntosTotalesMios);
                 showProgressCustomDialog(layout);
 
-            }else{
+            } else {
                 View layout = inflater.inflate(R.layout.progres_content4, container);
-                String content = "L�stima, pierdes la mano\nPerdiste el envid:\nTu envid: "+miEnvid+" Envid rival: "+envidOtro;
+                String content = "L�stima, pierdes la mano\nPerdiste el envid:\nTu envid: " + miEnvid + " Envid rival: " + envidOtro;
                 Log.d("TTTTTTT", content);
                 puntosTotalesMios += puntosTruc + puntosEnvid;
                 actualizarMarcador2(puntosTotalesMios);
@@ -1583,7 +1589,7 @@ public class MainActivity extends Activity
      * Q: Mensaje de quiero truc cuando me han trucado.
      */
 
-    public void enviarValorCarta(byte[] messageCarta){
+    public void enviarValorCarta(byte[] messageCarta) {
         byte[] message = messageCarta;
         for (Participant p : mParticipants) {
             if (!p.getParticipantId().equals(mMyId)) {
@@ -1592,7 +1598,8 @@ public class MainActivity extends Activity
             }
         }
     }
-    public void enviarMensajeRonda(){
+
+    public void enviarMensajeRonda() {
         byte[] messageRonda = ("R " + String.valueOf(ronda)).getBytes();
         for (Participant p : mParticipants) {
             if (!p.getParticipantId().equals(mMyId)) {
@@ -1601,7 +1608,8 @@ public class MainActivity extends Activity
             }
         }
     }
-    public void enviarMensajeTurno(){
+
+    public void enviarMensajeTurno() {
         byte[] messageTurno = turno.getBytes();
         for (Participant p : mParticipants) {
             if (!p.getParticipantId().equals(mMyId)) {
@@ -1610,7 +1618,8 @@ public class MainActivity extends Activity
             }
         }
     }
-    public void enviarMensajeHasPerdido(){
+
+    public void enviarMensajeHasPerdido() {
         byte[] messageGanadorPartida = "W".getBytes();
         for (Participant p : mParticipants) {
             if (!p.getParticipantId().equals(mMyId)) {
@@ -1620,7 +1629,8 @@ public class MainActivity extends Activity
             }
         }
     }
-    public void enviarMensajeHayEmpate(){
+
+    public void enviarMensajeHayEmpate() {
         byte[] messageEmpatePrimero = ("E").getBytes();
         for (Participant p : mParticipants) {
             if (!p.getParticipantId().equals(mMyId)) {
@@ -1629,7 +1639,8 @@ public class MainActivity extends Activity
             }
         }
     }
-    public void enviarMensajeSumaRonda(){
+
+    public void enviarMensajeSumaRonda() {
         byte[] messageGanadorRonda = "G".getBytes();
         for (Participant p : mParticipants) {
             if (!p.getParticipantId().equals(mMyId)) {
@@ -1640,8 +1651,8 @@ public class MainActivity extends Activity
         }
     }
 
-    public void enviarMensajeRepartir(){
-        byte[] messageRepartir = ("S"+" "+sCartasJ2).getBytes();
+    public void enviarMensajeRepartir() {
+        byte[] messageRepartir = ("S" + " " + sCartasJ2).getBytes();
         for (Participant p : mParticipants) {
             if (!p.getParticipantId().equals(mMyId)) {
                 Games.RealTimeMultiplayer.sendReliableMessage(mGoogleApiClient, null, messageRepartir,
@@ -1650,8 +1661,9 @@ public class MainActivity extends Activity
             }
         }
     }
-    public void enviarMensajeMano(){
-        byte[] messageMano = ("M "+mano).getBytes();
+
+    public void enviarMensajeMano() {
+        byte[] messageMano = ("M " + mano).getBytes();
         for (Participant p : mParticipants) {
             if (!p.getParticipantId().equals(mMyId)) {
                 Games.RealTimeMultiplayer.sendReliableMessage(mGoogleApiClient, null, messageMano,
@@ -1659,8 +1671,9 @@ public class MainActivity extends Activity
             }
         }
     }
-    public void enviarMensajeEnvid(int envid){
-        byte[] messageEnvid = ("N "+envid).getBytes();
+
+    public void enviarMensajeEnvid(int envid) {
+        byte[] messageEnvid = ("N " + envid).getBytes();
         for (Participant p : mParticipants) {
             if (!p.getParticipantId().equals(mMyId)) {
                 Games.RealTimeMultiplayer.sendReliableMessage(mGoogleApiClient, null, messageEnvid,
@@ -1668,8 +1681,9 @@ public class MainActivity extends Activity
             }
         }
     }
-    public void enviarMensajeHayEnvidAndGanador(String ganador, int caso){
-        byte[] messageEnvid = ("K "+ganador+" "+miEnvid+" "+caso).getBytes();
+
+    public void enviarMensajeHayEnvidAndGanador(String ganador, int caso) {
+        byte[] messageEnvid = ("K " + ganador + " " + miEnvid + " " + caso).getBytes();
         for (Participant p : mParticipants) {
             if (!p.getParticipantId().equals(mMyId)) {
                 Games.RealTimeMultiplayer.sendReliableMessage(mGoogleApiClient, null, messageEnvid,
@@ -1677,8 +1691,9 @@ public class MainActivity extends Activity
             }
         }
     }
-    public void enviarMensajeVuelvoAEnvidar(){
-        byte[] messageVuelvo = ("V "+miEnvid).getBytes();
+
+    public void enviarMensajeVuelvoAEnvidar() {
+        byte[] messageVuelvo = ("V " + miEnvid).getBytes();
         for (Participant p : mParticipants) {
             if (!p.getParticipantId().equals(mMyId)) {
                 Games.RealTimeMultiplayer.sendReliableMessage(mGoogleApiClient, null, messageVuelvo,
@@ -1686,8 +1701,9 @@ public class MainActivity extends Activity
             }
         }
     }
-    public void enviarMensajeNoQuiero(int caso){
-        byte[] messageNoQuiero = ("X "+caso).getBytes();
+
+    public void enviarMensajeNoQuiero(int caso) {
+        byte[] messageNoQuiero = ("X " + caso).getBytes();
         for (Participant p : mParticipants) {
             if (!p.getParticipantId().equals(mMyId)) {
                 Games.RealTimeMultiplayer.sendReliableMessage(mGoogleApiClient, null, messageNoQuiero,
@@ -1695,8 +1711,9 @@ public class MainActivity extends Activity
             }
         }
     }
-    public void enviarMensajeLaFalta(){
-        byte[] messageFalta = ("F "+miEnvid).getBytes();
+
+    public void enviarMensajeLaFalta() {
+        byte[] messageFalta = ("F " + miEnvid).getBytes();
         for (Participant p : mParticipants) {
             if (!p.getParticipantId().equals(mMyId)) {
                 Games.RealTimeMultiplayer.sendReliableMessage(mGoogleApiClient, null, messageFalta,
@@ -1705,7 +1722,7 @@ public class MainActivity extends Activity
         }
     }
 
-    public void enviarMensajeTruc(){
+    public void enviarMensajeTruc() {
         byte[] messageTruco = ("T").getBytes();
         for (Participant p : mParticipants) {
             if (!p.getParticipantId().equals(mMyId)) {
@@ -1715,7 +1732,7 @@ public class MainActivity extends Activity
         }
     }
 
-    public void enviarMensajeQuieroTruc(){
+    public void enviarMensajeQuieroTruc() {
         byte[] messageQuieroTruc = ("Q").getBytes();
         for (Participant p : mParticipants) {
             if (!p.getParticipantId().equals(mMyId)) {
@@ -1725,7 +1742,7 @@ public class MainActivity extends Activity
         }
     }
 
-    public void enviarMensajeRetruc(){
+    public void enviarMensajeRetruc() {
         byte[] messageRetruc = ("L").getBytes();
         for (Participant p : mParticipants) {
             if (!p.getParticipantId().equals(mMyId)) {
@@ -1735,7 +1752,7 @@ public class MainActivity extends Activity
         }
     }
 
-    public void enviarMensajeQuieroRetruc(){
+    public void enviarMensajeQuieroRetruc() {
         byte[] messageQuieroRetruc = ("I").getBytes();
         for (Participant p : mParticipants) {
             if (!p.getParticipantId().equals(mMyId)) {
@@ -1745,7 +1762,7 @@ public class MainActivity extends Activity
         }
     }
 
-    public void enviarMensajeCuatreVal(){
+    public void enviarMensajeCuatreVal() {
         byte[] messageCuatreVal = ("C").getBytes();
         for (Participant p : mParticipants) {
             if (!p.getParticipantId().equals(mMyId)) {
@@ -1755,7 +1772,7 @@ public class MainActivity extends Activity
         }
     }
 
-    public void enviarMensajeQuieroCuatreVal(){
+    public void enviarMensajeQuieroCuatreVal() {
         byte[] messageQuieroCuatreVal = ("B").getBytes();
         for (Participant p : mParticipants) {
             if (!p.getParticipantId().equals(mMyId)) {
@@ -1765,7 +1782,7 @@ public class MainActivity extends Activity
         }
     }
 
-    public void enviarMensajeJocFora(){
+    public void enviarMensajeJocFora() {
         byte[] messageJocFora = ("J").getBytes();
         for (Participant p : mParticipants) {
             if (!p.getParticipantId().equals(mMyId)) {
@@ -1775,7 +1792,7 @@ public class MainActivity extends Activity
         }
     }
 
-    public void enviarMensajeQuieroJocFora(){
+    public void enviarMensajeQuieroJocFora() {
         byte[] messageQuieroJocFora = ("Y").getBytes();
         for (Participant p : mParticipants) {
             if (!p.getParticipantId().equals(mMyId)) {
@@ -1785,8 +1802,8 @@ public class MainActivity extends Activity
         }
     }
 
-    public void enviarMensajeNoQuieroTruc(int caso){
-        byte[] messageNoQuieroTruc = ("D "+caso).getBytes();
+    public void enviarMensajeNoQuieroTruc(int caso) {
+        byte[] messageNoQuieroTruc = ("D " + caso).getBytes();
         for (Participant p : mParticipants) {
             if (!p.getParticipantId().equals(mMyId)) {
                 Games.RealTimeMultiplayer.sendReliableMessage(mGoogleApiClient, null, messageNoQuieroTruc,
@@ -1795,8 +1812,8 @@ public class MainActivity extends Activity
         }
     }
 
-    public void actualizarMarcador2(int puntosTotales){
-        byte[] messageMarcador = ("Z "+puntosTotales).getBytes();
+    public void actualizarMarcador2(int puntosTotales) {
+        byte[] messageMarcador = ("Z " + puntosTotales).getBytes();
         for (Participant p : mParticipants) {
             if (!p.getParticipantId().equals(mMyId)) {
                 Games.RealTimeMultiplayer.sendReliableMessage(mGoogleApiClient, null, messageMarcador,
@@ -1835,32 +1852,32 @@ public class MainActivity extends Activity
         byte[] buf = rtm.getMessageData();
         String sender = rtm.getSenderParticipantId();
         try {
-            switch (buf[0]){
+            switch (buf[0]) {
                 case '$':
                     String sBuf = new String(buf, "UTF-8");
                     String arrayBuf[] = sBuf.split(" ");
                     String palo = arrayBuf[1];
                     String numeroCarta = arrayBuf[0].substring(1);
-                    Carta newCarta = new Carta(numeroCarta,palo,arrayBuf[2]);
+                    Carta newCarta = new Carta(numeroCarta, palo, arrayBuf[2]);
                     int valor = Integer.parseInt(arrayBuf[2]);
 
-                    if(tvMesaRival1.getVisibility()==View.INVISIBLE){
-                        if(hayEmpate){
+                    if (tvMesaRival1.getVisibility() == View.INVISIBLE) {
+                        if (hayEmpate) {
                             valorEmpate = valor;
                         } else valor1 = valor;
-                        asignarImagenCarta(newCarta,tvMesaRival1);
+                        asignarImagenCarta(newCarta, tvMesaRival1);
                         tvMesaRival1.setVisibility(View.VISIBLE);
-                    }else if(tvMesaRival2.getVisibility()==View.INVISIBLE){
-                        if(hayEmpate){
+                    } else if (tvMesaRival2.getVisibility() == View.INVISIBLE) {
+                        if (hayEmpate) {
                             valorEmpate = valor;
                         } else valor2 = valor;
-                        asignarImagenCarta(newCarta,tvMesaRival2);
+                        asignarImagenCarta(newCarta, tvMesaRival2);
                         tvMesaRival2.setVisibility(View.VISIBLE);
-                    }else if(tvMesaRival3.getVisibility()==View.INVISIBLE){
-                        if(hayEmpate){
+                    } else if (tvMesaRival3.getVisibility() == View.INVISIBLE) {
+                        if (hayEmpate) {
                             valorEmpate = valor;
                         } else valor3 = valor;
-                        asignarImagenCarta(newCarta,tvMesaRival3);
+                        asignarImagenCarta(newCarta, tvMesaRival3);
                         tvMesaRival3.setVisibility(View.VISIBLE);
                     }
                     break;
@@ -1873,12 +1890,12 @@ public class MainActivity extends Activity
                     break;
                 case 'G':
                     //Si ha habido empate
-                    Log.d("TTTTTT","SUmo mis rondas ganadas");
-                    if(hayEmpate){
+                    Log.d("TTTTTT", "SUmo mis rondas ganadas");
+                    if (hayEmpate) {
                         mostrarResultadosGanadorMano();
-                    }else{
+                    } else {
                         //Sumo rondas ganadas
-                        if(ronda == 1){
+                        if (ronda == 1) {
                             ganadorRonda1 = mMyId;
                         }
                         misRondasGanadas++;
@@ -1898,8 +1915,8 @@ public class MainActivity extends Activity
                     break;
 
                 case 'S':
-                    marcador.setText("Yo: "+puntosTotalesMios);
-                    marcador2.setText("Rival: "+puntosTotalesJugador2);
+                    marcador.setText("Yo: " + puntosTotalesMios);
+                    marcador2.setText("Rival: " + puntosTotalesJugador2);
 
                     resetAll();
                     desbloquearCartas();
@@ -1924,7 +1941,7 @@ public class MainActivity extends Activity
                     String aux = new String(buf, "UTF-8");
                     String nuevaMano[] = aux.split(" ");
                     mano = nuevaMano[1];
-                    Log.d("TTTTTT","Mano: " +mano+" ID: "+mMyId);
+                    Log.d("TTTTTT", "Mano: " + mano + " ID: " + mMyId);
                     turno = mano;
                     inicializarMano();
                     break;
@@ -1943,7 +1960,7 @@ public class MainActivity extends Activity
                     ganadorEnvid = ganador[1];
                     envidOtro = Integer.parseInt(ganador[2]);
                     int caso = Integer.parseInt(ganador[3]);
-                    switch (caso){
+                    switch (caso) {
                         case 1:
                             textoAccion.setText("Quiero el envid");
                             cerrarAccion(3000);
@@ -1957,12 +1974,12 @@ public class MainActivity extends Activity
                             cerrarAccion(3000);
                             break;
                     }
-                    if(ganadorEnvid.equals(mMyId) && caso == 1)puntosEnvid = ENVID;
-                    if(ganadorEnvid.equals(mMyId) && caso == 2)puntosEnvid = TORNE;
+                    if (ganadorEnvid.equals(mMyId) && caso == 1) puntosEnvid = ENVID;
+                    if (ganadorEnvid.equals(mMyId) && caso == 2) puntosEnvid = TORNE;
                     //Calcular la falta
                     //if(ganadorEnvid.equals(mMyId) && caso == 3)puntosEnvid = ENVID;
 
-                    if(mMyId.equals(turno)){
+                    if (mMyId.equals(turno)) {
                         desbloquearCartas();
                     }
                     break;
@@ -1978,7 +1995,7 @@ public class MainActivity extends Activity
                     String aux4 = new String(buf, "UTF-8");
                     String otro1[] = aux4.split(" ");
                     int caso1 = Integer.parseInt(otro1[1]);
-                    switch (caso1){
+                    switch (caso1) {
                         case 1:
                             textoAccion.setText("No quiero el envid");
                             cerrarAccion(3000);
@@ -1992,7 +2009,7 @@ public class MainActivity extends Activity
                             cerrarAccion(3000);
                             break;
                     }
-                    if(mMyId.equals(turno)){
+                    if (mMyId.equals(turno)) {
                         desbloquearCartas();
                     }
                     break;
@@ -2001,7 +2018,7 @@ public class MainActivity extends Activity
                     String aux7 = new String(buf, "UTF-8");
                     String otro4[] = aux7.split(" ");
                     int caso2 = Integer.parseInt(otro4[1]);
-                    switch (caso2){
+                    switch (caso2) {
                         case 1:
                             textoAccion.setText("No quiero el truc");
                             cerrarAccion(3000);
@@ -2038,7 +2055,7 @@ public class MainActivity extends Activity
                     textoAccion.setText("Quiero el truc");
                     cerrarAccion(3000);
 
-                    if(mMyId.equals(turno)){
+                    if (mMyId.equals(turno)) {
                         desbloquearCartas();
                     }
                     break;
@@ -2053,7 +2070,7 @@ public class MainActivity extends Activity
                     textoAccion.setText("Quiero el retruc");
                     cerrarAccion(3000);
 
-                    if(mMyId.equals(turno)){
+                    if (mMyId.equals(turno)) {
                         desbloquearCartas();
                     }
                     break;
@@ -2067,7 +2084,7 @@ public class MainActivity extends Activity
                     textoAccion.setText("Quiero el cuatre val");
                     cerrarAccion(3000);
 
-                    if(mMyId.equals(turno)){
+                    if (mMyId.equals(turno)) {
                         desbloquearCartas();
                     }
                     break;
@@ -2081,7 +2098,7 @@ public class MainActivity extends Activity
                     textoAccion.setText("Quiero el joc fora");
                     cerrarAccion(3000);
 
-                    if(mMyId.equals(turno)){
+                    if (mMyId.equals(turno)) {
                         desbloquearCartas();
                     }
                     break;
@@ -2096,14 +2113,14 @@ public class MainActivity extends Activity
                     String turnoNuevo = new String(buf, "UTF-8");
                     turno = turnoNuevo;
                     desbloquearCartas();
-                    if(mMyId.equals(turno) && misRondasGanadas<2){
+                    if (mMyId.equals(turno) && misRondasGanadas < 2) {
                       /*  if(ronda == 1 && !hayEnvid)fabEnvid.setEnabled(true);
                         if(ronda > 1 && !hayEnvid)fabEnvid.setEnabled(false);*/
 
-                        Toast.makeText(getApplicationContext(),"Es tu turno", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "Es tu turno", Toast.LENGTH_SHORT).show();
                     }
 
-                    if(!mMyId.equals(turno) && misRondasGanadas<2) {
+                    if (!mMyId.equals(turno) && misRondasGanadas < 2) {
                         tvJugador1.setEnabled(false);
                         tvJugador2.setEnabled(false);
                         tvJugador3.setEnabled(false);
@@ -2222,8 +2239,7 @@ public class MainActivity extends Activity
     void switchToMainScreen() {
         if (mGoogleApiClient != null && mGoogleApiClient.isConnected()) {
             switchToScreen(R.id.screen_main);
-        }
-        else {
+        } else {
             switchToScreen(R.id.screen_sign_in);
         }
     }
@@ -2288,7 +2304,7 @@ public class MainActivity extends Activity
     }
 
 
-    public List<Carta> crearBaraja(){
+    public List<Carta> crearBaraja() {
         Carta carta;
         List<Carta> baraja = new ArrayList<>();
 
@@ -2319,44 +2335,45 @@ public class MainActivity extends Activity
         //Devolvemos la lista
         return baraja;
     }
+
     public int[] crearAleatorio() {
 
-        if (mMyId.equals(mano)){
+        if (mMyId.equals(mano)) {
 
             list[0] = (int) (Math.random() * 22);
             int aux = (int) (Math.random() * 22);
-            while(list[0] == aux){
+            while (list[0] == aux) {
                 aux = (int) (Math.random() * 22);
             }
             list[1] = aux;
             int aux2 = (int) (Math.random() * 22);
-            while(list[0] == aux2 || list[1] == aux2){
+            while (list[0] == aux2 || list[1] == aux2) {
                 aux2 = (int) Math.floor(Math.random() * 21);
             }
             list[2] = aux2;
             int aux3 = (int) (Math.random() * 22);
-            while(list[0] == aux3 || list[1] == aux3 || list[2] == aux3){
+            while (list[0] == aux3 || list[1] == aux3 || list[2] == aux3) {
                 aux3 = (int) Math.floor(Math.random() * 21);
             }
             list2[0] = aux3;
             int aux4 = (int) (Math.random() * 22);
-            while(list[0] == aux4 || list[1] == aux4 || list[2] == aux4 || list2[0] == aux4){
+            while (list[0] == aux4 || list[1] == aux4 || list[2] == aux4 || list2[0] == aux4) {
                 aux4 = (int) Math.floor(Math.random() * 21);
             }
             list2[1] = aux4;
             int aux5 = (int) (Math.random() * 22);
-            while(list[0] == aux5 || list[1] == aux5 || list[2] == aux5 || list2[0] == aux5 || list2[1] == aux5){
+            while (list[0] == aux5 || list[1] == aux5 || list[2] == aux5 || list2[0] == aux5 || list2[1] == aux5) {
                 aux5 = (int) (Math.random() * 22);
             }
             list2[2] = aux5;
 
-            sCartasJ2 = list2[0]+" "+list2[1]+" "+list2[2];
+            sCartasJ2 = list2[0] + " " + list2[1] + " " + list2[2];
 
         }
         return list;
     }
 
-    public void repartir(int[] numeros){
+    public void repartir(int[] numeros) {
 
         baraja = crearBaraja();
         manoJugador.add(0, baraja.get(numeros[0]));
@@ -2365,14 +2382,14 @@ public class MainActivity extends Activity
 
     }
 
-    public void inicializarMano(){
-        marcador.setText("Yo: "+puntosTotalesMios);
+    public void inicializarMano() {
+        marcador.setText("Yo: " + puntosTotalesMios);
         marcador2.setText("Rival: " + puntosTotalesJugador2);
         //Preparando la partida
         resetAll();
         desbloquearCartas();
         //Si soy mano reparto
-        if(mMyId.equals(mano)){
+        if (mMyId.equals(mano)) {
             repartir(crearAleatorio());
             carta1 = new Carta(manoJugador.get(0).getNumero(), manoJugador.get(0).getPalo(), manoJugador.get(0).getValor());
             carta2 = new Carta(manoJugador.get(1).getNumero(), manoJugador.get(1).getPalo(), manoJugador.get(1).getValor());
@@ -2386,19 +2403,20 @@ public class MainActivity extends Activity
 
     }
 
-    public void cambiarMano(){
-        if(mano.equals(idJugador1)){
+    public void cambiarMano() {
+        if (mano.equals(idJugador1)) {
             mano = idJugador2;
-        }else if(mano.equals(idJugador2)){
+        } else if (mano.equals(idJugador2)) {
             mano = idJugador1;
         }
 
         turno = mano;
         Log.d("TTTTTT", "Cambio mano");
     }
-    public void repartirTrasMano(){
+
+    public void repartirTrasMano() {
         Log.d("TTTTTT", "Mano: " + mano + " ID: " + mMyId);
-        if(mMyId.equals(mano)){
+        if (mMyId.equals(mano)) {
             cambiarMano();
             enviarMensajeMano();
             Log.d("TTTTTT", "Mano: " + mano + " ID: " + mMyId);
@@ -2406,9 +2424,9 @@ public class MainActivity extends Activity
         }
     }
 
-    public void asignarImagenCarta(Carta carta, ImageView view){
+    public void asignarImagenCarta(Carta carta, ImageView view) {
         String sCarta = carta.getNumero() + carta.getPalo();
-        switch(sCarta){
+        switch (sCarta) {
             case "1bastos":
                 view.setImageResource(R.drawable.uno_bastos);
                 break;
@@ -2477,30 +2495,8 @@ public class MainActivity extends Activity
                 break;
         }
     }
-    void ponerCartaSobreMesa(View view){
 
-        view.setVisibility(View.INVISIBLE);
 
-        if(view.equals(tvJugador1)){  aux=carta1; miValor = Integer.parseInt(carta1.getValor());}
-        if(view.equals(tvJugador2)){  aux=carta2; miValor = Integer.parseInt(carta2.getValor());}
-        if(view.equals(tvJugador3)){  aux=carta3; miValor = Integer.parseInt(carta3.getValor());}
-
-        if(tvCartaMesa1.getVisibility() == View.INVISIBLE){
-            //tvCartaMesa1.setText(aux.getText().toString());
-            asignarImagenCarta(aux,tvCartaMesa1);
-            tvCartaMesa1.setVisibility(View.VISIBLE);
-        }
-        else if(tvCartaMesa2.getVisibility() == View.INVISIBLE){
-            //tvCartaMesa2.setText(aux.getText().toString());
-            asignarImagenCarta(aux,tvCartaMesa2);
-            tvCartaMesa2.setVisibility(View.VISIBLE);
-        }
-        else if(tvCartaMesa3.getVisibility() == View.INVISIBLE){
-            //tvCartaMesa3.setText(aux.getText().toString());
-            asignarImagenCarta(aux,tvCartaMesa3);
-            tvCartaMesa3.setVisibility(View.VISIBLE);
-        }
-    }
     private void getProfileInformation() {
         try {
             if (Plus.PeopleApi.getCurrentPerson(mGoogleApiClient) != null) {
@@ -2522,7 +2518,7 @@ public class MainActivity extends Activity
                 // replacing sz=X
                 personPhotoUrl = personPhotoUrl.substring(0,
                         personPhotoUrl.length() - 2)
-                        +75;
+                        + 75;
 
                 new LoadProfileImage(imgPerfilRival).execute(personPhotoUrl);
 
@@ -2533,11 +2529,13 @@ public class MainActivity extends Activity
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+
     }
 
     /**
      * Background Async task to load user profile picture from url
-     * */
+     */
     private class LoadProfileImage extends AsyncTask<String, Void, Bitmap> {
         ImageView bmImage;
 
@@ -2562,5 +2560,86 @@ public class MainActivity extends Activity
             bmImage.setImageBitmap(result);
         }
     }
+
+    private final class MyTouchListener implements View.OnTouchListener {
+        public boolean onTouch(View view, MotionEvent motionEvent) {
+            PointF inicial = new PointF();
+            PointF inicio = new PointF();
+            PointF destino = new PointF();
+            RelativeLayout.LayoutParams Params =
+                    (RelativeLayout.LayoutParams) view.getLayoutParams();
+
+            switch (motionEvent.getAction()) {
+                //Al tocar la pantalla
+                case MotionEvent.ACTION_DOWN:
+                    inicial.x = motionEvent.getX();
+                    inicial.y = motionEvent.getY();
+
+                    xDelta = inicial.x - Params.leftMargin;
+                    yDelta = inicial.y - Params.topMargin;
+
+                    break;
+                case MotionEvent.ACTION_UP:
+
+                    //Vemos donde colocamos la carta
+                    double medioLayout = ((float)view.getLayoutParams().height)/1.2;
+                    if (view.getY() < (medioLayout)){
+                        if (tvCartaMesa1.getVisibility() == View.INVISIBLE) {
+                            destino.x = tvCartaMesa1.getX();
+                            destino.y = tvCartaMesa1.getY() + tvCartaMesa1.getHeight();
+                            tvCartaMesa1.setVisibility(View.VISIBLE);
+                        } else if (tvCartaMesa2.getVisibility() == View.INVISIBLE) {
+                            destino.x = tvCartaMesa2.getX();
+                            destino.y = tvCartaMesa2.getY() + tvCartaMesa2.getHeight();
+                            tvCartaMesa2.setVisibility(View.VISIBLE);
+                        } else if (tvCartaMesa3.getVisibility() == View.INVISIBLE) {
+                            destino.x = tvCartaMesa3.getX();
+                            destino.y = tvCartaMesa3.getY() + tvCartaMesa3.getHeight();
+                            tvCartaMesa3.setVisibility(View.VISIBLE);
+                        }
+                        view.animate().x(destino.x).y(destino.y).rotation(0).setDuration(500);
+                        view.animate().rotationXBy(45).scaleX((float) 0.63).scaleY((float) 0.63).setDuration(600);
+
+                        //Calculamos su valor para enviarlo
+                        if (view.equals(tvJugador1)) {
+                            aux = carta1;
+                            miValor = Integer.parseInt(carta1.getValor());
+                        }
+                        if (view.equals(tvJugador2)) {
+                            aux = carta2;
+                            miValor = Integer.parseInt(carta2.getValor());
+                        }
+                        if (view.equals(tvJugador3)) {
+                            aux = carta3;
+                            miValor = Integer.parseInt(carta3.getValor());
+                        }
+
+                        if (!hayEmpate) {
+                            cartaSeleccionada();
+                        } else cartaSeleccionadaEmpate();
+
+                    }else {
+                        view.animate().translationX(inicio.x + 100).setDuration(500);
+                        view.animate().translationY(inicio.y + 40).setDuration(500);
+                    }
+                    break;
+                case MotionEvent.ACTION_POINTER_DOWN:
+                    //No hace falta utilizarlo
+                    break;
+                case MotionEvent.ACTION_POINTER_UP:
+                    //No hace falta utilizarlo
+                    break;
+                case MotionEvent.ACTION_MOVE:
+                    inicio = new PointF(view.getX(), view.getY());
+                    PointF move = new PointF(motionEvent.getX() - inicial.x, motionEvent.getY() - inicial.y);
+                    view.setX((inicio.x + move.x) - xDelta);
+                    view.setY((inicio.y + move.y) - yDelta);
+                    break;
+            }
+            return true;
+        }
+    }
+
+
 
 }
