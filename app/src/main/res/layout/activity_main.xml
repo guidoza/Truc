@@ -178,7 +178,7 @@
                                         android:layout_width="80dp"
                                         android:layout_height="match_parent"
                                         android:id="@+id/carta1Mesa"
-                                        android:layout_marginLeft="20dp"
+                                        android:layout_marginLeft="15dp"
                                         android:layout_alignParentLeft="true"
                                         />
                                     <ImageView
@@ -192,7 +192,7 @@
                                         android:layout_height="match_parent"
                                         android:id="@+id/carta3Mesa"
                                         android:layout_alignParentRight="true"
-                                        android:layout_marginRight="20dp"
+                                        android:layout_marginRight="15dp"
                                         />
                                 </RelativeLayout>
 
@@ -207,7 +207,8 @@
                                     android:layout_alignParentLeft="true"
                                     android:layout_alignParentStart="true"
                                     android:layout_marginLeft="100dp"
-                                    android:layout_marginStart="50dp" />
+                                    android:layout_marginStart="50dp"
+                                    />
                                 <ImageView
                                     android:layout_width="100dp"
                                     android:layout_height="160dp"

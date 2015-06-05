@@ -17,19 +17,16 @@ package com.game.guillermo.truc;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.ClipData;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.PointF;
 import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.util.Log;
-import android.view.DragEvent;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -46,8 +43,6 @@ import android.widget.Toast;
 import com.afollestad.materialdialogs.GravityEnum;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.afollestad.materialdialogs.Theme;
-import com.akexorcist.roundcornerprogressbar.RoundCornerProgressBar;
-import com.akexorcist.roundcornerprogressbar.TextRoundCornerProgressBar;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.games.Games;
@@ -209,6 +204,11 @@ public class MainActivity extends Activity
     private ViewGroup marco;
     private float xDelta;
     private float yDelta;
+    PointF inicio1;
+    PointF inicio2;
+    PointF inicio3;
+    int posTvJugador1 = 1, posTvJugador2 = 2, posTvJugador3 = 3;
+    boolean hayAnimaciones = false;
 
 
     @Override
@@ -250,6 +250,10 @@ public class MainActivity extends Activity
         tvJugador1 = (ImageView) findViewById(R.id.carta1Jugador);
         tvJugador2 = (ImageView) findViewById(R.id.carta2Jugador);
         tvJugador3 = (ImageView) findViewById(R.id.carta3Jugador);
+
+        inicio1 = new PointF(tvJugador1.getX(), tvJugador1.getY());
+        inicio2 = new PointF(tvJugador2.getX(), tvJugador2.getY());
+        inicio3 = new PointF(tvJugador3.getX(), tvJugador3.getY());
 
         tvCartaMesa1 = (ImageView) findViewById(R.id.carta1Mesa);
         tvCartaMesa2 = (ImageView) findViewById(R.id.carta2Mesa);
@@ -304,6 +308,7 @@ public class MainActivity extends Activity
         for (int id : CLICKABLES) {
             findViewById(id).setOnClickListener(this);
         }
+
     }
 
 
@@ -1068,8 +1073,7 @@ public class MainActivity extends Activity
 
                 if (pid.equals(mMyId)) {
                     new LoadProfileImage(imgPerfil).execute(p.getIconImageUrl());
-
-                } else {
+                }else {
                     new LoadProfileImage(imgPerfilRival).execute(p.getIconImageUrl());
                 }
             }
@@ -1242,8 +1246,72 @@ public class MainActivity extends Activity
         hayCuatreVal = false;
         hayJocFora = false;
 
+        if(hayAnimaciones){
+            deshacerAnimaciones(tvJugador1);
+            deshacerAnimaciones(tvJugador2);
+            deshacerAnimaciones(tvJugador3);
+        }
+        hayAnimaciones = false;
+
     }
 
+    void deshacerAnimaciones(View view){
+
+        Log.d("RRRRRR", "Pos1: "+posTvJugador1+" Pos2: "+posTvJugador2+" Pos3: "+posTvJugador3);
+
+        if(view.equals(tvJugador1)){
+            tvJugador1.animate().translationX(inicio1.x).rotation(0).setDuration(500);
+            tvJugador1.animate().translationY(inicio1.y).rotation(0).setDuration(500);
+
+            if(posTvJugador1 == 1){
+                view.animate().rotationXBy(-45).scaleX((float) 1).scaleY((float) 1)
+                        .rotationYBy(5).setDuration(500);
+
+            }else if(posTvJugador1 == 2){
+                view.animate().rotationXBy(-45)
+                        .scaleX((float) 1).scaleY((float) 1).setDuration(500);
+
+            }else if(posTvJugador1 == 3){
+                view.animate().rotationXBy(-45).scaleX((float) 1).scaleY((float) 1)
+                        .rotationYBy(-5).setDuration(600);
+            }
+        }else if(view.equals(tvJugador2)){
+            tvJugador2.animate().translationX(inicio2.x).rotation(0).setDuration(500);
+            tvJugador2.animate().translationY(inicio2.y).rotation(0).setDuration(500);
+            view.bringToFront();
+
+            if(posTvJugador2 == 1){
+                view.animate().rotationXBy(-45).scaleX((float) 1).scaleY((float) 1)
+                        .rotationYBy(5).setDuration(500);
+
+            }else if(posTvJugador2 == 2){
+                view.animate().rotationXBy(-45)
+                        .scaleX((float) 1).scaleY((float) 1).setDuration(500);
+
+            }else if(posTvJugador2 == 3){
+                view.animate().rotationXBy(-45).scaleX((float) 1).scaleY((float) 1)
+                        .rotationYBy(-5).setDuration(600);
+            }
+        }else if(view.equals(tvJugador3)){
+            tvJugador3.animate().translationX(inicio3.x).rotation(0).setDuration(500);
+            tvJugador3.animate().translationY(inicio3.y).rotation(0).setDuration(500);
+            view.bringToFront();
+
+            if(posTvJugador3 == 1){
+                view.animate().rotationXBy(-45).scaleX((float) 1).scaleY((float) 1)
+                        .rotationYBy(5).setDuration(500);
+
+            }else if(posTvJugador3 == 2){
+                view.animate().rotationXBy(-45)
+                        .scaleX((float) 1).scaleY((float) 1).setDuration(500);
+
+            }else if(posTvJugador3 == 3){
+                view.animate().rotationXBy(-45).scaleX((float) 1).scaleY((float) 1)
+                        .rotationYBy(-5).setDuration(600);
+            }
+        }
+
+    }
 
     // Reset game variables in preparation for a new game.
     void desbloquearCartas() {
@@ -1263,6 +1331,15 @@ public class MainActivity extends Activity
         if (mMyId.equals(idJugador2) && turno.equals(idJugador2)) turno = idJugador1;
 
     }
+    void animacionAbrirCartas(){
+        tvJugador1.animate().rotation(-20).setDuration(750);
+        tvJugador3.animate().rotation(20).setDuration(750);
+
+        tvJugador1.animate().translationX(inicio1.x - 100).setDuration(750);
+        tvJugador3.animate().translationX(inicio3.x + 100).setDuration(750);
+        tvJugador1.animate().translationY(inicio1.y + 40).setDuration(750);
+        tvJugador3.animate().translationY(inicio3.y + 40).setDuration(750);
+    }
 
     // Start the gameplay phase of the game.
     void startGame(boolean multiplayer) {
@@ -1278,6 +1355,7 @@ public class MainActivity extends Activity
 
         if (mMyId.equals(turno) && ronda == 1) {
             Toast.makeText(getApplicationContext(), "Es tu turno", Toast.LENGTH_SHORT).show();
+            animacionAbrirCartas();
         }
 
         if (!mMyId.equals(turno) && ronda == 1) {
@@ -1285,6 +1363,7 @@ public class MainActivity extends Activity
             tvJugador2.setEnabled(false);
             tvJugador3.setEnabled(false);
             Toast.makeText(getApplicationContext(), "Esperando al Jugador", Toast.LENGTH_SHORT).show();
+            animacionAbrirCartas();
 
         }
 
@@ -2535,7 +2614,7 @@ public class MainActivity extends Activity
 
     /**
      * Background Async task to load user profile picture from url
-     */
+     * */
     private class LoadProfileImage extends AsyncTask<String, Void, Bitmap> {
         ImageView bmImage;
 
@@ -2550,8 +2629,10 @@ public class MainActivity extends Activity
                 InputStream in = new java.net.URL(urldisplay).openStream();
                 mIcon11 = BitmapFactory.decodeStream(in);
             } catch (Exception e) {
-                Log.e("Error", e.getMessage());
-                e.printStackTrace();
+                if(e.getMessage() != null) {
+                    Log.e("Error", e.getMessage());
+                    e.printStackTrace();
+                }
             }
             return mIcon11;
         }
@@ -2564,7 +2645,7 @@ public class MainActivity extends Activity
     private final class MyTouchListener implements View.OnTouchListener {
         public boolean onTouch(View view, MotionEvent motionEvent) {
             PointF inicial = new PointF();
-            PointF inicio = new PointF();
+            PointF inicio;
             PointF destino = new PointF();
             RelativeLayout.LayoutParams Params =
                     (RelativeLayout.LayoutParams) view.getLayoutParams();
@@ -2572,11 +2653,16 @@ public class MainActivity extends Activity
             switch (motionEvent.getAction()) {
                 //Al tocar la pantalla
                 case MotionEvent.ACTION_DOWN:
+                    view.bringToFront();
                     inicial.x = motionEvent.getX();
                     inicial.y = motionEvent.getY();
-
-                    xDelta = inicial.x - Params.leftMargin;
-                    yDelta = inicial.y - Params.topMargin;
+                    if(view.equals(tvJugador1)) {
+                        xDelta = inicial.x - Params.rightMargin;
+                        yDelta = inicial.y - Params.topMargin;
+                    }else{
+                        xDelta = inicial.x - Params.leftMargin;
+                        yDelta = inicial.y - Params.topMargin;
+                    }
 
                     break;
                 case MotionEvent.ACTION_UP:
@@ -2588,17 +2674,72 @@ public class MainActivity extends Activity
                             destino.x = tvCartaMesa1.getX();
                             destino.y = tvCartaMesa1.getY() + tvCartaMesa1.getHeight();
                             tvCartaMesa1.setVisibility(View.VISIBLE);
+
+                            view.animate().x(destino.x).y(destino.y).rotation(0).setDuration(500);
+                            view.animate().rotationXBy(45).scaleX((float) 0.63).scaleY((float) 0.63)
+                                    .rotationYBy(-5).rotation(5).setDuration(600);
+                            view.setEnabled(false);
+
+                            if(view.equals(tvJugador1)){
+                                posTvJugador1 = 1;
+                                tvJugador2.bringToFront();tvJugador3.bringToFront();
+                            }else if(view.equals(tvJugador2)){
+                                posTvJugador2 = 1;
+                                tvJugador1.bringToFront();tvJugador3.bringToFront();
+                            }else if(view.equals(tvJugador3)){
+                                posTvJugador3 = 1;
+                                tvJugador1.bringToFront();tvJugador2.bringToFront();
+                            }
+
                         } else if (tvCartaMesa2.getVisibility() == View.INVISIBLE) {
                             destino.x = tvCartaMesa2.getX();
                             destino.y = tvCartaMesa2.getY() + tvCartaMesa2.getHeight();
                             tvCartaMesa2.setVisibility(View.VISIBLE);
+
+                            view.animate().x(destino.x).y(destino.y).rotation(0).rotationXBy(45)
+                                    .scaleX((float) 0.63).scaleY((float) 0.63).setDuration(500);
+                            view.setEnabled(false);
+
+                            if(view.equals(tvJugador1) && !tvJugador2.isEnabled()){
+                                posTvJugador1 = 2;
+                                tvJugador3.bringToFront();
+                            }else if(view.equals(tvJugador1) && !tvJugador3.isEnabled()){
+                                posTvJugador1 = 2;
+                                tvJugador2.bringToFront();
+                            }else if(view.equals(tvJugador2) && !tvJugador1.isEnabled()){
+                                posTvJugador2 = 2;
+                                tvJugador3.bringToFront();
+                            }else if(view.equals(tvJugador2) && !tvJugador3.isEnabled()){
+                                posTvJugador2 = 2;
+                                tvJugador1.bringToFront();
+                            }else if(view.equals(tvJugador3) && !tvJugador1.isEnabled()){
+                                posTvJugador3 = 2;
+                                tvJugador2.bringToFront();
+                            }else if(view.equals(tvJugador3) && !tvJugador2.isEnabled()){
+                                posTvJugador3 = 2;
+                                tvJugador1.bringToFront();
+                            }
+
                         } else if (tvCartaMesa3.getVisibility() == View.INVISIBLE) {
                             destino.x = tvCartaMesa3.getX();
                             destino.y = tvCartaMesa3.getY() + tvCartaMesa3.getHeight();
                             tvCartaMesa3.setVisibility(View.VISIBLE);
+
+                            view.animate().x(destino.x).y(destino.y).rotation(0).setDuration(500);
+                            view.animate().rotationXBy(45).scaleX((float) 0.63).scaleY((float) 0.63)
+                                    .rotationYBy(5).rotation(-5).setDuration(600);
+                            view.setEnabled(false);
+
+                            if(view.equals(tvJugador1)){
+                                posTvJugador1 = 3;
+                            }else if(view.equals(tvJugador2)){
+                                posTvJugador2 = 3;
+                            }else if(view.equals(tvJugador3)){
+                                posTvJugador3 = 3;
+                            }
                         }
-                        view.animate().x(destino.x).y(destino.y).rotation(0).setDuration(500);
-                        view.animate().rotationXBy(45).scaleX((float) 0.63).scaleY((float) 0.63).setDuration(600);
+
+                        hayAnimaciones = true;
 
                         //Calculamos su valor para enviarlo
                         if (view.equals(tvJugador1)) {
@@ -2619,8 +2760,18 @@ public class MainActivity extends Activity
                         } else cartaSeleccionadaEmpate();
 
                     }else {
-                        view.animate().translationX(inicio.x + 100).setDuration(500);
-                        view.animate().translationY(inicio.y + 40).setDuration(500);
+                        if (view.equals(tvJugador1)) {
+                            view.animate().translationX(inicio1.x - 100).setDuration(500);
+                            view.animate().translationY(inicio1.y + 40);
+                        }
+                        if (view.equals(tvJugador2)) {
+                            view.animate().translationX(inicio2.x).setDuration(500);
+                            view.animate().translationY(inicio2.y).setDuration(500);
+                        }
+                        if (view.equals(tvJugador3)) {
+                            view.animate().translationX(inicio3.x + 100).setDuration(500);
+                            view.animate().translationY(inicio3.y + 40).setDuration(500);
+                        }
                     }
                     break;
                 case MotionEvent.ACTION_POINTER_DOWN:
