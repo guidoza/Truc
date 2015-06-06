@@ -134,40 +134,45 @@
 
 
 
-                            <RelativeLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="120dp"
-                                android:layout_marginTop="120dp">
-
-                                <ImageView
-                                    android:layout_width="80dp"
-                                    android:layout_height="match_parent"
-                                    android:id="@+id/carta1MesaRival"
-                                    android:layout_marginLeft="30dp"
-                                    android:layout_alignParentLeft="true"
-                                    />
-                                <ImageView
-                                    android:layout_width="80dp"
-                                    android:layout_height="match_parent"
-                                    android:id="@+id/carta2MesaRival"
-                                    android:layout_toRightOf="@+id/carta1MesaRival"
-                                    android:layout_marginLeft="20dp"
-                                    />
-                                <ImageView
-                                    android:layout_width="80dp"
-                                    android:layout_height="match_parent"
-                                    android:id="@+id/carta3MesaRival"
-                                    android:layout_alignParentRight="true"
-                                    android:layout_marginRight="10dp"
-                                    />
-                            </RelativeLayout>
-
-
-
 
                             <RelativeLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="450dp">
+
+                                <ImageView
+                                    android:layout_width="70dp"
+                                    android:layout_height="110dp"
+                                    android:id="@+id/carta1MesaRival"
+                                    android:src="@drawable/uno_bastos"
+                                    android:layout_alignParentTop="true"
+                                    android:layout_marginTop="100dp"
+                                    android:layout_alignParentLeft="true"
+                                    android:layout_alignParentStart="true"
+                                    android:layout_marginLeft="30dp"
+                                    android:layout_marginStart="50dp"
+
+                                    />
+                                <ImageView
+                                    android:layout_width="70dp"
+                                    android:layout_height="110dp"
+                                    android:id="@+id/carta2MesaRival"
+                                    android:src="@drawable/siete_bastos"
+                                    android:layout_alignParentTop="true"
+                                    android:layout_marginTop="100dp"
+                                    android:layout_centerHorizontal="true"
+                                    />
+                                <ImageView
+                                    android:layout_width="70dp"
+                                    android:layout_height="110dp"
+                                    android:id="@+id/carta3MesaRival"
+                                    android:src="@drawable/seis_bastos"
+                                    android:layout_alignParentTop="true"
+                                    android:layout_marginTop="100dp"
+                                    android:layout_alignParentRight="true"
+                                    android:layout_alignParentEnd="true"
+                                    android:layout_marginRight="30dp"
+                                    android:layout_marginEnd="50dp"
+                                    />
 
                                 <RelativeLayout
                                     android:layout_width="match_parent"
@@ -178,21 +183,21 @@
                                         android:layout_width="80dp"
                                         android:layout_height="match_parent"
                                         android:id="@+id/carta1Mesa"
-                                        android:layout_marginLeft="15dp"
+                                        android:layout_marginLeft="30dp"
                                         android:layout_alignParentLeft="true"
                                         />
                                     <ImageView
                                         android:layout_width="80dp"
                                         android:layout_height="match_parent"
                                         android:id="@+id/carta2Mesa"
-                                        android:layout_centerInParent="true"
+                                        android:layout_centerHorizontal="true"
                                         />
                                     <ImageView
                                         android:layout_width="80dp"
                                         android:layout_height="match_parent"
                                         android:id="@+id/carta3Mesa"
                                         android:layout_alignParentRight="true"
-                                        android:layout_marginRight="15dp"
+                                        android:layout_marginRight="30dp"
                                         />
                                 </RelativeLayout>
 

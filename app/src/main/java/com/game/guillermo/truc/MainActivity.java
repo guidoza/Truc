@@ -207,15 +207,18 @@ public class MainActivity extends Activity
     PointF inicio1;
     PointF inicio2;
     PointF inicio3;
-    int posTvJugador1 = 1, posTvJugador2 = 2, posTvJugador3 = 3;
+    PointF inicio1Rival;
+    PointF inicio2Rival;
+    PointF inicio3Rival;
+    int posTvJugador1 = 0, posTvJugador2 = 0, posTvJugador3 = 0;
     boolean hayAnimaciones = false;
+    boolean noEsLaPrimera = false;
 
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
 
         View.OnClickListener clickListener = new View.OnClickListener() {
             @Override
@@ -262,6 +265,19 @@ public class MainActivity extends Activity
         tvMesaRival1 = (ImageView) findViewById(R.id.carta1MesaRival);
         tvMesaRival2 = (ImageView) findViewById(R.id.carta2MesaRival);
         tvMesaRival3 = (ImageView) findViewById(R.id.carta3MesaRival);
+
+
+
+
+
+        tvMesaRival1.setVisibility(View.INVISIBLE);
+        tvMesaRival2.setVisibility(View.INVISIBLE);
+        tvMesaRival3.setVisibility(View.INVISIBLE);
+        inicio1Rival = new PointF(tvJugador1.getX(), tvJugador1.getY());
+        inicio2Rival = new PointF(tvJugador2.getX(), tvJugador2.getY());
+        inicio3Rival = new PointF(tvJugador3.getX(), tvJugador3.getY());
+
+
 
         textoAccion = (TextView) findViewById(R.id.textoJugador2);
         marcador = (TextView) findViewById(R.id.marcador);
@@ -680,6 +696,7 @@ public class MainActivity extends Activity
         enviarMensajeJocFora();
     }
 
+
     @Override
     public void onClick(View v) {
         Intent intent;
@@ -693,6 +710,21 @@ public class MainActivity extends Activity
                 tvJugador3.animate().translationX(tvJugador3.getX() + 100).setDuration(750);
                 tvJugador1.animate().translationY(tvJugador1.getY() + 40).setDuration(750);
                 tvJugador3.animate().translationY(tvJugador3.getY() + 40).setDuration(750);
+
+                RelativeLayout.LayoutParams params =
+                        (RelativeLayout.LayoutParams) tvMesaRival1.getLayoutParams();
+
+                tvMesaRival1.setX(tvMesaRival1.getX() + 100);
+                tvMesaRival1.setY(tvMesaRival1.getY() - params.height - params.topMargin);
+
+                tvMesaRival1.setVisibility(View.VISIBLE);
+                tvMesaRival1.animate().translationX(inicio1Rival.x).setDuration(500);
+                tvMesaRival1.animate().translationY(inicio1Rival.y)
+                        .rotationXBy(45).setDuration(500);
+
+
+
+
 
 
             case R.id.button_sign_in:
@@ -1250,8 +1282,18 @@ public class MainActivity extends Activity
             deshacerAnimaciones(tvJugador1);
             deshacerAnimaciones(tvJugador2);
             deshacerAnimaciones(tvJugador3);
+            posTvJugador1 = 0; posTvJugador2 = 0; posTvJugador3 = 0;
+            hayAnimaciones = false;
         }
-        hayAnimaciones = false;
+        if(noEsLaPrimera){
+            tvMesaRival1.animate().scaleX((float) 1).scaleY((float) 1)
+                    .rotationYBy(5).rotation(0).rotationXBy(-45).setDuration(0);
+            tvMesaRival2.animate().scaleX((float) 1).scaleY((float) 1)
+                    .rotationXBy(-45).setDuration(0);
+            tvMesaRival3.animate().scaleX((float) 1).scaleY((float) 1)
+                    .rotationYBy(-5).rotation(0).rotationXBy(-45).setDuration(0);
+            noEsLaPrimera = false;
+        }
 
     }
 
@@ -1340,6 +1382,41 @@ public class MainActivity extends Activity
         tvJugador1.animate().translationY(inicio1.y + 40).setDuration(750);
         tvJugador3.animate().translationY(inicio3.y + 40).setDuration(750);
     }
+    void animacionRival(View view){
+        RelativeLayout.LayoutParams params =
+                (RelativeLayout.LayoutParams) view.getLayoutParams();
+
+        if(view.equals(tvMesaRival1)) {
+            view.setX(view.getX() + 150);
+            view.setY(view.getY() - params.height - params.topMargin);
+
+            view.setVisibility(View.VISIBLE);
+            view.animate().translationX(inicio1Rival.x).setDuration(500);
+            view.animate().translationY(inicio1Rival.y).scaleX((float) 0.8).scaleY((float) 0.8)
+                    .rotationYBy(-5).rotation(5).rotationXBy(45).setDuration(500);
+            view.bringToFront();
+
+        }else if(view.equals(tvMesaRival2)) {
+            view.setX(view.getX());
+            view.setY(view.getY() - params.height - params.topMargin);
+
+            view.setVisibility(View.VISIBLE);
+            view.animate().translationX(inicio2Rival.x).setDuration(500);
+            view.animate().translationY(inicio2Rival.y).scaleX((float) 0.8).scaleY((float) 0.8)
+                    .rotationXBy(45).setDuration(500);
+            view.bringToFront();
+
+        }else if(view.equals(tvMesaRival3)) {
+            view.setX(view.getX() - 150);
+            view.setY(view.getY() - params.height - params.topMargin);
+
+            view.setVisibility(View.VISIBLE);
+            view.animate().translationX(inicio2Rival.x).setDuration(500);
+            view.animate().translationY(inicio2Rival.y).scaleX((float) 0.8).scaleY((float) 0.8)
+                    .rotationYBy(5).rotation(-5).rotationXBy(45).setDuration(500);
+            view.bringToFront();
+        }
+    }
 
     // Start the gameplay phase of the game.
     void startGame(boolean multiplayer) {
@@ -1366,7 +1443,8 @@ public class MainActivity extends Activity
             animacionAbrirCartas();
 
         }
-
+        hayAnimaciones = true;
+        noEsLaPrimera = true;
         switchToScreen(R.id.screen_game);
         mMultiplayer = multiplayer;
 
@@ -1945,19 +2023,19 @@ public class MainActivity extends Activity
                             valorEmpate = valor;
                         } else valor1 = valor;
                         asignarImagenCarta(newCarta, tvMesaRival1);
-                        tvMesaRival1.setVisibility(View.VISIBLE);
+                        animacionRival(tvMesaRival1);
                     } else if (tvMesaRival2.getVisibility() == View.INVISIBLE) {
                         if (hayEmpate) {
                             valorEmpate = valor;
                         } else valor2 = valor;
                         asignarImagenCarta(newCarta, tvMesaRival2);
-                        tvMesaRival2.setVisibility(View.VISIBLE);
+                        animacionRival(tvMesaRival2);
                     } else if (tvMesaRival3.getVisibility() == View.INVISIBLE) {
                         if (hayEmpate) {
                             valorEmpate = valor;
                         } else valor3 = valor;
                         asignarImagenCarta(newCarta, tvMesaRival3);
-                        tvMesaRival3.setVisibility(View.VISIBLE);
+                        animacionRival(tvMesaRival3);
                     }
                     break;
                 case 'R':
@@ -2678,18 +2756,22 @@ public class MainActivity extends Activity
                             view.animate().x(destino.x).y(destino.y).rotation(0).setDuration(500);
                             view.animate().rotationXBy(45).scaleX((float) 0.63).scaleY((float) 0.63)
                                     .rotationYBy(-5).rotation(5).setDuration(600);
-                            view.setEnabled(false);
 
                             if(view.equals(tvJugador1)){
                                 posTvJugador1 = 1;
+                                tvJugador1.bringToFront();
                                 tvJugador2.bringToFront();tvJugador3.bringToFront();
                             }else if(view.equals(tvJugador2)){
+                                tvJugador2.bringToFront();
                                 posTvJugador2 = 1;
                                 tvJugador1.bringToFront();tvJugador3.bringToFront();
                             }else if(view.equals(tvJugador3)){
                                 posTvJugador3 = 1;
+                                tvJugador3.bringToFront();
                                 tvJugador1.bringToFront();tvJugador2.bringToFront();
                             }
+
+                            view.setEnabled(false);
 
                         } else if (tvCartaMesa2.getVisibility() == View.INVISIBLE) {
                             destino.x = tvCartaMesa2.getX();
@@ -2698,27 +2780,34 @@ public class MainActivity extends Activity
 
                             view.animate().x(destino.x).y(destino.y).rotation(0).rotationXBy(45)
                                     .scaleX((float) 0.63).scaleY((float) 0.63).setDuration(500);
-                            view.setEnabled(false);
 
-                            if(view.equals(tvJugador1) && !tvJugador2.isEnabled()){
+                            if(view.equals(tvJugador1) && posTvJugador2 == 0){
                                 posTvJugador1 = 2;
-                                tvJugador3.bringToFront();
-                            }else if(view.equals(tvJugador1) && !tvJugador3.isEnabled()){
+                                tvJugador1.bringToFront();
+                                tvJugador2.bringToFront();Log.d("RRRRRRR", "Actualizada pos2");
+                            }else if(view.equals(tvJugador1) && posTvJugador3 == 0){
                                 posTvJugador1 = 2;
-                                tvJugador2.bringToFront();
-                            }else if(view.equals(tvJugador2) && !tvJugador1.isEnabled()){
+                                tvJugador1.bringToFront();
+                                tvJugador3.bringToFront();Log.d("RRRRRRR", "Actualizada pos2");
+                            }else if(view.equals(tvJugador2) && posTvJugador1 == 0){
                                 posTvJugador2 = 2;
+                                tvJugador2.bringToFront();
+                                tvJugador1.bringToFront();Log.d("RRRRRRR", "Actualizada pos2");
+                            }else if(view.equals(tvJugador2) && posTvJugador3 == 0){
+                                posTvJugador2 = 2;
+                                tvJugador2.bringToFront();
+                                tvJugador3.bringToFront();Log.d("RRRRRRR", "Actualizada pos2");
+                            }else if(view.equals(tvJugador3) && posTvJugador1 == 0){
+                                posTvJugador3 = 2;
                                 tvJugador3.bringToFront();
-                            }else if(view.equals(tvJugador2) && !tvJugador3.isEnabled()){
-                                posTvJugador2 = 2;
-                                tvJugador1.bringToFront();
-                            }else if(view.equals(tvJugador3) && !tvJugador1.isEnabled()){
+                                tvJugador1.bringToFront();Log.d("RRRRRRR", "Actualizada pos2");
+                            }else if(view.equals(tvJugador3) && posTvJugador2 == 0){
                                 posTvJugador3 = 2;
-                                tvJugador2.bringToFront();
-                            }else if(view.equals(tvJugador3) && !tvJugador2.isEnabled()){
-                                posTvJugador3 = 2;
-                                tvJugador1.bringToFront();
+                                tvJugador3.bringToFront();
+                                tvJugador2.bringToFront();Log.d("RRRRRRR", "Actualizada pos2");
                             }
+
+                            view.setEnabled(false);
 
                         } else if (tvCartaMesa3.getVisibility() == View.INVISIBLE) {
                             destino.x = tvCartaMesa3.getX();
@@ -2732,14 +2821,16 @@ public class MainActivity extends Activity
 
                             if(view.equals(tvJugador1)){
                                 posTvJugador1 = 3;
+                                tvJugador1.bringToFront();
                             }else if(view.equals(tvJugador2)){
                                 posTvJugador2 = 3;
+                                tvJugador2.bringToFront();
                             }else if(view.equals(tvJugador3)){
                                 posTvJugador3 = 3;
+                                tvJugador3.bringToFront();
                             }
+                            Log.d("RRRRRRR", "Actualizada pos3");
                         }
-
-                        hayAnimaciones = true;
 
                         //Calculamos su valor para enviarlo
                         if (view.equals(tvJugador1)) {
