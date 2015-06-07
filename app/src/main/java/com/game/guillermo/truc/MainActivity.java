@@ -33,8 +33,10 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -43,6 +45,7 @@ import android.widget.Toast;
 import com.afollestad.materialdialogs.GravityEnum;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.afollestad.materialdialogs.Theme;
+import com.github.alexkolpa.fabtoolbar.FabToolbar;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.games.Games;
@@ -59,7 +62,6 @@ import com.google.android.gms.games.multiplayer.realtime.RoomConfig;
 import com.google.android.gms.games.multiplayer.realtime.RoomStatusUpdateListener;
 import com.google.android.gms.games.multiplayer.realtime.RoomUpdateListener;
 import com.google.android.gms.plus.Plus;
-import com.google.android.gms.plus.model.people.Person;
 import com.google.example.games.basegameutils.BaseGameUtils;
 
 
@@ -145,7 +147,8 @@ public class MainActivity extends Activity
     ImageView tvMesaRival3;
     TextView marcador;
     TextView marcador2;
-    TextView textoAccion;
+    TextView textoAccion1;
+    TextView textoAccion2;
     private List<Carta> baraja = new ArrayList<>();
     private List<Carta> manoJugador = new ArrayList<>();
     Carta carta1;
@@ -194,14 +197,10 @@ public class MainActivity extends Activity
     ImageView imgPerfil;
     ProgressBar progressBar1;
     ProgressBar progressBar2;
-    CountDownTimer mCountDownTimer;
+    CountDownTimer mCountDownTimerJ1;
+    CountDownTimer mCountDownTimerJ2;
     int segundos = 30;
 
-    LinearLayout tablero;
-    LinearLayout layoutCartaMesa1;
-    LinearLayout layoutCartaMesa2;
-    LinearLayout layoutCartaMesa3;
-    private ViewGroup marco;
     private float xDelta;
     private float yDelta;
     PointF inicio1;
@@ -213,37 +212,58 @@ public class MainActivity extends Activity
     int posTvJugador1 = 0, posTvJugador2 = 0, posTvJugador3 = 0;
     boolean hayAnimaciones = false;
     boolean noEsLaPrimera = false;
-
+    ImageButton truc;
+    ImageButton envid;
+    ImageButton meVoy;
+    ImageButton retruque;
+    ImageButton quatreVal;
+    ImageButton jocFora;
+    ImageButton salir;
+    ImageButton laFalta;
+    FabToolbar actionButton;
+    View.OnClickListener menuListener;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        View.OnClickListener clickListener = new View.OnClickListener() {
+        menuListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String text = "";
-/*
+
                 switch (v.getId()) {
-                    case R.id.fab12:
+                    case R.id.truco:
                         truco();
+                        actionButton.hide();
                         break;
-                    case R.id.fab13:
+                    case R.id.retruco:
                         retruco();
+                        actionButton.hide();
                         break;
-                    case R.id.fab14:
+                    case R.id.quatre:
                         quatreVal();
+                        actionButton.hide();
                         break;
-                    case R.id.fab15:
+                    case R.id.joc_fora:
                         jocFora();
+                        actionButton.hide();
                         break;
-                    case R.id.fab22:
+                    case R.id.envido:
                         envido();
+                        actionButton.hide();
                         break;
-                    case R.id.fab32:
+                    case R.id.la_falta:
                         break;
-                }*/
+                    case R.id.me_voy:
+                        //A implementar
+                        break;
+                    case R.id.salir:
+                        actionButton.hide();
+                        break;
+
+                }
 
                 Toast.makeText(MainActivity.this, text, Toast.LENGTH_SHORT).show();
             }
@@ -266,10 +286,6 @@ public class MainActivity extends Activity
         tvMesaRival2 = (ImageView) findViewById(R.id.carta2MesaRival);
         tvMesaRival3 = (ImageView) findViewById(R.id.carta3MesaRival);
 
-
-
-
-
         tvMesaRival1.setVisibility(View.INVISIBLE);
         tvMesaRival2.setVisibility(View.INVISIBLE);
         tvMesaRival3.setVisibility(View.INVISIBLE);
@@ -277,27 +293,32 @@ public class MainActivity extends Activity
         inicio2Rival = new PointF(tvJugador2.getX(), tvJugador2.getY());
         inicio3Rival = new PointF(tvJugador3.getX(), tvJugador3.getY());
 
-
-
-        textoAccion = (TextView) findViewById(R.id.textoJugador2);
+        textoAccion1 = (TextView) findViewById(R.id.textoJugador1);
+        textoAccion2 = (TextView) findViewById(R.id.textoJugador2);
         marcador = (TextView) findViewById(R.id.marcador);
         marcador2 = (TextView) findViewById(R.id.marcador2);
         imgPerfilRival = (ImageView) findViewById(R.id.imgPerfilRival);
         imgPerfil = (ImageView) findViewById(R.id.imgPerfil);
 
+        actionButton = (FabToolbar) findViewById(R.id.fab_toolbar);
+        truc = (ImageButton) findViewById(R.id.truco);
+        envid = (ImageButton) findViewById(R.id.envido);
+        meVoy = (ImageButton) findViewById(R.id.me_voy);
+        retruque = (ImageButton) findViewById(R.id.retruco);
+        quatreVal = (ImageButton) findViewById(R.id.quatre);
+        jocFora = (ImageButton) findViewById(R.id.joc_fora);
+        salir = (ImageButton) findViewById(R.id.salir);
+        laFalta = (ImageButton) findViewById(R.id.la_falta);
 
         progressBar1 = (ProgressBar) findViewById(R.id.progres_segundos_1);
-        progressBar1.setProgress(segundos);
         progressBar2 = (ProgressBar) findViewById(R.id.progres_segundos_2);
-        progressBar2.setProgress(segundos);
-        mCountDownTimer = new CountDownTimer(30000, 1000) {
+        mCountDownTimerJ1 = new CountDownTimer(30000, 1000) {
 
             @Override
             public void onTick(long millisUntilFinished) {
                 Log.v("Log_tag", "Tick of Progress" + segundos + millisUntilFinished);
                 segundos--;
                 progressBar1.setProgress(segundos);
-                progressBar2.setProgress(segundos);
 
             }
 
@@ -306,11 +327,25 @@ public class MainActivity extends Activity
                 //Do what you want
                 segundos--;
                 progressBar1.setProgress(segundos);
+            }
+        };
+        mCountDownTimerJ2 = new CountDownTimer(30000, 1000) {
+
+            @Override
+            public void onTick(long millisUntilFinished) {
+                Log.v("Log_tag", "Tick of Progress" + segundos + millisUntilFinished);
+                segundos--;
+                progressBar2.setProgress(segundos);
+
+            }
+
+            @Override
+            public void onFinish() {
+                //Do what you want
+                segundos--;
                 progressBar2.setProgress(segundos);
             }
         };
-        mCountDownTimer.start();
-        mCountDownTimer.cancel();
 
         // Creamos el nuevo cliente de Google con acceso a Plus y Games
         mGoogleApiClient = new GoogleApiClient.Builder(this)
@@ -1278,6 +1313,20 @@ public class MainActivity extends Activity
         hayCuatreVal = false;
         hayJocFora = false;
 
+        textoAccion1.setVisibility(View.INVISIBLE);
+        textoAccion2.setVisibility(View.INVISIBLE);
+        progressBar1.setVisibility(View.INVISIBLE);
+        progressBar2.setVisibility(View.INVISIBLE);
+
+        truc.setVisibility(View.VISIBLE);
+        envid.setVisibility(View.VISIBLE);
+        meVoy.setVisibility(View.VISIBLE);
+        salir.setVisibility(View.VISIBLE);
+        retruque.setVisibility(View.GONE);
+        quatreVal.setVisibility(View.GONE);
+        jocFora.setVisibility(View.GONE);
+        laFalta.setVisibility(View.VISIBLE);
+
         if(hayAnimaciones){
             deshacerAnimaciones(tvJugador1);
             deshacerAnimaciones(tvJugador2);
@@ -1299,7 +1348,7 @@ public class MainActivity extends Activity
 
     void deshacerAnimaciones(View view){
 
-        Log.d("RRRRRR", "Pos1: "+posTvJugador1+" Pos2: "+posTvJugador2+" Pos3: "+posTvJugador3);
+        Log.d("RRRRRR", "Pos1: " + posTvJugador1 + " Pos2: " + posTvJugador2 + " Pos3: " + posTvJugador3);
 
         if(view.equals(tvJugador1)){
             tvJugador1.animate().translationX(inicio1.x).rotation(0).setDuration(500);
@@ -1354,6 +1403,31 @@ public class MainActivity extends Activity
         }
 
     }
+    void animarTextoAccion(final View view){
+        view.setVisibility(View.VISIBLE);
+        view.setAlpha(0.0f);
+        view.animate().alpha(1.0f).setDuration(1000).start();
+        AlphaAnimation animation2 = new AlphaAnimation(1.0f, 0.0f);
+        animation2.setDuration(1000);
+        animation2.setStartOffset(3500);
+        animation2.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                view.setVisibility(View.INVISIBLE);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+        view.startAnimation(animation2);
+    }
 
     // Reset game variables in preparation for a new game.
     void desbloquearCartas() {
@@ -1369,9 +1443,26 @@ public class MainActivity extends Activity
     }
 
     void cambiarTurno() {
+        cambiarBarraProgreso();
+        bloquearVisibles();
         if (mMyId.equals(idJugador1) && turno.equals(idJugador1)) turno = idJugador2;
         if (mMyId.equals(idJugador2) && turno.equals(idJugador2)) turno = idJugador1;
 
+    }
+    void cambiarBarraProgreso(){
+        if(progressBar1.getVisibility() == View.VISIBLE){
+            progressBar1.setVisibility(View.INVISIBLE);
+            mCountDownTimerJ1.cancel();
+            segundos = 31;
+            progressBar2.setVisibility(View.VISIBLE);
+            mCountDownTimerJ2.start();
+        }else if(progressBar2.getVisibility() == View.VISIBLE){
+            progressBar2.setVisibility(View.INVISIBLE);
+            mCountDownTimerJ2.cancel();
+            segundos = 31;
+            progressBar1.setVisibility(View.VISIBLE);
+            mCountDownTimerJ1.start();
+        }
     }
     void animacionAbrirCartas(){
         tvJugador1.animate().rotation(-20).setDuration(750);
@@ -1417,6 +1508,42 @@ public class MainActivity extends Activity
             view.bringToFront();
         }
     }
+    void bloquearVisibles(){
+        ArrayList<ImageButton> botonesVisibles = new ArrayList<>();
+        botonesVisibles.add(truc);
+        botonesVisibles.add(envid);
+        botonesVisibles.add(retruque);
+        botonesVisibles.add(quatreVal);
+        botonesVisibles.add(jocFora);
+        botonesVisibles.add(laFalta);
+        botonesVisibles.add(salir);
+        botonesVisibles.add(meVoy);
+        for(int i = 0; i<botonesVisibles.size(); i++){
+            if (botonesVisibles.get(i).getVisibility() == View.VISIBLE
+                    && !botonesVisibles.get(0).equals(salir)){
+                botonesVisibles.get(i).setEnabled(false);
+            }
+        }
+
+    }
+    void desBloquearVisibles(){
+        ArrayList<ImageButton> botonesVisibles = new ArrayList<>();
+        botonesVisibles.add(truc);
+        botonesVisibles.add(envid);
+        botonesVisibles.add(retruque);
+        botonesVisibles.add(quatreVal);
+        botonesVisibles.add(jocFora);
+        botonesVisibles.add(laFalta);
+        botonesVisibles.add(salir);
+        botonesVisibles.add(meVoy);
+        for(int i = 0; i<botonesVisibles.size(); i++){
+            if (botonesVisibles.get(i).getVisibility() == View.VISIBLE
+                    && !botonesVisibles.get(0).equals(salir)){
+                botonesVisibles.get(i).setEnabled(true);
+            }
+        }
+
+    }
 
     // Start the gameplay phase of the game.
     void startGame(boolean multiplayer) {
@@ -1429,10 +1556,22 @@ public class MainActivity extends Activity
         tvJugador2.setOnTouchListener(new MyTouchListener());
         tvJugador3.setOnTouchListener(new MyTouchListener());
 
+        truc.setOnClickListener(menuListener);
+        retruque.setOnClickListener(menuListener);
+        quatreVal.setOnClickListener(menuListener);
+        jocFora.setOnClickListener(menuListener);
+        envid.setOnClickListener(menuListener);
+        laFalta.setOnClickListener(menuListener);
+        salir.setOnClickListener(menuListener);
+        meVoy.setOnClickListener(menuListener);
+
 
         if (mMyId.equals(turno) && ronda == 1) {
             Toast.makeText(getApplicationContext(), "Es tu turno", Toast.LENGTH_SHORT).show();
             animacionAbrirCartas();
+            progressBar1.setVisibility(View.VISIBLE);
+            progressBar2.setVisibility(View.INVISIBLE);
+            mCountDownTimerJ1.start();
         }
 
         if (!mMyId.equals(turno) && ronda == 1) {
@@ -1441,6 +1580,10 @@ public class MainActivity extends Activity
             tvJugador3.setEnabled(false);
             Toast.makeText(getApplicationContext(), "Esperando al Jugador", Toast.LENGTH_SHORT).show();
             animacionAbrirCartas();
+            progressBar2.setVisibility(View.VISIBLE);
+            progressBar1.setVisibility(View.INVISIBLE);
+            mCountDownTimerJ2.start();
+            bloquearVisibles();
 
         }
         hayAnimaciones = true;
@@ -1646,17 +1789,6 @@ public class MainActivity extends Activity
                 // acciones que se ejecutan tras los milisegundos
                 repartiendo.cancel();
                 startGame(true);
-
-            }
-        }, milisegundos);
-    }
-
-    public void cerrarAccion(int milisegundos) {
-        Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            public void run() {
-                // acciones que se ejecutan tras los milisegundos
-                textoAccion.setText("");
 
             }
         }, milisegundos);
@@ -2119,16 +2251,16 @@ public class MainActivity extends Activity
                     int caso = Integer.parseInt(ganador[3]);
                     switch (caso) {
                         case 1:
-                            textoAccion.setText("Quiero el envid");
-                            cerrarAccion(3000);
+                            textoAccion2.setText("Quiero el envid");
+                            animarTextoAccion(textoAccion2);
                             break;
                         case 2:
-                            textoAccion.setText("Quiero el vuelvo");
-                            cerrarAccion(3000);
+                            textoAccion2.setText("Quiero el vuelvo");
+                            animarTextoAccion(textoAccion2);
                             break;
                         case 3:
-                            textoAccion.setText("Quiero la falta");
-                            cerrarAccion(3000);
+                            textoAccion2.setText("Quiero la falta");
+                            animarTextoAccion(textoAccion2);
                             break;
                     }
                     if (ganadorEnvid.equals(mMyId) && caso == 1) puntosEnvid = ENVID;
@@ -2154,16 +2286,16 @@ public class MainActivity extends Activity
                     int caso1 = Integer.parseInt(otro1[1]);
                     switch (caso1) {
                         case 1:
-                            textoAccion.setText("No quiero el envid");
-                            cerrarAccion(3000);
+                            textoAccion2.setText("No quiero el envid");
+                            animarTextoAccion(textoAccion2);
                             break;
                         case 2:
-                            textoAccion.setText("No quiero el vuelvo");
-                            cerrarAccion(3000);
+                            textoAccion2.setText("No quiero el vuelvo");
+                            animarTextoAccion(textoAccion2);
                             break;
                         case 3:
-                            textoAccion.setText("No quiero la falta");
-                            cerrarAccion(3000);
+                            textoAccion2.setText("No quiero la falta");
+                            animarTextoAccion(textoAccion2);
                             break;
                     }
                     if (mMyId.equals(turno)) {
@@ -2177,20 +2309,20 @@ public class MainActivity extends Activity
                     int caso2 = Integer.parseInt(otro4[1]);
                     switch (caso2) {
                         case 1:
-                            textoAccion.setText("No quiero el truc");
-                            cerrarAccion(3000);
+                            textoAccion2.setText("No quiero el truc");
+                            animarTextoAccion(textoAccion2);
                             break;
                         case 2:
-                            textoAccion.setText("No quiero el retruc");
-                            cerrarAccion(3000);
+                            textoAccion2.setText("No quiero el retruc");
+                            animarTextoAccion(textoAccion2);
                             break;
                         case 3:
-                            textoAccion.setText("No quiero el cuatre val");
-                            cerrarAccion(3000);
+                            textoAccion2.setText("No quiero el cuatre val");
+                            animarTextoAccion(textoAccion2);
                             break;
                         case 4:
-                            textoAccion.setText("No quiero el joc fora");
-                            cerrarAccion(3000);
+                            textoAccion2.setText("No quiero el joc fora");
+                            animarTextoAccion(textoAccion2);
                             break;
                     }
                     mostrarResultadosGanadorMano();
@@ -2209,8 +2341,8 @@ public class MainActivity extends Activity
 
                 case 'Q':
                     hayTruc = true;
-                    textoAccion.setText("Quiero el truc");
-                    cerrarAccion(3000);
+                    textoAccion2.setText("Quiero el truc");
+                    animarTextoAccion(textoAccion2);
 
                     if (mMyId.equals(turno)) {
                         desbloquearCartas();
@@ -2224,8 +2356,8 @@ public class MainActivity extends Activity
                 case 'I':
                     desbloquearCartas();
                     hayRetruc = true;
-                    textoAccion.setText("Quiero el retruc");
-                    cerrarAccion(3000);
+                    textoAccion2.setText("Quiero el retruc");
+                    animarTextoAccion(textoAccion2);
 
                     if (mMyId.equals(turno)) {
                         desbloquearCartas();
@@ -2238,8 +2370,8 @@ public class MainActivity extends Activity
 
                 case 'B':
                     hayCuatreVal = true;
-                    textoAccion.setText("Quiero el cuatre val");
-                    cerrarAccion(3000);
+                    textoAccion2.setText("Quiero el cuatre val");
+                    animarTextoAccion(textoAccion2);
 
                     if (mMyId.equals(turno)) {
                         desbloquearCartas();
@@ -2252,8 +2384,8 @@ public class MainActivity extends Activity
 
                 case 'Y':
                     hayJocFora = true;
-                    textoAccion.setText("Quiero el joc fora");
-                    cerrarAccion(3000);
+                    textoAccion2.setText("Quiero el joc fora");
+                    animarTextoAccion(textoAccion2);
 
                     if (mMyId.equals(turno)) {
                         desbloquearCartas();
@@ -2267,12 +2399,14 @@ public class MainActivity extends Activity
                     break;
 
                 default:
+                    cambiarBarraProgreso();
+                    desBloquearVisibles();
                     String turnoNuevo = new String(buf, "UTF-8");
                     turno = turnoNuevo;
                     desbloquearCartas();
                     if (mMyId.equals(turno) && misRondasGanadas < 2) {
-                      /*  if(ronda == 1 && !hayEnvid)fabEnvid.setEnabled(true);
-                        if(ronda > 1 && !hayEnvid)fabEnvid.setEnabled(false);*/
+                        if(ronda == 1 && !hayEnvid)envid.setVisibility(View.VISIBLE);
+                        if(ronda > 1 && !hayEnvid)envid.setVisibility(View.GONE);
 
                         Toast.makeText(getApplicationContext(), "Es tu turno", Toast.LENGTH_SHORT).show();
                     }
@@ -2281,7 +2415,7 @@ public class MainActivity extends Activity
                         tvJugador1.setEnabled(false);
                         tvJugador2.setEnabled(false);
                         tvJugador3.setEnabled(false);
-                        //fabEnvid.setEnabled(false);
+                        envid.setVisibility(View.GONE);
 
                         Toast.makeText(getApplicationContext(), "Esperando al Jugador", Toast.LENGTH_SHORT).show();
                         Log.d("LLLLLLL", "Me han comunicado cambio de turno");
@@ -2653,46 +2787,6 @@ public class MainActivity extends Activity
         }
     }
 
-
-    private void getProfileInformation() {
-        try {
-            if (Plus.PeopleApi.getCurrentPerson(mGoogleApiClient) != null) {
-                Person currentPerson = Plus.PeopleApi
-                        .getCurrentPerson(mGoogleApiClient);
-                String personName = currentPerson.getDisplayName();
-                String personPhotoUrl = currentPerson.getImage().getUrl();
-                String personGooglePlusProfile = currentPerson.getUrl();
-                String email = Plus.AccountApi.getAccountName(mGoogleApiClient);
-
-                textoAccion.setText(personName);
-                Log.e(TAG, "Name: " + personName + ", plusProfile: "
-                        + personGooglePlusProfile + ", email: " + email
-                        + ", Image: " + personPhotoUrl);
-
-
-                // by default the profile url gives 50x50 px image only
-                // we can replace the value with whatever dimension we want by
-                // replacing sz=X
-                personPhotoUrl = personPhotoUrl.substring(0,
-                        personPhotoUrl.length() - 2)
-                        + 75;
-
-                new LoadProfileImage(imgPerfilRival).execute(personPhotoUrl);
-
-            } else {
-                Toast.makeText(getApplicationContext(),
-                        "Person information is null", Toast.LENGTH_LONG).show();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-
-    }
-
-    /**
-     * Background Async task to load user profile picture from url
-     * */
     private class LoadProfileImage extends AsyncTask<String, Void, Bitmap> {
         ImageView bmImage;
 
@@ -2756,6 +2850,7 @@ public class MainActivity extends Activity
                             view.animate().x(destino.x).y(destino.y).rotation(0).setDuration(500);
                             view.animate().rotationXBy(45).scaleX((float) 0.63).scaleY((float) 0.63)
                                     .rotationYBy(-5).rotation(5).setDuration(600);
+                            view.setEnabled(false);
 
                             if(view.equals(tvJugador1)){
                                 posTvJugador1 = 1;
@@ -2771,7 +2866,6 @@ public class MainActivity extends Activity
                                 tvJugador1.bringToFront();tvJugador2.bringToFront();
                             }
 
-                            view.setEnabled(false);
 
                         } else if (tvCartaMesa2.getVisibility() == View.INVISIBLE) {
                             destino.x = tvCartaMesa2.getX();
@@ -2780,6 +2874,7 @@ public class MainActivity extends Activity
 
                             view.animate().x(destino.x).y(destino.y).rotation(0).rotationXBy(45)
                                     .scaleX((float) 0.63).scaleY((float) 0.63).setDuration(500);
+                            view.setEnabled(false);
 
                             if(view.equals(tvJugador1) && posTvJugador2 == 0){
                                 posTvJugador1 = 2;
@@ -2807,7 +2902,6 @@ public class MainActivity extends Activity
                                 tvJugador2.bringToFront();Log.d("RRRRRRR", "Actualizada pos2");
                             }
 
-                            view.setEnabled(false);
 
                         } else if (tvCartaMesa3.getVisibility() == View.INVISIBLE) {
                             destino.x = tvCartaMesa3.getX();

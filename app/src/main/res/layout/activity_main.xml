@@ -83,7 +83,8 @@
                             android:layout_height="50dp"
                             android:layout_weight="1"
                             android:background="@drawable/bocadillo"
-                            android:layout_margin="5dp"/>
+                            android:layout_margin="5dp"
+                            android:gravity="center_vertical|center_horizontal" />
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -103,7 +104,7 @@
                             <ProgressBar
                                 android:id="@+id/progres_segundos_2"
                                 android:layout_width="50dp"
-                                android:layout_height="wrap_content"
+                                android:layout_height="match_parent"
                                 android:layout_gravity="center"
                                 style="@android:style/Widget.DeviceDefault.Light.ProgressBar.Horizontal"
                                 android:max="30"
@@ -264,7 +265,7 @@
                     <ProgressBar
                         android:id="@+id/progres_segundos_1"
                         android:layout_width="50dp"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:layout_gravity="center"
                         style="@android:style/Widget.DeviceDefault.Light.ProgressBar.Horizontal"
                         android:max="30"
@@ -279,7 +280,7 @@
                     android:layout_weight="1"
                     android:background="@drawable/bocadillo2"
                     android:layout_margin="10dp"
-                    />
+                    android:gravity="center_vertical|center_horizontal" />
 
             </LinearLayout>
 
@@ -293,7 +294,8 @@
             android:layout_height="match_parent"
             fab:tb_button_gravity="end"
             fab:tb_container_gravity="end"
-            android:layout_weight="1">
+            android:layout_weight="1"
+            fab:tb_color="@android:color/background_dark">
 
             <HorizontalScrollView
                 android:layout_width="match_parent"
@@ -304,79 +306,91 @@
                     android:layout_height="match_parent"
                     android:orientation="horizontal">
 
-                    <ImageView
+                    <ImageButton
                         android:id="@+id/truco"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/ic_truc"
                         android:background="@drawable/fondo_boton"
-                        android:layout_margin="5dp"
+                        android:layout_margin="10dp"
                         android:layout_weight="1"
                         />
-
-                    <ImageView
-                        android:id="@+id/envido"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/fondo_boton"
-                        android:layout_margin="5dp"
-                        android:layout_weight="1"
-
-                        />
-
-                    <ImageView
-                        android:id="@+id/me_voy"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/fondo_boton"
-                        android:layout_margin="5dp"
-                        android:layout_weight="1"
-
-                        />
-                    <ImageView
+                    <ImageButton
                         android:id="@+id/retruco"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
                         android:background="@drawable/fondo_boton"
-                        android:layout_margin="5dp"
+                        android:src="@drawable/ic_retruco"
+                        android:layout_margin="10dp"
                         android:layout_weight="1"
 
                         />
-                    <ImageView
+                    <ImageButton
                         android:id="@+id/quatre"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
                         android:background="@drawable/fondo_boton"
-                        android:layout_margin="5dp"
+                        android:src="@drawable/ic_quatr_val"
+                        android:layout_margin="10dp"
                         android:layout_weight="1"
 
                         />
-                    <ImageView
+                    <ImageButton
                         android:id="@+id/joc_fora"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
                         android:background="@drawable/fondo_boton"
-                        android:layout_margin="5dp"
+                        android:src="@drawable/ic_joc_fora"
+                        android:layout_margin="10dp"
                         android:layout_weight="1"
 
                         />
-                    <ImageView
+
+                    <ImageButton
+                        android:id="@+id/envido"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/ic_envido"
+                        android:background="@drawable/fondo_boton"
+                        android:layout_margin="10dp"
+                        android:layout_weight="1"
+
+                        />
+
+                    <ImageButton
                         android:id="@+id/la_falta"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
                         android:background="@drawable/fondo_boton"
-                        android:layout_margin="5dp"
+                        android:src="@drawable/ic_la_falta"
+                        android:layout_margin="10dp"
                         android:layout_weight="1"
 
                         />
-                    <ImageView
+
+                    <ImageButton
+                        android:id="@+id/me_voy"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/fondo_boton"
+                        android:src="@drawable/ic_me_voy"
+                        android:layout_margin="10dp"
+                        android:layout_weight="1"
+
+                        />
+
+                    <ImageButton
                         android:id="@+id/salir"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
                         android:background="@drawable/fondo_boton"
-                        android:layout_margin="5dp"
+                        android:src="@drawable/ic_salir"
+                        android:layout_margin="10dp"
                         android:layout_weight="1"
 
                         />
+
+
                 </LinearLayout>
             </HorizontalScrollView>
         </com.github.alexkolpa.fabtoolbar.FabToolbar>
