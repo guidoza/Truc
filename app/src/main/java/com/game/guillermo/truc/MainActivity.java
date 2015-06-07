@@ -35,6 +35,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -237,24 +238,32 @@ public class MainActivity extends Activity
                     case R.id.truco:
                         truco();
                         actionButton.hide();
+                        truc.setVisibility(View.GONE);
                         break;
                     case R.id.retruco:
                         retruco();
                         actionButton.hide();
+                        retruque.setVisibility(View.GONE);
                         break;
                     case R.id.quatre:
                         quatreVal();
                         actionButton.hide();
+                        quatreVal.setVisibility(View.GONE);
                         break;
                     case R.id.joc_fora:
                         jocFora();
                         actionButton.hide();
+                        jocFora.setVisibility(View.GONE);
                         break;
                     case R.id.envido:
                         envido();
                         actionButton.hide();
+                        envid.setVisibility(View.GONE);
+                        laFalta.setVisibility(View.GONE);
                         break;
                     case R.id.la_falta:
+                        envid.setVisibility(View.GONE);
+                        laFalta.setVisibility(View.GONE);
                         break;
                     case R.id.me_voy:
                         //A implementar
@@ -380,20 +389,24 @@ public class MainActivity extends Activity
                                 comprobarGanadorEnvid();
                                 if (ganadorEnvid.equals(mMyId)) puntosEnvid = ENVID;
                                 enviarMensajeHayEnvidAndGanador(ganadorEnvid, 1);
+                                cambiarBarraProgreso();
                                 break;
                             //Vuelvo
                             case 1:
                                 miEnvid = comprobarEnvid();
                                 enviarMensajeVuelvoAEnvidar();
+                                cambiarBarraProgreso();
                                 break;
                             //Falta
                             case 2:
                                 miEnvid = comprobarEnvid();
                                 enviarMensajeLaFalta();
+                                cambiarBarraProgreso();
                                 break;
                             //No quiero
                             case 3:
                                 enviarMensajeNoQuiero(1);
+                                cambiarBarraProgreso();
                                 break;
                         }
                         return true;
@@ -421,15 +434,18 @@ public class MainActivity extends Activity
                                 enviarMensajeHayEnvidAndGanador(ganadorEnvid, 2);
                                 if (ganadorEnvid.equals(mMyId)) puntosEnvid = TORNE;
                                 desbloquearCartas();
+                                cambiarBarraProgreso();
                                 break;
                             //Falta
                             case 1:
                                 enviarMensajeLaFalta();
+                                cambiarBarraProgreso();
                                 break;
                             //No quiero
                             case 2:
                                 desbloquearCartas();
                                 enviarMensajeNoQuiero(2);
+                                cambiarBarraProgreso();
                                 break;
                         }
                         return true;
@@ -458,10 +474,12 @@ public class MainActivity extends Activity
                                 //puntos a sumar por la falta
                                 //if(ganadorEnvid.equals(mMyId))puntosEnvid = ;
                                 enviarMensajeHayEnvidAndGanador(ganadorEnvid, 3);
+                                cambiarBarraProgreso();
                                 break;
                             case 1:
                                 if (mMyId.equals(turno)) desbloquearCartas();
                                 enviarMensajeNoQuiero(3);
+                                cambiarBarraProgreso();
                                 break;
                         }
                         return true;
@@ -486,10 +504,13 @@ public class MainActivity extends Activity
                             case 0:
                                 hayTruc = true;
                                 enviarMensajeQuieroTruc();
+                                cambiarBarraProgreso();
+                                retruque.setVisibility(View.VISIBLE);
                                 break;
                             //Retruque
                             case 1:
                                 enviarMensajeRetruc();
+                                cambiarBarraProgreso();
                                 break;
                             //No quiero
                             case 2:
@@ -519,10 +540,13 @@ public class MainActivity extends Activity
                             case 0:
                                 hayRetruc = true;
                                 enviarMensajeQuieroRetruc();
+                                cambiarBarraProgreso();
+                                quatreVal.setVisibility(View.VISIBLE);
                                 break;
                             //Cuatre val
                             case 1:
                                 enviarMensajeCuatreVal();
+                                cambiarBarraProgreso();
                                 break;
                             //No quiero
                             case 2:
@@ -552,10 +576,13 @@ public class MainActivity extends Activity
                             case 0:
                                 hayCuatreVal = true;
                                 enviarMensajeQuieroCuatreVal();
+                                cambiarBarraProgreso();
+                                jocFora.setVisibility(View.VISIBLE);
                                 break;
                             //Joc fora
                             case 1:
                                 enviarMensajeJocFora();
+                                cambiarBarraProgreso();
                                 break;
                             //No quiero
                             case 2:
@@ -586,6 +613,7 @@ public class MainActivity extends Activity
                                 hayJocFora = true;
                                 enviarMensajeQuieroJocFora();
                                 desbloquearCartas();
+                                cambiarBarraProgreso();
                                 break;
                             //No quiero
                             case 1:
@@ -657,6 +685,7 @@ public class MainActivity extends Activity
         tvJugador3.setEnabled(false);
         miEnvid = comprobarEnvid();
         enviarMensajeEnvid(miEnvid);
+        cambiarBarraProgreso();
     }
 
     private int comprobarEnvid() {
@@ -705,6 +734,7 @@ public class MainActivity extends Activity
         tvJugador2.setEnabled(false);
         tvJugador3.setEnabled(false);
         enviarMensajeTruc();
+        cambiarBarraProgreso();
     }
 
     public void retruco() {
@@ -713,6 +743,7 @@ public class MainActivity extends Activity
         tvJugador2.setEnabled(false);
         tvJugador3.setEnabled(false);
         enviarMensajeRetruc();
+        cambiarBarraProgreso();
     }
 
     public void quatreVal() {
@@ -721,6 +752,7 @@ public class MainActivity extends Activity
         tvJugador2.setEnabled(false);
         tvJugador3.setEnabled(false);
         enviarMensajeCuatreVal();
+        cambiarBarraProgreso();
     }
 
     public void jocFora() {
@@ -729,6 +761,7 @@ public class MainActivity extends Activity
         tvJugador2.setEnabled(false);
         tvJugador3.setEnabled(false);
         enviarMensajeJocFora();
+        cambiarBarraProgreso();
     }
 
 
@@ -756,10 +789,6 @@ public class MainActivity extends Activity
                 tvMesaRival1.animate().translationX(inicio1Rival.x).setDuration(500);
                 tvMesaRival1.animate().translationY(inicio1Rival.y)
                         .rotationXBy(45).setDuration(500);
-
-
-
-
 
 
             case R.id.button_sign_in:
@@ -1315,6 +1344,7 @@ public class MainActivity extends Activity
 
         textoAccion1.setVisibility(View.INVISIBLE);
         textoAccion2.setVisibility(View.INVISIBLE);
+        segundos = 30;
         progressBar1.setVisibility(View.INVISIBLE);
         progressBar2.setVisibility(View.INVISIBLE);
 
@@ -1444,7 +1474,7 @@ public class MainActivity extends Activity
 
     void cambiarTurno() {
         cambiarBarraProgreso();
-        bloquearVisibles();
+        animarDesaparecerMenu();
         if (mMyId.equals(idJugador1) && turno.equals(idJugador1)) turno = idJugador2;
         if (mMyId.equals(idJugador2) && turno.equals(idJugador2)) turno = idJugador1;
 
@@ -1453,15 +1483,26 @@ public class MainActivity extends Activity
         if(progressBar1.getVisibility() == View.VISIBLE){
             progressBar1.setVisibility(View.INVISIBLE);
             mCountDownTimerJ1.cancel();
-            segundos = 31;
+            segundos = 30;
             progressBar2.setVisibility(View.VISIBLE);
             mCountDownTimerJ2.start();
         }else if(progressBar2.getVisibility() == View.VISIBLE){
             progressBar2.setVisibility(View.INVISIBLE);
             mCountDownTimerJ2.cancel();
-            segundos = 31;
+            segundos = 30;
             progressBar1.setVisibility(View.VISIBLE);
             mCountDownTimerJ1.start();
+        }
+    }
+    void reiniciarBarraProgreso(){
+        if(progressBar1.getVisibility() == View.VISIBLE){
+            mCountDownTimerJ1.cancel();
+            segundos = 30;
+            mCountDownTimerJ1.start();
+        }else if(progressBar2.getVisibility() == View.VISIBLE){
+            mCountDownTimerJ2.cancel();
+            segundos = 30;
+            mCountDownTimerJ2.start();
         }
     }
     void animacionAbrirCartas(){
@@ -1508,41 +1549,32 @@ public class MainActivity extends Activity
             view.bringToFront();
         }
     }
-    void bloquearVisibles(){
-        ArrayList<ImageButton> botonesVisibles = new ArrayList<>();
-        botonesVisibles.add(truc);
-        botonesVisibles.add(envid);
-        botonesVisibles.add(retruque);
-        botonesVisibles.add(quatreVal);
-        botonesVisibles.add(jocFora);
-        botonesVisibles.add(laFalta);
-        botonesVisibles.add(salir);
-        botonesVisibles.add(meVoy);
-        for(int i = 0; i<botonesVisibles.size(); i++){
-            if (botonesVisibles.get(i).getVisibility() == View.VISIBLE
-                    && !botonesVisibles.get(0).equals(salir)){
-                botonesVisibles.get(i).setEnabled(false);
-            }
-        }
-
+    void animarAparecerMenu(){
+        actionButton.setVisibility(View.VISIBLE);
+        Animation animation = AnimationUtils.loadAnimation(getApplicationContext(),
+                R.anim.fab_scale_up);
+        actionButton.startAnimation(animation);
     }
-    void desBloquearVisibles(){
-        ArrayList<ImageButton> botonesVisibles = new ArrayList<>();
-        botonesVisibles.add(truc);
-        botonesVisibles.add(envid);
-        botonesVisibles.add(retruque);
-        botonesVisibles.add(quatreVal);
-        botonesVisibles.add(jocFora);
-        botonesVisibles.add(laFalta);
-        botonesVisibles.add(salir);
-        botonesVisibles.add(meVoy);
-        for(int i = 0; i<botonesVisibles.size(); i++){
-            if (botonesVisibles.get(i).getVisibility() == View.VISIBLE
-                    && !botonesVisibles.get(0).equals(salir)){
-                botonesVisibles.get(i).setEnabled(true);
-            }
-        }
+    void animarDesaparecerMenu(){
+        Animation animation = AnimationUtils.loadAnimation(getApplicationContext(),
+                R.anim.fab_scale_down);
+        animation.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
 
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                actionButton.setVisibility(View.INVISIBLE);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+        actionButton.startAnimation(animation);
     }
 
     // Start the gameplay phase of the game.
@@ -1572,6 +1604,7 @@ public class MainActivity extends Activity
             progressBar1.setVisibility(View.VISIBLE);
             progressBar2.setVisibility(View.INVISIBLE);
             mCountDownTimerJ1.start();
+            animarAparecerMenu();
         }
 
         if (!mMyId.equals(turno) && ronda == 1) {
@@ -1583,7 +1616,7 @@ public class MainActivity extends Activity
             progressBar2.setVisibility(View.VISIBLE);
             progressBar1.setVisibility(View.INVISIBLE);
             mCountDownTimerJ2.start();
-            bloquearVisibles();
+            animarDesaparecerMenu();
 
         }
         hayAnimaciones = true;
@@ -1625,6 +1658,7 @@ public class MainActivity extends Activity
                     actualizaRonda();
                     //Comunicar el turno al oponente, gane o pierda
                     enviarMensajeTurno();
+                    reiniciarBarraProgreso();
                 }
 
                 //Caso en el que tiras primero, o pierdes tirando segundo
@@ -2240,6 +2274,9 @@ public class MainActivity extends Activity
                     String suEnvid[] = aux1.split(" ");
                     envidOtro = Integer.parseInt(suEnvid[1]);
                     showSingleChoiceAlertEnvid("Tu rival ha envidado", R.array.envid);
+                    envid.setVisibility(View.GONE);
+                    laFalta.setVisibility(View.GONE);
+                    cambiarBarraProgreso();
                     break;
 
                 case 'K':
@@ -2271,6 +2308,7 @@ public class MainActivity extends Activity
                     if (mMyId.equals(turno)) {
                         desbloquearCartas();
                     }
+                    cambiarBarraProgreso();
                     break;
 
                 case 'V':
@@ -2278,6 +2316,7 @@ public class MainActivity extends Activity
                     String otro[] = aux3.split(" ");
                     envidOtro = Integer.parseInt(otro[1]);
                     showSingleChoiceAlertVuelvo("Tu rival ha vuelto a envidar", R.array.envid2);
+                    cambiarBarraProgreso();
                     break;
 
                 case 'X':
@@ -2301,6 +2340,7 @@ public class MainActivity extends Activity
                     if (mMyId.equals(turno)) {
                         desbloquearCartas();
                     }
+                    cambiarBarraProgreso();
                     break;
 
                 case 'D':
@@ -2333,10 +2373,15 @@ public class MainActivity extends Activity
                     String otro2[] = aux5.split(" ");
                     envidOtro = Integer.parseInt(otro2[1]);
                     showSingleChoiceAlertFalta("Tu rival ha envidado la falta", R.array.envid3);
+                    envid.setVisibility(View.GONE);
+                    laFalta.setVisibility(View.GONE);
+                    cambiarBarraProgreso();
                     break;
 
                 case 'T':
                     showSingleChoiceAlertTruco("Tu rival ha trucado", R.array.truc1);
+                    truc.setVisibility(View.GONE);
+                    cambiarBarraProgreso();
                     break;
 
                 case 'Q':
@@ -2347,10 +2392,12 @@ public class MainActivity extends Activity
                     if (mMyId.equals(turno)) {
                         desbloquearCartas();
                     }
+                    cambiarBarraProgreso();
                     break;
 
                 case 'L':
                     showSingleChoiceAlertRetruc("Tu rival ha retrucado", R.array.truc2);
+                    cambiarBarraProgreso();
                     break;
 
                 case 'I':
@@ -2362,10 +2409,12 @@ public class MainActivity extends Activity
                     if (mMyId.equals(turno)) {
                         desbloquearCartas();
                     }
+                    cambiarBarraProgreso();
                     break;
 
                 case 'C':
                     showSingleChoiceAlertCuatreVal("�Cuatre val!", R.array.truc3);
+                    cambiarBarraProgreso();
                     break;
 
                 case 'B':
@@ -2376,10 +2425,12 @@ public class MainActivity extends Activity
                     if (mMyId.equals(turno)) {
                         desbloquearCartas();
                     }
+                    cambiarBarraProgreso();
                     break;
 
                 case 'J':
                     showSingleChoiceAlertJocFora("�Joc fora!", R.array.envid3);
+                    cambiarBarraProgreso();
                     break;
 
                 case 'Y':
@@ -2390,6 +2441,7 @@ public class MainActivity extends Activity
                     if (mMyId.equals(turno)) {
                         desbloquearCartas();
                     }
+                    cambiarBarraProgreso();
                     break;
 
                 case 'Z':
@@ -2399,16 +2451,19 @@ public class MainActivity extends Activity
                     break;
 
                 default:
-                    cambiarBarraProgreso();
-                    desBloquearVisibles();
+
                     String turnoNuevo = new String(buf, "UTF-8");
                     turno = turnoNuevo;
                     desbloquearCartas();
                     if (mMyId.equals(turno) && misRondasGanadas < 2) {
-                        if(ronda == 1 && !hayEnvid)envid.setVisibility(View.VISIBLE);
-                        if(ronda > 1 && !hayEnvid)envid.setVisibility(View.GONE);
+                        if(ronda > 1 && !hayEnvid){
+                            envid.setVisibility(View.GONE);
+                            laFalta.setVisibility(View.GONE);
+                        }
 
                         Toast.makeText(getApplicationContext(), "Es tu turno", Toast.LENGTH_SHORT).show();
+                        cambiarBarraProgreso();
+                        animarAparecerMenu();
                     }
 
                     if (!mMyId.equals(turno) && misRondasGanadas < 2) {
@@ -2416,9 +2471,11 @@ public class MainActivity extends Activity
                         tvJugador2.setEnabled(false);
                         tvJugador3.setEnabled(false);
                         envid.setVisibility(View.GONE);
+                        laFalta.setVisibility(View.GONE);
 
                         Toast.makeText(getApplicationContext(), "Esperando al Jugador", Toast.LENGTH_SHORT).show();
                         Log.d("LLLLLLL", "Me han comunicado cambio de turno");
+                        reiniciarBarraProgreso();
 
                     }
                     break;
@@ -2939,6 +2996,9 @@ public class MainActivity extends Activity
                             aux = carta3;
                             miValor = Integer.parseInt(carta3.getValor());
                         }
+
+                        envid.setVisibility(View.GONE);
+                        laFalta.setVisibility(View.GONE);
 
                         if (!hayEmpate) {
                             cartaSeleccionada();
