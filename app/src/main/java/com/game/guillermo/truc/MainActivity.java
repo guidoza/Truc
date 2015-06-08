@@ -325,7 +325,6 @@ public class MainActivity extends Activity
 
             @Override
             public void onTick(long millisUntilFinished) {
-                Log.v("Log_tag", "Tick of Progress" + segundos + millisUntilFinished);
                 segundos--;
                 progressBar1.setProgress(segundos);
 
@@ -342,7 +341,6 @@ public class MainActivity extends Activity
 
             @Override
             public void onTick(long millisUntilFinished) {
-                Log.v("Log_tag", "Tick of Progress" + segundos + millisUntilFinished);
                 segundos--;
                 progressBar2.setProgress(segundos);
 
@@ -1375,9 +1373,12 @@ public class MainActivity extends Activity
             deshacerAnimaciones(tvJugador1);
             deshacerAnimaciones(tvJugador2);
             deshacerAnimaciones(tvJugador3);
-            posTvJugador1 = 0; posTvJugador2 = 0; posTvJugador3 = 0;
+            posTvJugador1 = 0;
+            posTvJugador2 = 0;
+            posTvJugador3 = 0;
             hayAnimaciones = false;
         }
+        Log.d("GGGGGGG", "noEsLaPrimera: "+noEsLaPrimera);
         if(noEsLaPrimera){
             tvMesaRival1.animate().scaleX((float) 1).scaleY((float) 1)
                     .rotationYBy(5).rotation(0).rotationXBy(-45).setDuration(0);
@@ -1478,6 +1479,11 @@ public class MainActivity extends Activity
         tvJugador1.setEnabled(true);
         tvJugador2.setEnabled(true);
         tvJugador3.setEnabled(true);
+    }
+    void bloquearCartas() {
+        tvJugador1.setEnabled(false);
+        tvJugador2.setEnabled(false);
+        tvJugador3.setEnabled(false);
     }
 
     void resetTurno() {
@@ -1617,7 +1623,7 @@ public class MainActivity extends Activity
             animacionAbrirCartas();
             progressBar1.setVisibility(View.VISIBLE);
             progressBar2.setVisibility(View.INVISIBLE);
-            mCountDownTimerJ1.start();
+            reiniciarBarraProgreso();
             animarAparecerMenu();
         }
 
@@ -1629,11 +1635,11 @@ public class MainActivity extends Activity
             animacionAbrirCartas();
             progressBar2.setVisibility(View.VISIBLE);
             progressBar1.setVisibility(View.INVISIBLE);
-            mCountDownTimerJ2.start();
+            reiniciarBarraProgreso();
             animarDesaparecerMenu();
 
         }
-        hayAnimaciones = true;
+
         noEsLaPrimera = true;
         switchToScreen(R.id.screen_game);
         mMultiplayer = multiplayer;
@@ -1844,11 +1850,11 @@ public class MainActivity extends Activity
 
     public void mostrarResultadosGanadorMano() {
 
-        Log.d("FFFFFFF", "Hay truc: "+hayTruc);
-        Log.d("FFFFFFF", "Hay retruc: "+hayRetruc);
-        Log.d("FFFFFFF", "Hay cuatre: "+hayCuatreVal);
-        Log.d("FFFFFFF", "Hay joc: "+hayJocFora);
-        Log.d("FFFFFFF", "Hay envid: "+hayEnvid);
+        Log.d("FFFFFFF", "Hay truc? "+hayTruc);
+        Log.d("FFFFFFF", "Hay retruc? "+hayRetruc);
+        Log.d("FFFFFFF", "Hay cuatre? "+hayCuatreVal);
+        Log.d("FFFFFFF", "Hay joc? "+hayJocFora);
+        Log.d("FFFFFFF", "Hay envid? "+hayEnvid);
 
         if (!hayTruc) puntosTruc = NO_QUIERO_TRUC;
         if (hayTruc && !hayRetruc) puntosTruc = TRUC;
@@ -2431,7 +2437,9 @@ public class MainActivity extends Activity
                     if (mMyId.equals(turno)) {
                         desbloquearCartas();
                     }
-                    cambiarBarraProgreso();
+                    if(turno.equals(mMyId)){
+                        cambiarBarraProgreso();
+                    }else reiniciarBarraProgreso();
                     break;
 
                 case 'C':
@@ -2447,7 +2455,9 @@ public class MainActivity extends Activity
                     if (mMyId.equals(turno)) {
                         desbloquearCartas();
                     }
-                    cambiarBarraProgreso();
+                    if(turno.equals(mMyId)){
+                        cambiarBarraProgreso();
+                    }else reiniciarBarraProgreso();
                     break;
 
                 case 'J':
@@ -2463,7 +2473,9 @@ public class MainActivity extends Activity
                     if (mMyId.equals(turno)) {
                         desbloquearCartas();
                     }
-                    cambiarBarraProgreso();
+                    if(turno.equals(mMyId)){
+                        cambiarBarraProgreso();
+                    }else reiniciarBarraProgreso();
                     break;
 
                 case 'Z':
@@ -3025,6 +3037,8 @@ public class MainActivity extends Activity
                         if (!hayEmpate) {
                             cartaSeleccionada();
                         } else cartaSeleccionadaEmpate();
+
+                        hayAnimaciones = true;
 
                     }else {
                         if (view.equals(tvJugador1)) {
