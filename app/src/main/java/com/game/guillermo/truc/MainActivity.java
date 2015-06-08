@@ -434,7 +434,9 @@ public class MainActivity extends Activity
                                 enviarMensajeHayEnvidAndGanador(ganadorEnvid, 2);
                                 if (ganadorEnvid.equals(mMyId)) puntosEnvid = TORNE;
                                 desbloquearCartas();
-                                cambiarBarraProgreso();
+                                if(!turno.equals(mMyId)){
+                                    cambiarBarraProgreso();
+                                }else reiniciarBarraProgreso();
                                 break;
                             //Falta
                             case 1:
@@ -445,7 +447,9 @@ public class MainActivity extends Activity
                             case 2:
                                 desbloquearCartas();
                                 enviarMensajeNoQuiero(2);
-                                cambiarBarraProgreso();
+                                if(!turno.equals(mMyId)){
+                                    cambiarBarraProgreso();
+                                }else reiniciarBarraProgreso();
                                 break;
                         }
                         return true;
@@ -474,12 +478,16 @@ public class MainActivity extends Activity
                                 //puntos a sumar por la falta
                                 //if(ganadorEnvid.equals(mMyId))puntosEnvid = ;
                                 enviarMensajeHayEnvidAndGanador(ganadorEnvid, 3);
-                                cambiarBarraProgreso();
+                                if(!turno.equals(mMyId)){
+                                    cambiarBarraProgreso();
+                                }else reiniciarBarraProgreso();
                                 break;
                             case 1:
                                 if (mMyId.equals(turno)) desbloquearCartas();
                                 enviarMensajeNoQuiero(3);
-                                cambiarBarraProgreso();
+                                if(!turno.equals(mMyId)){
+                                    cambiarBarraProgreso();
+                                }else reiniciarBarraProgreso();
                                 break;
                         }
                         return true;
@@ -540,7 +548,9 @@ public class MainActivity extends Activity
                             case 0:
                                 hayRetruc = true;
                                 enviarMensajeQuieroRetruc();
-                                cambiarBarraProgreso();
+                                if(!turno.equals(mMyId)){
+                                    cambiarBarraProgreso();
+                                }else reiniciarBarraProgreso();
                                 quatreVal.setVisibility(View.VISIBLE);
                                 break;
                             //Cuatre val
@@ -576,7 +586,9 @@ public class MainActivity extends Activity
                             case 0:
                                 hayCuatreVal = true;
                                 enviarMensajeQuieroCuatreVal();
-                                cambiarBarraProgreso();
+                                if(!turno.equals(mMyId)){
+                                    cambiarBarraProgreso();
+                                }else reiniciarBarraProgreso();
                                 jocFora.setVisibility(View.VISIBLE);
                                 break;
                             //Joc fora
@@ -613,7 +625,9 @@ public class MainActivity extends Activity
                                 hayJocFora = true;
                                 enviarMensajeQuieroJocFora();
                                 desbloquearCartas();
-                                cambiarBarraProgreso();
+                                if(!turno.equals(mMyId)){
+                                    cambiarBarraProgreso();
+                                }else reiniciarBarraProgreso();
                                 break;
                             //No quiero
                             case 1:
@@ -1830,6 +1844,12 @@ public class MainActivity extends Activity
 
     public void mostrarResultadosGanadorMano() {
 
+        Log.d("FFFFFFF", "Hay truc: "+hayTruc);
+        Log.d("FFFFFFF", "Hay retruc: "+hayRetruc);
+        Log.d("FFFFFFF", "Hay cuatre: "+hayCuatreVal);
+        Log.d("FFFFFFF", "Hay joc: "+hayJocFora);
+        Log.d("FFFFFFF", "Hay envid: "+hayEnvid);
+
         if (!hayTruc) puntosTruc = NO_QUIERO_TRUC;
         if (hayTruc && !hayRetruc) puntosTruc = TRUC;
         if (hayRetruc && !hayCuatreVal) puntosTruc = RETRUC;
@@ -1843,22 +1863,18 @@ public class MainActivity extends Activity
 
             if (ganadorEnvid.equals(mMyId)) {
                 View layout = inflater.inflate(R.layout.progres_content, container);
-                String content = "Tu envid: " + miEnvid + " Envid rival: " + envidOtro;
-                Log.d("TTTTTTT", content);
-                puntosTotalesMios += puntosTruc + puntosEnvid;
+                puntosTotalesMios += puntosTruc;
                 actualizarMarcador2(puntosTotalesMios);
                 showProgressCustomDialog(layout);
 
             } else {
                 View layout = inflater.inflate(R.layout.progres_content2, container);
-                String content = "Tu envid: " + miEnvid + " Envid rival: " + envidOtro;
-                Log.d("TTTTTTT", content);
-                puntosTotalesMios += puntosTruc + puntosEnvid;
+                puntosTotalesMios += puntosTruc;
                 actualizarMarcador2(puntosTotalesMios);
                 showProgressCustomDialog(layout);
             }
         } else {
-            puntosTotalesMios += puntosTruc + puntosEnvid;
+            puntosTotalesMios += puntosTruc;
             actualizarMarcador2(puntosTotalesMios);
             showProgressDialog("Enhorabuena, ganas la mano");
         }
@@ -1872,22 +1888,18 @@ public class MainActivity extends Activity
         if (hayEnvid) {
             if (ganadorEnvid.equals(mMyId)) {
                 View layout = inflater.inflate(R.layout.progres_content3, container);
-                String content = "L�stima, pierdes la mano\nGanaste el envid:\nTu envid: " + miEnvid + " Envid rival: " + envidOtro;
-                Log.d("TTTTTTT", content);
-                puntosTotalesMios += puntosTruc + puntosEnvid;
+                puntosTotalesMios += puntosTruc;
                 actualizarMarcador2(puntosTotalesMios);
                 showProgressCustomDialog(layout);
 
             } else {
                 View layout = inflater.inflate(R.layout.progres_content4, container);
-                String content = "L�stima, pierdes la mano\nPerdiste el envid:\nTu envid: " + miEnvid + " Envid rival: " + envidOtro;
-                Log.d("TTTTTTT", content);
-                puntosTotalesMios += puntosTruc + puntosEnvid;
+                puntosTotalesMios += puntosTruc;
                 actualizarMarcador2(puntosTotalesMios);
                 showProgressCustomDialog(layout);
             }
         } else {
-            puntosTotalesMios += puntosTruc + puntosEnvid;
+            puntosTotalesMios += puntosTruc;
             actualizarMarcador2(puntosTotalesMios);
             showProgressDialog("L�stima, pierdes la mano");
         }
@@ -2290,14 +2302,19 @@ public class MainActivity extends Activity
                         case 1:
                             textoAccion2.setText("Quiero el envid");
                             animarTextoAccion(textoAccion2);
+                            cambiarBarraProgreso();
                             break;
                         case 2:
                             textoAccion2.setText("Quiero el vuelvo");
                             animarTextoAccion(textoAccion2);
+                            reiniciarBarraProgreso();
                             break;
                         case 3:
                             textoAccion2.setText("Quiero la falta");
                             animarTextoAccion(textoAccion2);
+                            if (!mMyId.equals(turno)) {
+                                reiniciarBarraProgreso();
+                            }else cambiarBarraProgreso();
                             break;
                     }
                     if (ganadorEnvid.equals(mMyId) && caso == 1) puntosEnvid = ENVID;
@@ -2308,7 +2325,7 @@ public class MainActivity extends Activity
                     if (mMyId.equals(turno)) {
                         desbloquearCartas();
                     }
-                    cambiarBarraProgreso();
+
                     break;
 
                 case 'V':
@@ -2327,20 +2344,25 @@ public class MainActivity extends Activity
                         case 1:
                             textoAccion2.setText("No quiero el envid");
                             animarTextoAccion(textoAccion2);
+                            cambiarBarraProgreso();
                             break;
                         case 2:
                             textoAccion2.setText("No quiero el vuelvo");
                             animarTextoAccion(textoAccion2);
+                            reiniciarBarraProgreso();
                             break;
                         case 3:
                             textoAccion2.setText("No quiero la falta");
                             animarTextoAccion(textoAccion2);
+                            if (!mMyId.equals(turno)) {
+                                reiniciarBarraProgreso();
+                            }else cambiarBarraProgreso();
                             break;
                     }
                     if (mMyId.equals(turno)) {
                         desbloquearCartas();
                     }
-                    cambiarBarraProgreso();
+
                     break;
 
                 case 'D':
