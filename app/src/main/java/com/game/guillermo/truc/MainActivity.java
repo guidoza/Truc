@@ -240,7 +240,6 @@ public class MainActivity extends Activity
         menuListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String text = "";
 
                 switch (v.getId()) {
                     case R.id.truco:
@@ -283,8 +282,6 @@ public class MainActivity extends Activity
                         break;
 
                 }
-
-                Toast.makeText(MainActivity.this, text, Toast.LENGTH_SHORT).show();
             }
         };
 
@@ -1465,18 +1462,19 @@ public class MainActivity extends Activity
     }
     void resetAnimaciones(){
         hayAnimaciones = false;
-        hayAnimacionRival3 = false;
+        hayAnimacionRival1 = false;
         hayAnimacionRival2 = false;
         hayAnimacionRival3 = false;
     }
     void resetMarcador(){
         marcador.setText("");
         marcador2.setText("");
+        puntosTotalesJugador2 = 0;
+        puntosTotalesMios = 0;
     }
 
     void deshacerAnimaciones(View view){
 
-        Log.d("RRRRRR", "Pos1: " + posTvJugador1 + " Pos2: " + posTvJugador2 + " Pos3: " + posTvJugador3);
 
         if(view.equals(tvJugador1)){
             tvJugador1.animate().translationX(inicio1.x).rotation(0).setDuration(500);
@@ -1752,6 +1750,8 @@ public class MainActivity extends Activity
                 //actualizaRonda();
                 enviarMensajeRonda();
 
+                Log.d("GGGGGG", "MisrondasGanadas"+misRondasGanadas);
+
                 //He ganado la partida
                 if (misRondasGanadas == 2) {
                     enviarMensajeHasPerdido();
@@ -1947,9 +1947,6 @@ public class MainActivity extends Activity
         if(noQuieroFalta && hayEnvid && !hayVuelvo) puntosEnvid = ENVID;
         if(noQuieroFalta && hayVuelvo) puntosEnvid = TORNE;
 
-        Log.d("GGGGG","PuntosTruc: "+puntosTruc);
-        Log.d("GGGGG","PuntosEnvid: "+puntosEnvid);
-
         if (hayEnvid) {
             LayoutInflater inflater = getLayoutInflater();
             ViewGroup container = null;
@@ -1981,10 +1978,8 @@ public class MainActivity extends Activity
             //Si no se han querido envids
             if(noQuiereEnvid.equals(mMyId) && !noQuiereEnvid.equals("nadie")){
                 puntosTotalesJugador2 += puntosEnvid;
-                Log.d("GGGGG", "Sumo los puntos al rival");
             }else if(!noQuiereEnvid.equals(mMyId) && !noQuiereEnvid.equals("nadie")){
                 puntosTotalesMios += puntosEnvid;
-                Log.d("GGGGG", "Me sumo los puntos");
             }
 
             //Gano truc
@@ -2022,8 +2017,6 @@ public class MainActivity extends Activity
         if(noQuieroFalta && hayEnvid && !hayVuelvo) puntosEnvid = ENVID;
         if(noQuieroFalta && hayVuelvo) puntosEnvid = TORNE;
 
-        Log.d("GGGGG","PuntosTruc: "+puntosTruc);
-        Log.d("GGGGG","PuntosEnvid: "+puntosEnvid);
 
         if (hayEnvid) {
             LayoutInflater inflater = getLayoutInflater();
@@ -2056,10 +2049,8 @@ public class MainActivity extends Activity
             //Si no se han querido envids
             if(noQuiereEnvid.equals(mMyId) && !noQuiereEnvid.equals("nadie")){
                 puntosTotalesJugador2 += puntosEnvid;
-                Log.d("GGGGG", "Sumo los puntos al rival");
             }else if(!noQuiereEnvid.equals(mMyId) && !noQuiereEnvid.equals("nadie")){
                 puntosTotalesMios += puntosEnvid;
-                Log.d("GGGGG", "Me sumo los puntos");
             }
             //Pierdo truc
             puntosTotalesJugador2 += puntosTruc;
@@ -2136,7 +2127,6 @@ public class MainActivity extends Activity
             if (!p.getParticipantId().equals(mMyId)) {
                 Games.RealTimeMultiplayer.sendReliableMessage(mGoogleApiClient, null, messageGanadorPartida,
                         mRoomId, p.getParticipantId());
-                Log.d("LLLLLLL", "He ganado la ronda, y la partida");
             }
         }
     }
@@ -2157,7 +2147,6 @@ public class MainActivity extends Activity
             if (!p.getParticipantId().equals(mMyId)) {
                 Games.RealTimeMultiplayer.sendReliableMessage(mGoogleApiClient, null, messageGanadorRonda,
                         mRoomId, p.getParticipantId());
-                Log.d("LLLLLLL", "No tiro primero, envio mensaje G comunicando que sume rondasGanadas");
             }
         }
     }
@@ -2401,7 +2390,6 @@ public class MainActivity extends Activity
                     break;
                 case 'G':
                     //Si ha habido empate
-                    Log.d("TTTTTT", "SUmo mis rondas ganadas");
                     if (hayEmpate) {
                         mostrarResultadosGanadorMano();
                     } else {
@@ -2429,11 +2417,8 @@ public class MainActivity extends Activity
 
                     resetAll();
                     desbloquearCartas();
-                    Log.d("TTTTTT", "Recibo las cartas");
                     String ssBuf = new String(buf, "UTF-8");
-                    Log.d("TTTTTT", ssBuf.toString());
                     String[] arrayCartasJ2 = ssBuf.split(" ");
-                    Log.d("TTTTTT", arrayCartasJ2.toString());
                     numCarta[0] = Integer.parseInt(arrayCartasJ2[1]);
                     numCarta[1] = Integer.parseInt(arrayCartasJ2[2]);
                     numCarta[2] = Integer.parseInt(arrayCartasJ2[3]);
@@ -2442,15 +2427,12 @@ public class MainActivity extends Activity
                     carta2 = new Carta(manoJugador.get(1).getNumero(), manoJugador.get(1).getPalo(), manoJugador.get(1).getValor());
                     carta3 = new Carta(manoJugador.get(2).getNumero(), manoJugador.get(2).getPalo(), manoJugador.get(2).getValor());
                     cerrarDialogoAndStart(6000);
-                    Log.d("TTTTTT", "Start game");
                     break;
 
                 case 'M':
-                    Log.d("TTTTTT", "Recibo el mensaje con la nueva mano");
                     String aux = new String(buf, "UTF-8");
                     String nuevaMano[] = aux.split(" ");
                     mano = nuevaMano[1];
-                    Log.d("TTTTTT", "Mano: " + mano + " ID: " + mMyId);
                     turno = mano;
                     inicializarMano();
                     break;
@@ -2697,7 +2679,6 @@ public class MainActivity extends Activity
                         laFalta.setVisibility(View.GONE);
 
                         Toast.makeText(getApplicationContext(), "Esperando al Jugador", Toast.LENGTH_SHORT).show();
-                        Log.d("LLLLLLL", "Me han comunicado cambio de turno");
                         reiniciarBarraProgreso();
 
                     }
@@ -2966,7 +2947,6 @@ public class MainActivity extends Activity
             //Mando las cartas
             enviarMensajeRepartir();
             cerrarDialogoAndStart(4000);
-            Log.d("TTTTTT", "Envio las cartas y start game");
         }
         //Sino soy mano, espero las cartas
 
@@ -2980,16 +2960,12 @@ public class MainActivity extends Activity
         }
 
         turno = mano;
-        Log.d("TTTTTT", "Cambio mano");
     }
 
     public void repartirTrasMano() {
-        Log.d("TTTTTT", "Mano: " + mano + " ID: " + mMyId);
         if (mMyId.equals(mano)) {
             cambiarMano();
             enviarMensajeMano();
-            Log.d("TTTTTT", "Mano: " + mano + " ID: " + mMyId);
-            Log.d("TTTTTT", "EnviarMensajeMano");
         }
     }
 
@@ -3157,27 +3133,27 @@ public class MainActivity extends Activity
                             if(view.equals(tvJugador1) && posTvJugador2 == 0){
                                 posTvJugador1 = 2;
                                 tvJugador1.bringToFront();
-                                tvJugador2.bringToFront();Log.d("RRRRRRR", "Actualizada pos2");
+                                tvJugador2.bringToFront();
                             }else if(view.equals(tvJugador1) && posTvJugador3 == 0){
                                 posTvJugador1 = 2;
                                 tvJugador1.bringToFront();
-                                tvJugador3.bringToFront();Log.d("RRRRRRR", "Actualizada pos2");
+                                tvJugador3.bringToFront();
                             }else if(view.equals(tvJugador2) && posTvJugador1 == 0){
                                 posTvJugador2 = 2;
                                 tvJugador2.bringToFront();
-                                tvJugador1.bringToFront();Log.d("RRRRRRR", "Actualizada pos2");
+                                tvJugador1.bringToFront();
                             }else if(view.equals(tvJugador2) && posTvJugador3 == 0){
                                 posTvJugador2 = 2;
                                 tvJugador2.bringToFront();
-                                tvJugador3.bringToFront();Log.d("RRRRRRR", "Actualizada pos2");
+                                tvJugador3.bringToFront();
                             }else if(view.equals(tvJugador3) && posTvJugador1 == 0){
                                 posTvJugador3 = 2;
                                 tvJugador3.bringToFront();
-                                tvJugador1.bringToFront();Log.d("RRRRRRR", "Actualizada pos2");
+                                tvJugador1.bringToFront();
                             }else if(view.equals(tvJugador3) && posTvJugador2 == 0){
                                 posTvJugador3 = 2;
                                 tvJugador3.bringToFront();
-                                tvJugador2.bringToFront();Log.d("RRRRRRR", "Actualizada pos2");
+                                tvJugador2.bringToFront();
                             }
 
 
@@ -3201,7 +3177,7 @@ public class MainActivity extends Activity
                                 posTvJugador3 = 3;
                                 tvJugador3.bringToFront();
                             }
-                            Log.d("RRRRRRR", "Actualizada pos3");
+
                         }
 
                         //Calculamos su valor para enviarlo
