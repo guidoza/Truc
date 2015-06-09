@@ -548,6 +548,7 @@ public class MainActivity extends Activity
                                 break;
                             //Retruque
                             case 1:
+                                hayTruc = true;
                                 enviarMensajeRetruc();
                                 cambiarBarraProgreso();
                                 break;
@@ -589,11 +590,13 @@ public class MainActivity extends Activity
                                 break;
                             //Cuatre val
                             case 1:
+                                hayRetruc = true;
                                 enviarMensajeCuatreVal();
                                 cambiarBarraProgreso();
                                 break;
                             //No quiero
                             case 2:
+                                hayTruc = true;
                                 enviarMensajeNoQuieroTruc(2);
                                 mostrarResultadosPerdedorMano();
                                 break;
@@ -630,11 +633,13 @@ public class MainActivity extends Activity
                                 break;
                             //Joc fora
                             case 1:
+                                hayCuatreVal = true;
                                 enviarMensajeJocFora();
                                 cambiarBarraProgreso();
                                 break;
                             //No quiero
                             case 2:
+                                hayRetruc = true;
                                 enviarMensajeNoQuieroTruc(3);
                                 mostrarResultadosPerdedorMano();
                                 break;
@@ -671,6 +676,7 @@ public class MainActivity extends Activity
                                 break;
                             //No quiero
                             case 1:
+                                hayCuatreVal = true;
                                 enviarMensajeNoQuieroTruc(4);
                                 mostrarResultadosPerdedorMano();
                                 break;
@@ -945,6 +951,7 @@ public class MainActivity extends Activity
                     Log.d(TAG, "Starting game (waiting room returned OK).");
                     showProgressDialog("�Empezamos!");
                     resetAnimaciones();
+                    resetMarcador();
                     inicializarMano();
                 } else if (responseCode == GamesActivityResultCodes.RESULT_LEFT_ROOM) {
                     // player indicated that they want to leave the room
@@ -1415,7 +1422,6 @@ public class MainActivity extends Activity
         noQuieroVuelvo = false;
         noQuieroFalta = false;
 
-
         textoAccion1.setVisibility(View.INVISIBLE);
         textoAccion2.setVisibility(View.INVISIBLE);
         segundos = 40;
@@ -1462,6 +1468,10 @@ public class MainActivity extends Activity
         hayAnimacionRival3 = false;
         hayAnimacionRival2 = false;
         hayAnimacionRival3 = false;
+    }
+    void resetMarcador(){
+        marcador.setText("");
+        marcador2.setText("");
     }
 
     void deshacerAnimaciones(View view){
@@ -1992,10 +2002,8 @@ public class MainActivity extends Activity
         if(hayGanadorFinal.equals("nadie")){
             repartirTrasMano();
         }else if(hayGanadorFinal.equals("YO")){
-            leaveRoom();
             switchToScreen(R.id.screen_win);
         }else if(hayGanadorFinal.equals("RIVAL")){
-            leaveRoom();
             switchToScreen(R.id.screen_lost);
         }
     }
@@ -2022,7 +2030,7 @@ public class MainActivity extends Activity
             ViewGroup container = null;
             //Pierdo truc gano envid
             if (ganadorEnvid.equals(mMyId)) {
-                View layout = inflater.inflate(R.layout.progres_content2, container);
+                View layout = inflater.inflate(R.layout.progres_content3, container);
                 puntosTotalesMios += puntosEnvid;
                 puntosTotalesJugador2 += puntosTruc;
                 if(puntosTotalesMios>=24){
@@ -2068,10 +2076,8 @@ public class MainActivity extends Activity
         if(hayGanadorFinal.equals("nadie")){
             repartirTrasMano();
         }else if(hayGanadorFinal.equals("YO")){
-            leaveRoom();
             switchToScreen(R.id.screen_win);
         }else if(hayGanadorFinal.equals("RIVAL")){
-            leaveRoom();
             switchToScreen(R.id.screen_lost);
         }
     }
@@ -2575,14 +2581,17 @@ public class MainActivity extends Activity
                         case 2:
                             textoAccion2.setText("No quiero el retruc");
                             animarTextoAccion(textoAccion2);
+                            hayTruc = true;
                             break;
                         case 3:
                             textoAccion2.setText("No quiero el quatre val");
                             animarTextoAccion(textoAccion2);
+                            hayRetruc = true;
                             break;
                         case 4:
                             textoAccion2.setText("No quiero el joc fora");
                             animarTextoAccion(textoAccion2);
+                            hayCuatreVal = true;
                             break;
                     }
                     mostrarResultadosGanadorMano();
@@ -2956,7 +2965,7 @@ public class MainActivity extends Activity
             carta3 = new Carta(manoJugador.get(2).getNumero(), manoJugador.get(2).getPalo(), manoJugador.get(2).getValor());
             //Mando las cartas
             enviarMensajeRepartir();
-            cerrarDialogoAndStart(6000);
+            cerrarDialogoAndStart(4000);
             Log.d("TTTTTT", "Envio las cartas y start game");
         }
         //Sino soy mano, espero las cartas

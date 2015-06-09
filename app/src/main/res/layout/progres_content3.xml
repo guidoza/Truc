@@ -20,7 +20,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/progres_ganador_envid"
         android:background="@drawable/fondo_boton_ganador"
-        android:text="Ganaste el envid:"
+        android:text="Ganaste el envid"
         android:layout_margin="5dp"
         android:padding="5dp"
         android:textColor="#FFFFFF"
