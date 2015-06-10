@@ -533,7 +533,7 @@ public class MainActivity extends Activity
                             //No quiero
                             case 2:
                                 enviarMensajeNoQuieroTruc(1);
-                                mostrarResultadosPerdedorMano();
+                                //mostrarResultadosPerdedorMano("PRIMERO");
                                 break;
                         }
                         return true;
@@ -574,7 +574,7 @@ public class MainActivity extends Activity
                             //No quiero
                             case 2:
                                 enviarMensajeNoQuieroTruc(2);
-                                mostrarResultadosPerdedorMano();
+                               // mostrarResultadosPerdedorMano("PRIMERO");
                                 break;
                         }
                         return true;
@@ -615,7 +615,7 @@ public class MainActivity extends Activity
                             //No quiero
                             case 2:
                                 enviarMensajeNoQuieroTruc(3);
-                                mostrarResultadosPerdedorMano();
+                               // mostrarResultadosPerdedorMano("PRIMERO");
                                 break;
                         }
                         return true;
@@ -651,7 +651,7 @@ public class MainActivity extends Activity
                             //No quiero
                             case 1:
                                 enviarMensajeNoQuieroTruc(4);
-                                mostrarResultadosPerdedorMano();
+                               // mostrarResultadosPerdedorMano("PRIMERO");
                                 break;
 
                         }
@@ -1732,8 +1732,8 @@ public class MainActivity extends Activity
                     }
                     //He ganado la mano
                     if (misRondasGanadas == 2) {
-                        enviarMensajeHasPerdido();
-                        mostrarResultadosGanadorMano();
+                        //enviarMensajeHasPerdido();
+                        mostrarResultadosGanadorMano("PRIMERO");
                     //Vuelvo a tirar
                     }else {
                         Toast.makeText(getApplicationContext(), "Es tu turno", Toast.LENGTH_SHORT).show();
@@ -1744,10 +1744,10 @@ public class MainActivity extends Activity
                     }
                 //Pierdo la ronda
                 }else {
-                    enviarMensajeSumaRonda();
+                    //enviarMensajeSumaRonda();
                     if ((ronda == 2 && misRondasGanadas == 0) || (ronda == 3)) {
                         //Pierdes en la segunda ronda o en la tercera
-                        mostrarResultadosPerdedorMano();
+                        mostrarResultadosPerdedorMano("PRIMERO");
                     }else {
                         cambiarTurno();
                         Toast.makeText(getApplicationContext(), "Esperando al Jugador", Toast.LENGTH_SHORT).show();
@@ -1872,13 +1872,13 @@ public class MainActivity extends Activity
     void casoEmpateTercero() {
         //Caso en el que gano
         if (ganadorRonda1.equals(mMyId)) {
-            enviarMensajeHasPerdido();
-            mostrarResultadosGanadorMano();
+            //enviarMensajeHasPerdido();
+            mostrarResultadosGanadorMano("PRIMERO");
 
             //Caso en el que pierdo
         } else {
-            enviarMensajeSumaRonda();
-            mostrarResultadosPerdedorMano();
+            //enviarMensajeSumaRonda();
+            mostrarResultadosPerdedorMano("PRIMERO");
         }
     }
 
@@ -1894,13 +1894,13 @@ public class MainActivity extends Activity
             //Si no soy mano, compruebo quien gana
         } else if (soyGanadorRondaEmpate()) {
             //Caso en el que gano
-            enviarMensajeHasPerdido();
-            mostrarResultadosGanadorMano();
+            //enviarMensajeHasPerdido();
+            mostrarResultadosGanadorMano("PRIMERO");
 
         } else {
             //Caso en el que pierdo
-            enviarMensajeSumaRonda();
-            mostrarResultadosPerdedorMano();
+            //enviarMensajeSumaRonda();
+            mostrarResultadosPerdedorMano("PRIMERO");
         }
     }
 
@@ -1970,7 +1970,7 @@ public class MainActivity extends Activity
         }, milisegundos);
     }
 
-    public void mostrarResultadosGanadorMano() {
+    public void mostrarResultadosGanadorMano(String contador) {
         Log.d("FFFFFFF", "Hay truc? "+hayTruc);
         Log.d("FFFFFFF", "Hay retruc? "+hayRetruc);
         Log.d("FFFFFFF", "Hay cuatre? "+hayCuatreVal);
@@ -1985,14 +1985,14 @@ public class MainActivity extends Activity
 
         puntosTotalesMios += (puntosTruc + puntosEnvid);
         marcador.setText("Yo: "+puntosTotalesMios);
-        actualizarMarcador2(puntosTotalesMios, "GANADOR");
+        actualizarMarcador2(puntosTotalesMios, "GANADOR", contador);
 
     }
 
-    public void mostrarResultadosPerdedorMano() {
+    public void mostrarResultadosPerdedorMano(String contador) {
         puntosTotalesMios += puntosEnvid;
         marcador.setText("Yo: "+puntosTotalesMios);
-        actualizarMarcador2(puntosTotalesMios, "PERDEDOR");
+        actualizarMarcador2(puntosTotalesMios, "PERDEDOR", contador);
 
     }
 
@@ -2246,8 +2246,8 @@ public class MainActivity extends Activity
         }
     }
 
-    public void actualizarMarcador2(int puntosTotales, String usuario) {
-        byte[] messageMarcador = ("Z " + puntosTotales +" " +usuario).getBytes();
+    public void actualizarMarcador2(int puntosTotales, String usuario, String contador) {
+        byte[] messageMarcador = ("Z " + puntosTotales +" " +usuario+" "+contador).getBytes();
         for (Participant p : mParticipants) {
             if (!p.getParticipantId().equals(mMyId)) {
                 Games.RealTimeMultiplayer.sendReliableMessage(mGoogleApiClient, null, messageMarcador,
@@ -2320,13 +2320,13 @@ public class MainActivity extends Activity
                     break;
                 case 'W':
                     //Caso en que pierdo
-                    mostrarResultadosPerdedorMano();
+                    //mostrarResultadosPerdedorMano();
                     break;
                 case 'G':
                     //Si ha habido empate
                     Log.d("TTTTTT", "SUmo mis rondas ganadas");
                     if (hayEmpate) {
-                        mostrarResultadosGanadorMano();
+                       // mostrarResultadosGanadorMano();
                     } else {
                         //Sumo rondas ganadas
                         if (ronda == 1) {
@@ -2335,7 +2335,7 @@ public class MainActivity extends Activity
                         misRondasGanadas++;
                         //Si llego a 2 he ganado
                         if (misRondasGanadas == 2) {
-                            mostrarResultadosGanadorMano();
+                          //  mostrarResultadosGanadorMano();
                         }
                     }
                     break;
@@ -2491,7 +2491,7 @@ public class MainActivity extends Activity
                             hayCuatreVal = true;
                             break;
                     }
-                    mostrarResultadosGanadorMano();
+                    mostrarResultadosGanadorMano("PRIMERO");
                     break;
 
                 case 'F':
@@ -2575,6 +2575,7 @@ public class MainActivity extends Activity
                     String otro5[] = aux8.split(" ");
                     puntosTotalesJugador2 = Integer.parseInt(otro5[1]);
                     String quien = otro5[2];
+                    String contador = otro5[3];
                     marcador2.setText("Rival: "+puntosTotalesJugador2);
 
                     String ganadorFinal = comprobarGanadorPartida();
@@ -2586,8 +2587,11 @@ public class MainActivity extends Activity
                             switchToScreen(R.id.screen_lost);
                         }
                     }else {
+
+
                         //Lo recibe el ganador
                         if(quien.equals("PERDEDOR")){
+                            if(contador.equals("PRIMERO")) mostrarResultadosGanadorMano("SEGUNDO");
                             if (hayEnvid) {
                                 LayoutInflater inflater = getLayoutInflater();
                                 ViewGroup container = null;
@@ -2604,10 +2608,15 @@ public class MainActivity extends Activity
                                 showProgressDialog("Enhorabuena, ganas la mano");
                             }
                             repartirTrasMano();
-                            Log.d("KKKKKKKK", "Repartiendo tras mano..."+mMyId);
+                            Log.d("KKKKKKKK", "Repartiendo tras mano..." + mMyId);
+
+
+
+
 
                         //Lo recibe el perdedor
                         }else if(quien.equals("GANADOR")){
+                            if(contador.equals("PRIMERO")) mostrarResultadosPerdedorMano("SEGUNDO");
                             if (hayEnvid) {
                                 LayoutInflater inflater = getLayoutInflater();
                                 ViewGroup container = null;
