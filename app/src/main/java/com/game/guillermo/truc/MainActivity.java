@@ -326,38 +326,6 @@ public class MainActivity extends Activity
 
         progressBar1 = (ProgressBar) findViewById(R.id.progres_segundos_1);
         progressBar2 = (ProgressBar) findViewById(R.id.progres_segundos_2);
-        mCountDownTimerJ1 = new CountDownTimer(40000, 1000) {
-
-            @Override
-            public void onTick(long millisUntilFinished) {
-                segundos--;
-                progressBar1.setProgress(segundos);
-
-            }
-
-            @Override
-            public void onFinish() {
-                //Do what you want
-                segundos--;
-                progressBar1.setProgress(segundos);
-            }
-        };
-        mCountDownTimerJ2 = new CountDownTimer(40000, 1000) {
-
-            @Override
-            public void onTick(long millisUntilFinished) {
-                segundos--;
-                progressBar2.setProgress(segundos);
-
-            }
-
-            @Override
-            public void onFinish() {
-                //Do what you want
-                segundos--;
-                progressBar2.setProgress(segundos);
-            }
-        };
 
         // Creamos el nuevo cliente de Google con acceso a Plus y Games
         mGoogleApiClient = new GoogleApiClient.Builder(this)
@@ -922,6 +890,7 @@ public class MainActivity extends Activity
                 if (responseCode == Activity.RESULT_OK) {
                     // ready to start playing
                     Log.d(TAG, "Starting game (waiting room returned OK).");
+                    resetPuntos();
                     showProgressDialog("�Empezamos!");
                     resetAnimaciones();
                     inicializarMano();
@@ -1072,6 +1041,7 @@ public class MainActivity extends Activity
     void leaveRoom() {
         Log.d(TAG, "Leaving room.");
         mSecondsLeft = 0;
+        resetPuntos();
         stopKeepingScreenOn();
         if (mRoomId != null) {
             Games.RealTimeMultiplayer.leave(mGoogleApiClient, this, mRoomId);
@@ -1182,6 +1152,7 @@ public class MainActivity extends Activity
         mParticipants = room.getParticipants();
         mMyId = room.getParticipantId(Games.Players.getCurrentPlayerId(mGoogleApiClient));
         remoteId = null;
+        resetPuntos();
 
         ArrayList<String> ids = room.getParticipantIds();
         for (int i = 0; i < ids.size(); i++) {
@@ -1391,6 +1362,7 @@ public class MainActivity extends Activity
         textoAccion1.setVisibility(View.INVISIBLE);
         textoAccion2.setVisibility(View.INVISIBLE);
         segundos = 40;
+
         progressBar1.setVisibility(View.INVISIBLE);
         progressBar2.setVisibility(View.INVISIBLE);
 
@@ -1412,6 +1384,7 @@ public class MainActivity extends Activity
             posTvJugador3 = 0;
             hayAnimaciones = false;
         }
+
         if(hayAnimacionRival1){
             Log.d("KKKKKK", "REiniciando animacion 1");
             tvMesaRival1.animate().scaleX((float) 1).scaleY((float) 1)
@@ -1431,6 +1404,12 @@ public class MainActivity extends Activity
             hayAnimacionRival3 = false;
         }
 
+    }
+    void resetPuntos(){
+        puntosTotalesMios = 0;
+        puntosTotalesJugador2 = 0;
+        marcador.setText("");
+        marcador2.setText("");
     }
     void resetAnimaciones(){
         hayAnimaciones = false;
@@ -1547,6 +1526,43 @@ public class MainActivity extends Activity
         if (mMyId.equals(idJugador2) && turno.equals(idJugador2)) turno = idJugador1;
 
     }
+    void inicializarBarraProgreso() {
+
+        mCountDownTimerJ1 = new CountDownTimer(40000, 1000) {
+
+            @Override
+            public void onTick(long millisUntilFinished) {
+                segundos--;
+                progressBar1.setProgress(segundos);
+
+            }
+
+            @Override
+            public void onFinish() {
+                //Do what you want
+                segundos--;
+                progressBar1.setProgress(segundos);
+            }
+        };
+        mCountDownTimerJ2 = new CountDownTimer(40000, 1000) {
+
+            @Override
+            public void onTick(long millisUntilFinished) {
+                segundos--;
+                progressBar2.setProgress(segundos);
+
+            }
+
+            @Override
+            public void onFinish() {
+                //Do what you want
+                segundos--;
+                progressBar2.setProgress(segundos);
+            }
+        };
+    }
+
+
     void cambiarBarraProgreso(){
         if(progressBar1.getVisibility() == View.VISIBLE){
             progressBar1.setVisibility(View.INVISIBLE);
@@ -1596,7 +1612,7 @@ public class MainActivity extends Activity
                     .rotationYBy(-5).rotation(5).rotationXBy(45).setDuration(500);
             view.bringToFront();
             hayAnimacionRival1 = true;
-
+            Log.d("KKKKKK","hay animacion carta rival 1 = true");
         }else if(view.equals(tvMesaRival2)) {
             view.setX(view.getX());
             view.setY(view.getY() - params.height - params.topMargin);
@@ -1607,7 +1623,7 @@ public class MainActivity extends Activity
                     .rotationXBy(45).setDuration(500);
             view.bringToFront();
             hayAnimacionRival2 = true;
-
+            Log.d("KKKKKK","hay animacion carta rival 2 = true");
         }else if(view.equals(tvMesaRival3)) {
             view.setX(view.getX() - 150);
             view.setY(view.getY() - params.height - params.topMargin);
@@ -1618,6 +1634,7 @@ public class MainActivity extends Activity
                     .rotationYBy(5).rotation(-5).rotationXBy(45).setDuration(500);
             view.bringToFront();
             hayAnimacionRival3 = true;
+            Log.d("KKKKKK","hay animacion carta rival 3 = true");
         }
     }
     void animarAparecerMenu(){
@@ -1674,7 +1691,8 @@ public class MainActivity extends Activity
             animacionAbrirCartas();
             progressBar1.setVisibility(View.VISIBLE);
             progressBar2.setVisibility(View.INVISIBLE);
-            reiniciarBarraProgreso();
+            inicializarBarraProgreso();
+            mCountDownTimerJ1.start();
             animarAparecerMenu();
         }
 
@@ -1686,7 +1704,8 @@ public class MainActivity extends Activity
             animacionAbrirCartas();
             progressBar2.setVisibility(View.VISIBLE);
             progressBar1.setVisibility(View.INVISIBLE);
-            reiniciarBarraProgreso();
+            inicializarBarraProgreso();
+            mCountDownTimerJ2.start();
             animarDesaparecerMenu();
 
         }
@@ -1997,9 +2016,9 @@ public class MainActivity extends Activity
     }
 
     String comprobarGanadorPartida(){
-        if(puntosTotalesMios>=24){
+        if(puntosTotalesMios >= 24){
             return "YO";
-        }else if(puntosTotalesJugador2>=24){
+        }else if(puntosTotalesJugador2 >= 24){
             return "RIVAL";
         }
         return "NADIE";
@@ -2301,18 +2320,21 @@ public class MainActivity extends Activity
                         } else valor1 = valor;
                         asignarImagenCarta(newCarta, tvMesaRival1);
                         animacionRival(tvMesaRival1);
+                        Log.d("KKKKK", "Animando la carta rival 1");
                     } else if (tvMesaRival2.getVisibility() == View.INVISIBLE) {
                         if (hayEmpate) {
                             valorEmpate = valor;
                         } else valor2 = valor;
                         asignarImagenCarta(newCarta, tvMesaRival2);
                         animacionRival(tvMesaRival2);
+                        Log.d("KKKKK", "Animando la carta rival 2");
                     } else if (tvMesaRival3.getVisibility() == View.INVISIBLE) {
                         if (hayEmpate) {
                             valorEmpate = valor;
                         } else valor3 = valor;
                         asignarImagenCarta(newCarta, tvMesaRival3);
                         animacionRival(tvMesaRival3);
+                        Log.d("KKKKK", "Animando la carta rival 3");
                     }
                     break;
                 case 'R':
@@ -2578,12 +2600,30 @@ public class MainActivity extends Activity
                     String contador = otro5[3];
                     marcador2.setText("Rival: "+puntosTotalesJugador2);
 
+                    if(quien.equals("PERDEDOR")){
+                        if(contador.equals("PRIMERO")) mostrarResultadosGanadorMano("SEGUNDO");
+                    }
+
+                    Log.d("HHHHHH", "Mis puntos: " + puntosTotalesMios);
+                    Log.d("HHHHHH", "Puntos rival: " + puntosTotalesJugador2);
+
                     String ganadorFinal = comprobarGanadorPartida();
                     Log.d("HHHHHH", "Ganador: "+ganadorFinal);
                     if(!ganadorFinal.equals("NADIE")){
                         if(ganadorFinal.equals("YO")){
+                            if(quien.equals("GANADOR")){
+                                if(contador.equals("PRIMERO"))mostrarResultadosPerdedorMano("SEGUNDO");
+                            }else if(quien.equals("PERDEDOR")){
+                                if(contador.equals("PRIMERO"))mostrarResultadosGanadorMano("SEGUNDO");
+                            }
                             switchToScreen(R.id.screen_win);
+
                         } else if (ganadorFinal.equals("RIVAL")){
+                            if(quien.equals("GANADOR")){
+                                if(contador.equals("PRIMERO"))mostrarResultadosPerdedorMano("SEGUNDO");
+                            }else if(quien.equals("PERDEDOR")){
+                                if(contador.equals("PRIMERO"))mostrarResultadosGanadorMano("SEGUNDO");
+                            }
                             switchToScreen(R.id.screen_lost);
                         }
                     }else {
@@ -2591,7 +2631,6 @@ public class MainActivity extends Activity
 
                         //Lo recibe el ganador
                         if(quien.equals("PERDEDOR")){
-                            if(contador.equals("PRIMERO")) mostrarResultadosGanadorMano("SEGUNDO");
                             if (hayEnvid) {
                                 LayoutInflater inflater = getLayoutInflater();
                                 ViewGroup container = null;
@@ -2641,6 +2680,8 @@ public class MainActivity extends Activity
 
                     }
                     break;
+
+
 
                 default:
 
