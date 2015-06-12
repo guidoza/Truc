@@ -264,7 +264,7 @@
 
                     <ProgressBar
                         android:id="@+id/progres_segundos_1"
-                        android:layout_width="match_parent"
+                        android:layout_width="50dp"
                         android:layout_height="match_parent"
                         android:layout_gravity="center"
                         style="@android:style/Widget.DeviceDefault.Light.ProgressBar.Horizontal"

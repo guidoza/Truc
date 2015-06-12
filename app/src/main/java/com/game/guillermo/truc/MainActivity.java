@@ -448,10 +448,12 @@ public class MainActivity extends Activity
                                 if (mMyId.equals(turno)) desbloquearCartas();
                                 comprobarGanadorEnvid();
                                 //puntos a sumar por la falta
-                                if(puntosTotalesJugador2<=12){
-                                    puntosEnvid = 24;
-                                } else if(puntosTotalesJugador2>12){
-                                    puntosEnvid = 24 - puntosTotalesJugador2;
+                                if(ganadorEnvid.equals(mMyId)){
+                                    if(puntosTotalesJugador2<=12){
+                                        puntosEnvid = 24;
+                                    } else if(puntosTotalesJugador2>12){
+                                        puntosEnvid = 24 - puntosTotalesJugador2;
+                                    }
                                 }
                                 enviarMensajeHayEnvidAndGanador(ganadorEnvid, 3);
                                 if(!turno.equals(mMyId)){
@@ -802,7 +804,7 @@ public class MainActivity extends Activity
                 tvMesaRival1.setVisibility(View.VISIBLE);
                 tvMesaRival1.animate().translationX(inicio1Rival.x).setDuration(500);
                 tvMesaRival1.animate().translationY(inicio1Rival.y)
-                        .rotationXBy(45).setDuration(500);
+                        .rotationXBy(30).setDuration(500);
 
 
             case R.id.button_sign_in:
@@ -1388,19 +1390,19 @@ public class MainActivity extends Activity
         if(hayAnimacionRival1){
             Log.d("KKKKKK", "REiniciando animacion 1");
             tvMesaRival1.animate().scaleX((float) 1).scaleY((float) 1)
-                    .rotationYBy(5).rotation(0).rotationXBy(-45).setDuration(0);
+                    .rotationYBy(5).rotation(0).rotationXBy(-30).setDuration(0);
             hayAnimacionRival1 = false;
         }
         if(hayAnimacionRival2){
             Log.d("KKKKKK", "REiniciando animacion 2");
             tvMesaRival2.animate().scaleX((float) 1).scaleY((float) 1)
-                    .rotationXBy(-45).setDuration(0);
+                    .rotationXBy(-30).setDuration(0);
             hayAnimacionRival2 = false;
         }
         if(hayAnimacionRival3){
             Log.d("KKKKKK", "REiniciando animacion 3");
             tvMesaRival3.animate().scaleX((float) 1).scaleY((float) 1)
-                    .rotationYBy(-5).rotation(0).rotationXBy(-45).setDuration(0);
+                    .rotationYBy(-5).rotation(0).rotationXBy(-30).setDuration(0);
             hayAnimacionRival3 = false;
         }
 
@@ -1427,15 +1429,15 @@ public class MainActivity extends Activity
             tvJugador1.animate().translationY(inicio1.y).rotation(0).setDuration(500);
 
             if(posTvJugador1 == 1){
-                view.animate().rotationXBy(-45).scaleX((float) 1).scaleY((float) 1)
+                view.animate().rotationXBy(-30).scaleX((float) 1).scaleY((float) 1)
                         .rotationYBy(5).setDuration(500);
 
             }else if(posTvJugador1 == 2){
-                view.animate().rotationXBy(-45)
+                view.animate().rotationXBy(-30)
                         .scaleX((float) 1).scaleY((float) 1).setDuration(500);
 
             }else if(posTvJugador1 == 3){
-                view.animate().rotationXBy(-45).scaleX((float) 1).scaleY((float) 1)
+                view.animate().rotationXBy(-30).scaleX((float) 1).scaleY((float) 1)
                         .rotationYBy(-5).setDuration(600);
             }
         }else if(view.equals(tvJugador2)){
@@ -1444,15 +1446,15 @@ public class MainActivity extends Activity
             view.bringToFront();
 
             if(posTvJugador2 == 1){
-                view.animate().rotationXBy(-45).scaleX((float) 1).scaleY((float) 1)
+                view.animate().rotationXBy(-30).scaleX((float) 1).scaleY((float) 1)
                         .rotationYBy(5).setDuration(500);
 
             }else if(posTvJugador2 == 2){
-                view.animate().rotationXBy(-45)
+                view.animate().rotationXBy(-30)
                         .scaleX((float) 1).scaleY((float) 1).setDuration(500);
 
             }else if(posTvJugador2 == 3){
-                view.animate().rotationXBy(-45).scaleX((float) 1).scaleY((float) 1)
+                view.animate().rotationXBy(-30).scaleX((float) 1).scaleY((float) 1)
                         .rotationYBy(-5).setDuration(600);
             }
         }else if(view.equals(tvJugador3)){
@@ -1461,15 +1463,15 @@ public class MainActivity extends Activity
             view.bringToFront();
 
             if(posTvJugador3 == 1){
-                view.animate().rotationXBy(-45).scaleX((float) 1).scaleY((float) 1)
+                view.animate().rotationXBy(-30).scaleX((float) 1).scaleY((float) 1)
                         .rotationYBy(5).setDuration(500);
 
             }else if(posTvJugador3 == 2){
-                view.animate().rotationXBy(-45)
+                view.animate().rotationXBy(-30)
                         .scaleX((float) 1).scaleY((float) 1).setDuration(500);
 
             }else if(posTvJugador3 == 3){
-                view.animate().rotationXBy(-45).scaleX((float) 1).scaleY((float) 1)
+                view.animate().rotationXBy(-30).scaleX((float) 1).scaleY((float) 1)
                         .rotationYBy(-5).setDuration(600);
             }
         }
@@ -1609,7 +1611,7 @@ public class MainActivity extends Activity
             view.setVisibility(View.VISIBLE);
             view.animate().translationX(inicio1Rival.x).setDuration(500);
             view.animate().translationY(inicio1Rival.y).scaleX((float) 0.8).scaleY((float) 0.8)
-                    .rotationYBy(-5).rotation(5).rotationXBy(45).setDuration(500);
+                    .rotationYBy(-5).rotation(5).rotationXBy(30).setDuration(500);
             view.bringToFront();
             hayAnimacionRival1 = true;
             Log.d("KKKKKK","hay animacion carta rival 1 = true");
@@ -1620,7 +1622,7 @@ public class MainActivity extends Activity
             view.setVisibility(View.VISIBLE);
             view.animate().translationX(inicio2Rival.x).setDuration(500);
             view.animate().translationY(inicio2Rival.y).scaleX((float) 0.8).scaleY((float) 0.8)
-                    .rotationXBy(45).setDuration(500);
+                    .rotationXBy(30).setDuration(500);
             view.bringToFront();
             hayAnimacionRival2 = true;
             Log.d("KKKKKK","hay animacion carta rival 2 = true");
@@ -1631,7 +1633,7 @@ public class MainActivity extends Activity
             view.setVisibility(View.VISIBLE);
             view.animate().translationX(inicio2Rival.x).setDuration(500);
             view.animate().translationY(inicio2Rival.y).scaleX((float) 0.8).scaleY((float) 0.8)
-                    .rotationYBy(5).rotation(-5).rotationXBy(45).setDuration(500);
+                    .rotationYBy(5).rotation(-5).rotationXBy(30).setDuration(500);
             view.bringToFront();
             hayAnimacionRival3 = true;
             Log.d("KKKKKK","hay animacion carta rival 3 = true");
@@ -1782,7 +1784,6 @@ public class MainActivity extends Activity
                     enviarMensajeHayEmpate();
                     casoEmpatePrimero();
                 } else {
-                    enviarMensajeHayEmpate();
                     casoEmpateTercero();
                 }
             }
@@ -1889,6 +1890,7 @@ public class MainActivity extends Activity
     }
 
     void casoEmpateTercero() {
+        Log.d("JJJJJJ", "ganador1ronda: "+ganadorRonda1+" MIid: "+mMyId);
         //Caso en el que gano
         if (ganadorRonda1.equals(mMyId)) {
             //enviarMensajeHasPerdido();
@@ -2600,8 +2602,12 @@ public class MainActivity extends Activity
                     String contador = otro5[3];
                     marcador2.setText("Rival: "+puntosTotalesJugador2);
 
+                    //Para que actualice los puntos antes de comprobar quien es el ganador
+                    //Primero y segundo para que no entre en un bucle
                     if(quien.equals("PERDEDOR")){
                         if(contador.equals("PRIMERO")) mostrarResultadosGanadorMano("SEGUNDO");
+                    }else if(quien.equals("GANADOR")){
+                        if(contador.equals("PRIMERO")) mostrarResultadosPerdedorMano("SEGUNDO");
                     }
 
                     Log.d("HHHHHH", "Mis puntos: " + puntosTotalesMios);
@@ -2611,19 +2617,23 @@ public class MainActivity extends Activity
                     Log.d("HHHHHH", "Ganador: "+ganadorFinal);
                     if(!ganadorFinal.equals("NADIE")){
                         if(ganadorFinal.equals("YO")){
+
+                            /*
                             if(quien.equals("GANADOR")){
                                 if(contador.equals("PRIMERO"))mostrarResultadosPerdedorMano("SEGUNDO");
                             }else if(quien.equals("PERDEDOR")){
                                 if(contador.equals("PRIMERO"))mostrarResultadosGanadorMano("SEGUNDO");
-                            }
+                            } */
                             switchToScreen(R.id.screen_win);
 
                         } else if (ganadorFinal.equals("RIVAL")){
+
+                            /*
                             if(quien.equals("GANADOR")){
                                 if(contador.equals("PRIMERO"))mostrarResultadosPerdedorMano("SEGUNDO");
                             }else if(quien.equals("PERDEDOR")){
                                 if(contador.equals("PRIMERO"))mostrarResultadosGanadorMano("SEGUNDO");
-                            }
+                            }*/
                             switchToScreen(R.id.screen_lost);
                         }
                     }else {
@@ -2655,7 +2665,6 @@ public class MainActivity extends Activity
 
                         //Lo recibe el perdedor
                         }else if(quien.equals("GANADOR")){
-                            if(contador.equals("PRIMERO")) mostrarResultadosPerdedorMano("SEGUNDO");
                             if (hayEnvid) {
                                 LayoutInflater inflater = getLayoutInflater();
                                 ViewGroup container = null;
@@ -3135,7 +3144,7 @@ public class MainActivity extends Activity
                             tvCartaMesa1.setVisibility(View.VISIBLE);
 
                             view.animate().x(destino.x).y(destino.y).rotation(0).setDuration(500);
-                            view.animate().rotationXBy(45).scaleX((float) 0.63).scaleY((float) 0.63)
+                            view.animate().rotationXBy(30).scaleX((float) 0.63).scaleY((float) 0.63)
                                     .rotationYBy(-5).rotation(5).setDuration(600);
                             view.setEnabled(false);
 
@@ -3159,7 +3168,7 @@ public class MainActivity extends Activity
                             destino.y = tvCartaMesa2.getY() + tvCartaMesa2.getHeight();
                             tvCartaMesa2.setVisibility(View.VISIBLE);
 
-                            view.animate().x(destino.x).y(destino.y).rotation(0).rotationXBy(45)
+                            view.animate().x(destino.x).y(destino.y).rotation(0).rotationXBy(30)
                                     .scaleX((float) 0.63).scaleY((float) 0.63).setDuration(500);
                             view.setEnabled(false);
 
@@ -3196,7 +3205,7 @@ public class MainActivity extends Activity
                             tvCartaMesa3.setVisibility(View.VISIBLE);
 
                             view.animate().x(destino.x).y(destino.y).rotation(0).setDuration(500);
-                            view.animate().rotationXBy(45).scaleX((float) 0.63).scaleY((float) 0.63)
+                            view.animate().rotationXBy(30).scaleX((float) 0.63).scaleY((float) 0.63)
                                     .rotationYBy(5).rotation(-5).setDuration(600);
                             view.setEnabled(false);
 
