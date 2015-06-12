@@ -1748,7 +1748,15 @@ public class MainActivity extends Activity
                     //He ganado la mano
                     if (misRondasGanadas == 2) {
                         //enviarMensajeHasPerdido();
-                        mostrarResultadosGanadorMano("PRIMERO");
+                        Handler handler = new Handler();
+                        handler.postDelayed(new Runnable() {
+                            public void run() {
+                                // acciones que se ejecutan tras los milisegundos
+                                mostrarResultadosGanadorMano("PRIMERO");
+
+                            }
+                        }, 1500);
+
                     //Vuelvo a tirar
                     }else {
                         Toast.makeText(getApplicationContext(), "Es tu turno", Toast.LENGTH_SHORT).show();
@@ -1762,7 +1770,15 @@ public class MainActivity extends Activity
                     //enviarMensajeSumaRonda();
                     if ((ronda == 2 && misRondasGanadas == 0) || (ronda == 3)) {
                         //Pierdes en la segunda ronda o en la tercera
-                        mostrarResultadosPerdedorMano("PRIMERO");
+                        Handler handler = new Handler();
+                        handler.postDelayed(new Runnable() {
+                            public void run() {
+                                // acciones que se ejecutan tras los milisegundos
+                                mostrarResultadosPerdedorMano("PRIMERO");
+
+                            }
+                        }, 1500);
+
                     }else {
                         cambiarTurno();
                         Toast.makeText(getApplicationContext(), "Esperando al Jugador", Toast.LENGTH_SHORT).show();
@@ -1888,12 +1904,28 @@ public class MainActivity extends Activity
         //Caso en el que gano
         if (ganadorRonda1.equals(mMyId)) {
             //enviarMensajeHasPerdido();
-            mostrarResultadosGanadorMano("PRIMERO");
+            Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                public void run() {
+                    // acciones que se ejecutan tras los milisegundos
+                    mostrarResultadosGanadorMano("PRIMERO");
+
+                }
+            }, 1500);
+
 
             //Caso en el que pierdo
         } else {
             //enviarMensajeSumaRonda();
-            mostrarResultadosPerdedorMano("PRIMERO");
+            Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                public void run() {
+                    // acciones que se ejecutan tras los milisegundos
+                    mostrarResultadosPerdedorMano("PRIMERO");
+
+                }
+            }, 1500);
+
         }
     }
 
@@ -1910,12 +1942,28 @@ public class MainActivity extends Activity
         } else if (soyGanadorRondaEmpate()) {
             //Caso en el que gano
             //enviarMensajeHasPerdido();
-            mostrarResultadosGanadorMano("PRIMERO");
+            Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                public void run() {
+                    // acciones que se ejecutan tras los milisegundos
+                    mostrarResultadosGanadorMano("PRIMERO");
+
+                }
+            }, 1500);
+
 
         } else {
             //Caso en el que pierdo
             //enviarMensajeSumaRonda();
-            mostrarResultadosPerdedorMano("PRIMERO");
+            Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                public void run() {
+                    // acciones que se ejecutan tras los milisegundos
+                    mostrarResultadosPerdedorMano("PRIMERO");
+
+                }
+            }, 1500);
+
         }
     }
 
@@ -2375,7 +2423,7 @@ public class MainActivity extends Activity
                     carta1 = new Carta(manoJugador.get(0).getNumero(), manoJugador.get(0).getPalo(), manoJugador.get(0).getValor());
                     carta2 = new Carta(manoJugador.get(1).getNumero(), manoJugador.get(1).getPalo(), manoJugador.get(1).getValor());
                     carta3 = new Carta(manoJugador.get(2).getNumero(), manoJugador.get(2).getPalo(), manoJugador.get(2).getValor());
-                    cerrarDialogoAndStart(5000);
+                    cerrarDialogoAndStart(4000);
                     break;
 
                 case 'M':
@@ -2509,7 +2557,15 @@ public class MainActivity extends Activity
                             hayCuatreVal = true;
                             break;
                     }
-                    mostrarResultadosGanadorMano("PRIMERO");
+                    Handler handler = new Handler();
+                    handler.postDelayed(new Runnable() {
+                        public void run() {
+                            // acciones que se ejecutan tras los milisegundos
+                            mostrarResultadosGanadorMano("PRIMERO");
+
+                        }
+                    }, 1500);
+
                     break;
 
                 case 'F':
@@ -2976,7 +3032,7 @@ public class MainActivity extends Activity
             carta3 = new Carta(manoJugador.get(2).getNumero(), manoJugador.get(2).getPalo(), manoJugador.get(2).getValor());
             //Mando las cartas
             enviarMensajeRepartir();
-            cerrarDialogoAndStart(5000);
+            cerrarDialogoAndStart(4000);
         }
         //Sino soy mano, espero las cartas
 
