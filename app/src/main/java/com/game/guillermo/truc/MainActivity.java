@@ -299,6 +299,11 @@ public class MainActivity extends Activity
         tvMesaRival1 = (ImageView) findViewById(R.id.carta1MesaRival);
         tvMesaRival2 = (ImageView) findViewById(R.id.carta2MesaRival);
         tvMesaRival3 = (ImageView) findViewById(R.id.carta3MesaRival);
+        tvMesaRival1.animate().rotationXBy(30).rotationYBy(-5).rotation(3).setDuration(0);
+        tvMesaRival2.animate().rotationXBy(30).setDuration(0);
+        tvMesaRival3.animate().rotationXBy(30).rotationYBy(5).rotation(-3).setDuration(0);
+
+
 
         tvMesaRival1.setVisibility(View.INVISIBLE);
         tvMesaRival2.setVisibility(View.INVISIBLE);
@@ -787,24 +792,7 @@ public class MainActivity extends Activity
 
         switch (v.getId()) {
             case R.id.button_single_player_2:
-                switchToScreen(R.id.screen_game);
-                tvJugador1.animate().rotation(-20).setDuration(750);
-                tvJugador3.animate().rotation(20).setDuration(750);
-                tvJugador1.animate().translationX(tvJugador1.getX() - 100).setDuration(750);
-                tvJugador3.animate().translationX(tvJugador3.getX() + 100).setDuration(750);
-                tvJugador1.animate().translationY(tvJugador1.getY() + 40).setDuration(750);
-                tvJugador3.animate().translationY(tvJugador3.getY() + 40).setDuration(750);
 
-                RelativeLayout.LayoutParams params =
-                        (RelativeLayout.LayoutParams) tvMesaRival1.getLayoutParams();
-
-                tvMesaRival1.setX(tvMesaRival1.getX() + 100);
-                tvMesaRival1.setY(tvMesaRival1.getY() - params.height - params.topMargin);
-
-                tvMesaRival1.setVisibility(View.VISIBLE);
-                tvMesaRival1.animate().translationX(inicio1Rival.x).setDuration(500);
-                tvMesaRival1.animate().translationY(inicio1Rival.y)
-                        .rotationXBy(30).setDuration(500);
 
 
             case R.id.button_sign_in:
@@ -1389,20 +1377,23 @@ public class MainActivity extends Activity
 
         if(hayAnimacionRival1){
             Log.d("KKKKKK", "REiniciando animacion 1");
-            tvMesaRival1.animate().scaleX((float) 1).scaleY((float) 1)
-                    .rotationYBy(5).rotation(0).rotationXBy(-30).setDuration(0);
+            tvMesaRival1.animate().scaleX((float) 1).scaleY((float) 1).setDuration(0);
+           // tvMesaRival1.animate().rotationXBy(-30).rotationYBy(5).rotation(0).setDuration(0);
+
             hayAnimacionRival1 = false;
         }
         if(hayAnimacionRival2){
             Log.d("KKKKKK", "REiniciando animacion 2");
-            tvMesaRival2.animate().scaleX((float) 1).scaleY((float) 1)
-                    .rotationXBy(-30).setDuration(0);
+            tvMesaRival2.animate().scaleX((float) 1).scaleY((float) 1).setDuration(0);
+            //tvMesaRival2.animate().rotationXBy(-30).setDuration(0);
+
             hayAnimacionRival2 = false;
         }
         if(hayAnimacionRival3){
             Log.d("KKKKKK", "REiniciando animacion 3");
-            tvMesaRival3.animate().scaleX((float) 1).scaleY((float) 1)
-                    .rotationYBy(-5).rotation(0).rotationXBy(-30).setDuration(0);
+            tvMesaRival3.animate().scaleX((float) 1).scaleY((float) 1).setDuration(0);
+            //tvMesaRival3.animate().rotationXBy(-30).rotationYBy(-5).rotation(0).setDuration(0);
+
             hayAnimacionRival3 = false;
         }
 
@@ -1609,9 +1600,10 @@ public class MainActivity extends Activity
             view.setY(view.getY() - params.height - params.topMargin);
 
             view.setVisibility(View.VISIBLE);
-            view.animate().translationX(inicio1Rival.x).setDuration(500);
-            view.animate().translationY(inicio1Rival.y).scaleX((float) 0.8).scaleY((float) 0.8)
-                    .rotationYBy(-5).rotation(5).rotationXBy(30).setDuration(500);
+            view.animate().translationX(inicio1Rival.x).scaleX((float) 0.8).setDuration(500);
+            view.animate().translationY(inicio1Rival.y).scaleY((float) 0.8).setDuration(500);
+            //view.animate().rotationXBy(30).rotationYBy(-5).rotation(5).setDuration(500);
+
             view.bringToFront();
             hayAnimacionRival1 = true;
             Log.d("KKKKKK","hay animacion carta rival 1 = true");
@@ -1620,9 +1612,10 @@ public class MainActivity extends Activity
             view.setY(view.getY() - params.height - params.topMargin);
 
             view.setVisibility(View.VISIBLE);
-            view.animate().translationX(inicio2Rival.x).setDuration(500);
-            view.animate().translationY(inicio2Rival.y).scaleX((float) 0.8).scaleY((float) 0.8)
-                    .rotationXBy(30).setDuration(500);
+            view.animate().translationX(inicio2Rival.x).scaleX((float) 0.8).setDuration(500);
+            view.animate().translationY(inicio2Rival.y).scaleY((float) 0.8).setDuration(500);
+            //view.animate().rotationXBy(30);
+
             view.bringToFront();
             hayAnimacionRival2 = true;
             Log.d("KKKKKK","hay animacion carta rival 2 = true");
@@ -1631,9 +1624,10 @@ public class MainActivity extends Activity
             view.setY(view.getY() - params.height - params.topMargin);
 
             view.setVisibility(View.VISIBLE);
-            view.animate().translationX(inicio2Rival.x).setDuration(500);
-            view.animate().translationY(inicio2Rival.y).scaleX((float) 0.8).scaleY((float) 0.8)
-                    .rotationYBy(5).rotation(-5).rotationXBy(30).setDuration(500);
+            view.animate().translationX(inicio3Rival.x).scaleX((float) 0.8).setDuration(500);
+            view.animate().translationY(inicio3Rival.y).scaleY((float) 0.8).setDuration(500);
+            //view.animate().rotationXBy(30).rotationYBy(5).rotation(-5).setDuration(500);
+
             view.bringToFront();
             hayAnimacionRival3 = true;
             Log.d("KKKKKK","hay animacion carta rival 3 = true");
@@ -3145,7 +3139,7 @@ public class MainActivity extends Activity
 
                             view.animate().x(destino.x).y(destino.y).rotation(0).setDuration(500);
                             view.animate().rotationXBy(30).scaleX((float) 0.63).scaleY((float) 0.63)
-                                    .rotationYBy(-5).rotation(5).setDuration(600);
+                                    .rotationYBy(-5).rotation(3).setDuration(500);
                             view.setEnabled(false);
 
                             if(view.equals(tvJugador1)){
@@ -3206,7 +3200,7 @@ public class MainActivity extends Activity
 
                             view.animate().x(destino.x).y(destino.y).rotation(0).setDuration(500);
                             view.animate().rotationXBy(30).scaleX((float) 0.63).scaleY((float) 0.63)
-                                    .rotationYBy(5).rotation(-5).setDuration(600);
+                                    .rotationYBy(5).rotation(-3).setDuration(500);
                             view.setEnabled(false);
 
                             if(view.equals(tvJugador1)){
