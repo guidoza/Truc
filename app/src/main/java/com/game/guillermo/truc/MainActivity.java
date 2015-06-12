@@ -2325,7 +2325,6 @@ public class MainActivity extends Activity
 
 
 
-
     /*
      * COMMUNICATIONS SECTION. Methods that implement the game's network
      * protocol.
