@@ -229,8 +229,8 @@ public class MainActivity extends Activity
     MaterialDialog.ButtonCallback callbackReinicio;
     ProgressBar progressBar1;
     ProgressBar progressBar2;
-    CountDownTimer mCountDownTimerJ1;
-    CountDownTimer mCountDownTimerJ2;
+    CountDownTimer mCountDownTimerJ1 = null;
+    CountDownTimer mCountDownTimerJ2 = null;
     PointF inicio1;
     PointF inicio2;
     PointF inicio3;
@@ -371,6 +371,10 @@ public class MainActivity extends Activity
         tvMesaRival1 = (ImageView) findViewById(R.id.carta1MesaRival);
         tvMesaRival2 = (ImageView) findViewById(R.id.carta2MesaRival);
         tvMesaRival3 = (ImageView) findViewById(R.id.carta3MesaRival);
+
+        tvMesaRival1.animate().rotationXBy(30).rotationYBy(-5).rotation(3).setDuration(0);
+        tvMesaRival2.animate().rotationXBy(30).setDuration(0);
+        tvMesaRival3.animate().rotationXBy(30).rotationYBy(5).rotation(-3).setDuration(0);
 
         tvMesaRival1.setVisibility(View.INVISIBLE);
         tvMesaRival2.setVisibility(View.INVISIBLE);
@@ -543,10 +547,12 @@ public class MainActivity extends Activity
                                 if (mMyId.equals(turno)) desbloquearCartas();
                                 comprobarGanadorEnvid();
                                 //puntos a sumar por la falta
-                                if(puntosTotalesJugador2<=12){
-                                    puntosEnvid = 24;
-                                } else if(puntosTotalesJugador2>12){
-                                    puntosEnvid = 24 - puntosTotalesJugador2;
+                                if(ganadorEnvid.equals(mMyId)){
+                                    if(puntosTotalesJugador2<=12){
+                                        puntosEnvid = 24;
+                                    } else if(puntosTotalesJugador2>12){
+                                        puntosEnvid = 24 - puntosTotalesJugador2;
+                                    }
                                 }
                                 enviarMensajeHayEnvidAndGanador(ganadorEnvid, 3);
                                 if(!turno.equals(mMyId)){
@@ -880,7 +886,7 @@ public class MainActivity extends Activity
 
         switch (v.getId()) {
             case R.id.button_single_player_2:
-                switchToScreen(R.id.screen_game);
+              /*  switchToScreen(R.id.screen_game);
                 tvJugador1.animate().rotation(-20).setDuration(750);
                 tvJugador3.animate().rotation(20).setDuration(750);
                 tvJugador1.animate().translationX(tvJugador1.getX() - 100).setDuration(750);
@@ -897,7 +903,7 @@ public class MainActivity extends Activity
                 tvMesaRival1.setVisibility(View.VISIBLE);
                 tvMesaRival1.animate().translationX(inicio1Rival.x).setDuration(500);
                 tvMesaRival1.animate().translationY(inicio1Rival.y)
-                        .rotationXBy(45).setDuration(500);
+                        .rotationXBy(30).setDuration(500); */
 
 
             case R.id.button_sign_in:
@@ -1511,6 +1517,7 @@ public class MainActivity extends Activity
 
             textoAccion1.setVisibility(View.INVISIBLE);
             textoAccion2.setVisibility(View.INVISIBLE);
+            if(mCountDownTimerJ1 != null && mCountDownTimerJ2 != null) cancelarBarraProgreso();
             segundos = 40;
 
             progressBar1.setVisibility(View.INVISIBLE);
@@ -1537,20 +1544,17 @@ public class MainActivity extends Activity
 
             if (hayAnimacionRival1) {
                 Log.d("KKKKKK", "REiniciando animacion 1");
-                tvMesaRival1.animate().scaleX((float) 1).scaleY((float) 1)
-                        .rotationYBy(5).rotation(0).rotationXBy(-45).setDuration(0);
+                tvMesaRival1.animate().scaleX((float) 1).scaleY((float) 1).setDuration(0);
                 hayAnimacionRival1 = false;
             }
             if (hayAnimacionRival2) {
                 Log.d("KKKKKK", "REiniciando animacion 2");
-                tvMesaRival2.animate().scaleX((float) 1).scaleY((float) 1)
-                        .rotationXBy(-45).setDuration(0);
+                tvMesaRival2.animate().scaleX((float) 1).scaleY((float) 1).setDuration(0);
                 hayAnimacionRival2 = false;
             }
             if (hayAnimacionRival3) {
                 Log.d("KKKKKK", "REiniciando animacion 3");
-                tvMesaRival3.animate().scaleX((float) 1).scaleY((float) 1)
-                        .rotationYBy(-5).rotation(0).rotationXBy(-45).setDuration(0);
+                tvMesaRival3.animate().scaleX((float) 1).scaleY((float) 1).setDuration(0);
                 hayAnimacionRival3 = false;
             }
         }
@@ -1621,15 +1625,15 @@ public class MainActivity extends Activity
             tvJugador1.animate().translationY(inicio1.y).rotation(0).setDuration(500);
 
             if(posTvJugador1 == 1){
-                view.animate().rotationXBy(-45).scaleX((float) 1).scaleY((float) 1)
+                view.animate().rotationXBy(-30).scaleX((float) 1).scaleY((float) 1)
                         .rotationYBy(5).setDuration(500);
 
             }else if(posTvJugador1 == 2){
-                view.animate().rotationXBy(-45)
+                view.animate().rotationXBy(-30)
                         .scaleX((float) 1).scaleY((float) 1).setDuration(500);
 
             }else if(posTvJugador1 == 3){
-                view.animate().rotationXBy(-45).scaleX((float) 1).scaleY((float) 1)
+                view.animate().rotationXBy(-30).scaleX((float) 1).scaleY((float) 1)
                         .rotationYBy(-5).setDuration(600);
             }
         }else if(view.equals(tvJugador2)){
@@ -1638,15 +1642,15 @@ public class MainActivity extends Activity
             view.bringToFront();
 
             if(posTvJugador2 == 1){
-                view.animate().rotationXBy(-45).scaleX((float) 1).scaleY((float) 1)
+                view.animate().rotationXBy(-30).scaleX((float) 1).scaleY((float) 1)
                         .rotationYBy(5).setDuration(500);
 
             }else if(posTvJugador2 == 2){
-                view.animate().rotationXBy(-45)
+                view.animate().rotationXBy(-30)
                         .scaleX((float) 1).scaleY((float) 1).setDuration(500);
 
             }else if(posTvJugador2 == 3){
-                view.animate().rotationXBy(-45).scaleX((float) 1).scaleY((float) 1)
+                view.animate().rotationXBy(-30).scaleX((float) 1).scaleY((float) 1)
                         .rotationYBy(-5).setDuration(600);
             }
         }else if(view.equals(tvJugador3)){
@@ -1655,15 +1659,15 @@ public class MainActivity extends Activity
             view.bringToFront();
 
             if(posTvJugador3 == 1){
-                view.animate().rotationXBy(-45).scaleX((float) 1).scaleY((float) 1)
+                view.animate().rotationXBy(-30).scaleX((float) 1).scaleY((float) 1)
                         .rotationYBy(5).setDuration(500);
 
             }else if(posTvJugador3 == 2){
-                view.animate().rotationXBy(-45)
+                view.animate().rotationXBy(-30)
                         .scaleX((float) 1).scaleY((float) 1).setDuration(500);
 
             }else if(posTvJugador3 == 3){
-                view.animate().rotationXBy(-45).scaleX((float) 1).scaleY((float) 1)
+                view.animate().rotationXBy(-30).scaleX((float) 1).scaleY((float) 1)
                         .rotationYBy(-5).setDuration(600);
             }
         }
@@ -1753,7 +1757,7 @@ public class MainActivity extends Activity
 
     }
 
-    void inicializarBarraProgreso() {
+    void iniciarBarraProgresoJ1() {
 
         mCountDownTimerJ1 = new CountDownTimer(40000, 1000) {
 
@@ -1770,7 +1774,9 @@ public class MainActivity extends Activity
                 segundos--;
                 progressBar1.setProgress(segundos);
             }
-        };
+        }.start();
+            }
+    void iniciarBarraProgresoJ2() {
         mCountDownTimerJ2 = new CountDownTimer(40000, 1000) {
 
             @Override
@@ -1786,7 +1792,7 @@ public class MainActivity extends Activity
                 segundos--;
                 progressBar2.setProgress(segundos);
             }
-        };
+        }.start();
     }
 
 
@@ -1796,13 +1802,13 @@ public class MainActivity extends Activity
             mCountDownTimerJ1.cancel();
             segundos = 40;
             progressBar2.setVisibility(View.VISIBLE);
-            mCountDownTimerJ2.start();
+            iniciarBarraProgresoJ2();
         }else if(progressBar2.getVisibility() == View.VISIBLE){
             progressBar2.setVisibility(View.INVISIBLE);
             mCountDownTimerJ2.cancel();
             segundos = 40;
             progressBar1.setVisibility(View.VISIBLE);
-            mCountDownTimerJ1.start();
+            iniciarBarraProgresoJ1();
         }
     }
 
@@ -1810,11 +1816,20 @@ public class MainActivity extends Activity
         if(progressBar1.getVisibility() == View.VISIBLE){
             mCountDownTimerJ1.cancel();
             segundos = 40;
-            mCountDownTimerJ1.start();
+            iniciarBarraProgresoJ1();
         }else if(progressBar2.getVisibility() == View.VISIBLE){
             mCountDownTimerJ2.cancel();
             segundos = 40;
-            mCountDownTimerJ2.start();
+            iniciarBarraProgresoJ2();
+        }
+    }
+
+    void cancelarBarraProgreso(){
+        if(progressBar1.getVisibility() == View.VISIBLE){
+            mCountDownTimerJ1.cancel();
+
+        }else if(progressBar2.getVisibility() == View.VISIBLE){
+            mCountDownTimerJ2.cancel();
         }
     }
 
@@ -1837,9 +1852,8 @@ public class MainActivity extends Activity
             view.setY(view.getY() - params.height - params.topMargin);
 
             view.setVisibility(View.VISIBLE);
-            view.animate().translationX(inicio1Rival.x).setDuration(500);
-            view.animate().translationY(inicio1Rival.y).scaleX((float) 0.8).scaleY((float) 0.8)
-                    .rotationYBy(-5).rotation(5).rotationXBy(45).setDuration(500);
+            view.animate().translationX(inicio1Rival.x).scaleX((float) 0.8).setDuration(500);
+            view.animate().translationY(inicio1Rival.y).scaleY((float) 0.8).setDuration(500);
             view.bringToFront();
             hayAnimacionRival1 = true;
             Log.d("KKKKKK","hay animacion carta rival 1 = true");
@@ -1848,9 +1862,8 @@ public class MainActivity extends Activity
             view.setY(view.getY() - params.height - params.topMargin);
 
             view.setVisibility(View.VISIBLE);
-            view.animate().translationX(inicio2Rival.x).setDuration(500);
-            view.animate().translationY(inicio2Rival.y).scaleX((float) 0.8).scaleY((float) 0.8)
-                    .rotationXBy(45).setDuration(500);
+            view.animate().translationX(inicio2Rival.x).scaleX((float) 0.8).setDuration(500);
+            view.animate().translationY(inicio2Rival.y).scaleY((float) 0.8).setDuration(500);
             view.bringToFront();
             hayAnimacionRival2 = true;
             Log.d("KKKKKK","hay animacion carta rival 2 = true");
@@ -1859,9 +1872,8 @@ public class MainActivity extends Activity
             view.setY(view.getY() - params.height - params.topMargin);
 
             view.setVisibility(View.VISIBLE);
-            view.animate().translationX(inicio2Rival.x).setDuration(500);
-            view.animate().translationY(inicio2Rival.y).scaleX((float) 0.8).scaleY((float) 0.8)
-                    .rotationYBy(5).rotation(-5).rotationXBy(45).setDuration(500);
+            view.animate().translationX(inicio3Rival.x).scaleX((float) 0.8).setDuration(500);
+            view.animate().translationY(inicio3Rival.y).scaleY((float) 0.8).setDuration(500);
             view.bringToFront();
             hayAnimacionRival3 = true;
             Log.d("KKKKKK","hay animacion carta rival 3 = true");
@@ -1926,8 +1938,7 @@ public class MainActivity extends Activity
                 animacionAbrirCartas();
                 progressBar1.setVisibility(View.VISIBLE);
                 progressBar2.setVisibility(View.INVISIBLE);
-                inicializarBarraProgreso();
-                mCountDownTimerJ1.start();
+                iniciarBarraProgresoJ1();
                 animarAparecerMenu();
             }
 
@@ -1939,8 +1950,7 @@ public class MainActivity extends Activity
                 animacionAbrirCartas();
                 progressBar2.setVisibility(View.VISIBLE);
                 progressBar1.setVisibility(View.INVISIBLE);
-                inicializarBarraProgreso();
-                mCountDownTimerJ2.start();
+                iniciarBarraProgresoJ2();
                 animarDesaparecerMenu();
 
             }
@@ -2042,7 +2052,15 @@ public class MainActivity extends Activity
                         //He ganado la mano
                         if (misRondasGanadas == 2) {
                             //enviarMensajeHasPerdido();
-                            mostrarResultadosGanadorMano("PRIMERO");
+                            Handler handler = new Handler();
+                            handler.postDelayed(new Runnable() {
+                                public void run() {
+                                    // acciones que se ejecutan tras los milisegundos
+                                    mostrarResultadosGanadorMano("PRIMERO");
+
+                                }
+                            }, 1500);
+
                             //Vuelvo a tirar
                         } else {
                             Toast.makeText(getApplicationContext(), "Es tu turno", Toast.LENGTH_SHORT).show();
@@ -2056,7 +2074,14 @@ public class MainActivity extends Activity
                         //enviarMensajeSumaRonda();
                         if ((ronda == 2 && misRondasGanadas == 0) || (ronda == 3)) {
                             //Pierdes en la segunda ronda o en la tercera
-                            mostrarResultadosPerdedorMano("PRIMERO");
+                            Handler handler = new Handler();
+                            handler.postDelayed(new Runnable() {
+                                public void run() {
+                                    // acciones que se ejecutan tras los milisegundos
+                                    mostrarResultadosPerdedorMano("PRIMERO");
+                                }
+                            }, 1500);
+
                         } else {
                             cambiarTurno();
                             Toast.makeText(getApplicationContext(), "Esperando al Jugador", Toast.LENGTH_SHORT).show();
@@ -2072,7 +2097,6 @@ public class MainActivity extends Activity
                         enviarMensajeHayEmpate();
                         casoEmpatePrimero();
                     } else {
-                        enviarMensajeHayEmpate();
                         casoEmpateTercero();
                     }
                 }
@@ -2110,12 +2134,25 @@ public class MainActivity extends Activity
         //Caso en el que gano
         if (ganadorRonda1.equals(mMyId)) {
             //enviarMensajeHasPerdido();
-            mostrarResultadosGanadorMano("PRIMERO");
+            Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                public void run() {
+                    // acciones que se ejecutan tras los milisegundos
+                    mostrarResultadosGanadorMano("PRIMERO");
+
+                }
+            }, 1500);
 
             //Caso en el que pierdo
         } else {
             //enviarMensajeSumaRonda();
-            mostrarResultadosPerdedorMano("PRIMERO");
+            Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                public void run() {
+                    // acciones que se ejecutan tras los milisegundos
+                    mostrarResultadosPerdedorMano("PRIMERO");
+                }
+            }, 1500);
         }
     }
 
@@ -2132,12 +2169,25 @@ public class MainActivity extends Activity
         } else if (soyGanadorRondaEmpate()) {
             //Caso en el que gano
             //enviarMensajeHasPerdido();
-            mostrarResultadosGanadorMano("PRIMERO");
+            Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                public void run() {
+                    // acciones que se ejecutan tras los milisegundos
+                    mostrarResultadosGanadorMano("PRIMERO");
+
+                }
+            }, 1500);
 
         } else {
             //Caso en el que pierdo
             //enviarMensajeSumaRonda();
-            mostrarResultadosPerdedorMano("PRIMERO");
+            Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                public void run() {
+                    // acciones que se ejecutan tras los milisegundos
+                    mostrarResultadosPerdedorMano("PRIMERO");
+                }
+            }, 1500);
         }
     }
 
@@ -2876,7 +2926,7 @@ public class MainActivity extends Activity
                         carta1 = new Carta(manoJugador.get(0).getNumero(), manoJugador.get(0).getPalo(), manoJugador.get(0).getValor());
                         carta2 = new Carta(manoJugador.get(1).getNumero(), manoJugador.get(1).getPalo(), manoJugador.get(1).getValor());
                         carta3 = new Carta(manoJugador.get(2).getNumero(), manoJugador.get(2).getPalo(), manoJugador.get(2).getValor());
-                        cerrarDialogoAndStart(5000);
+                        cerrarDialogoAndStart(4000);
                     }
 
                     else if(numeroJugadores == 4){
@@ -3050,7 +3100,14 @@ public class MainActivity extends Activity
                             hayCuatreVal = true;
                             break;
                     }
-                    mostrarResultadosGanadorMano("PRIMERO");
+                    Handler handler = new Handler();
+                    handler.postDelayed(new Runnable() {
+                        public void run() {
+                            // acciones que se ejecutan tras los milisegundos
+                            mostrarResultadosGanadorMano("PRIMERO");
+
+                        }
+                    }, 1500);
                     break;
 
                 case 'F':
@@ -3137,8 +3194,12 @@ public class MainActivity extends Activity
                     String contador = otro5[3];
                     marcador2.setText("Rival: "+puntosTotalesJugador2);
 
+                    //Para que actualice los puntos antes de comprobar quien es el ganador
+                    //Primero y segundo para que no entre en un bucle
                     if(quien.equals("PERDEDOR")){
                         if(contador.equals("PRIMERO")) mostrarResultadosGanadorMano("SEGUNDO");
+                    }else if(quien.equals("GANADOR")) {
+                        if (contador.equals("PRIMERO")) mostrarResultadosPerdedorMano("SEGUNDO");
                     }
 
                     Log.d("HHHHHH", "Mis puntos: " + puntosTotalesMios);
@@ -3148,19 +3209,20 @@ public class MainActivity extends Activity
                     Log.d("HHHHHH", "Ganador: "+ganadorFinal);
                     if(!ganadorFinal.equals("NADIE")){
                         if(ganadorFinal.equals("YO")){
+                            /*
                             if(quien.equals("GANADOR")){
                                 if(contador.equals("PRIMERO"))mostrarResultadosPerdedorMano("SEGUNDO");
                             }else if(quien.equals("PERDEDOR")){
                                 if(contador.equals("PRIMERO"))mostrarResultadosGanadorMano("SEGUNDO");
-                            }
+                            } */
                             switchToScreen(R.id.screen_win);
 
                         } else if (ganadorFinal.equals("RIVAL")){
-                            if(quien.equals("GANADOR")){
+                           /* if(quien.equals("GANADOR")){
                                 if(contador.equals("PRIMERO"))mostrarResultadosPerdedorMano("SEGUNDO");
                             }else if(quien.equals("PERDEDOR")){
                                 if(contador.equals("PRIMERO"))mostrarResultadosGanadorMano("SEGUNDO");
-                            }
+                            } */
                             switchToScreen(R.id.screen_lost);
                         }
                     }else {
@@ -3192,7 +3254,6 @@ public class MainActivity extends Activity
 
                         //Lo recibe el perdedor
                         }else if(quien.equals("GANADOR")){
-                            if(contador.equals("PRIMERO")) mostrarResultadosPerdedorMano("SEGUNDO");
                             if (hayEnvid) {
                                 LayoutInflater inflater = getLayoutInflater();
                                 ViewGroup container = null;
@@ -3606,7 +3667,7 @@ public class MainActivity extends Activity
             carta3 = new Carta(manoJugador.get(2).getNumero(), manoJugador.get(2).getPalo(), manoJugador.get(2).getValor());
             //Mando las cartas
             enviarMensajeRepartir();
-            cerrarDialogoAndStart(5000);
+            cerrarDialogoAndStart(4000);
         }
         //Sino soy mano, espero las cartas
 
@@ -3789,8 +3850,8 @@ public class MainActivity extends Activity
                             tvCartaMesa1.setVisibility(View.VISIBLE);
 
                             view.animate().x(destino.x).y(destino.y).rotation(0).setDuration(500);
-                            view.animate().rotationXBy(45).scaleX((float) 0.63).scaleY((float) 0.63)
-                                    .rotationYBy(-5).rotation(5).setDuration(600);
+                            view.animate().rotationXBy(30).scaleX((float) 0.63).scaleY((float) 0.63)
+                                    .rotationYBy(-5).rotation(3).setDuration(500);
                             view.setEnabled(false);
 
                             if(view.equals(tvJugador1)){
@@ -3813,7 +3874,7 @@ public class MainActivity extends Activity
                             destino.y = tvCartaMesa2.getY() + tvCartaMesa2.getHeight();
                             tvCartaMesa2.setVisibility(View.VISIBLE);
 
-                            view.animate().x(destino.x).y(destino.y).rotation(0).rotationXBy(45)
+                            view.animate().x(destino.x).y(destino.y).rotation(0).rotationXBy(30)
                                     .scaleX((float) 0.63).scaleY((float) 0.63).setDuration(500);
                             view.setEnabled(false);
 
@@ -3850,8 +3911,8 @@ public class MainActivity extends Activity
                             tvCartaMesa3.setVisibility(View.VISIBLE);
 
                             view.animate().x(destino.x).y(destino.y).rotation(0).setDuration(500);
-                            view.animate().rotationXBy(45).scaleX((float) 0.63).scaleY((float) 0.63)
-                                    .rotationYBy(5).rotation(-5).setDuration(600);
+                            view.animate().rotationXBy(30).scaleX((float) 0.63).scaleY((float) 0.63)
+                                    .rotationYBy(-5).rotation(3).setDuration(500);
                             view.setEnabled(false);
 
                             if(view.equals(tvJugador1)){
