@@ -293,11 +293,34 @@ public class MainActivity extends Activity
     ImageView tvMesaJ4_C1; //Cartas de la mesa del jugador 4
     ImageView tvMesaJ4_C2;
     ImageView tvMesaJ4_C3;
+    ImageButton truc_4J;
+    ImageButton envid_4J;
+    ImageButton meVoy_4J;
+    ImageButton retruque_4J;
+    ImageButton jocFora_4J;
+    ImageButton salir_4J;
+    ImageButton laFalta_4J;
+    ImageButton quatreVal_4J;
 
     //TextViews
     TextView txtNumeroJugador;
 
     //Otros objetos
+    PointF inicio1J1;
+    PointF inicio2J1;
+    PointF inicio3J1;
+    PointF inicio1RivalJ2;
+    PointF inicio2RivalJ2;
+    PointF inicio3RivalJ2;
+    PointF inicio1RivalJ3;
+    PointF inicio2RivalJ3;
+    PointF inicio3RivalJ3;
+    PointF inicio1RivalJ4;
+    PointF inicio2RivalJ4;
+    PointF inicio3RivalJ4;
+    private float xDelta_4J;
+    private float yDelta_4J;
+    FabToolbar actionButton_4J;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -423,6 +446,29 @@ public class MainActivity extends Activity
         tvMesaJ4_C1 = (ImageView) findViewById(R.id.carta1MesaJ4);
         tvMesaJ4_C2 = (ImageView) findViewById(R.id.carta2MesaJ4);
         tvMesaJ4_C3 = (ImageView) findViewById(R.id.carta3MesaJ4);
+
+        inicio1J1 = new PointF(tvJugador1_4J.getX(), tvJugador1_4J.getY());
+        inicio2J1 = new PointF(tvJugador2_4J.getX(), tvJugador2_4J.getY());
+        inicio3J1 = new PointF(tvJugador3_4J.getX(), tvJugador3_4J.getY());
+        inicio1RivalJ2 = new PointF(tvMesaJ2_C1.getX(), tvMesaJ2_C1.getY());
+        inicio2RivalJ2 = new PointF(tvMesaJ2_C2.getX(), tvMesaJ2_C2.getY());
+        inicio3RivalJ2 = new PointF(tvMesaJ2_C3.getX(), tvMesaJ2_C3.getY());
+        inicio1RivalJ3 = new PointF(tvMesaJ3_C1.getX(), tvMesaJ3_C1.getY());
+        inicio2RivalJ3 = new PointF(tvMesaJ3_C2.getX(), tvMesaJ3_C2.getY());
+        inicio3RivalJ3 = new PointF(tvMesaJ3_C3.getX(), tvMesaJ3_C3.getY());
+        inicio1RivalJ4 = new PointF(tvMesaJ4_C1.getX(), tvMesaJ4_C1.getY());
+        inicio2RivalJ4 = new PointF(tvMesaJ4_C2.getX(), tvMesaJ4_C2.getY());
+        inicio3RivalJ4 = new PointF(tvMesaJ4_C3.getX(), tvMesaJ4_C3.getY());
+
+        actionButton_4J = (FabToolbar) findViewById(R.id.fab_toolbar_4J);
+        truc_4J = (ImageButton) findViewById(R.id.truco_4J);
+        envid_4J = (ImageButton) findViewById(R.id.envido_4J);
+        meVoy_4J = (ImageButton) findViewById(R.id.me_voy_4J);
+        retruque_4J = (ImageButton) findViewById(R.id.retruco_4J);
+        quatreVal_4J = (ImageButton) findViewById(R.id.quatre_4J);
+        jocFora_4J = (ImageButton) findViewById(R.id.joc_fora_4J);
+        salir_4J = (ImageButton) findViewById(R.id.salir_4J);
+        laFalta_4J = (ImageButton) findViewById(R.id.la_falta_4J);
 
         txtNumeroJugador = (TextView) findViewById(R.id.textoNumeroJugador);
 
@@ -885,26 +931,6 @@ public class MainActivity extends Activity
         Intent intent;
 
         switch (v.getId()) {
-            case R.id.button_single_player_2:
-              /*  switchToScreen(R.id.screen_game);
-                tvJugador1.animate().rotation(-20).setDuration(750);
-                tvJugador3.animate().rotation(20).setDuration(750);
-                tvJugador1.animate().translationX(tvJugador1.getX() - 100).setDuration(750);
-                tvJugador3.animate().translationX(tvJugador3.getX() + 100).setDuration(750);
-                tvJugador1.animate().translationY(tvJugador1.getY() + 40).setDuration(750);
-                tvJugador3.animate().translationY(tvJugador3.getY() + 40).setDuration(750);
-
-                RelativeLayout.LayoutParams params =
-                        (RelativeLayout.LayoutParams) tvMesaRival1.getLayoutParams();
-
-                tvMesaRival1.setX(tvMesaRival1.getX() + 100);
-                tvMesaRival1.setY(tvMesaRival1.getY() - params.height - params.topMargin);
-
-                tvMesaRival1.setVisibility(View.VISIBLE);
-                tvMesaRival1.animate().translationX(inicio1Rival.x).setDuration(500);
-                tvMesaRival1.animate().translationY(inicio1Rival.y)
-                        .rotationXBy(30).setDuration(500); */
-
 
             case R.id.button_sign_in:
                 // user wants to sign in
@@ -1943,9 +1969,7 @@ public class MainActivity extends Activity
             }
 
             if (!mMyId.equals(turno) && ronda == 1) {
-                tvJugador1.setEnabled(false);
-                tvJugador2.setEnabled(false);
-                tvJugador3.setEnabled(false);
+                bloquearCartas();
                 Toast.makeText(getApplicationContext(), "Esperando al Jugador", Toast.LENGTH_SHORT).show();
                 animacionAbrirCartas();
                 progressBar2.setVisibility(View.VISIBLE);
@@ -1965,31 +1989,9 @@ public class MainActivity extends Activity
                 asignarImagenCarta(carta3, tvJugador3_4J);
 
 
-                tvJugador1_4J.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        // if (!hayEmpate) {
-                        cartaSeleccionada();
-                        // } else cartaSeleccionadaEmpate(view);
-
-                    }
-                });
-                tvJugador2_4J.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        // if (!hayEmpate) {
-                        cartaSeleccionada();
-                        // } else cartaSeleccionadaEmpate(view);
-                    }
-                });
-                tvJugador3_4J.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        //   if (!hayEmpate) {
-                        cartaSeleccionada();
-                        //    } else cartaSeleccionadaEmpate(view);
-                    }
-                });
+                tvJugador1_4J.setOnTouchListener(new MyTouchListener4J());
+                tvJugador2_4J.setOnTouchListener(new MyTouchListener4J());
+                tvJugador3_4J.setOnTouchListener(new MyTouchListener4J());
 
                 if (mMyId.equals(turno) && ronda == 1) {
                     Toast.makeText(getApplicationContext(), "Es tu turno", Toast.LENGTH_SHORT).show();
@@ -2104,13 +2106,10 @@ public class MainActivity extends Activity
             break;
 
             case 4:
-                ponerCartaSobreMesa(view);
+
                 //Envio el valor de la carta
                 byte[] messageCarta2 = ("$" + aux.toString()).getBytes();
                 enviarValorCarta(messageCarta2);
-                tvJugador1.setEnabled(false);
-                tvJugador2.setEnabled(false);
-                tvJugador3.setEnabled(false);
                 cambiarTurno();
                 Toast.makeText(getApplicationContext(), "Esperando al Jugador", Toast.LENGTH_SHORT).show();
                 enviarMensajeTurno();
@@ -2382,7 +2381,7 @@ public class MainActivity extends Activity
     }
 
     public void enviarMensajeRepartir() {
-        byte[] messageRepartir = ("S" + " " + sCartasJ2).getBytes();
+        byte[] messageRepartir = ("S" + " " + sCartasJ2+ " " + sCartasJ3+ " " + sCartasJ4).getBytes();
         for (Participant p : mParticipants) {
             if (!p.getParticipantId().equals(mMyId)) {
                 Games.RealTimeMultiplayer.sendReliableMessage(mGoogleApiClient, null, messageRepartir,
@@ -3283,29 +3282,61 @@ public class MainActivity extends Activity
 
                 default:
 
-                    String turnoNuevo = new String(buf, "UTF-8");
-                    turno = turnoNuevo;
+                    switch (numeroJugadores) {
 
-                    if (mMyId.equals(turno) && misRondasGanadas < 2) {
-                        if(ronda > 1 && !hayEnvid){
+                        case 2:
+                        String turnoNuevo = new String(buf, "UTF-8");
+                        turno = turnoNuevo;
+
+                        if (mMyId.equals(turno) && misRondasGanadas < 2) {
+                            if (ronda > 1 && !hayEnvid) {
+                                envid.setVisibility(View.GONE);
+                                laFalta.setVisibility(View.GONE);
+                            }
+                            desbloquearCartas();
+                            Toast.makeText(getApplicationContext(), "Es tu turno", Toast.LENGTH_SHORT).show();
+                            cambiarBarraProgreso();
+                            animarAparecerMenu();
+                        }
+
+                        if (!mMyId.equals(turno) && misRondasGanadas < 2) {
+                            bloquearCartas();
                             envid.setVisibility(View.GONE);
                             laFalta.setVisibility(View.GONE);
+
+                            Toast.makeText(getApplicationContext(), "Esperando al Jugador", Toast.LENGTH_SHORT).show();
+                            Log.d("LLLLLLL", "Me han comunicado cambio de turno");
+                            reiniciarBarraProgreso();
+
                         }
-                        desbloquearCartas();
-                        Toast.makeText(getApplicationContext(), "Es tu turno", Toast.LENGTH_SHORT).show();
-                        cambiarBarraProgreso();
-                        animarAparecerMenu();
-                    }
+                            break;
 
-                    if (!mMyId.equals(turno) && misRondasGanadas < 2) {
-                        bloquearCartas();
-                        envid.setVisibility(View.GONE);
-                        laFalta.setVisibility(View.GONE);
+                        case 4:
+                            String turnoNuevo4J = new String(buf, "UTF-8");
+                            turno = turnoNuevo4J;
 
-                        Toast.makeText(getApplicationContext(), "Esperando al Jugador", Toast.LENGTH_SHORT).show();
-                        Log.d("LLLLLLL", "Me han comunicado cambio de turno");
-                        reiniciarBarraProgreso();
+                            if (mMyId.equals(turno) && misRondasGanadas < 2) {
+                                /*if (ronda > 1 && !hayEnvid) {
+                                    envid.setVisibility(View.GONE);
+                                    laFalta.setVisibility(View.GONE);
+                                }*/
+                                desbloquearCartas();
+                                Toast.makeText(getApplicationContext(), "Es tu turno", Toast.LENGTH_SHORT).show();
+                                //cambiarBarraProgreso();
+                                animarAparecerMenu();
+                            }
 
+                            if (!mMyId.equals(turno) && misRondasGanadas < 2) {
+                                bloquearCartas();
+                                envid.setVisibility(View.GONE);
+                                laFalta.setVisibility(View.GONE);
+
+                                Toast.makeText(getApplicationContext(), "Esperando al Jugador", Toast.LENGTH_SHORT).show();
+                                Log.d("LLLLLLL", "Me han comunicado cambio de turno");
+                                //reiniciarBarraProgreso();
+
+                            }
+                            break;
                     }
                     break;
 
@@ -3380,8 +3411,7 @@ public class MainActivity extends Activity
     final static int[] CLICKABLES = {
             R.id.button_accept_popup_invitation, R.id.button_invite_players,
             R.id.button_quick_game, R.id.button_see_invitations, R.id.button_sign_in,
-            R.id.button_sign_out, R.id.button_single_player,
-            R.id.button_single_player_2,R.id.button_quick_game_4
+            R.id.button_sign_out, R.id.button_single_player,R.id.button_quick_game_4
     };
 
     // This array lists all the individual screens our game has.
@@ -3551,7 +3581,7 @@ public class MainActivity extends Activity
                     sCartasJ2 = list2[0] + " " + list2[1] + " " + list2[2];
 
                 }
-                return list;
+                break;
 
             case 4:
                 if (mMyId.equals(mano)) {
@@ -3641,7 +3671,7 @@ public class MainActivity extends Activity
                     sCartasJ4 = list4[0] + " " + list4[1] + " " + list4[2];
 
                 }
-                return list;
+                break;
         }
         return list;
     }
@@ -3982,6 +4012,178 @@ public class MainActivity extends Activity
             return true;
         }
     }
+    private final class MyTouchListener4J implements View.OnTouchListener {
+        public boolean onTouch(View view, MotionEvent motionEvent) {
+            PointF inicial = new PointF();
+            PointF inicio;
+            PointF destino = new PointF();
+            RelativeLayout.LayoutParams Params =
+                    (RelativeLayout.LayoutParams) view.getLayoutParams();
+
+            switch (motionEvent.getAction()) {
+                //Al tocar la pantalla
+                case MotionEvent.ACTION_DOWN:
+                    view.bringToFront();
+                    inicial.x = motionEvent.getX();
+                    inicial.y = motionEvent.getY();
+                    if(view.equals(tvJugador1_4J)) {
+                        xDelta_4J = inicial.x - Params.rightMargin;
+                        yDelta_4J = inicial.y - Params.topMargin;
+                    }else{
+                        xDelta_4J = inicial.x - Params.leftMargin;
+                        yDelta_4J = inicial.y - Params.topMargin;
+                    }
+
+                    break;
+                case MotionEvent.ACTION_UP:
+
+                    //Vemos donde colocamos la carta
+                    double medioLayout = ((float)view.getLayoutParams().height)/1.2;
+                    if (view.getY() < (medioLayout)){
+                        if (tvCartaMesa1_4J.getVisibility() == View.INVISIBLE) {
+                            destino.x = tvCartaMesa1_4J.getX();
+                            destino.y = tvCartaMesa1_4J.getY() + tvCartaMesa1_4J.getHeight();
+                            tvCartaMesa1_4J.setVisibility(View.VISIBLE);
+
+                            view.animate().x(destino.x).y(destino.y).rotation(0).setDuration(500);
+                            view.animate().rotationXBy(30).scaleX((float) 0.63).scaleY((float) 0.63)
+                                    .rotationYBy(-5).rotation(3).setDuration(500);
+                            view.setEnabled(false);
+
+                            if(view.equals(tvJugador1_4J)){
+                                posTvJugador1 = 1;
+                                tvJugador1_4J.bringToFront();
+                                tvJugador2_4J.bringToFront();
+                                tvJugador3_4J.bringToFront();
+
+                            }else if(view.equals(tvJugador2_4J)){
+                                tvJugador2_4J.bringToFront();
+                                posTvJugador2 = 1;
+                                tvJugador1_4J.bringToFront();
+                                tvJugador3_4J.bringToFront();
+
+                            }else if(view.equals(tvJugador3_4J)){
+                                posTvJugador3 = 1;
+                                tvJugador3_4J.bringToFront();
+                                tvJugador1_4J.bringToFront();
+                                tvJugador2_4J.bringToFront();
+                            }
+
+
+                        } else if (tvCartaMesa2_4J.getVisibility() == View.INVISIBLE) {
+                            destino.x = tvCartaMesa2_4J.getX();
+                            destino.y = tvCartaMesa2_4J.getY() + tvCartaMesa2_4J.getHeight();
+                            tvCartaMesa2_4J.setVisibility(View.VISIBLE);
+
+                            view.animate().x(destino.x).y(destino.y).rotation(0).rotationXBy(30)
+                                    .scaleX((float) 0.63).scaleY((float) 0.63).setDuration(500);
+                            view.setEnabled(false);
+
+                            if(view.equals(tvJugador1_4J) && posTvJugador2 == 0){
+                                posTvJugador1 = 2;
+                                tvJugador1_4J.bringToFront();
+                                tvJugador2_4J.bringToFront();Log.d("RRRRRRR", "Actualizada pos2");
+                            }else if(view.equals(tvJugador1_4J) && posTvJugador3 == 0){
+                                posTvJugador1 = 2;
+                                tvJugador1_4J.bringToFront();
+                                tvJugador3_4J.bringToFront();Log.d("RRRRRRR", "Actualizada pos2");
+                            }else if(view.equals(tvJugador2_4J) && posTvJugador1 == 0){
+                                posTvJugador2 = 2;
+                                tvJugador2_4J.bringToFront();
+                                tvJugador1_4J.bringToFront();Log.d("RRRRRRR", "Actualizada pos2");
+                            }else if(view.equals(tvJugador2_4J) && posTvJugador2 == 0){
+                                posTvJugador2 = 2;
+                                tvJugador2_4J.bringToFront();
+                                tvJugador3_4J.bringToFront();Log.d("RRRRRRR", "Actualizada pos2");
+                            }else if(view.equals(tvJugador3_4J) && posTvJugador1 == 0){
+                                posTvJugador3 = 2;
+                                tvJugador3_4J.bringToFront();
+                                tvJugador1_4J.bringToFront();Log.d("RRRRRRR", "Actualizada pos2");
+                            }else if(view.equals(tvJugador3_4J) && posTvJugador2 == 0){
+                                posTvJugador3 = 2;
+                                tvJugador3_4J.bringToFront();
+                                tvJugador2_4J.bringToFront();Log.d("RRRRRRR", "Actualizada pos2");
+                            }
+
+
+                        } else if (tvCartaMesa3_4J.getVisibility() == View.INVISIBLE) {
+                            destino.x = tvCartaMesa3_4J.getX();
+                            destino.y = tvCartaMesa3_4J.getY() + tvCartaMesa3_4J.getHeight();
+                            tvCartaMesa3_4J.setVisibility(View.VISIBLE);
+
+                            view.animate().x(destino.x).y(destino.y).rotation(0).setDuration(500);
+                            view.animate().rotationXBy(30).scaleX((float) 0.63).scaleY((float) 0.63)
+                                    .rotationYBy(-5).rotation(3).setDuration(500);
+                            view.setEnabled(false);
+
+                            if(view.equals(tvJugador1_4J)){
+                                posTvJugador1 = 3;
+                                tvJugador1_4J.bringToFront();
+                            }else if(view.equals(tvJugador2_4J)){
+                                posTvJugador2 = 3;
+                                tvJugador2_4J.bringToFront();
+                            }else if(view.equals(tvJugador3_4J)){
+                                posTvJugador3 = 3;
+                                tvJugador3_4J.bringToFront();
+                            }
+                            Log.d("RRRRRRR", "Actualizada pos3");
+                        }
+
+                        //Calculamos su valor para enviarlo
+                        if (view.equals(tvJugador1_4J)) {
+                            aux = carta1;
+                            miValor = Integer.parseInt(carta1.getValor());
+                        }
+                        if (view.equals(tvJugador2_4J)) {
+                            aux = carta2;
+                            miValor = Integer.parseInt(carta2.getValor());
+                        }
+                        if (view.equals(tvJugador3_4J)) {
+                            aux = carta3;
+                            miValor = Integer.parseInt(carta3.getValor());
+                        }
+
+                        envid_4J.setVisibility(View.GONE);
+                        laFalta_4J.setVisibility(View.GONE);
+
+                        if (!hayEmpate) {
+                            cartaSeleccionada();
+                        } else cartaSeleccionadaEmpate();
+
+                        hayAnimaciones = true;
+
+                    }else {
+                        if (view.equals(tvJugador1_4J)) {
+                            view.animate().translationX(inicio1J1.x - 100).setDuration(500);
+                            view.animate().translationY(inicio1J1.y + 40);
+                        }
+                        if (view.equals(tvJugador2_4J)) {
+                            view.animate().translationX(inicio2J1.x).setDuration(500);
+                            view.animate().translationY(inicio2J1.y).setDuration(500);
+                        }
+                        if (view.equals(tvJugador3_4J)) {
+                            view.animate().translationX(inicio3J1.x + 100).setDuration(500);
+                            view.animate().translationY(inicio3J1.y + 40).setDuration(500);
+                        }
+                    }
+                    break;
+                case MotionEvent.ACTION_POINTER_DOWN:
+                    //No hace falta utilizarlo
+                    break;
+                case MotionEvent.ACTION_POINTER_UP:
+                    //No hace falta utilizarlo
+                    break;
+                case MotionEvent.ACTION_MOVE:
+                    inicio = new PointF(view.getX(), view.getY());
+                    PointF move = new PointF(motionEvent.getX() - inicial.x, motionEvent.getY() - inicial.y);
+                    view.setX((inicio.x + move.x) - xDelta_4J);
+                    view.setY((inicio.y + move.y) - yDelta_4J);
+                    break;
+            }
+            return true;
+        }
+    }
+
 
 
 
