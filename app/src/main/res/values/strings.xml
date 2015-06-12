@@ -21,7 +21,8 @@
     <string name="app_name">Retruque!</string>
     <string name="game_title">Retruque!</string>
     <string name="single_player">Un jugador</string>
-    <string name="quick_game">Partida rapida</string>
+    <string name="quick_game">Partida rapida 2 jugadores</string>
+    <string name="quick_game_4">Partida rapida 4 jugadores</string>
     <string name="invite_players">Invita a amigos</string>
     <string name="see_invitations">Mira tus invitaciones</string>
     <string name="quick_game_explanation">Desafia a un oponente aleatorio.</string>

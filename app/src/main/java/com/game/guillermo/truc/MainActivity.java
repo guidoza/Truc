@@ -64,6 +64,7 @@ import com.google.android.gms.games.multiplayer.realtime.RoomStatusUpdateListene
 import com.google.android.gms.games.multiplayer.realtime.RoomUpdateListener;
 import com.google.android.gms.plus.Plus;
 import com.google.example.games.basegameutils.BaseGameUtils;
+import com.melnykov.fab.FloatingActionButton;
 
 
 import org.xmlpull.v1.XmlPullParser;
@@ -76,6 +77,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -134,9 +136,57 @@ public class MainActivity extends Activity
     //Para enviar mensajes
     byte[] mMsgBuf = new byte[2];
 
+    /****** VARIABLES DEL JUEGO ******/
+
+    //Enteros
+    int miValor=0, valor1 = 0, valor2 = 0, valor3 = 0, valorEmpate = 0;
+    int ronda = 1;
+    int misRondasGanadas = 0;
+    int puntosTruc = 0;
+    int puntosEnvid = 0;
+    int miEnvid = 0;
+    int puntosTotalesMios = 0;
+    int puntosTotalesJugador2 = 0;
+    int envidOtro = 0;
+    int maximo = 0;
+    int numeroJugadores = 0;
+    int segundos = 40;
+    private float xDelta;
+    private float yDelta;
+    int posTvJugador1 = 0, posTvJugador2 = 0, posTvJugador3 = 0;
+
+    //Strings
     String idJugador1 = null;
     String idJugador2 = null;
     String turno = null;
+    String remoteId;
+    String mano;
+    String ganadorRonda1 = null;
+    String sCartasJ2 = "";
+    String ganadorEnvid = null;
+
+    //Boolean
+    boolean hayEmpate = false;
+    boolean hayEnvid = false;
+    boolean mostrarRepartiendo = false;
+    boolean todosMismoPalo = false;
+    boolean hayTruc = false;
+    boolean hayRetruc = false;
+    boolean hayCuatreVal = false;
+    boolean hayJocFora = false;
+    boolean hayVuelvo = false;
+    boolean faltaDirecta = false;
+    boolean hayAnimaciones = false;
+    boolean hayAnimacionRival1 = false;
+    boolean hayAnimacionRival2 = false;
+    boolean hayAnimacionRival3 = false;
+
+    //Listas y arrays
+    int[] list = new int[3];
+    int[] list2 = new int[3];
+    int[] numCarta = new int[3];
+
+    //ImageViews
     ImageView tvJugador1;
     ImageView tvJugador2;
     ImageView tvJugador3;
@@ -146,76 +196,8 @@ public class MainActivity extends Activity
     ImageView tvMesaRival1;
     ImageView tvMesaRival2;
     ImageView tvMesaRival3;
-    TextView marcador;
-    TextView marcador2;
-    TextView textoAccion1;
-    TextView textoAccion2;
-    private List<Carta> baraja = new ArrayList<>();
-    private List<Carta> manoJugador = new ArrayList<>();
-    Carta carta1;
-    Carta carta2;
-    Carta carta3;
-    int miValor = 0, valor1 = 0, valor2 = 0, valor3 = 0, valorEmpate = 0;
-    int ronda = 1;
-    int misRondasGanadas = 0;
-    AlertDialog.Builder dialogoNuevaPartida;
-    String remoteId;
-    String mano;
-    boolean hayEmpate = false;
-    final static int NO_QUIERO_TRUC = 1;
-    final static int TRUC = 2;
-    final static int RETRUC = 3;
-    final static int CUATRE_VAL = 4;
-    final static int NO_QUIERO_ENVID = 1;
-    final static int ENVID = 2;
-    final static int TORNE = 4;
-    int puntosTruc = 0;
-    int puntosEnvid = 0;
-    int miEnvid = 0;
-    boolean hayEnvid = false;
-    int puntosTotalesMios = 0;
-    int puntosTotalesJugador2 = 0;
-    String ganadorRonda1 = "";
-    String sCartasJ2 = "";
-    int[] list = new int[3];
-    int[] list2 = new int[3];
-    int[] numCarta = new int[3];
-    Carta aux;
-    int envidOtro = 0;
-    String ganadorEnvid = null;
-    boolean todosMismoPalo = false;
-    int maximo = 0;
-    boolean hayTruc = false;
-    boolean hayRetruc = false;
-    boolean hayCuatreVal = false;
-    boolean hayJocFora = false;
-    boolean hayVuelvo = false;
-    boolean faltaDirecta = false;
-
-    MaterialDialog.Builder materialDialog;
-    MaterialDialog repartiendo;
-
     ImageView imgPerfilRival;
     ImageView imgPerfil;
-    ProgressBar progressBar1;
-    ProgressBar progressBar2;
-    CountDownTimer mCountDownTimerJ1;
-    CountDownTimer mCountDownTimerJ2;
-    int segundos = 40;
-
-    private float xDelta;
-    private float yDelta;
-    PointF inicio1;
-    PointF inicio2;
-    PointF inicio3;
-    PointF inicio1Rival;
-    PointF inicio2Rival;
-    PointF inicio3Rival;
-    int posTvJugador1 = 0, posTvJugador2 = 0, posTvJugador3 = 0;
-    boolean hayAnimaciones = false;
-    boolean hayAnimacionRival1 = false;
-    boolean hayAnimacionRival2 = false;
-    boolean hayAnimacionRival3 = false;
     ImageButton truc;
     ImageButton envid;
     ImageButton meVoy;
@@ -224,8 +206,98 @@ public class MainActivity extends Activity
     ImageButton jocFora;
     ImageButton salir;
     ImageButton laFalta;
+
+    //TextViews
+    TextView marcador;
+    TextView marcador2;
+    TextView textoAccion1;
+    TextView textoAccion2;
+
+
+    //Otros objetos
+    private List<Carta> baraja = new ArrayList<>();
+    private List<Carta> manoJugador = new ArrayList<>();
+    Carta carta1;
+    Carta carta2;
+    Carta carta3;
+    AlertDialog.Builder dialogoNuevaPartida;
+    AlertDialog dialog;
+    Carta aux;
+    MaterialDialog.Builder materialDialog;
+    MaterialDialog repartiendo;
+    MaterialDialog dialogEnvid;
+    MaterialDialog.ButtonCallback callbackReinicio;
+    ProgressBar progressBar1;
+    ProgressBar progressBar2;
+    CountDownTimer mCountDownTimerJ1;
+    CountDownTimer mCountDownTimerJ2;
+    PointF inicio1;
+    PointF inicio2;
+    PointF inicio3;
+    PointF inicio1Rival;
+    PointF inicio2Rival;
+    PointF inicio3Rival;
     FabToolbar actionButton;
     View.OnClickListener menuListener;
+
+    //Constantes
+    final static int NO_QUIERO_TRUC = 1;
+    final static int TRUC = 2;
+    final static int RETRUC = 3;
+    final static int CUATRE_VAL = 4;
+    final static int NO_QUIERO_ENVID = 1;
+    final static int ENVID = 2;
+    final static int TORNE = 4;
+
+    /****** VARIABLES EXTRA PARA 4 JUGADORES ******/
+
+    //Enteros
+    int valor1_J2 = 0;
+    int valor2_J2 = 0;
+    int valor3_J2 = 0;
+    int valor1_J3 = 0;
+    int valor2_J3 = 0;
+    int valor3_J3 = 0;
+    int valor1_J4 = 0;
+    int valor2_J4 = 0;
+    int valor3_J4 = 0;
+
+    //Strings
+    String idJugador3 = null;
+    String idJugador4 = null;
+    String sCartasJ3 = "";
+    String sCartasJ4 = "";
+
+
+    //Boolean
+
+    //Listas y arrays
+    int[] list3 = new int[3];
+    int[] list4 = new int[3];
+    String[] equipo1 = new String[2];
+    String[] equipo2 = new String[2];
+
+    //ImageViews
+    ImageView tvJugador1_4J; //Cartas de la mano del jugador 1
+    ImageView tvJugador2_4J;
+    ImageView tvJugador3_4J;
+    ImageView tvCartaMesa1_4J; //Cartas de la mesa del jugador 1
+    ImageView tvCartaMesa2_4J;
+    ImageView tvCartaMesa3_4J;
+    ImageView tvMesaJ2_C1; // Cartas de la mesa del jugador 2
+    ImageView tvMesaJ2_C2;
+    ImageView tvMesaJ2_C3;
+    ImageView tvMesaJ3_C1; //Cartas de la mesa del jugador 3
+    ImageView tvMesaJ3_C2;
+    ImageView tvMesaJ3_C3;
+    ImageView tvMesaJ4_C1; //Cartas de la mesa del jugador 4
+    ImageView tvMesaJ4_C2;
+    ImageView tvMesaJ4_C3;
+
+    //TextViews
+    TextView txtNumeroJugador;
+
+    //Otros objetos
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -326,6 +398,29 @@ public class MainActivity extends Activity
 
         progressBar1 = (ProgressBar) findViewById(R.id.progres_segundos_1);
         progressBar2 = (ProgressBar) findViewById(R.id.progres_segundos_2);
+
+        //ImageViews para el modo de 4 jugadores
+        tvJugador1_4J = (ImageView) findViewById(R.id.carta1ManoJ1);
+        tvJugador2_4J = (ImageView) findViewById(R.id.carta2ManoJ1);
+        tvJugador3_4J = (ImageView) findViewById(R.id.carta3ManoJ1);
+
+        tvCartaMesa1_4J = (ImageView) findViewById(R.id.carta1MesaJ1);
+        tvCartaMesa2_4J = (ImageView) findViewById(R.id.carta2MesaJ1);
+        tvCartaMesa3_4J = (ImageView) findViewById(R.id.carta3MesaJ1);
+
+        tvMesaJ2_C1 = (ImageView) findViewById(R.id.carta1MesaJ2);
+        tvMesaJ2_C2 = (ImageView) findViewById(R.id.carta2MesaJ2);
+        tvMesaJ2_C3 = (ImageView) findViewById(R.id.carta3MesaJ2);
+
+        tvMesaJ3_C1 = (ImageView) findViewById(R.id.carta1MesaJ3);
+        tvMesaJ3_C2 = (ImageView) findViewById(R.id.carta2MesaJ3);
+        tvMesaJ3_C3 = (ImageView) findViewById(R.id.carta3MesaJ3);
+
+        tvMesaJ4_C1 = (ImageView) findViewById(R.id.carta1MesaJ4);
+        tvMesaJ4_C2 = (ImageView) findViewById(R.id.carta2MesaJ4);
+        tvMesaJ4_C3 = (ImageView) findViewById(R.id.carta3MesaJ4);
+
+        txtNumeroJugador = (TextView) findViewById(R.id.textoNumeroJugador);
 
         // Creamos el nuevo cliente de Google con acceso a Plus y Games
         mGoogleApiClient = new GoogleApiClient.Builder(this)
@@ -848,12 +943,16 @@ public class MainActivity extends Activity
                 break;
             case R.id.button_quick_game:
                 // user wants to play against a random opponent right now
-                startQuickGame();
+                startQuickGame2jugadores();
+                break;
+            case R.id.button_quick_game_4:
+                // user wants to play against a random opponent right now
+                startQuickGame4jugadores();
                 break;
         }
     }
 
-    void startQuickGame() {
+    void startQuickGame2jugadores() {
         // quick-start a game with 1 randomly selected opponent
         final int MIN_OPPONENTS = 1, MAX_OPPONENTS = 1;
         Bundle autoMatchCriteria = RoomConfig.createAutoMatchCriteria(MIN_OPPONENTS,
@@ -867,6 +966,23 @@ public class MainActivity extends Activity
         desbloquearCartas();
         resetAll();
         resetTurno();
+        Games.RealTimeMultiplayer.create(mGoogleApiClient, rtmConfigBuilder.build());
+    }
+
+    void startQuickGame4jugadores() {
+        // quick-start a game with 3 randomly selected opponent
+        final int MIN_OPPONENTS = 3, MAX_OPPONENTS = 3;
+        Bundle autoMatchCriteria = RoomConfig.createAutoMatchCriteria(MIN_OPPONENTS,
+                MAX_OPPONENTS, 0);
+        RoomConfig.Builder rtmConfigBuilder = RoomConfig.builder(this);
+        rtmConfigBuilder.setMessageReceivedListener(this);
+        rtmConfigBuilder.setRoomStatusUpdateListener(this);
+        rtmConfigBuilder.setAutoMatchCriteria(autoMatchCriteria);
+        switchToScreen(R.id.screen_wait);
+        keepScreenOn();
+        desbloquearCartas();
+        resetAll();
+        //resetTurno();
         Games.RealTimeMultiplayer.create(mGoogleApiClient, rtmConfigBuilder.build());
     }
 
@@ -1153,26 +1269,59 @@ public class MainActivity extends Activity
         mMyId = room.getParticipantId(Games.Players.getCurrentPlayerId(mGoogleApiClient));
         remoteId = null;
         resetPuntos();
+        numeroJugadores = mParticipants.size();
+        Log.d("ZZZ", "Numero de jugadores: " + numeroJugadores);
 
-        ArrayList<String> ids = room.getParticipantIds();
-        for (int i = 0; i < ids.size(); i++) {
-            String aux = ids.get(i);
-            if (!aux.equals(mMyId)) {
-                remoteId = aux;
-                break;
+        if(numeroJugadores == 2) {
+            ArrayList<String> ids = room.getParticipantIds();
+            for (int i = 0; i < ids.size(); i++) {
+                String aux = ids.get(i);
+                if (!aux.equals(mMyId)) {
+                    remoteId = aux;
+                    break;
+                }
             }
-        }
-        if (mMyId.compareTo(remoteId) > 0) {
-            idJugador1 = mMyId;
-            idJugador2 = remoteId;
-        } else {
-            idJugador1 = remoteId;
-            idJugador2 = mMyId;
+            if (mMyId.compareTo(remoteId) > 0) {
+                idJugador1 = mMyId;
+                idJugador2 = remoteId;
+            } else {
+                idJugador1 = remoteId;
+                idJugador2 = mMyId;
+            }
+
+            turno = idJugador1;
+            mano = idJugador1;
         }
 
-        turno = idJugador1;
-        mano = idJugador1;
+        else if(numeroJugadores == 4){
+            ArrayList<String> ids4 = room.getParticipantIds();
+            List<String> ids4ordenadas = ids4.subList(0, ids4.size());
+            Collections.sort(ids4ordenadas);
+            Log.d("ZZZ", "Lista de jugadores ordenada: " + ids4ordenadas);
 
+            idJugador1 = ids4ordenadas.get(0);
+            idJugador2 = ids4ordenadas.get(1);
+            idJugador3 = ids4ordenadas.get(2);
+            idJugador4 = ids4ordenadas.get(3);
+
+            equipo1[0] = idJugador1;
+            equipo1[1] = idJugador3;
+            equipo2[0] = idJugador2;
+            equipo2[1] = idJugador4;
+
+            turno = idJugador1;
+            mano = idJugador1;
+
+            Log.d("ZZZ", "IDJ1: "+idJugador1);
+            Log.d("ZZZ", "IDJ2: "+idJugador2);
+            Log.d("ZZZ", "IDJ3: "+idJugador3);
+            Log.d("ZZZ", "IDJ4: "+idJugador4);
+            Log.d("ZZZ", "Nombre : " +mParticipants.get(0).getDisplayName());
+            Log.d("ZZZ", "Nombre : " +mParticipants.get(1).getDisplayName());
+            Log.d("ZZZ", "Nombre : " +mParticipants.get(2).getDisplayName());
+            Log.d("ZZZ", "Nombre : " +mParticipants.get(3).getDisplayName());
+
+        }
         // print out the list of participants (for debug purposes)
         Log.d(TAG, "Room ID: " + mRoomId);
         Log.d(TAG, "My ID " + mMyId);
@@ -1326,91 +1475,136 @@ public class MainActivity extends Activity
     int mScore = 0; // user's current score
 
     void resetAll() {
-        miValor = 0;
-        valor1 = 0;
-        valor2 = 0;
-        valor3 = 0;
-        valorEmpate = 0;
-        ronda = 1;
-        misRondasGanadas = 0;
-        tvJugador1.setVisibility(View.VISIBLE);
-        tvJugador2.setVisibility(View.VISIBLE);
-        tvJugador3.setVisibility(View.VISIBLE);
-        tvCartaMesa1.setVisibility(View.INVISIBLE);
-        tvCartaMesa2.setVisibility(View.INVISIBLE);
-        tvCartaMesa3.setVisibility(View.INVISIBLE);
-        tvMesaRival1.setVisibility(View.INVISIBLE);
-        tvMesaRival2.setVisibility(View.INVISIBLE);
-        tvMesaRival3.setVisibility(View.INVISIBLE);
-        hayEmpate = false;
-        ganadorRonda1 = "";
-        miEnvid = 0;
-        hayEnvid = false;
-        ganadorEnvid = null;
-        envidOtro = 0;
-        todosMismoPalo = false;
-        maximo = 0;
-        puntosEnvid = 0;
-        puntosTruc = 0;
-        hayTruc = false;
-        hayRetruc = false;
-        hayCuatreVal = false;
-        hayJocFora = false;
-        hayVuelvo = false;
-        faltaDirecta = false;
+        if(numeroJugadores == 2) {
+            miValor = 0;
+            valor1 = 0;
+            valor2 = 0;
+            valor3 = 0;
+            valorEmpate = 0;
+            ronda = 1;
+            misRondasGanadas = 0;
+            tvJugador1.setVisibility(View.VISIBLE);
+            tvJugador2.setVisibility(View.VISIBLE);
+            tvJugador3.setVisibility(View.VISIBLE);
+            tvCartaMesa1.setVisibility(View.INVISIBLE);
+            tvCartaMesa2.setVisibility(View.INVISIBLE);
+            tvCartaMesa3.setVisibility(View.INVISIBLE);
+            tvMesaRival1.setVisibility(View.INVISIBLE);
+            tvMesaRival2.setVisibility(View.INVISIBLE);
+            tvMesaRival3.setVisibility(View.INVISIBLE);
+            hayEmpate = false;
+            ganadorRonda1 = "";
+            miEnvid = 0;
+            hayEnvid = false;
+            ganadorEnvid = null;
+            envidOtro = 0;
+            todosMismoPalo = false;
+            maximo = 0;
+            puntosEnvid = 0;
+            puntosTruc = 0;
+            hayTruc = false;
+            hayRetruc = false;
+            hayCuatreVal = false;
+            hayJocFora = false;
+            hayVuelvo = false;
+            faltaDirecta = false;
 
-        textoAccion1.setVisibility(View.INVISIBLE);
-        textoAccion2.setVisibility(View.INVISIBLE);
-        segundos = 40;
+            textoAccion1.setVisibility(View.INVISIBLE);
+            textoAccion2.setVisibility(View.INVISIBLE);
+            segundos = 40;
 
-        progressBar1.setVisibility(View.INVISIBLE);
-        progressBar2.setVisibility(View.INVISIBLE);
+            progressBar1.setVisibility(View.INVISIBLE);
+            progressBar2.setVisibility(View.INVISIBLE);
 
-        truc.setVisibility(View.VISIBLE);
-        envid.setVisibility(View.VISIBLE);
-        meVoy.setVisibility(View.VISIBLE);
-        salir.setVisibility(View.VISIBLE);
-        retruque.setVisibility(View.GONE);
-        quatreVal.setVisibility(View.GONE);
-        jocFora.setVisibility(View.GONE);
-        laFalta.setVisibility(View.VISIBLE);
+            truc.setVisibility(View.VISIBLE);
+            envid.setVisibility(View.VISIBLE);
+            meVoy.setVisibility(View.VISIBLE);
+            salir.setVisibility(View.VISIBLE);
+            retruque.setVisibility(View.GONE);
+            quatreVal.setVisibility(View.GONE);
+            jocFora.setVisibility(View.GONE);
+            laFalta.setVisibility(View.VISIBLE);
 
-        if(hayAnimaciones){
-            deshacerAnimaciones(tvJugador1);
-            deshacerAnimaciones(tvJugador2);
-            deshacerAnimaciones(tvJugador3);
-            posTvJugador1 = 0;
-            posTvJugador2 = 0;
-            posTvJugador3 = 0;
-            hayAnimaciones = false;
+            if (hayAnimaciones) {
+                deshacerAnimaciones(tvJugador1);
+                deshacerAnimaciones(tvJugador2);
+                deshacerAnimaciones(tvJugador3);
+                posTvJugador1 = 0;
+                posTvJugador2 = 0;
+                posTvJugador3 = 0;
+                hayAnimaciones = false;
+            }
+
+            if (hayAnimacionRival1) {
+                Log.d("KKKKKK", "REiniciando animacion 1");
+                tvMesaRival1.animate().scaleX((float) 1).scaleY((float) 1)
+                        .rotationYBy(5).rotation(0).rotationXBy(-45).setDuration(0);
+                hayAnimacionRival1 = false;
+            }
+            if (hayAnimacionRival2) {
+                Log.d("KKKKKK", "REiniciando animacion 2");
+                tvMesaRival2.animate().scaleX((float) 1).scaleY((float) 1)
+                        .rotationXBy(-45).setDuration(0);
+                hayAnimacionRival2 = false;
+            }
+            if (hayAnimacionRival3) {
+                Log.d("KKKKKK", "REiniciando animacion 3");
+                tvMesaRival3.animate().scaleX((float) 1).scaleY((float) 1)
+                        .rotationYBy(-5).rotation(0).rotationXBy(-45).setDuration(0);
+                hayAnimacionRival3 = false;
+            }
         }
 
-        if(hayAnimacionRival1){
-            Log.d("KKKKKK", "REiniciando animacion 1");
-            tvMesaRival1.animate().scaleX((float) 1).scaleY((float) 1)
-                    .rotationYBy(5).rotation(0).rotationXBy(-45).setDuration(0);
-            hayAnimacionRival1 = false;
+        else if(numeroJugadores == 4){
+            miValor = 0;
+            valor1 = 0;
+            valor2 = 0;
+            valor3 = 0;
+            valorEmpate = 0;
+            ronda = 1;
+            misRondasGanadas = 0;
+            tvJugador1_4J.setVisibility(View.VISIBLE);
+            tvJugador2_4J.setVisibility(View.VISIBLE);
+            tvJugador3_4J.setVisibility(View.VISIBLE);
+            tvCartaMesa1_4J.setVisibility(View.INVISIBLE);
+            tvCartaMesa2_4J.setVisibility(View.INVISIBLE);
+            tvCartaMesa3_4J.setVisibility(View.INVISIBLE);
+            tvMesaJ2_C1.setVisibility(View.INVISIBLE);
+            tvMesaJ2_C2.setVisibility(View.INVISIBLE);
+            tvMesaJ2_C3.setVisibility(View.INVISIBLE);
+            tvMesaJ3_C1.setVisibility(View.INVISIBLE);
+            tvMesaJ3_C2.setVisibility(View.INVISIBLE);
+            tvMesaJ3_C3.setVisibility(View.INVISIBLE);
+            tvMesaJ4_C1.setVisibility(View.INVISIBLE);
+            tvMesaJ4_C2.setVisibility(View.INVISIBLE);
+            tvMesaJ4_C3.setVisibility(View.INVISIBLE);
+            hayEmpate = false;
+            ganadorRonda1 = null;
+            miEnvid = 0;
+            hayEnvid = false;
+            ganadorEnvid = null;
+            envidOtro = 0;
+            todosMismoPalo = false;
+            maximo = 0;
+            valor1_J2 = 0;
+            valor2_J2 = 0;
+            valor3_J2 = 0;
+            valor1_J3 = 0;
+            valor2_J3 = 0;
+            valor3_J3 = 0;
+            valor1_J4 = 0;
+            valor2_J4 = 0;
+            valor3_J4 = 0;
         }
-        if(hayAnimacionRival2){
-            Log.d("KKKKKK", "REiniciando animacion 2");
-            tvMesaRival2.animate().scaleX((float) 1).scaleY((float) 1)
-                    .rotationXBy(-45).setDuration(0);
-            hayAnimacionRival2 = false;
-        }
-        if(hayAnimacionRival3){
-            Log.d("KKKKKK", "REiniciando animacion 3");
-            tvMesaRival3.animate().scaleX((float) 1).scaleY((float) 1)
-                    .rotationYBy(-5).rotation(0).rotationXBy(-45).setDuration(0);
-            hayAnimacionRival3 = false;
-        }
-
     }
+
     void resetPuntos(){
         puntosTotalesMios = 0;
         puntosTotalesJugador2 = 0;
         marcador.setText("");
         marcador2.setText("");
     }
+
     void resetAnimaciones(){
         hayAnimaciones = false;
         hayAnimacionRival1 = false;
@@ -1475,6 +1669,7 @@ public class MainActivity extends Activity
         }
 
     }
+
     void animarTextoAccion(final View view){
         view.setVisibility(View.VISIBLE);
         view.setAlpha(0.0f);
@@ -1503,29 +1698,61 @@ public class MainActivity extends Activity
 
     // Reset game variables in preparation for a new game.
     void desbloquearCartas() {
-        tvJugador1.setEnabled(true);
-        tvJugador2.setEnabled(true);
-        tvJugador3.setEnabled(true);
+        if(numeroJugadores == 2) {
+            tvJugador1.setEnabled(true);
+            tvJugador2.setEnabled(true);
+            tvJugador3.setEnabled(true);
+        }
+
+        else if(numeroJugadores == 4){
+            tvJugador1_4J.setEnabled(true);
+            tvJugador2_4J.setEnabled(true);
+            tvJugador3_4J.setEnabled(true);
+        }
     }
+
     void bloquearCartas() {
-        tvJugador1.setEnabled(false);
-        tvJugador2.setEnabled(false);
-        tvJugador3.setEnabled(false);
+        if(numeroJugadores == 2) {
+            tvJugador1.setEnabled(false);
+            tvJugador2.setEnabled(false);
+            tvJugador3.setEnabled(false);
+        }
+
+        else if(numeroJugadores == 4){
+            tvJugador1_4J.setEnabled(false);
+            tvJugador2_4J.setEnabled(false);
+            tvJugador3_4J.setEnabled(false);
+        }
+
     }
 
     void resetTurno() {
         turno = null;
         idJugador1 = null;
         idJugador2 = null;
+        idJugador3 = null;
+        idJugador4 = null;
     }
 
     void cambiarTurno() {
-        cambiarBarraProgreso();
-        animarDesaparecerMenu();
-        if (mMyId.equals(idJugador1) && turno.equals(idJugador1)) turno = idJugador2;
-        if (mMyId.equals(idJugador2) && turno.equals(idJugador2)) turno = idJugador1;
+
+        if(numeroJugadores == 2) {
+            cambiarBarraProgreso();
+            animarDesaparecerMenu();
+            if (mMyId.equals(idJugador1) && turno.equals(idJugador1)) turno = idJugador2;
+            if (mMyId.equals(idJugador2) && turno.equals(idJugador2)) turno = idJugador1;
+        }
+
+        else if(numeroJugadores == 4){
+            if (mMyId.equals(idJugador1) && turno.equals(idJugador1)) turno = idJugador2;
+            if (mMyId.equals(idJugador2) && turno.equals(idJugador2)) turno = idJugador3;
+            if (mMyId.equals(idJugador3) && turno.equals(idJugador3)) turno = idJugador4;
+            if (mMyId.equals(idJugador4) && turno.equals(idJugador4)) turno = idJugador1;
+
+        }
 
     }
+
     void inicializarBarraProgreso() {
 
         mCountDownTimerJ1 = new CountDownTimer(40000, 1000) {
@@ -1578,6 +1805,7 @@ public class MainActivity extends Activity
             mCountDownTimerJ1.start();
         }
     }
+
     void reiniciarBarraProgreso(){
         if(progressBar1.getVisibility() == View.VISIBLE){
             mCountDownTimerJ1.cancel();
@@ -1589,6 +1817,7 @@ public class MainActivity extends Activity
             mCountDownTimerJ2.start();
         }
     }
+
     void animacionAbrirCartas(){
         tvJugador1.animate().rotation(-20).setDuration(750);
         tvJugador3.animate().rotation(20).setDuration(750);
@@ -1598,6 +1827,7 @@ public class MainActivity extends Activity
         tvJugador1.animate().translationY(inicio1.y + 40).setDuration(750);
         tvJugador3.animate().translationY(inicio3.y + 40).setDuration(750);
     }
+
     void animacionRival(View view){
         RelativeLayout.LayoutParams params =
                 (RelativeLayout.LayoutParams) view.getLayoutParams();
@@ -1637,12 +1867,14 @@ public class MainActivity extends Activity
             Log.d("KKKKKK","hay animacion carta rival 3 = true");
         }
     }
+
     void animarAparecerMenu(){
         actionButton.setVisibility(View.VISIBLE);
         Animation animation = AnimationUtils.loadAnimation(getApplicationContext(),
                 R.anim.fab_scale_up);
         actionButton.startAnimation(animation);
     }
+
     void animarDesaparecerMenu(){
         Animation animation = AnimationUtils.loadAnimation(getApplicationContext(),
                 R.anim.fab_scale_down);
@@ -1668,212 +1900,198 @@ public class MainActivity extends Activity
     // Start the gameplay phase of the game.
     void startGame(boolean multiplayer) {
 
-        asignarImagenCarta(carta1, tvJugador1);
-        asignarImagenCarta(carta2, tvJugador2);
-        asignarImagenCarta(carta3, tvJugador3);
+        switch (numeroJugadores) {
 
-        tvJugador1.setOnTouchListener(new MyTouchListener());
-        tvJugador2.setOnTouchListener(new MyTouchListener());
-        tvJugador3.setOnTouchListener(new MyTouchListener());
+            case 2:
+            asignarImagenCarta(carta1, tvJugador1);
+            asignarImagenCarta(carta2, tvJugador2);
+            asignarImagenCarta(carta3, tvJugador3);
 
-        truc.setOnClickListener(menuListener);
-        retruque.setOnClickListener(menuListener);
-        quatreVal.setOnClickListener(menuListener);
-        jocFora.setOnClickListener(menuListener);
-        envid.setOnClickListener(menuListener);
-        laFalta.setOnClickListener(menuListener);
-        salir.setOnClickListener(menuListener);
-        meVoy.setOnClickListener(menuListener);
+            tvJugador1.setOnTouchListener(new MyTouchListener());
+            tvJugador2.setOnTouchListener(new MyTouchListener());
+            tvJugador3.setOnTouchListener(new MyTouchListener());
+
+            truc.setOnClickListener(menuListener);
+            retruque.setOnClickListener(menuListener);
+            quatreVal.setOnClickListener(menuListener);
+            jocFora.setOnClickListener(menuListener);
+            envid.setOnClickListener(menuListener);
+            laFalta.setOnClickListener(menuListener);
+            salir.setOnClickListener(menuListener);
+            meVoy.setOnClickListener(menuListener);
 
 
-        if (mMyId.equals(turno) && ronda == 1) {
-            Toast.makeText(getApplicationContext(), "Es tu turno", Toast.LENGTH_SHORT).show();
-            animacionAbrirCartas();
-            progressBar1.setVisibility(View.VISIBLE);
-            progressBar2.setVisibility(View.INVISIBLE);
-            inicializarBarraProgreso();
-            mCountDownTimerJ1.start();
-            animarAparecerMenu();
+            if (mMyId.equals(turno) && ronda == 1) {
+                Toast.makeText(getApplicationContext(), "Es tu turno", Toast.LENGTH_SHORT).show();
+                animacionAbrirCartas();
+                progressBar1.setVisibility(View.VISIBLE);
+                progressBar2.setVisibility(View.INVISIBLE);
+                inicializarBarraProgreso();
+                mCountDownTimerJ1.start();
+                animarAparecerMenu();
+            }
+
+            if (!mMyId.equals(turno) && ronda == 1) {
+                tvJugador1.setEnabled(false);
+                tvJugador2.setEnabled(false);
+                tvJugador3.setEnabled(false);
+                Toast.makeText(getApplicationContext(), "Esperando al Jugador", Toast.LENGTH_SHORT).show();
+                animacionAbrirCartas();
+                progressBar2.setVisibility(View.VISIBLE);
+                progressBar1.setVisibility(View.INVISIBLE);
+                inicializarBarraProgreso();
+                mCountDownTimerJ2.start();
+                animarDesaparecerMenu();
+
+            }
+
+            switchToScreen(R.id.screen_game);
+            mMultiplayer = multiplayer;
+                break;
+
+            case 4:
+                asignarImagenCarta(carta1, tvJugador1_4J);
+                asignarImagenCarta(carta2, tvJugador2_4J);
+                asignarImagenCarta(carta3, tvJugador3_4J);
+
+
+                tvJugador1_4J.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        // if (!hayEmpate) {
+                        cartaSeleccionada();
+                        // } else cartaSeleccionadaEmpate(view);
+
+                    }
+                });
+                tvJugador2_4J.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        // if (!hayEmpate) {
+                        cartaSeleccionada();
+                        // } else cartaSeleccionadaEmpate(view);
+                    }
+                });
+                tvJugador3_4J.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        //   if (!hayEmpate) {
+                        cartaSeleccionada();
+                        //    } else cartaSeleccionadaEmpate(view);
+                    }
+                });
+
+                if (mMyId.equals(turno) && ronda == 1) {
+                    Toast.makeText(getApplicationContext(), "Es tu turno", Toast.LENGTH_SHORT).show();
+                }
+
+                if (!mMyId.equals(turno) && ronda == 1) {
+                    tvJugador1_4J.setEnabled(false);
+                    tvJugador2_4J.setEnabled(false);
+                    tvJugador3_4J.setEnabled(false);
+                    Toast.makeText(getApplicationContext(), "Esperando al Jugador", Toast.LENGTH_SHORT).show();
+
+                }
+
+                if(mMyId.equals(idJugador1)) txtNumeroJugador.setText("Soy el jugador 1");
+                else if(mMyId.equals(idJugador2)) txtNumeroJugador.setText("Soy el jugador 2");
+                else if(mMyId.equals(idJugador3)) txtNumeroJugador.setText("Soy el jugador 3");
+                else if(mMyId.equals(idJugador4)) txtNumeroJugador.setText("Soy el jugador 4");
+
+                switchToScreen(R.id.screen_game_4_jugadores);
+                mMultiplayer = multiplayer;
+                break;
         }
-
-        if (!mMyId.equals(turno) && ronda == 1) {
-            tvJugador1.setEnabled(false);
-            tvJugador2.setEnabled(false);
-            tvJugador3.setEnabled(false);
-            Toast.makeText(getApplicationContext(), "Esperando al Jugador", Toast.LENGTH_SHORT).show();
-            animacionAbrirCartas();
-            progressBar2.setVisibility(View.VISIBLE);
-            progressBar1.setVisibility(View.INVISIBLE);
-            inicializarBarraProgreso();
-            mCountDownTimerJ2.start();
-            animarDesaparecerMenu();
-
-        }
-
-        switchToScreen(R.id.screen_game);
-        mMultiplayer = multiplayer;
-
     }
 
     void cartaSeleccionada() {
 
-        //Envio el valor de la carta
-        byte[] messageCarta = ("$" + aux.toString()).getBytes();
-        enviarValorCarta(messageCarta);
-        Log.d("KKKKK", "Ronda: " + ronda);
-        Log.d("KKKKK", "valor1: " + valor1);
-        Log.d("KKKKK", "valor2: " + valor2);
-        Log.d("KKKKK", "valor3: " + valor3);
+        switch (numeroJugadores) {
+            case 2:
+            //Envio el valor de la carta
+            byte[] messageCarta = ("$" + aux.toString()).getBytes();
+            enviarValorCarta(messageCarta);
+            Log.d("KKKKK", "Ronda: " + ronda);
+            Log.d("KKKKK", "valor1: " + valor1);
+            Log.d("KKKKK", "valor2: " + valor2);
+            Log.d("KKKKK", "valor3: " + valor3);
 
 
-
-        Log.d("KKKKK", "Tiro primero? " + tiroPrimero());
-        //Caso en el que tiro primero
-        if(tiroPrimero()){
-            cambiarTurno();
-            Toast.makeText(getApplicationContext(), "Esperando al Jugador", Toast.LENGTH_SHORT).show();
-            bloquearCartas();
-            enviarMensajeTurno();
-
-        //Caso en que tiro segundo
-        }else {
-            //No hay empate
-            if(!hayEmpate()){
-                //Gano la ronda
-                if(soyGanadorRonda()){
-                    if (ronda == 1) {
-                        misRondasGanadas = 1;
-                        ganadorRonda1 = mMyId;
-                    }else if (ronda == 2){
-                        misRondasGanadas++;
-                    }else if (ronda == 3){
-                        misRondasGanadas = 2;
-                    }
-                    //He ganado la mano
-                    if (misRondasGanadas == 2) {
-                        //enviarMensajeHasPerdido();
-                        mostrarResultadosGanadorMano("PRIMERO");
-                    //Vuelvo a tirar
-                    }else {
-                        Toast.makeText(getApplicationContext(), "Es tu turno", Toast.LENGTH_SHORT).show();
-                        actualizaRonda();
-                        enviarMensajeRonda();
-                        enviarMensajeTurno();
-                        reiniciarBarraProgreso();
-                    }
-                //Pierdo la ronda
-                }else {
-                    //enviarMensajeSumaRonda();
-                    if ((ronda == 2 && misRondasGanadas == 0) || (ronda == 3)) {
-                        //Pierdes en la segunda ronda o en la tercera
-                        mostrarResultadosPerdedorMano("PRIMERO");
-                    }else {
-                        cambiarTurno();
-                        Toast.makeText(getApplicationContext(), "Esperando al Jugador", Toast.LENGTH_SHORT).show();
-                        bloquearCartas();
-                        actualizaRonda();
-                        enviarMensajeRonda();
-                        enviarMensajeTurno();
-                    }
-                }
-            //Hay empate
-            }else {
-                if (ronda == 1) {
-                    enviarMensajeHayEmpate();
-                    casoEmpatePrimero();
-                } else {
-                    enviarMensajeHayEmpate();
-                    casoEmpateTercero();
-                }
-            }
-        }
-
-
-
-
-
-
-
-
-
-
-/*
-        //Caso en el que NO hay empate
-        if (!hayEmpate()) {}
-            //Compruebo si tiro primero
-            tiroPrimero();
-           //Caso en el que ganas tirando segundo
-            if (soyGanadorRonda()) {
-                if (ronda == 1) {
-                    misRondasGanadas = 1;
-                    ganadorRonda1 = mMyId;
-                }
-                if (ronda == 2 && misRondasGanadas == 1) misRondasGanadas = 2;
-                else if (ronda == 2 && misRondasGanadas == 0) misRondasGanadas = 1;
-                if (ronda == 3) misRondasGanadas = 2;
-                //actualizaRonda();
-                enviarMensajeRonda();
-
-                //He ganado la partida
-                if (misRondasGanadas == 2) {
-                    enviarMensajeHasPerdido();
-                    mostrarResultadosGanadorMano();
-
-                } else {
-                    Toast.makeText(getApplicationContext(), "Es tu turno", Toast.LENGTH_SHORT).show();
-                    casoTiroPrimero = false;
-                    actualizaRonda();
-                    //Comunicar el turno al oponente, gane o pierda
-                    enviarMensajeTurno();
-                    reiniciarBarraProgreso();
-                }
-
-                //Caso en el que tiras primero, o pierdes tirando segundo
-            } else {
-                //Caso en el que pierdo tirando segundo
-                if (!casoTiroPrimero) {
-                    //Enviar mensaje para que el jugaddor sume rondas ganadas
-                    enviarMensajeSumaRonda();
-                }
-                //Caso continuo
-                if ((ronda == 2 && misRondasGanadas == 0) || (ronda == 3 && misRondasGanadas < 2) && !casoTiroPrimero) {
-                    enviarMensajeSumaRonda();
-                    //Pierdes en la segunda ronda o en la tercera
-                    enviarMensajeSumaRonda();
-                    mostrarResultadosPerdedorMano();
-                } else {
-                    //Caso en el que tiras primero o todavia no hay ganador");
-                    cambiarTurno();
-                    Toast.makeText(getApplicationContext(), "Esperando al Jugador", Toast.LENGTH_SHORT).show();
-                    tvJugador1.setEnabled(false);
-                    tvJugador2.setEnabled(false);
-                    tvJugador3.setEnabled(false);
-
-                    casoTiroPrimero = false;
-                    actualizaRonda();
-                    //Comunicar el turno al oponente, gane o pierda
-                    enviarMensajeTurno();
-                }
-            }
-           /* if (((ronda == 3 || (!soyGanadorRonda() && ronda == 2)) && misRondasGanadas < 2 && !casoTiroPrimero) || misRondasGanadas == 2) {
-                return;
-            } else {
-                casoTiroPrimero = false;
-                actualizaRonda();
-                //Comunicar el turno al oponente, gane o pierda
+            Log.d("KKKKK", "Tiro primero? " + tiroPrimero());
+            //Caso en el que tiro primero
+            if (tiroPrimero()) {
+                cambiarTurno();
+                Toast.makeText(getApplicationContext(), "Esperando al Jugador", Toast.LENGTH_SHORT).show();
+                bloquearCartas();
                 enviarMensajeTurno();
-            }
-        } else {
-            //Caso en el que hay empate
-            if (ronda == 1) {
-                enviarMensajeHayEmpate();
-                casoEmpatePrimero();
-            } else {
-                enviarMensajeHayEmpate();
-                casoEmpateTercero();
-            }
-       */
 
+                //Caso en que tiro segundo
+            } else {
+                //No hay empate
+                if (!hayEmpate()) {
+                    //Gano la ronda
+                    if (soyGanadorRonda()) {
+                        if (ronda == 1) {
+                            misRondasGanadas = 1;
+                            ganadorRonda1 = mMyId;
+                        } else if (ronda == 2) {
+                            misRondasGanadas++;
+                        } else if (ronda == 3) {
+                            misRondasGanadas = 2;
+                        }
+                        //He ganado la mano
+                        if (misRondasGanadas == 2) {
+                            //enviarMensajeHasPerdido();
+                            mostrarResultadosGanadorMano("PRIMERO");
+                            //Vuelvo a tirar
+                        } else {
+                            Toast.makeText(getApplicationContext(), "Es tu turno", Toast.LENGTH_SHORT).show();
+                            actualizaRonda();
+                            enviarMensajeRonda();
+                            enviarMensajeTurno();
+                            reiniciarBarraProgreso();
+                        }
+                        //Pierdo la ronda
+                    } else {
+                        //enviarMensajeSumaRonda();
+                        if ((ronda == 2 && misRondasGanadas == 0) || (ronda == 3)) {
+                            //Pierdes en la segunda ronda o en la tercera
+                            mostrarResultadosPerdedorMano("PRIMERO");
+                        } else {
+                            cambiarTurno();
+                            Toast.makeText(getApplicationContext(), "Esperando al Jugador", Toast.LENGTH_SHORT).show();
+                            bloquearCartas();
+                            actualizaRonda();
+                            enviarMensajeRonda();
+                            enviarMensajeTurno();
+                        }
+                    }
+                    //Hay empate
+                } else {
+                    if (ronda == 1) {
+                        enviarMensajeHayEmpate();
+                        casoEmpatePrimero();
+                    } else {
+                        enviarMensajeHayEmpate();
+                        casoEmpateTercero();
+                    }
+                }
+            }
+            break;
+
+            case 4:
+                ponerCartaSobreMesa(view);
+                //Envio el valor de la carta
+                byte[] messageCarta2 = ("$" + aux.toString()).getBytes();
+                enviarValorCarta(messageCarta2);
+                tvJugador1.setEnabled(false);
+                tvJugador2.setEnabled(false);
+                tvJugador3.setEnabled(false);
+                cambiarTurno();
+                Toast.makeText(getApplicationContext(), "Esperando al Jugador", Toast.LENGTH_SHORT).show();
+                enviarMensajeTurno();
+                break;
+        }
     }
 
     void casoEmpatePrimero() {
@@ -1938,17 +2156,26 @@ public class MainActivity extends Activity
     }
 
     boolean soyGanadorRonda() {
-        //Ronda 1
-        if (ronda == 1 && miValor > valor1) {
-            return true;
-        }
-        //Ronda 2
-        if (ronda == 2 && miValor > valor2) {
-            return true;
-        }
-        //Ronda 3
-        if (ronda == 3 && miValor > valor3) {
-            return true;
+
+        switch (numeroJugadores) {
+            case 2:
+            //Ronda 1
+            if (ronda == 1 && miValor > valor1) {
+                return true;
+            }
+            //Ronda 2
+            if (ronda == 2 && miValor > valor2) {
+                return true;
+            }
+            //Ronda 3
+            if (ronda == 3 && miValor > valor3) {
+                return true;
+            }
+            return false;
+
+            case 4:
+
+                return false;
         }
         return false;
     }
@@ -2307,35 +2534,304 @@ public class MainActivity extends Activity
         try {
             switch (buf[0]) {
                 case '$':
-                    String sBuf = new String(buf, "UTF-8");
-                    String arrayBuf[] = sBuf.split(" ");
-                    String palo = arrayBuf[1];
-                    String numeroCarta = arrayBuf[0].substring(1);
-                    Carta newCarta = new Carta(numeroCarta, palo, arrayBuf[2]);
-                    int valor = Integer.parseInt(arrayBuf[2]);
+                    if(numeroJugadores == 2) {
+                        String sBuf = new String(buf, "UTF-8");
+                        String arrayBuf[] = sBuf.split(" ");
+                        String palo = arrayBuf[1];
+                        String numeroCarta = arrayBuf[0].substring(1);
+                        Carta newCarta = new Carta(numeroCarta, palo, arrayBuf[2]);
+                        int valor = Integer.parseInt(arrayBuf[2]);
 
-                    if (tvMesaRival1.getVisibility() == View.INVISIBLE) {
-                        if (hayEmpate) {
-                            valorEmpate = valor;
-                        } else valor1 = valor;
-                        asignarImagenCarta(newCarta, tvMesaRival1);
-                        animacionRival(tvMesaRival1);
-                        Log.d("KKKKK", "Animando la carta rival 1");
-                    } else if (tvMesaRival2.getVisibility() == View.INVISIBLE) {
-                        if (hayEmpate) {
-                            valorEmpate = valor;
-                        } else valor2 = valor;
-                        asignarImagenCarta(newCarta, tvMesaRival2);
-                        animacionRival(tvMesaRival2);
-                        Log.d("KKKKK", "Animando la carta rival 2");
-                    } else if (tvMesaRival3.getVisibility() == View.INVISIBLE) {
-                        if (hayEmpate) {
-                            valorEmpate = valor;
-                        } else valor3 = valor;
-                        asignarImagenCarta(newCarta, tvMesaRival3);
-                        animacionRival(tvMesaRival3);
-                        Log.d("KKKKK", "Animando la carta rival 3");
+                        if (tvMesaRival1.getVisibility() == View.INVISIBLE) {
+                            if (hayEmpate) {
+                                valorEmpate = valor;
+                            } else valor1 = valor;
+                            asignarImagenCarta(newCarta, tvMesaRival1);
+                            animacionRival(tvMesaRival1);
+                            Log.d("KKKKK", "Animando la carta rival 1");
+                        } else if (tvMesaRival2.getVisibility() == View.INVISIBLE) {
+                            if (hayEmpate) {
+                                valorEmpate = valor;
+                            } else valor2 = valor;
+                            asignarImagenCarta(newCarta, tvMesaRival2);
+                            animacionRival(tvMesaRival2);
+                            Log.d("KKKKK", "Animando la carta rival 2");
+                        } else if (tvMesaRival3.getVisibility() == View.INVISIBLE) {
+                            if (hayEmpate) {
+                                valorEmpate = valor;
+                            } else valor3 = valor;
+                            asignarImagenCarta(newCarta, tvMesaRival3);
+                            animacionRival(tvMesaRival3);
+                            Log.d("KKKKK", "Animando la carta rival 3");
+                        }
+                    }//2 jugadores
+
+                    else if(numeroJugadores == 4) {
+                        String sBuf = new String(buf, "UTF-8");
+                        String arrayBuf[] = sBuf.split(" ");
+                        String palo = arrayBuf[1];
+                        String numeroCarta = arrayBuf[0].substring(1);
+                        Carta newCarta = new Carta(numeroCarta, palo, arrayBuf[2]);
+                        int valor = Integer.parseInt(arrayBuf[2]);
+
+                        if (mMyId.equals(idJugador1)) {
+
+                            if (sender.equals(idJugador2)) {
+                                if (tvMesaJ2_C1.getVisibility() == View.INVISIBLE) {
+                                    if (hayEmpate) {
+                                        valorEmpate = valor;
+                                    } else valor1_J2 = valor;
+                                    asignarImagenCarta(newCarta, tvMesaJ2_C1);
+                                    tvMesaJ2_C1.setVisibility(View.VISIBLE);
+                                } else if (tvMesaJ2_C2.getVisibility() == View.INVISIBLE) {
+                                    if (hayEmpate) {
+                                        valorEmpate = valor;
+                                    } else valor2_J2 = valor;
+                                    asignarImagenCarta(newCarta, tvMesaJ2_C2);
+                                    tvMesaJ2_C2.setVisibility(View.VISIBLE);
+                                } else if (tvMesaJ2_C3.getVisibility() == View.INVISIBLE) {
+                                    if (hayEmpate) {
+                                        valorEmpate = valor;
+                                    } else valor3_J2 = valor;
+                                    asignarImagenCarta(newCarta, tvMesaJ2_C3);
+                                    tvMesaJ2_C3.setVisibility(View.VISIBLE);
+                                }
+                            } else if (sender.equals(idJugador3)) {
+
+                                if (tvMesaJ3_C1.getVisibility() == View.INVISIBLE) {
+                                    if (hayEmpate) {
+                                        valorEmpate = valor;
+                                    } else valor1_J3 = valor;
+                                    asignarImagenCarta(newCarta, tvMesaJ3_C1);
+                                    tvMesaJ3_C1.setVisibility(View.VISIBLE);
+                                } else if (tvMesaJ3_C2.getVisibility() == View.INVISIBLE) {
+                                    if (hayEmpate) {
+                                        valorEmpate = valor;
+                                    } else valor2_J3 = valor;
+                                    asignarImagenCarta(newCarta, tvMesaJ3_C2);
+                                    tvMesaJ3_C2.setVisibility(View.VISIBLE);
+                                } else if (tvMesaJ3_C3.getVisibility() == View.INVISIBLE) {
+                                    if (hayEmpate) {
+                                        valorEmpate = valor;
+                                    } else valor3_J3 = valor;
+                                    asignarImagenCarta(newCarta, tvMesaJ3_C3);
+                                    tvMesaJ3_C3.setVisibility(View.VISIBLE);
+                                }
+                            } else if (sender.equals(idJugador4)) {
+                                if (tvMesaJ4_C1.getVisibility() == View.INVISIBLE) {
+                                    if (hayEmpate) {
+                                        valorEmpate = valor;
+                                    } else valor1_J4 = valor;
+                                    asignarImagenCarta(newCarta, tvMesaJ4_C1);
+                                    tvMesaJ4_C1.setVisibility(View.VISIBLE);
+                                } else if (tvMesaJ4_C2.getVisibility() == View.INVISIBLE) {
+                                    if (hayEmpate) {
+                                        valorEmpate = valor;
+                                    } else valor2_J4 = valor;
+                                    asignarImagenCarta(newCarta, tvMesaJ4_C2);
+                                    tvMesaJ4_C2.setVisibility(View.VISIBLE);
+                                } else if (tvMesaJ4_C3.getVisibility() == View.INVISIBLE) {
+                                    if (hayEmpate) {
+                                        valorEmpate = valor;
+                                    } else valor3_J4 = valor;
+                                    asignarImagenCarta(newCarta, tvMesaJ4_C3);
+                                    tvMesaJ4_C3.setVisibility(View.VISIBLE);
+                                }
+                            }
+
+                        } else if (mMyId.equals(idJugador2)) {
+
+                            if (sender.equals(idJugador1)) {
+                                if (tvMesaJ4_C1.getVisibility() == View.INVISIBLE) {
+                                    if (hayEmpate) {
+                                        valorEmpate = valor;
+                                    } else valor1_J4 = valor;
+                                    asignarImagenCarta(newCarta, tvMesaJ4_C1);
+                                    tvMesaJ4_C1.setVisibility(View.VISIBLE);
+                                } else if (tvMesaJ4_C2.getVisibility() == View.INVISIBLE) {
+                                    if (hayEmpate) {
+                                        valorEmpate = valor;
+                                    } else valor2_J4 = valor;
+                                    asignarImagenCarta(newCarta, tvMesaJ4_C2);
+                                    tvMesaJ4_C2.setVisibility(View.VISIBLE);
+                                } else if (tvMesaJ4_C3.getVisibility() == View.INVISIBLE) {
+                                    if (hayEmpate) {
+                                        valorEmpate = valor;
+                                    } else valor3_J4 = valor;
+                                    asignarImagenCarta(newCarta, tvMesaJ4_C3);
+                                    tvMesaJ4_C3.setVisibility(View.VISIBLE);
+                                }
+                            } else if (sender.equals(idJugador3)) {
+                                if (tvMesaJ2_C1.getVisibility() == View.INVISIBLE) {
+                                    if (hayEmpate) {
+                                        valorEmpate = valor;
+                                    } else valor1_J2 = valor;
+                                    asignarImagenCarta(newCarta, tvMesaJ2_C1);
+                                    tvMesaJ2_C1.setVisibility(View.VISIBLE);
+                                } else if (tvMesaJ2_C2.getVisibility() == View.INVISIBLE) {
+                                    if (hayEmpate) {
+                                        valorEmpate = valor;
+                                    } else valor2_J2 = valor;
+                                    asignarImagenCarta(newCarta, tvMesaJ2_C2);
+                                    tvMesaJ2_C2.setVisibility(View.VISIBLE);
+                                } else if (tvMesaJ2_C3.getVisibility() == View.INVISIBLE) {
+                                    if (hayEmpate) {
+                                        valorEmpate = valor;
+                                    } else valor3_J2 = valor;
+                                    asignarImagenCarta(newCarta, tvMesaJ2_C3);
+                                    tvMesaJ2_C3.setVisibility(View.VISIBLE);
+                                }
+                            } else if (sender.equals(idJugador4)) {
+                                if (tvMesaJ3_C1.getVisibility() == View.INVISIBLE) {
+                                    if (hayEmpate) {
+                                        valorEmpate = valor;
+                                    } else valor1_J3 = valor;
+                                    asignarImagenCarta(newCarta, tvMesaJ3_C1);
+                                    tvMesaJ3_C1.setVisibility(View.VISIBLE);
+                                } else if (tvMesaJ3_C2.getVisibility() == View.INVISIBLE) {
+                                    if (hayEmpate) {
+                                        valorEmpate = valor;
+                                    } else valor2_J3 = valor;
+                                    asignarImagenCarta(newCarta, tvMesaJ3_C2);
+                                    tvMesaJ3_C2.setVisibility(View.VISIBLE);
+                                } else if (tvMesaJ3_C3.getVisibility() == View.INVISIBLE) {
+                                    if (hayEmpate) {
+                                        valorEmpate = valor;
+                                    } else valor3_J3 = valor;
+                                    asignarImagenCarta(newCarta, tvMesaJ3_C3);
+                                    tvMesaJ3_C3.setVisibility(View.VISIBLE);
+                                }
+                            }
+                        } else if (mMyId.equals(idJugador3)) {
+
+                            if (sender.equals(idJugador1)) {
+                                if (tvMesaJ3_C1.getVisibility() == View.INVISIBLE) {
+                                    if (hayEmpate) {
+                                        valorEmpate = valor;
+                                    } else valor1_J3 = valor;
+                                    asignarImagenCarta(newCarta, tvMesaJ3_C1);
+                                    tvMesaJ3_C1.setVisibility(View.VISIBLE);
+                                } else if (tvMesaJ3_C2.getVisibility() == View.INVISIBLE) {
+                                    if (hayEmpate) {
+                                        valorEmpate = valor;
+                                    } else valor2_J3 = valor;
+                                    asignarImagenCarta(newCarta, tvMesaJ3_C2);
+                                    tvMesaJ3_C2.setVisibility(View.VISIBLE);
+                                } else if (tvMesaJ3_C3.getVisibility() == View.INVISIBLE) {
+                                    if (hayEmpate) {
+                                        valorEmpate = valor;
+                                    } else valor3_J3 = valor;
+                                    asignarImagenCarta(newCarta, tvMesaJ3_C3);
+                                    tvMesaJ3_C3.setVisibility(View.VISIBLE);
+                                }
+                            } else if (sender.equals(idJugador2)) {
+                                if (tvMesaJ4_C1.getVisibility() == View.INVISIBLE) {
+                                    if (hayEmpate) {
+                                        valorEmpate = valor;
+                                    } else valor1_J4 = valor;
+                                    asignarImagenCarta(newCarta, tvMesaJ4_C1);
+                                    tvMesaJ4_C1.setVisibility(View.VISIBLE);
+                                } else if (tvMesaJ4_C2.getVisibility() == View.INVISIBLE) {
+                                    if (hayEmpate) {
+                                        valorEmpate = valor;
+                                    } else valor2_J4 = valor;
+                                    asignarImagenCarta(newCarta, tvMesaJ4_C2);
+                                    tvMesaJ4_C2.setVisibility(View.VISIBLE);
+                                } else if (tvMesaJ4_C3.getVisibility() == View.INVISIBLE) {
+                                    if (hayEmpate) {
+                                        valorEmpate = valor;
+                                    } else valor3_J4 = valor;
+                                    asignarImagenCarta(newCarta, tvMesaJ4_C3);
+                                    tvMesaJ4_C3.setVisibility(View.VISIBLE);
+                                }
+                            } else if (sender.equals(idJugador4)) {
+                                if (tvMesaJ2_C1.getVisibility() == View.INVISIBLE) {
+                                    if (hayEmpate) {
+                                        valorEmpate = valor;
+                                    } else valor1_J2 = valor;
+                                    asignarImagenCarta(newCarta, tvMesaJ2_C1);
+                                    tvMesaJ2_C1.setVisibility(View.VISIBLE);
+                                } else if (tvMesaJ2_C2.getVisibility() == View.INVISIBLE) {
+                                    if (hayEmpate) {
+                                        valorEmpate = valor;
+                                    } else valor2_J2 = valor;
+                                    asignarImagenCarta(newCarta, tvMesaJ2_C2);
+                                    tvMesaJ2_C2.setVisibility(View.VISIBLE);
+                                } else if (tvMesaJ2_C3.getVisibility() == View.INVISIBLE) {
+                                    if (hayEmpate) {
+                                        valorEmpate = valor;
+                                    } else valor3_J2 = valor;
+                                    asignarImagenCarta(newCarta, tvMesaJ2_C3);
+                                    tvMesaJ2_C3.setVisibility(View.VISIBLE);
+                                }
+                            }
+                        } else if (mMyId.equals(idJugador4)) {
+
+                            if (sender.equals(idJugador1)) {
+                                if (tvMesaJ2_C1.getVisibility() == View.INVISIBLE) {
+                                    if (hayEmpate) {
+                                        valorEmpate = valor;
+                                    } else valor1_J4 = valor;
+                                    asignarImagenCarta(newCarta, tvMesaJ2_C1);
+                                    tvMesaJ2_C1.setVisibility(View.VISIBLE);
+                                } else if (tvMesaJ2_C2.getVisibility() == View.INVISIBLE) {
+                                    if (hayEmpate) {
+                                        valorEmpate = valor;
+                                    } else valor2_J4 = valor;
+                                    asignarImagenCarta(newCarta, tvMesaJ2_C2);
+                                    tvMesaJ2_C2.setVisibility(View.VISIBLE);
+                                } else if (tvMesaJ2_C3.getVisibility() == View.INVISIBLE) {
+                                    if (hayEmpate) {
+                                        valorEmpate = valor;
+                                    } else valor3_J4 = valor;
+                                    asignarImagenCarta(newCarta, tvMesaJ2_C3);
+                                    tvMesaJ2_C3.setVisibility(View.VISIBLE);
+                                }
+                            } else if (sender.equals(idJugador2)) {
+                                if (tvMesaJ3_C1.getVisibility() == View.INVISIBLE) {
+                                    if (hayEmpate) {
+                                        valorEmpate = valor;
+                                    } else valor1_J3 = valor;
+                                    asignarImagenCarta(newCarta, tvMesaJ3_C1);
+                                    tvMesaJ3_C1.setVisibility(View.VISIBLE);
+                                } else if (tvMesaJ3_C2.getVisibility() == View.INVISIBLE) {
+                                    if (hayEmpate) {
+                                        valorEmpate = valor;
+                                    } else valor2_J3 = valor;
+                                    asignarImagenCarta(newCarta, tvMesaJ3_C2);
+                                    tvMesaJ3_C2.setVisibility(View.VISIBLE);
+                                } else if (tvMesaJ3_C3.getVisibility() == View.INVISIBLE) {
+                                    if (hayEmpate) {
+                                        valorEmpate = valor;
+                                    } else valor3_J3 = valor;
+                                    asignarImagenCarta(newCarta, tvMesaJ3_C3);
+                                    tvMesaJ3_C3.setVisibility(View.VISIBLE);
+                                }
+                            } else if (sender.equals(idJugador3)) {
+                                if (tvMesaJ4_C1.getVisibility() == View.INVISIBLE) {
+                                    if (hayEmpate) {
+                                        valorEmpate = valor;
+                                    } else valor1_J4 = valor;
+                                    asignarImagenCarta(newCarta, tvMesaJ4_C1);
+                                    tvMesaJ4_C1.setVisibility(View.VISIBLE);
+                                } else if (tvMesaJ4_C2.getVisibility() == View.INVISIBLE) {
+                                    if (hayEmpate) {
+                                        valorEmpate = valor;
+                                    } else valor2_J4 = valor;
+                                    asignarImagenCarta(newCarta, tvMesaJ4_C2);
+                                    tvMesaJ4_C2.setVisibility(View.VISIBLE);
+                                } else if (tvMesaJ4_C3.getVisibility() == View.INVISIBLE) {
+                                    if (hayEmpate) {
+                                        valorEmpate = valor;
+                                    } else valor3_J4 = valor;
+                                    asignarImagenCarta(newCarta, tvMesaJ4_C3);
+                                    tvMesaJ4_C3.setVisibility(View.VISIBLE);
+                                }
+                            }
+
+                        } //4 jugadores
                     }
+
                     break;
                 case 'R':
                     actualizaRonda();
@@ -2368,18 +2864,59 @@ public class MainActivity extends Activity
                     break;
 
                 case 'S':
-                    resetAll();
-                    desbloquearCartas();
-                    String ssBuf = new String(buf, "UTF-8");
-                    String[] arrayCartasJ2 = ssBuf.split(" ");
-                    numCarta[0] = Integer.parseInt(arrayCartasJ2[1]);
-                    numCarta[1] = Integer.parseInt(arrayCartasJ2[2]);
-                    numCarta[2] = Integer.parseInt(arrayCartasJ2[3]);
-                    repartir(numCarta);
-                    carta1 = new Carta(manoJugador.get(0).getNumero(), manoJugador.get(0).getPalo(), manoJugador.get(0).getValor());
-                    carta2 = new Carta(manoJugador.get(1).getNumero(), manoJugador.get(1).getPalo(), manoJugador.get(1).getValor());
-                    carta3 = new Carta(manoJugador.get(2).getNumero(), manoJugador.get(2).getPalo(), manoJugador.get(2).getValor());
-                    cerrarDialogoAndStart(5000);
+                    if(numeroJugadores == 2) {
+                        resetAll();
+                        desbloquearCartas();
+                        String ssBuf = new String(buf, "UTF-8");
+                        String[] arrayCartasJ2 = ssBuf.split(" ");
+                        numCarta[0] = Integer.parseInt(arrayCartasJ2[1]);
+                        numCarta[1] = Integer.parseInt(arrayCartasJ2[2]);
+                        numCarta[2] = Integer.parseInt(arrayCartasJ2[3]);
+                        repartir(numCarta);
+                        carta1 = new Carta(manoJugador.get(0).getNumero(), manoJugador.get(0).getPalo(), manoJugador.get(0).getValor());
+                        carta2 = new Carta(manoJugador.get(1).getNumero(), manoJugador.get(1).getPalo(), manoJugador.get(1).getValor());
+                        carta3 = new Carta(manoJugador.get(2).getNumero(), manoJugador.get(2).getPalo(), manoJugador.get(2).getValor());
+                        cerrarDialogoAndStart(5000);
+                    }
+
+                    else if(numeroJugadores == 4){
+                        marcador.setText("Yo: " + puntosTotalesMios);
+                        marcador2.setText("Rival: " + puntosTotalesJugador2);
+
+                        resetAll();
+                        desbloquearCartas();
+                        Log.d("TTTTTT", "Recibo las cartas");
+                        String ssBuf = new String(buf, "UTF-8");
+                        Log.d("TTTTTT", ssBuf.toString());
+                        String[] arrayCartasJugadores = ssBuf.split(" ");
+                        Log.d("TTTTTT", arrayCartasJugadores.toString());
+
+                        if(!mMyId.equals(idJugador1) && mMyId.equals(idJugador2)) {
+                            numCarta[0] = Integer.parseInt(arrayCartasJugadores[1]);
+                            numCarta[1] = Integer.parseInt(arrayCartasJugadores[2]);
+                            numCarta[2] = Integer.parseInt(arrayCartasJugadores[3]);
+                        }
+
+                        else if(!mMyId.equals(idJugador1) && mMyId.equals(idJugador3)) {
+                            numCarta[0] = Integer.parseInt(arrayCartasJugadores[4]);
+                            numCarta[1] = Integer.parseInt(arrayCartasJugadores[5]);
+                            numCarta[2] = Integer.parseInt(arrayCartasJugadores[6]);
+                        }
+
+                        else if(!mMyId.equals(idJugador1) && mMyId.equals(idJugador4)) {
+                            numCarta[0] = Integer.parseInt(arrayCartasJugadores[7]);
+                            numCarta[1] = Integer.parseInt(arrayCartasJugadores[8]);
+                            numCarta[2] = Integer.parseInt(arrayCartasJugadores[9]);
+                        }
+
+                        repartir(numCarta);
+                        carta1 = new Carta(manoJugador.get(0).getNumero(), manoJugador.get(0).getPalo(), manoJugador.get(0).getValor());
+                        carta2 = new Carta(manoJugador.get(1).getNumero(), manoJugador.get(1).getPalo(), manoJugador.get(1).getValor());
+                        carta3 = new Carta(manoJugador.get(2).getNumero(), manoJugador.get(2).getPalo(), manoJugador.get(2).getValor());
+                        cerrarDialogoAndStart(6000);
+                        Log.d("TTTTTT", "Start game");
+                    }
+
                     break;
 
                 case 'M':
@@ -2783,13 +3320,14 @@ public class MainActivity extends Activity
             R.id.button_accept_popup_invitation, R.id.button_invite_players,
             R.id.button_quick_game, R.id.button_see_invitations, R.id.button_sign_in,
             R.id.button_sign_out, R.id.button_single_player,
-            R.id.button_single_player_2
+            R.id.button_single_player_2,R.id.button_quick_game_4
     };
 
     // This array lists all the individual screens our game has.
     final static int[] SCREENS = {
             R.id.screen_game, R.id.screen_main, R.id.screen_sign_in,
-            R.id.screen_wait, R.id.screen_lost, R.id.screen_win
+            R.id.screen_wait, R.id.screen_lost, R.id.screen_win,
+            R.id.screen_game_4_jugadores
     };
     int mCurScreen = -1;
 
@@ -2917,37 +3455,132 @@ public class MainActivity extends Activity
 
     public int[] crearAleatorio() {
 
-        if (mMyId.equals(mano)) {
+        switch (numeroJugadores) {
+            case 2:
 
-            list[0] = (int) (Math.random() * 22);
-            int aux = (int) (Math.random() * 22);
-            while (list[0] == aux) {
-                aux = (int) (Math.random() * 22);
-            }
-            list[1] = aux;
-            int aux2 = (int) (Math.random() * 22);
-            while (list[0] == aux2 || list[1] == aux2) {
-                aux2 = (int) Math.floor(Math.random() * 21);
-            }
-            list[2] = aux2;
-            int aux3 = (int) (Math.random() * 22);
-            while (list[0] == aux3 || list[1] == aux3 || list[2] == aux3) {
-                aux3 = (int) Math.floor(Math.random() * 21);
-            }
-            list2[0] = aux3;
-            int aux4 = (int) (Math.random() * 22);
-            while (list[0] == aux4 || list[1] == aux4 || list[2] == aux4 || list2[0] == aux4) {
-                aux4 = (int) Math.floor(Math.random() * 21);
-            }
-            list2[1] = aux4;
-            int aux5 = (int) (Math.random() * 22);
-            while (list[0] == aux5 || list[1] == aux5 || list[2] == aux5 || list2[0] == aux5 || list2[1] == aux5) {
-                aux5 = (int) (Math.random() * 22);
-            }
-            list2[2] = aux5;
+                if (mMyId.equals(mano)) {
 
-            sCartasJ2 = list2[0] + " " + list2[1] + " " + list2[2];
+                    list[0] = (int) (Math.random() * 22);
+                    int aux = (int) (Math.random() * 22);
+                    while (list[0] == aux) {
+                        aux = (int) (Math.random() * 22);
+                    }
+                    list[1] = aux;
+                    int aux2 = (int) (Math.random() * 22);
+                    while (list[0] == aux2 || list[1] == aux2) {
+                        aux2 = (int) Math.floor(Math.random() * 21);
+                    }
+                    list[2] = aux2;
+                    int aux3 = (int) (Math.random() * 22);
+                    while (list[0] == aux3 || list[1] == aux3 || list[2] == aux3) {
+                        aux3 = (int) Math.floor(Math.random() * 21);
+                    }
+                    list2[0] = aux3;
+                    int aux4 = (int) (Math.random() * 22);
+                    while (list[0] == aux4 || list[1] == aux4 || list[2] == aux4 || list2[0] == aux4) {
+                        aux4 = (int) Math.floor(Math.random() * 21);
+                    }
+                    list2[1] = aux4;
+                    int aux5 = (int) (Math.random() * 22);
+                    while (list[0] == aux5 || list[1] == aux5 || list[2] == aux5 || list2[0] == aux5 || list2[1] == aux5) {
+                        aux5 = (int) (Math.random() * 22);
+                    }
+                    list2[2] = aux5;
 
+                    sCartasJ2 = list2[0] + " " + list2[1] + " " + list2[2];
+
+                }
+                return list;
+
+            case 4:
+                if (mMyId.equals(mano)) {
+
+                    list[0] = (int) (Math.random() * 22);
+
+                    int aux = (int) (Math.random() * 22);
+                    while (list[0] == aux) {
+                        aux = (int) (Math.random() * 22);
+                    }
+                    list[1] = aux;
+
+                    int aux2 = (int) (Math.random() * 22);
+                    while (list[0] == aux2 || list[1] == aux2) {
+                        aux2 = (int) Math.floor(Math.random() * 21);
+                    }
+                    list[2] = aux2;
+
+                    int aux3 = (int) (Math.random() * 22);
+                    while (list[0] == aux3 || list[1] == aux3 || list[2] == aux3) {
+                        aux3 = (int) Math.floor(Math.random() * 21);
+                    }
+                    list2[0] = aux3;
+
+                    int aux4 = (int) (Math.random() * 22);
+                    while (list[0] == aux4 || list[1] == aux4 || list[2] == aux4 || list2[0] == aux4) {
+                        aux4 = (int) Math.floor(Math.random() * 21);
+                    }
+                    list2[1] = aux4;
+
+                    int aux5 = (int) (Math.random() * 22);
+                    while (list[0] == aux5 || list[1] == aux5 || list[2] == aux5 || list2[0] == aux5
+                            || list2[1] == aux5) {
+                        aux5 = (int) (Math.random() * 22);
+                    }
+                    list2[2] = aux5;
+
+                    int aux6 = (int) (Math.random() * 22);
+                    while (list[0] == aux6 || list[1] == aux6 || list[2] == aux6 || list2[0] == aux6
+                            || list2[1] == aux6 || list2[2] == aux6) {
+                        aux6 = (int) (Math.random() * 22);
+                    }
+                    list3[0] = aux6;
+
+                    int aux7 = (int) (Math.random() * 22);
+                    while (list[0] == aux7 || list[1] == aux7 || list[2] == aux7 || list2[0] == aux7
+                            || list2[1] == aux7 || list2[2] == aux7 || list3[0] == aux7) {
+                        aux7 = (int) (Math.random() * 22);
+                    }
+                    list3[1] = aux7;
+
+                    int aux8 = (int) (Math.random() * 22);
+                    while (list[0] == aux8 || list[1] == aux8 || list[2] == aux8 || list2[0] == aux8
+                            || list2[1] == aux8 || list2[2] == aux8 || list3[0] == aux8
+                            || list3[1] == aux8 ) {
+                        aux8 = (int) (Math.random() * 22);
+                    }
+                    list3[2] = aux8;
+
+                    int aux9 = (int) (Math.random() * 22);
+                    while (list[0] == aux9 || list[1] == aux9 || list[2] == aux9 || list2[0] == aux9
+                            || list2[1] == aux9 || list2[2] == aux9 || list3[0] == aux9
+                            || list3[1] == aux9 || list3[2] == aux9) {
+                        aux9 = (int) (Math.random() * 22);
+                    }
+                    list4[0] = aux9;
+
+                    int aux10 = (int) (Math.random() * 22);
+                    while (list[0] == aux10 || list[1] == aux10 || list[2] == aux10 || list2[0] == aux10
+                            || list2[1] == aux10 || list2[2] == aux10 || list3[0] == aux10
+                            || list3[1] == aux10 || list3[2] == aux10 || list4[0] == aux10) {
+                        aux10 = (int) (Math.random() * 22);
+                    }
+                    list4[1] = aux10;
+
+                    int aux11 = (int) (Math.random() * 22);
+                    while (list[0] == aux11 || list[1] == aux11 || list[2] == aux11 || list2[0] == aux11
+                            || list2[1] == aux11 || list2[2] == aux11 || list3[0] == aux11
+                            || list3[1] == aux11 || list3[2] == aux11 || list4[0] == aux11 || list4[1] == aux11) {
+                        aux11 = (int) (Math.random() * 22);
+                    }
+                    list4[2] = aux11;
+
+
+                    sCartasJ2 = list2[0] + " " + list2[1] + " " + list2[2];
+                    sCartasJ3 = list3[0] + " " + list3[1] + " " + list3[2];
+                    sCartasJ4 = list4[0] + " " + list4[1] + " " + list4[2];
+
+                }
+                return list;
         }
         return list;
     }
@@ -2980,13 +3613,34 @@ public class MainActivity extends Activity
     }
 
     public void cambiarMano() {
-        if (mano.equals(idJugador1)) {
-            mano = idJugador2;
-        } else if (mano.equals(idJugador2)) {
-            mano = idJugador1;
-        }
+        switch (numeroJugadores) {
+            case 2:
+            if (mano.equals(idJugador1)) {
+                mano = idJugador2;
+            } else if (mano.equals(idJugador2)) {
+                mano = idJugador1;
+            }
 
-        turno = mano;}
+            turno = mano;
+                break;
+
+            case 4:
+                if (mano.equals(idJugador1)) {
+                    mano = idJugador2;
+                } else if (mano.equals(idJugador2)) {
+                    mano = idJugador3;
+                }
+                else if (mano.equals(idJugador3)) {
+                    mano = idJugador4;
+                }
+                else if (mano.equals(idJugador4)) {
+                    mano = idJugador1;
+                }
+
+                turno = mano;
+                break;
+        }
+    }
 
     public void repartirTrasMano() {
         cambiarMano();
