@@ -199,8 +199,8 @@ public class MainActivity extends Activity
     ImageView imgPerfil;
     ProgressBar progressBar1;
     ProgressBar progressBar2;
-    CountDownTimer mCountDownTimerJ1;
-    CountDownTimer mCountDownTimerJ2;
+    CountDownTimer mCountDownTimerJ1 = null;
+    CountDownTimer mCountDownTimerJ2 = null;
     int segundos = 40;
 
     private float xDelta;
@@ -302,8 +302,6 @@ public class MainActivity extends Activity
         tvMesaRival1.animate().rotationXBy(30).rotationYBy(-5).rotation(3).setDuration(0);
         tvMesaRival2.animate().rotationXBy(30).setDuration(0);
         tvMesaRival3.animate().rotationXBy(30).rotationYBy(5).rotation(-3).setDuration(0);
-
-
 
         tvMesaRival1.setVisibility(View.INVISIBLE);
         tvMesaRival2.setVisibility(View.INVISIBLE);
@@ -1351,8 +1349,8 @@ public class MainActivity extends Activity
 
         textoAccion1.setVisibility(View.INVISIBLE);
         textoAccion2.setVisibility(View.INVISIBLE);
+        if(mCountDownTimerJ1 != null && mCountDownTimerJ2 != null)cancelarBarraProgreso();
         segundos = 40;
-
         progressBar1.setVisibility(View.INVISIBLE);
         progressBar2.setVisibility(View.INVISIBLE);
 
@@ -1519,40 +1517,35 @@ public class MainActivity extends Activity
         if (mMyId.equals(idJugador2) && turno.equals(idJugador2)) turno = idJugador1;
 
     }
-    void inicializarBarraProgreso() {
-
+    void iniciarBarraProgresoJ1() {
         mCountDownTimerJ1 = new CountDownTimer(40000, 1000) {
-
             @Override
             public void onTick(long millisUntilFinished) {
                 segundos--;
                 progressBar1.setProgress(segundos);
-
             }
-
             @Override
             public void onFinish() {
                 //Do what you want
                 segundos--;
                 progressBar1.setProgress(segundos);
             }
-        };
+        }.start();
+    }
+    void iniciarBarraProgresoJ2() {
         mCountDownTimerJ2 = new CountDownTimer(40000, 1000) {
-
             @Override
             public void onTick(long millisUntilFinished) {
                 segundos--;
                 progressBar2.setProgress(segundos);
-
             }
-
             @Override
             public void onFinish() {
                 //Do what you want
                 segundos--;
                 progressBar2.setProgress(segundos);
             }
-        };
+        }.start();
     }
 
 
@@ -1562,24 +1555,33 @@ public class MainActivity extends Activity
             mCountDownTimerJ1.cancel();
             segundos = 40;
             progressBar2.setVisibility(View.VISIBLE);
-            mCountDownTimerJ2.start();
+            iniciarBarraProgresoJ2();
         }else if(progressBar2.getVisibility() == View.VISIBLE){
             progressBar2.setVisibility(View.INVISIBLE);
             mCountDownTimerJ2.cancel();
             segundos = 40;
             progressBar1.setVisibility(View.VISIBLE);
-            mCountDownTimerJ1.start();
+            iniciarBarraProgresoJ1();
         }
     }
     void reiniciarBarraProgreso(){
         if(progressBar1.getVisibility() == View.VISIBLE){
             mCountDownTimerJ1.cancel();
             segundos = 40;
-            mCountDownTimerJ1.start();
+            iniciarBarraProgresoJ1();
         }else if(progressBar2.getVisibility() == View.VISIBLE){
             mCountDownTimerJ2.cancel();
             segundos = 40;
-            mCountDownTimerJ2.start();
+            iniciarBarraProgresoJ2();
+        }
+    }
+    void cancelarBarraProgreso(){
+        if(progressBar1.getVisibility() == View.VISIBLE){
+            mCountDownTimerJ1.cancel();
+
+        }else if(progressBar2.getVisibility() == View.VISIBLE){
+            mCountDownTimerJ2.cancel();
+
         }
     }
     void animacionAbrirCartas(){
@@ -1687,8 +1689,7 @@ public class MainActivity extends Activity
             animacionAbrirCartas();
             progressBar1.setVisibility(View.VISIBLE);
             progressBar2.setVisibility(View.INVISIBLE);
-            inicializarBarraProgreso();
-            mCountDownTimerJ1.start();
+            iniciarBarraProgresoJ1();
             animarAparecerMenu();
         }
 
@@ -1700,8 +1701,7 @@ public class MainActivity extends Activity
             animacionAbrirCartas();
             progressBar2.setVisibility(View.VISIBLE);
             progressBar1.setVisibility(View.INVISIBLE);
-            inicializarBarraProgreso();
-            mCountDownTimerJ2.start();
+            iniciarBarraProgresoJ2();
             animarDesaparecerMenu();
 
         }
