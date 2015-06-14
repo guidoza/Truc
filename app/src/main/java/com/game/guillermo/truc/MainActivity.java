@@ -261,6 +261,7 @@ public class MainActivity extends Activity
     int valor1_J4 = 0;
     int valor2_J4 = 0;
     int valor3_J4 = 0;
+    int invitados = 0;
 
     //Strings
     String idJugador3 = null;
@@ -1081,6 +1082,7 @@ public class MainActivity extends Activity
         // get the invitee list
         final ArrayList<String> invitees = data.getStringArrayListExtra(Games.EXTRA_PLAYER_IDS);
         Log.d(TAG, "Invitee count: " + invitees.size());
+        invitados = invitees.size();
 
         // get the automatch criteria
         Bundle autoMatchCriteria = null;
@@ -1103,7 +1105,6 @@ public class MainActivity extends Activity
         }
         switchToScreen(R.id.screen_wait);
         keepScreenOn();
-        desbloquearCartas();
         Games.RealTimeMultiplayer.create(mGoogleApiClient, rtmConfigBuilder.build());
         Log.d(TAG, "Room created, waiting for it to be ready...");
     }
@@ -1134,7 +1135,6 @@ public class MainActivity extends Activity
                 .setRoomStatusUpdateListener(this);
         switchToScreen(R.id.screen_wait);
         keepScreenOn();
-        desbloquearCartas();
         Games.RealTimeMultiplayer.join(mGoogleApiClient, roomConfigBuilder.build());
     }
 
@@ -1301,8 +1301,64 @@ public class MainActivity extends Activity
         mMyId = room.getParticipantId(Games.Players.getCurrentPlayerId(mGoogleApiClient));
         remoteId = null;
         resetPuntos();
-        numeroJugadores = mParticipants.size();
         Log.d("ZZZ", "Numero de jugadores: " + numeroJugadores);
+
+        // print out the list of participants (for debug purposes)
+        Log.d(TAG, "Room ID: " + mRoomId);
+        Log.d(TAG, "My ID " + mMyId);
+        Log.d(TAG, "<< CONNECTED TO ROOM>>");
+
+    }
+
+    // Called when we've successfully left the room (this happens a result of voluntarily leaving
+    // via a call to leaveRoom(). If we get disconnected, we get onDisconnectedFromRoom()).
+    @Override
+    public void onLeftRoom(int statusCode, String roomId) {
+        // we have left the room; return to main screen.
+        Log.d(TAG, "onLeftRoom, code " + statusCode);
+        switchToMainScreen();
+    }
+
+    // Called when we get disconnected from the room. We return to the main screen.
+    @Override
+    public void onDisconnectedFromRoom(Room room) {
+        mRoomId = null;
+        showGameError();
+    }
+
+    // Show error message about game being cancelled and return to main screen.
+    void showGameError() {
+        BaseGameUtils.makeSimpleDialog(this, getString(R.string.game_problem));
+        switchToMainScreen();
+    }
+
+    // Called when room has been created
+    @Override
+    public void onRoomCreated(int statusCode, Room room) {
+        Log.d(TAG, "onRoomCreated(" + statusCode + ", " + room + ")");
+        if (statusCode != GamesStatusCodes.STATUS_OK) {
+            Log.e(TAG, "*** Error: onRoomCreated, status " + statusCode);
+            showGameError();
+            return;
+        }
+
+        // show the waiting room UI
+        //room.getAutoMatchCriteria().ge
+        showWaitingRoom(room);
+    }
+
+    // Called when room is fully connected.
+    @Override
+    public void onRoomConnected(int statusCode, Room room) {
+        Log.d(TAG, "onRoomConnected(" + statusCode + ", " + room + ")");
+        if (statusCode != GamesStatusCodes.STATUS_OK) {
+            Log.e(TAG, "*** Error: onRoomConnected, status " + statusCode);
+            showGameError();
+            return;
+        }
+        updateRoom(room);
+        numeroJugadores = mParticipants.size();
+        Log.e(TAG, "numero de jugadores" + numeroJugadores);
 
         if(numeroJugadores == 2) {
             ArrayList<String> ids = room.getParticipantIds();
@@ -1354,11 +1410,6 @@ public class MainActivity extends Activity
             Log.d("ZZZ", "Nombre : " +mParticipants.get(3).getDisplayName());
 
         }
-        // print out the list of participants (for debug purposes)
-        Log.d(TAG, "Room ID: " + mRoomId);
-        Log.d(TAG, "My ID " + mMyId);
-        Log.d(TAG, "<< CONNECTED TO ROOM>>");
-
 
         if (mRoomId != null) {
             for (Participant p : mParticipants) {
@@ -1371,56 +1422,6 @@ public class MainActivity extends Activity
                 }
             }
         }
-
-        //getProfileInformation();
-    }
-
-    // Called when we've successfully left the room (this happens a result of voluntarily leaving
-    // via a call to leaveRoom(). If we get disconnected, we get onDisconnectedFromRoom()).
-    @Override
-    public void onLeftRoom(int statusCode, String roomId) {
-        // we have left the room; return to main screen.
-        Log.d(TAG, "onLeftRoom, code " + statusCode);
-        switchToMainScreen();
-    }
-
-    // Called when we get disconnected from the room. We return to the main screen.
-    @Override
-    public void onDisconnectedFromRoom(Room room) {
-        mRoomId = null;
-        showGameError();
-    }
-
-    // Show error message about game being cancelled and return to main screen.
-    void showGameError() {
-        BaseGameUtils.makeSimpleDialog(this, getString(R.string.game_problem));
-        switchToMainScreen();
-    }
-
-    // Called when room has been created
-    @Override
-    public void onRoomCreated(int statusCode, Room room) {
-        Log.d(TAG, "onRoomCreated(" + statusCode + ", " + room + ")");
-        if (statusCode != GamesStatusCodes.STATUS_OK) {
-            Log.e(TAG, "*** Error: onRoomCreated, status " + statusCode);
-            showGameError();
-            return;
-        }
-
-        // show the waiting room UI
-        showWaitingRoom(room);
-    }
-
-    // Called when room is fully connected.
-    @Override
-    public void onRoomConnected(int statusCode, Room room) {
-        Log.d(TAG, "onRoomConnected(" + statusCode + ", " + room + ")");
-        if (statusCode != GamesStatusCodes.STATUS_OK) {
-            Log.e(TAG, "*** Error: onRoomConnected, status " + statusCode);
-            showGameError();
-            return;
-        }
-        updateRoom(room);
     }
 
     @Override
@@ -2381,11 +2382,23 @@ public class MainActivity extends Activity
     }
 
     public void enviarMensajeRepartir() {
-        byte[] messageRepartir = ("S" + " " + sCartasJ2+ " " + sCartasJ3+ " " + sCartasJ4).getBytes();
+        byte[] messageRepartir = ("S" + " " + sCartasJ2).getBytes();
         for (Participant p : mParticipants) {
             if (!p.getParticipantId().equals(mMyId)) {
                 Games.RealTimeMultiplayer.sendReliableMessage(mGoogleApiClient, null, messageRepartir,
                         mRoomId, p.getParticipantId());
+
+            }
+        }
+    }
+    public void enviarMensajeRepartir4J() {
+        Log.d("BBBBBBBBB","Enviando el mensaje de repartir...");
+        byte[] messageRepartir = ("S"+" "+sCartasJ2+" "+sCartasJ3+" "+sCartasJ4).getBytes();
+        for (Participant p : mParticipants) {
+            if (!p.getParticipantId().equals(mMyId)) {
+                Games.RealTimeMultiplayer.sendReliableMessage(mGoogleApiClient, null, messageRepartir,
+                        mRoomId, p.getParticipantId());
+                Log.d("BBBBBBBBB", "Mensaje enviado");
 
             }
         }
@@ -2915,7 +2928,6 @@ public class MainActivity extends Activity
                 case 'S':
                     if(numeroJugadores == 2) {
                         resetAll();
-                        desbloquearCartas();
                         String ssBuf = new String(buf, "UTF-8");
                         String[] arrayCartasJ2 = ssBuf.split(" ");
                         numCarta[0] = Integer.parseInt(arrayCartasJ2[1]);
@@ -2928,17 +2940,16 @@ public class MainActivity extends Activity
                         cerrarDialogoAndStart(4000);
                     }
 
-                    else if(numeroJugadores == 4){
+                    else if(numeroJugadores == 4) {
+                        Log.d("BBBBBBBBB", "Recibo las cartas");
                         marcador.setText("Yo: " + puntosTotalesMios);
                         marcador2.setText("Rival: " + puntosTotalesJugador2);
 
                         resetAll();
-                        desbloquearCartas();
                         Log.d("TTTTTT", "Recibo las cartas");
                         String ssBuf = new String(buf, "UTF-8");
                         Log.d("TTTTTT", ssBuf.toString());
                         String[] arrayCartasJugadores = ssBuf.split(" ");
-                        Log.d("TTTTTT", arrayCartasJugadores.toString());
 
                         if(!mMyId.equals(idJugador1) && mMyId.equals(idJugador2)) {
                             numCarta[0] = Integer.parseInt(arrayCartasJugadores[1]);
@@ -3687,6 +3698,7 @@ public class MainActivity extends Activity
 
     public void inicializarMano() {
         //Preparando la partida
+        Log.d("BBBBBBBBB", "cartas2: "+sCartasJ2+" cartas3: "+sCartasJ3+" cartas3: "+sCartasJ3);
         resetAll();
         desbloquearCartas();
         //Si soy mano reparto
@@ -3696,7 +3708,14 @@ public class MainActivity extends Activity
             carta2 = new Carta(manoJugador.get(1).getNumero(), manoJugador.get(1).getPalo(), manoJugador.get(1).getValor());
             carta3 = new Carta(manoJugador.get(2).getNumero(), manoJugador.get(2).getPalo(), manoJugador.get(2).getValor());
             //Mando las cartas
-            enviarMensajeRepartir();
+            Log.d("BBBBBBBBB", "mandando cartas");
+            Log.d("BBBBBBBBB", "cartas2: "+sCartasJ2+" cartas3: "+sCartasJ3+" cartas3: "+sCartasJ3);
+            if(numeroJugadores == 2){
+                enviarMensajeRepartir();
+            }else if(numeroJugadores == 4){
+                enviarMensajeRepartir4J();
+                Log.d("BBBBBBBBB", "Mensaje 4J");
+            }
             cerrarDialogoAndStart(4000);
         }
         //Sino soy mano, espero las cartas
