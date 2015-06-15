@@ -64,7 +64,6 @@ import com.google.android.gms.games.multiplayer.realtime.RoomStatusUpdateListene
 import com.google.android.gms.games.multiplayer.realtime.RoomUpdateListener;
 import com.google.android.gms.plus.Plus;
 import com.google.example.games.basegameutils.BaseGameUtils;
-import com.melnykov.fab.FloatingActionButton;
 
 
 import org.xmlpull.v1.XmlPullParser;
@@ -252,22 +251,27 @@ public class MainActivity extends Activity
     /****** VARIABLES EXTRA PARA 4 JUGADORES ******/
 
     //Enteros
-    int valor1_J2 = 0;
-    int valor2_J2 = 0;
-    int valor3_J2 = 0;
-    int valor1_J3 = 0;
-    int valor2_J3 = 0;
-    int valor3_J3 = 0;
-    int valor1_J4 = 0;
-    int valor2_J4 = 0;
-    int valor3_J4 = 0;
-    int invitados = 0;
+    int valor1_derecha = 0;
+    int valor2_derecha = 0;
+    int valor3_derecha = 0;
+    int valor1_arriba = 0;
+    int valor2_arriba = 0;
+    int valor3_arriba = 0;
+    int valor1_izq = 0;
+    int valor2_izq = 0;
+    int valor3_izq = 0;
+    int rondasGanadasMiEquipo = 0;
 
     //Strings
     String idJugador3 = null;
     String idJugador4 = null;
     String sCartasJ3 = "";
     String sCartasJ4 = "";
+    String idCompañero = "";
+    String idInvitado = "";
+    String ganadorRonda1_4J = "";
+    String ganadorRonda2_4J = "";
+    String ganadorRonda3_4J = "";
 
 
     //Boolean
@@ -1082,7 +1086,9 @@ public class MainActivity extends Activity
         // get the invitee list
         final ArrayList<String> invitees = data.getStringArrayListExtra(Games.EXTRA_PLAYER_IDS);
         Log.d(TAG, "Invitee count: " + invitees.size());
-        invitados = invitees.size();
+        if(invitees.size() != 0){
+            idInvitado = invitees.get(0);
+        }
 
         // get the automatch criteria
         Bundle autoMatchCriteria = null;
@@ -1129,6 +1135,7 @@ public class MainActivity extends Activity
     void acceptInviteToRoom(String invId) {
         // accept the invitation
         Log.d(TAG, "Accepting invitation: " + invId);
+        idCompañero = invId;
         RoomConfig.Builder roomConfigBuilder = RoomConfig.builder(this);
         roomConfigBuilder.setInvitationIdToAccept(invId)
                 .setMessageReceivedListener(this)
@@ -1382,6 +1389,7 @@ public class MainActivity extends Activity
         }
 
         else if(numeroJugadores == 4){
+
             ArrayList<String> ids4 = room.getParticipantIds();
             List<String> ids4ordenadas = ids4.subList(0, ids4.size());
             Collections.sort(ids4ordenadas);
@@ -1399,6 +1407,8 @@ public class MainActivity extends Activity
 
             turno = idJugador1;
             mano = idJugador1;
+
+
 
             Log.d("ZZZ", "IDJ1: "+idJugador1);
             Log.d("ZZZ", "IDJ2: "+idJugador2);
@@ -1617,15 +1627,15 @@ public class MainActivity extends Activity
             envidOtro = 0;
             todosMismoPalo = false;
             maximo = 0;
-            valor1_J2 = 0;
-            valor2_J2 = 0;
-            valor3_J2 = 0;
-            valor1_J3 = 0;
-            valor2_J3 = 0;
-            valor3_J3 = 0;
-            valor1_J4 = 0;
-            valor2_J4 = 0;
-            valor3_J4 = 0;
+            valor1_derecha = 0;
+            valor2_derecha = 0;
+            valor3_derecha = 0;
+            valor1_arriba = 0;
+            valor2_arriba = 0;
+            valor3_arriba = 0;
+            valor1_izq = 0;
+            valor2_izq = 0;
+            valor3_izq = 0;
         }
     }
 
@@ -2111,10 +2121,105 @@ public class MainActivity extends Activity
                 //Envio el valor de la carta
                 byte[] messageCarta2 = ("$" + aux.toString()).getBytes();
                 enviarValorCarta(messageCarta2);
-                cambiarTurno();
-                Toast.makeText(getApplicationContext(), "Esperando al Jugador", Toast.LENGTH_SHORT).show();
-                enviarMensajeTurno();
-                break;
+                //No tiro ultimo
+                Log.d("KKKKK", "Quien calcula? " + quienCalcula());
+                Log.d("KKKKK", "Calculo yo? " + mMyId.equals(quienCalcula()));
+
+                if(!mMyId.equals(quienCalcula())){
+                    cambiarTurno();
+                    Toast.makeText(getApplicationContext(), "Esperando al Jugador", Toast.LENGTH_SHORT).show();
+                    bloquearCartas();
+                    enviarMensajeTurno4J(turno);
+
+                //Tiro ultimo
+                }else{
+                    //Calculo quien gana, tanto si es de mi equipo como si no
+                    if(ronda == 1){
+                        ganadorRonda1_4J = calcularGanadorRonda();
+                        enviarMensajeGanadorRonda4J(ganadorRonda1_4J);
+                        Log.d("KKKKK", "ganador ronda 1 " + ganadorRonda1_4J);
+                    }else if(ronda == 2){
+                        ganadorRonda2_4J = calcularGanadorRonda();
+                        enviarMensajeGanadorRonda4J(ganadorRonda2_4J);
+                        Log.d("KKKKK", "ganador ronda 2 " + ganadorRonda2_4J);
+                    }else if(ronda == 3){
+                        ganadorRonda3_4J = calcularGanadorRonda();
+                        Log.d("KKKKK", "ganador ronda 3 " + ganadorRonda3_4J);
+                    }
+
+                    //El ganador de la ronda es de mi equipo
+                    if(esDeMiEquipo(calcularGanadorRonda()) || mMyId.equals(calcularGanadorRonda())){
+                        Log.d("KKKKK", "Gano yo o mi equipo");
+                        if(ronda == 1){
+                            rondasGanadasMiEquipo = 1;
+                        }else if(ronda == 2){
+                            rondasGanadasMiEquipo++;
+                        }else if(ronda == 3){
+                            rondasGanadasMiEquipo = 2;
+                        }
+                        //Soy ganador
+                        if(mMyId.equals(calcularGanadorRonda())){
+                            if (rondasGanadasMiEquipo == 2) {
+                                //enviarMensajeHasPerdido();
+                                Handler handler = new Handler();
+                                handler.postDelayed(new Runnable() {
+                                    public void run() {
+                                        // acciones que se ejecutan tras los milisegundos
+                                        //mostrarResultadosGanadorMano("PRIMERO");
+
+                                    }
+                                }, 1500);
+
+                            //Vuelvo a tirar
+                            } else {
+                                Log.d("KKKKK", "gano yo");
+                                Toast.makeText(getApplicationContext(), "Es tu turno", Toast.LENGTH_SHORT).show();
+                                actualizaRonda();
+                                enviarMensajeRonda();
+                                enviarMensajeTurno4J(turno);
+                                //reiniciarBarraProgreso();
+                            }
+                        //Ha ganado mi compañero
+                        }else{
+                            Log.d("KKKKK", "gaa mi compi");
+                            Toast.makeText(getApplicationContext(), "Esperando al jugador", Toast.LENGTH_SHORT).show();
+                            if(ronda == 1) enviarMensajeTurno4J(ganadorRonda1_4J);
+                            else if(ronda == 2) enviarMensajeTurno4J(ganadorRonda2_4J);
+                            else if(ronda == 3) enviarMensajeTurno4J(ganadorRonda3_4J);
+                            actualizaRonda();
+                            enviarMensajeRonda();
+
+                        }
+
+
+
+                    //Mi equipo pierde la ronda
+                    }else {
+                        if ((ronda == 2 && rondasGanadasMiEquipo == 0) || (ronda == 3)) {
+                            //Pierdes en la segunda ronda o en la tercera
+                            Handler handler = new Handler();
+                            handler.postDelayed(new Runnable() {
+                                public void run() {
+                                    // acciones que se ejecutan tras los milisegundos
+                                    //mostrarResultadosPerdedorMano("PRIMERO");
+                                }
+                            }, 1500);
+
+                        } else {
+                            Log.d("KKKKK", "perdemos la ronda");
+                            cambiarTurno();
+                            Toast.makeText(getApplicationContext(), "Esperando al Jugador", Toast.LENGTH_SHORT).show();
+                            bloquearCartas();
+                            if(ronda == 1) enviarMensajeTurno4J(ganadorRonda1_4J);
+                            else if(ronda == 2) enviarMensajeTurno4J(ganadorRonda2_4J);
+                            else if(ronda == 3) enviarMensajeTurno4J(ganadorRonda3_4J);
+                            actualizaRonda();
+                            enviarMensajeRonda();
+
+                        }
+                    }
+
+                }
         }
     }
 
@@ -2204,30 +2309,129 @@ public class MainActivity extends Activity
         else if (ronda == 3 && valor3 == 0) return true;
         return false;
     }
+    String quienCalcula() {
+
+        if(ronda == 1)return idJugador4;
+        else if(ronda == 2 && ganadorRonda1_4J.equals(idJugador1)){
+            return idJugador4;
+        }else if(ronda == 2 && ganadorRonda1_4J.equals(idJugador2)){
+            return idJugador1;
+        }else if(ronda == 2 && ganadorRonda1_4J.equals(idJugador3)){
+            return idJugador2;
+        }else if(ronda == 2 && ganadorRonda1_4J.equals(idJugador4)){
+            return idJugador3;
+        }else if(ronda == 3 && ganadorRonda2_4J.equals(idJugador1)){
+            return idJugador4;
+        }else if(ronda == 3 && ganadorRonda2_4J.equals(idJugador2)){
+            return idJugador1;
+        }else if(ronda == 3 && ganadorRonda2_4J.equals(idJugador3)){
+            return idJugador2;
+        }else if(ronda == 3 && ganadorRonda2_4J.equals(idJugador4)){
+            return idJugador3;
+        }
+        return "";
+    }
 
     boolean soyGanadorRonda() {
-
-        switch (numeroJugadores) {
-            case 2:
-            //Ronda 1
-            if (ronda == 1 && miValor > valor1) {
-                return true;
-            }
-            //Ronda 2
-            if (ronda == 2 && miValor > valor2) {
-                return true;
-            }
-            //Ronda 3
-            if (ronda == 3 && miValor > valor3) {
-                return true;
-            }
-            return false;
-
-            case 4:
-
-                return false;
+        //Ronda 1
+        if (ronda == 1 && miValor > valor1) {
+            return true;
+        }
+        //Ronda 2
+        if (ronda == 2 && miValor > valor2) {
+            return true;
+        }
+        //Ronda 3
+        if (ronda == 3 && miValor > valor3) {
+            return true;
         }
         return false;
+
+    }
+
+    String calcularGanadorRonda() {
+        //Ronda 1
+        if (ronda == 1) {
+            int[] valores = { miValor, valor1_derecha, valor1_arriba, valor1_izq };
+            int max = valores[0];
+            for(int i = 0; i<valores.length-1; i++){
+                if(max<valores[i]) max = valores[i];
+            }
+            if(max == miValor)return mMyId;
+            if(mMyId.equals(idJugador1)){
+                if(max == valor1_derecha) return idJugador2;
+                else if(max == valor1_arriba) return idJugador3;
+                else if (max == valor1_izq) return idJugador4;
+            }else if(mMyId.equals(idJugador2)){
+                if(max == valor1_derecha) return idJugador3;
+                else if(max == valor1_arriba) return idJugador4;
+                else if (max == valor1_izq) return idJugador1;
+            }else if(mMyId.equals(idJugador3)){
+                if(max == valor1_derecha) return idJugador4;
+                else if(max == valor1_arriba) return idJugador1;
+                else if (max == valor1_izq) return idJugador2;
+            }else if(mMyId.equals(idJugador4)){
+                if(max == valor1_derecha) return idJugador1;
+                else if(max == valor1_arriba) return idJugador2;
+                else if (max == valor1_izq) return idJugador3;
+            }
+
+        }
+        //Ronda 2
+        if (ronda == 2) {
+            int[] valores = { miValor, valor2_derecha, valor2_arriba, valor2_izq };
+            int max = valores[0];
+            for(int i = 0; i<valores.length-1; i++){
+                if(max<valores[i]) max = valores[i];
+            }
+            if(max == miValor)return mMyId;
+            if(mMyId.equals(idJugador1)){
+                if(max == valor2_derecha) return idJugador2;
+                else if(max == valor2_arriba) return idJugador3;
+                else if (max == valor2_izq) return idJugador4;
+            }else if(mMyId.equals(idJugador2)){
+                if(max == valor2_derecha) return idJugador3;
+                else if(max == valor2_arriba) return idJugador4;
+                else if (max == valor2_izq) return idJugador1;
+            }else if(mMyId.equals(idJugador3)){
+                if(max == valor2_derecha) return idJugador4;
+                else if(max == valor2_arriba) return idJugador1;
+                else if (max == valor2_izq) return idJugador2;
+            }else if(mMyId.equals(idJugador4)){
+                if(max == valor2_derecha) return idJugador1;
+                else if(max == valor2_arriba) return idJugador2;
+                else if (max == valor2_izq) return idJugador3;
+            }
+        }
+        //Ronda 3
+        if (ronda == 3) {
+            int[] valores = { miValor, valor3_derecha, valor3_arriba, valor3_izq };
+            int max = valores[0];
+            for(int i = 0; i<valores.length-1; i++){
+                if(max<valores[i]) max = valores[i];
+            }
+            if(max == miValor)return mMyId;
+            if(mMyId.equals(idJugador1)){
+                if(max == valor3_derecha) return idJugador2;
+                else if(max == valor3_arriba) return idJugador3;
+                else if (max == valor3_izq) return idJugador4;
+            }else if(mMyId.equals(idJugador2)){
+                if(max == valor3_derecha) return idJugador3;
+                else if(max == valor3_arriba) return idJugador4;
+                else if (max == valor3_izq) return idJugador1;
+            }else if(mMyId.equals(idJugador3)){
+                if(max == valor3_derecha) return idJugador4;
+                else if(max == valor3_arriba) return idJugador1;
+                else if (max == valor3_izq) return idJugador2;
+            }else if(mMyId.equals(idJugador4)){
+                if(max == valor3_derecha) return idJugador1;
+                else if(max == valor3_arriba) return idJugador2;
+                else if (max == valor3_izq) return idJugador3;
+            }
+        }
+
+        return "";
+
     }
 
     boolean soyGanadorRondaEmpate() {
@@ -2341,6 +2545,15 @@ public class MainActivity extends Activity
 
     public void enviarMensajeTurno() {
         byte[] messageTurno = turno.getBytes();
+        for (Participant p : mParticipants) {
+            if (!p.getParticipantId().equals(mMyId)) {
+                Games.RealTimeMultiplayer.sendReliableMessage(mGoogleApiClient, null, messageTurno,
+                        mRoomId, p.getParticipantId());
+            }
+        }
+    }
+    public void enviarMensajeTurno4J(String t) {
+        byte[] messageTurno = t.getBytes();
         for (Participant p : mParticipants) {
             if (!p.getParticipantId().equals(mMyId)) {
                 Games.RealTimeMultiplayer.sendReliableMessage(mGoogleApiClient, null, messageTurno,
@@ -2563,6 +2776,15 @@ public class MainActivity extends Activity
             }
         }
     }
+    public void enviarMensajeGanadorRonda4J(String ganador){
+        byte[] messageGanadorRonda4J = ("O " + ganador).getBytes();
+        for (Participant p : mParticipants) {
+            if (!p.getParticipantId().equals(mMyId)) {
+                Games.RealTimeMultiplayer.sendReliableMessage(mGoogleApiClient, null, messageGanadorRonda4J,
+                        mRoomId, p.getParticipantId());
+            }
+        }
+    }
 
 
 
@@ -2642,19 +2864,19 @@ public class MainActivity extends Activity
                                 if (tvMesaJ2_C1.getVisibility() == View.INVISIBLE) {
                                     if (hayEmpate) {
                                         valorEmpate = valor;
-                                    } else valor1_J2 = valor;
+                                    } else valor1_derecha = valor;
                                     asignarImagenCarta(newCarta, tvMesaJ2_C1);
                                     tvMesaJ2_C1.setVisibility(View.VISIBLE);
                                 } else if (tvMesaJ2_C2.getVisibility() == View.INVISIBLE) {
                                     if (hayEmpate) {
                                         valorEmpate = valor;
-                                    } else valor2_J2 = valor;
+                                    } else valor2_derecha = valor;
                                     asignarImagenCarta(newCarta, tvMesaJ2_C2);
                                     tvMesaJ2_C2.setVisibility(View.VISIBLE);
                                 } else if (tvMesaJ2_C3.getVisibility() == View.INVISIBLE) {
                                     if (hayEmpate) {
                                         valorEmpate = valor;
-                                    } else valor3_J2 = valor;
+                                    } else valor3_derecha = valor;
                                     asignarImagenCarta(newCarta, tvMesaJ2_C3);
                                     tvMesaJ2_C3.setVisibility(View.VISIBLE);
                                 }
@@ -2663,19 +2885,19 @@ public class MainActivity extends Activity
                                 if (tvMesaJ3_C1.getVisibility() == View.INVISIBLE) {
                                     if (hayEmpate) {
                                         valorEmpate = valor;
-                                    } else valor1_J3 = valor;
+                                    } else valor1_arriba = valor;
                                     asignarImagenCarta(newCarta, tvMesaJ3_C1);
                                     tvMesaJ3_C1.setVisibility(View.VISIBLE);
                                 } else if (tvMesaJ3_C2.getVisibility() == View.INVISIBLE) {
                                     if (hayEmpate) {
                                         valorEmpate = valor;
-                                    } else valor2_J3 = valor;
+                                    } else valor2_arriba = valor;
                                     asignarImagenCarta(newCarta, tvMesaJ3_C2);
                                     tvMesaJ3_C2.setVisibility(View.VISIBLE);
                                 } else if (tvMesaJ3_C3.getVisibility() == View.INVISIBLE) {
                                     if (hayEmpate) {
                                         valorEmpate = valor;
-                                    } else valor3_J3 = valor;
+                                    } else valor3_arriba = valor;
                                     asignarImagenCarta(newCarta, tvMesaJ3_C3);
                                     tvMesaJ3_C3.setVisibility(View.VISIBLE);
                                 }
@@ -2683,19 +2905,19 @@ public class MainActivity extends Activity
                                 if (tvMesaJ4_C1.getVisibility() == View.INVISIBLE) {
                                     if (hayEmpate) {
                                         valorEmpate = valor;
-                                    } else valor1_J4 = valor;
+                                    } else valor1_izq = valor;
                                     asignarImagenCarta(newCarta, tvMesaJ4_C1);
                                     tvMesaJ4_C1.setVisibility(View.VISIBLE);
                                 } else if (tvMesaJ4_C2.getVisibility() == View.INVISIBLE) {
                                     if (hayEmpate) {
                                         valorEmpate = valor;
-                                    } else valor2_J4 = valor;
+                                    } else valor2_izq = valor;
                                     asignarImagenCarta(newCarta, tvMesaJ4_C2);
                                     tvMesaJ4_C2.setVisibility(View.VISIBLE);
                                 } else if (tvMesaJ4_C3.getVisibility() == View.INVISIBLE) {
                                     if (hayEmpate) {
                                         valorEmpate = valor;
-                                    } else valor3_J4 = valor;
+                                    } else valor3_izq = valor;
                                     asignarImagenCarta(newCarta, tvMesaJ4_C3);
                                     tvMesaJ4_C3.setVisibility(View.VISIBLE);
                                 }
@@ -2707,19 +2929,19 @@ public class MainActivity extends Activity
                                 if (tvMesaJ4_C1.getVisibility() == View.INVISIBLE) {
                                     if (hayEmpate) {
                                         valorEmpate = valor;
-                                    } else valor1_J4 = valor;
+                                    } else valor1_izq = valor;
                                     asignarImagenCarta(newCarta, tvMesaJ4_C1);
                                     tvMesaJ4_C1.setVisibility(View.VISIBLE);
                                 } else if (tvMesaJ4_C2.getVisibility() == View.INVISIBLE) {
                                     if (hayEmpate) {
                                         valorEmpate = valor;
-                                    } else valor2_J4 = valor;
+                                    } else valor2_izq = valor;
                                     asignarImagenCarta(newCarta, tvMesaJ4_C2);
                                     tvMesaJ4_C2.setVisibility(View.VISIBLE);
                                 } else if (tvMesaJ4_C3.getVisibility() == View.INVISIBLE) {
                                     if (hayEmpate) {
                                         valorEmpate = valor;
-                                    } else valor3_J4 = valor;
+                                    } else valor3_izq = valor;
                                     asignarImagenCarta(newCarta, tvMesaJ4_C3);
                                     tvMesaJ4_C3.setVisibility(View.VISIBLE);
                                 }
@@ -2727,19 +2949,19 @@ public class MainActivity extends Activity
                                 if (tvMesaJ2_C1.getVisibility() == View.INVISIBLE) {
                                     if (hayEmpate) {
                                         valorEmpate = valor;
-                                    } else valor1_J2 = valor;
+                                    } else valor1_derecha = valor;
                                     asignarImagenCarta(newCarta, tvMesaJ2_C1);
                                     tvMesaJ2_C1.setVisibility(View.VISIBLE);
                                 } else if (tvMesaJ2_C2.getVisibility() == View.INVISIBLE) {
                                     if (hayEmpate) {
                                         valorEmpate = valor;
-                                    } else valor2_J2 = valor;
+                                    } else valor2_derecha = valor;
                                     asignarImagenCarta(newCarta, tvMesaJ2_C2);
                                     tvMesaJ2_C2.setVisibility(View.VISIBLE);
                                 } else if (tvMesaJ2_C3.getVisibility() == View.INVISIBLE) {
                                     if (hayEmpate) {
                                         valorEmpate = valor;
-                                    } else valor3_J2 = valor;
+                                    } else valor3_derecha = valor;
                                     asignarImagenCarta(newCarta, tvMesaJ2_C3);
                                     tvMesaJ2_C3.setVisibility(View.VISIBLE);
                                 }
@@ -2747,19 +2969,19 @@ public class MainActivity extends Activity
                                 if (tvMesaJ3_C1.getVisibility() == View.INVISIBLE) {
                                     if (hayEmpate) {
                                         valorEmpate = valor;
-                                    } else valor1_J3 = valor;
+                                    } else valor1_arriba = valor;
                                     asignarImagenCarta(newCarta, tvMesaJ3_C1);
                                     tvMesaJ3_C1.setVisibility(View.VISIBLE);
                                 } else if (tvMesaJ3_C2.getVisibility() == View.INVISIBLE) {
                                     if (hayEmpate) {
                                         valorEmpate = valor;
-                                    } else valor2_J3 = valor;
+                                    } else valor2_arriba = valor;
                                     asignarImagenCarta(newCarta, tvMesaJ3_C2);
                                     tvMesaJ3_C2.setVisibility(View.VISIBLE);
                                 } else if (tvMesaJ3_C3.getVisibility() == View.INVISIBLE) {
                                     if (hayEmpate) {
                                         valorEmpate = valor;
-                                    } else valor3_J3 = valor;
+                                    } else valor3_arriba = valor;
                                     asignarImagenCarta(newCarta, tvMesaJ3_C3);
                                     tvMesaJ3_C3.setVisibility(View.VISIBLE);
                                 }
@@ -2770,19 +2992,19 @@ public class MainActivity extends Activity
                                 if (tvMesaJ3_C1.getVisibility() == View.INVISIBLE) {
                                     if (hayEmpate) {
                                         valorEmpate = valor;
-                                    } else valor1_J3 = valor;
+                                    } else valor1_arriba = valor;
                                     asignarImagenCarta(newCarta, tvMesaJ3_C1);
                                     tvMesaJ3_C1.setVisibility(View.VISIBLE);
                                 } else if (tvMesaJ3_C2.getVisibility() == View.INVISIBLE) {
                                     if (hayEmpate) {
                                         valorEmpate = valor;
-                                    } else valor2_J3 = valor;
+                                    } else valor2_arriba = valor;
                                     asignarImagenCarta(newCarta, tvMesaJ3_C2);
                                     tvMesaJ3_C2.setVisibility(View.VISIBLE);
                                 } else if (tvMesaJ3_C3.getVisibility() == View.INVISIBLE) {
                                     if (hayEmpate) {
                                         valorEmpate = valor;
-                                    } else valor3_J3 = valor;
+                                    } else valor3_arriba = valor;
                                     asignarImagenCarta(newCarta, tvMesaJ3_C3);
                                     tvMesaJ3_C3.setVisibility(View.VISIBLE);
                                 }
@@ -2790,19 +3012,19 @@ public class MainActivity extends Activity
                                 if (tvMesaJ4_C1.getVisibility() == View.INVISIBLE) {
                                     if (hayEmpate) {
                                         valorEmpate = valor;
-                                    } else valor1_J4 = valor;
+                                    } else valor1_izq = valor;
                                     asignarImagenCarta(newCarta, tvMesaJ4_C1);
                                     tvMesaJ4_C1.setVisibility(View.VISIBLE);
                                 } else if (tvMesaJ4_C2.getVisibility() == View.INVISIBLE) {
                                     if (hayEmpate) {
                                         valorEmpate = valor;
-                                    } else valor2_J4 = valor;
+                                    } else valor2_izq = valor;
                                     asignarImagenCarta(newCarta, tvMesaJ4_C2);
                                     tvMesaJ4_C2.setVisibility(View.VISIBLE);
                                 } else if (tvMesaJ4_C3.getVisibility() == View.INVISIBLE) {
                                     if (hayEmpate) {
                                         valorEmpate = valor;
-                                    } else valor3_J4 = valor;
+                                    } else valor3_izq = valor;
                                     asignarImagenCarta(newCarta, tvMesaJ4_C3);
                                     tvMesaJ4_C3.setVisibility(View.VISIBLE);
                                 }
@@ -2810,19 +3032,19 @@ public class MainActivity extends Activity
                                 if (tvMesaJ2_C1.getVisibility() == View.INVISIBLE) {
                                     if (hayEmpate) {
                                         valorEmpate = valor;
-                                    } else valor1_J2 = valor;
+                                    } else valor1_derecha = valor;
                                     asignarImagenCarta(newCarta, tvMesaJ2_C1);
                                     tvMesaJ2_C1.setVisibility(View.VISIBLE);
                                 } else if (tvMesaJ2_C2.getVisibility() == View.INVISIBLE) {
                                     if (hayEmpate) {
                                         valorEmpate = valor;
-                                    } else valor2_J2 = valor;
+                                    } else valor2_derecha = valor;
                                     asignarImagenCarta(newCarta, tvMesaJ2_C2);
                                     tvMesaJ2_C2.setVisibility(View.VISIBLE);
                                 } else if (tvMesaJ2_C3.getVisibility() == View.INVISIBLE) {
                                     if (hayEmpate) {
                                         valorEmpate = valor;
-                                    } else valor3_J2 = valor;
+                                    } else valor3_derecha = valor;
                                     asignarImagenCarta(newCarta, tvMesaJ2_C3);
                                     tvMesaJ2_C3.setVisibility(View.VISIBLE);
                                 }
@@ -2833,19 +3055,19 @@ public class MainActivity extends Activity
                                 if (tvMesaJ2_C1.getVisibility() == View.INVISIBLE) {
                                     if (hayEmpate) {
                                         valorEmpate = valor;
-                                    } else valor1_J4 = valor;
+                                    } else valor1_derecha = valor;
                                     asignarImagenCarta(newCarta, tvMesaJ2_C1);
                                     tvMesaJ2_C1.setVisibility(View.VISIBLE);
                                 } else if (tvMesaJ2_C2.getVisibility() == View.INVISIBLE) {
                                     if (hayEmpate) {
                                         valorEmpate = valor;
-                                    } else valor2_J4 = valor;
+                                    } else valor2_derecha = valor;
                                     asignarImagenCarta(newCarta, tvMesaJ2_C2);
                                     tvMesaJ2_C2.setVisibility(View.VISIBLE);
                                 } else if (tvMesaJ2_C3.getVisibility() == View.INVISIBLE) {
                                     if (hayEmpate) {
                                         valorEmpate = valor;
-                                    } else valor3_J4 = valor;
+                                    } else valor3_derecha = valor;
                                     asignarImagenCarta(newCarta, tvMesaJ2_C3);
                                     tvMesaJ2_C3.setVisibility(View.VISIBLE);
                                 }
@@ -2853,19 +3075,19 @@ public class MainActivity extends Activity
                                 if (tvMesaJ3_C1.getVisibility() == View.INVISIBLE) {
                                     if (hayEmpate) {
                                         valorEmpate = valor;
-                                    } else valor1_J3 = valor;
+                                    } else valor1_arriba = valor;
                                     asignarImagenCarta(newCarta, tvMesaJ3_C1);
                                     tvMesaJ3_C1.setVisibility(View.VISIBLE);
                                 } else if (tvMesaJ3_C2.getVisibility() == View.INVISIBLE) {
                                     if (hayEmpate) {
                                         valorEmpate = valor;
-                                    } else valor2_J3 = valor;
+                                    } else valor2_arriba = valor;
                                     asignarImagenCarta(newCarta, tvMesaJ3_C2);
                                     tvMesaJ3_C2.setVisibility(View.VISIBLE);
                                 } else if (tvMesaJ3_C3.getVisibility() == View.INVISIBLE) {
                                     if (hayEmpate) {
                                         valorEmpate = valor;
-                                    } else valor3_J3 = valor;
+                                    } else valor3_arriba = valor;
                                     asignarImagenCarta(newCarta, tvMesaJ3_C3);
                                     tvMesaJ3_C3.setVisibility(View.VISIBLE);
                                 }
@@ -2873,19 +3095,19 @@ public class MainActivity extends Activity
                                 if (tvMesaJ4_C1.getVisibility() == View.INVISIBLE) {
                                     if (hayEmpate) {
                                         valorEmpate = valor;
-                                    } else valor1_J4 = valor;
+                                    } else valor1_izq = valor;
                                     asignarImagenCarta(newCarta, tvMesaJ4_C1);
                                     tvMesaJ4_C1.setVisibility(View.VISIBLE);
                                 } else if (tvMesaJ4_C2.getVisibility() == View.INVISIBLE) {
                                     if (hayEmpate) {
                                         valorEmpate = valor;
-                                    } else valor2_J4 = valor;
+                                    } else valor2_izq = valor;
                                     asignarImagenCarta(newCarta, tvMesaJ4_C2);
                                     tvMesaJ4_C2.setVisibility(View.VISIBLE);
                                 } else if (tvMesaJ4_C3.getVisibility() == View.INVISIBLE) {
                                     if (hayEmpate) {
                                         valorEmpate = valor;
-                                    } else valor3_J4 = valor;
+                                    } else valor3_izq = valor;
                                     asignarImagenCarta(newCarta, tvMesaJ4_C3);
                                     tvMesaJ4_C3.setVisibility(View.VISIBLE);
                                 }
@@ -3289,6 +3511,15 @@ public class MainActivity extends Activity
                     }
                     break;
 
+                case 'O':
+                    String aux9 = new String(buf, "UTF-8");
+                    String otro6[] = aux9.split(" ");
+                    if(ronda == 1)ganadorRonda1_4J = otro6[1];
+                    else if(ronda == 2)ganadorRonda2_4J = otro6[1];
+                    else if(ronda == 3)ganadorRonda3_4J = otro6[1];
+
+                    break;
+
 
 
                 default:
@@ -3325,8 +3556,8 @@ public class MainActivity extends Activity
                         case 4:
                             String turnoNuevo4J = new String(buf, "UTF-8");
                             turno = turnoNuevo4J;
-
-                            if (mMyId.equals(turno) && misRondasGanadas < 2) {
+                            Log.d("LLLLLLL", "Turno para: "+turno+" mi id: "+mMyId);
+                            if (mMyId.equals(turno) && rondasGanadasMiEquipo < 2) {
                                 /*if (ronda > 1 && !hayEnvid) {
                                     envid.setVisibility(View.GONE);
                                     laFalta.setVisibility(View.GONE);
@@ -3334,10 +3565,10 @@ public class MainActivity extends Activity
                                 desbloquearCartas();
                                 Toast.makeText(getApplicationContext(), "Es tu turno", Toast.LENGTH_SHORT).show();
                                 //cambiarBarraProgreso();
-                                animarAparecerMenu();
+                                //animarAparecerMenu();
                             }
 
-                            if (!mMyId.equals(turno) && misRondasGanadas < 2) {
+                            if (!mMyId.equals(turno) && rondasGanadasMiEquipo < 2) {
                                 bloquearCartas();
                                 envid.setVisibility(View.GONE);
                                 laFalta.setVisibility(View.GONE);
