@@ -4203,6 +4203,19 @@ public class MainActivity extends Activity
         }
     }
 
+    public boolean esDeMiEquipo(String id){
+
+        if(mMyId.equals(equipo1[0]) || mMyId.equals(equipo1[1])){
+            if(id.equals(equipo1[0]) || id.equals(equipo1[1])) return true;
+        }
+
+        else if(mMyId.equals(equipo2[0]) || mMyId.equals(equipo2[1])){
+            if(id.equals(equipo2[0]) || id.equals(equipo2[1])) return true;
+        }
+
+        return false;
+    }
+
 
 
 
