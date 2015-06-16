@@ -2454,7 +2454,7 @@ public class MainActivity extends Activity
     String calcularGanadorRonda() {
         //Ronda 1
         if (ronda == 1) {
-            int[] valores = { miValor, valor1_derecha, valor1_arriba, valor1_izq };
+            int[] valores = { valor1_derecha, valor1_arriba, valor1_izq, miValor };
             int max = valores[0];
             for(int i = 0; i<valores.length-1; i++){
                 if(max<valores[i]) max = valores[i];
