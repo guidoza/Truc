@@ -134,7 +134,7 @@
 
                             <RelativeLayout
                                 android:layout_width="match_parent"
-                                android:layout_height="450dp">
+                                android:layout_height="match_parent">
 
                                 <ImageView
                                     android:layout_width="70dp"
@@ -198,6 +198,14 @@
                                         />
                                 </RelativeLayout>
 
+                                <ImageView
+                                    android:id="@+id/mano"
+                                    android:layout_width="200dp"
+                                    android:layout_height="165dp"
+                                    android:src="@drawable/ic_mano"
+                                    android:layout_centerHorizontal="true"
+                                    android:layout_alignParentBottom="true"
+                                    />
 
                                 <ImageView
                                     android:layout_width="100dp"
@@ -205,10 +213,10 @@
                                     android:id="@+id/carta1Jugador"
                                     android:src="@drawable/seis_espadas"
                                     android:layout_alignParentBottom="true"
-                                    android:layout_marginBottom="30dp"
+                                    android:layout_marginBottom="100dp"
                                     android:layout_alignParentLeft="true"
                                     android:layout_alignParentStart="true"
-                                    android:layout_marginLeft="100dp"
+                                    android:layout_marginLeft="110dp"
                                     android:layout_marginStart="50dp"
                                     />
                                 <ImageView
@@ -217,7 +225,7 @@
                                     android:id="@+id/carta2Jugador"
                                     android:src="@drawable/siete_espadas"
                                     android:layout_alignParentBottom="true"
-                                    android:layout_marginBottom="30dp"
+                                    android:layout_marginBottom="100dp"
                                     android:layout_centerHorizontal="true"
                                     />
                                 <ImageView
@@ -226,11 +234,19 @@
                                     android:id="@+id/carta3Jugador"
                                     android:src="@drawable/uno_espadas"
                                     android:layout_alignParentBottom="true"
-                                    android:layout_marginBottom="30dp"
+                                    android:layout_marginBottom="100dp"
                                     android:layout_alignParentRight="true"
                                     android:layout_alignParentEnd="true"
-                                    android:layout_marginRight="100dp"
+                                    android:layout_marginRight="110dp"
                                     android:layout_marginEnd="50dp"
+                                    />
+                                <ImageView
+                                    android:id="@+id/dedo"
+                                    android:layout_width="200dp"
+                                    android:layout_height="165dp"
+                                    android:src="@drawable/ic_dedo"
+                                    android:layout_centerHorizontal="true"
+                                    android:layout_alignParentBottom="true"
                                     />
 
                             </RelativeLayout>
@@ -282,15 +298,15 @@
 
 
 
-        </FrameLayout>
+
 
         <com.github.alexkolpa.fabtoolbar.FabToolbar
             android:id="@+id/fab_toolbar"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="65dp"
+            android:layout_gravity="bottom"
             fab:tb_button_gravity="end"
             fab:tb_container_gravity="end"
-            android:layout_weight="1"
             fab:tb_color="@android:color/holo_blue_light">
 
             <HorizontalScrollView
@@ -390,10 +406,11 @@
                 </LinearLayout>
             </HorizontalScrollView>
         </com.github.alexkolpa.fabtoolbar.FabToolbar>
+        </FrameLayout>
     </LinearLayout>
 
 
-    <!-- GAMEPLAY SCREEN J1 4 jugadores-->
+    <!--GAMEPLAY SCREEN J1 4 jugadores-->
     <LinearLayout android:id="@+id/screen_game_4_jugadores"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
