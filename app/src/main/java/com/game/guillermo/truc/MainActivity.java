@@ -205,6 +205,8 @@ public class MainActivity extends Activity
     ImageButton jocFora;
     ImageButton salir;
     ImageButton laFalta;
+    ImageView manoDedo;
+    ImageView dedo;
 
     //TextViews
     TextView marcador;
@@ -233,6 +235,7 @@ public class MainActivity extends Activity
     PointF inicio1;
     PointF inicio2;
     PointF inicio3;
+    PointF inicioManoDedo;
     PointF inicio1Rival;
     PointF inicio2Rival;
     PointF inicio3Rival;
@@ -434,6 +437,10 @@ public class MainActivity extends Activity
 
         progressBar1 = (ProgressBar) findViewById(R.id.progres_segundos_1);
         progressBar2 = (ProgressBar) findViewById(R.id.progres_segundos_2);
+
+        manoDedo = (ImageView) findViewById(R.id.mano);
+        dedo = (ImageView) findViewById(R.id.dedo);
+        inicioManoDedo = new PointF(dedo.getX(), dedo.getY());
 
         //ImageViews para el modo de 4 jugadores
         tvJugador1_4J = (ImageView) findViewById(R.id.carta1ManoJ1);
@@ -1530,9 +1537,9 @@ public class MainActivity extends Activity
             valorEmpate = 0;
             ronda = 1;
             misRondasGanadas = 0;
-            tvJugador1.setVisibility(View.VISIBLE);
-            tvJugador2.setVisibility(View.VISIBLE);
-            tvJugador3.setVisibility(View.VISIBLE);
+            tvJugador1.setVisibility(View.INVISIBLE);
+            tvJugador2.setVisibility(View.INVISIBLE);
+            tvJugador3.setVisibility(View.INVISIBLE);
             tvCartaMesa1.setVisibility(View.INVISIBLE);
             tvCartaMesa2.setVisibility(View.INVISIBLE);
             tvCartaMesa3.setVisibility(View.INVISIBLE);
@@ -1555,6 +1562,10 @@ public class MainActivity extends Activity
             hayJocFora = false;
             hayVuelvo = false;
             faltaDirecta = false;
+
+            manoDedo.setVisibility(View.INVISIBLE);
+            dedo.setVisibility(View.INVISIBLE);
+            //animarDesaparecerMano();
 
             textoAccion1.setVisibility(View.INVISIBLE);
             textoAccion2.setVisibility(View.INVISIBLE);
@@ -1945,13 +1956,66 @@ public class MainActivity extends Activity
     }
 
     void animacionAbrirCartas(){
-        tvJugador1.animate().rotation(-20).setDuration(750);
-        tvJugador3.animate().rotation(20).setDuration(750);
+        tvJugador1.animate().rotation(-20).setDuration(500);
+        tvJugador3.animate().rotation(20).setDuration(500);
 
-        tvJugador1.animate().translationX(inicio1.x - 100).setDuration(750);
-        tvJugador3.animate().translationX(inicio3.x + 100).setDuration(750);
-        tvJugador1.animate().translationY(inicio1.y + 40).setDuration(750);
-        tvJugador3.animate().translationY(inicio3.y + 40).setDuration(750);
+        tvJugador1.animate().translationX(inicio1.x - 100).setDuration(500);
+        tvJugador3.animate().translationX(inicio3.x + 100).setDuration(500);
+        tvJugador1.animate().translationY(inicio1.y + 40).setDuration(500);
+        tvJugador3.animate().translationY(inicio3.y + 40).setDuration(500);
+    }
+
+    void animarDesaparecerMano(){
+        RelativeLayout.LayoutParams params =
+                (RelativeLayout.LayoutParams) tvJugador1.getLayoutParams();
+
+        manoDedo.animate().translationX(manoDedo.getX()).setDuration(300);
+        manoDedo.animate().translationY(manoDedo.getY() + params.height).setDuration(300);
+
+        dedo.animate().translationX(dedo.getX()).setDuration(300);
+        dedo.animate().translationY(dedo.getY() + params.height).setDuration(300);
+    }
+
+    void aparecerCartas(){
+        RelativeLayout.LayoutParams params =
+                (RelativeLayout.LayoutParams) tvJugador1.getLayoutParams();
+
+        tvJugador1.setX(tvJugador1.getX());
+        tvJugador1.setY(tvJugador1.getY() + params.height);
+        tvJugador2.setX(tvJugador2.getX());
+        tvJugador2.setY(tvJugador2.getY() + params.height);
+        tvJugador3.setX(tvJugador3.getX());
+        tvJugador3.setY(tvJugador3.getY() + params.height);
+        dedo.setX(dedo.getX());
+        dedo.setY(dedo.getY() + params.height);
+        manoDedo.setX(manoDedo.getX());
+        manoDedo.setY(manoDedo.getY() + params.height);
+
+        tvJugador1.setVisibility(View.VISIBLE);
+        tvJugador2.setVisibility(View.VISIBLE);
+        tvJugador3.setVisibility(View.VISIBLE);
+        manoDedo.setVisibility(View.VISIBLE);
+        dedo.setVisibility(View.VISIBLE);
+
+        tvJugador1.animate().translationX(inicio1.x).setDuration(500);
+        tvJugador1.animate().translationY(inicio1.y).setDuration(500);
+        tvJugador1.bringToFront();
+
+        tvJugador2.animate().translationX(inicio2.x).setDuration(500);
+        tvJugador2.animate().translationY(inicio2.y).setDuration(500);
+        tvJugador2.bringToFront();
+
+        tvJugador3.animate().translationX(inicio3.x).setDuration(500);
+        tvJugador3.animate().translationY(inicio3.y).setDuration(500);
+        tvJugador3.bringToFront();
+
+        manoDedo.animate().translationX(inicioManoDedo.x).setDuration(500);
+        manoDedo.animate().translationY(inicioManoDedo.y).setDuration(500);
+
+        dedo.animate().translationX(inicioManoDedo.x).setDuration(500);
+        dedo.animate().translationY(inicioManoDedo.y).setDuration(500);
+
+        Log.d("KKKKKK","hay animacion carta rival 3 = true");
     }
 
     void animacionRival(View view){
@@ -2046,7 +2110,15 @@ public class MainActivity extends Activity
 
             if (mMyId.equals(turno) && ronda == 1) {
                 Toast.makeText(getApplicationContext(), "Es tu turno", Toast.LENGTH_SHORT).show();
-                animacionAbrirCartas();
+                aparecerCartas();
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    public void run() {
+                        // acciones que se ejecutan tras los milisegundos
+                        animacionAbrirCartas();
+
+                    }
+                }, 500);
                 progressBar1.setVisibility(View.VISIBLE);
                 progressBar2.setVisibility(View.INVISIBLE);
                 iniciarBarraProgresoJ1();
@@ -2056,7 +2128,15 @@ public class MainActivity extends Activity
             if (!mMyId.equals(turno) && ronda == 1) {
                 bloquearCartas();
                 Toast.makeText(getApplicationContext(), "Esperando al Jugador", Toast.LENGTH_SHORT).show();
-                animacionAbrirCartas();
+                aparecerCartas();
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    public void run() {
+                        // acciones que se ejecutan tras los milisegundos
+                        animacionAbrirCartas();
+
+                    }
+                }, 500);
                 progressBar2.setVisibility(View.VISIBLE);
                 progressBar1.setVisibility(View.INVISIBLE);
                 iniciarBarraProgresoJ2();
