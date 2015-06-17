@@ -135,10 +135,12 @@ public class MainActivity extends Activity
     //Para enviar mensajes
     byte[] mMsgBuf = new byte[2];
 
-    /****** VARIABLES DEL JUEGO ******/
+    /**
+     * *** VARIABLES DEL JUEGO *****
+     */
 
     //Enteros
-    int miValor=0, valor1 = 0, valor2 = 0, valor3 = 0, valorEmpate = 0;
+    int miValor = 0, valor1 = 0, valor2 = 0, valor3 = 0, valorEmpate = 0;
     int ronda = 1;
     int misRondasGanadas = 0;
     int puntosTruc = 0;
@@ -251,7 +253,9 @@ public class MainActivity extends Activity
     final static int ENVID = 2;
     final static int TORNE = 4;
 
-    /****** VARIABLES EXTRA PARA 4 JUGADORES ******/
+    /**
+     * *** VARIABLES EXTRA PARA 4 JUGADORES *****
+     */
 
     //Enteros
     int valor1_derecha = 0;
@@ -271,6 +275,7 @@ public class MainActivity extends Activity
     //Strings
     String idJugador3 = null;
     String idJugador4 = null;
+    String sCartasJ1 = "";
     String sCartasJ3 = "";
     String sCartasJ4 = "";
     String idCompañero = "";
@@ -288,6 +293,7 @@ public class MainActivity extends Activity
     int[] list4 = new int[3];
     String[] equipo1 = new String[2];
     String[] equipo2 = new String[2];
+    String[] arrayCartasJugadores;
 
     //ImageViews
     ImageView tvJugador1_4J; //Cartas de la mano del jugador 1
@@ -371,20 +377,32 @@ public class MainActivity extends Activity
                         envid.setVisibility(View.GONE);
                         laFalta.setVisibility(View.GONE);
                         break;
+
                     case R.id.la_falta:
                         envidoLaFalta();
                         actionButton.hide();
                         envid.setVisibility(View.GONE);
                         laFalta.setVisibility(View.GONE);
                         break;
+
                     case R.id.me_voy:
                         //A implementar
                         break;
+
                     case R.id.salir:
                         actionButton.hide();
                         break;
 
-                }
+                    case R.id.envido_4J:
+                        envido();
+                        actionButton_4J.hide();
+                        envid_4J.setVisibility(View.GONE);
+                        laFalta_4J.setVisibility(View.GONE);
+                      break;
+                    case R.id.salir_4J:
+                        actionButton_4J.hide();
+                        break;
+            }
 
                 Toast.makeText(MainActivity.this, text, Toast.LENGTH_SHORT).show();
             }
@@ -567,9 +585,9 @@ public class MainActivity extends Activity
                                 enviarMensajeHayEnvidAndGanador(ganadorEnvid, 2);
                                 puntosEnvid = TORNE;
                                 desbloquearCartas();
-                                if(!turno.equals(mMyId)){
+                                if (!turno.equals(mMyId)) {
                                     cambiarBarraProgreso();
-                                }else reiniciarBarraProgreso();
+                                } else reiniciarBarraProgreso();
                                 break;
                             //Falta
                             case 1:
@@ -580,9 +598,9 @@ public class MainActivity extends Activity
                             case 2:
                                 desbloquearCartas();
                                 enviarMensajeNoQuiero(2);
-                                if(!turno.equals(mMyId)){
+                                if (!turno.equals(mMyId)) {
                                     cambiarBarraProgreso();
-                                }else reiniciarBarraProgreso();
+                                } else reiniciarBarraProgreso();
                                 break;
                         }
                         return true;
@@ -609,26 +627,26 @@ public class MainActivity extends Activity
                                 if (mMyId.equals(turno)) desbloquearCartas();
                                 comprobarGanadorEnvid();
                                 //puntos a sumar por la falta
-                                if(ganadorEnvid.equals(mMyId)){
-                                    if(puntosTotalesJugador2<=12){
+                                if (ganadorEnvid.equals(mMyId)) {
+                                    if (puntosTotalesJugador2 <= 12) {
                                         puntosEnvid = 24;
-                                    } else if(puntosTotalesJugador2>12){
+                                    } else if (puntosTotalesJugador2 > 12) {
                                         puntosEnvid = 24 - puntosTotalesJugador2;
                                     }
                                 }
                                 enviarMensajeHayEnvidAndGanador(ganadorEnvid, 3);
-                                if(!turno.equals(mMyId)){
+                                if (!turno.equals(mMyId)) {
                                     cambiarBarraProgreso();
-                                }else reiniciarBarraProgreso();
+                                } else reiniciarBarraProgreso();
                                 break;
                             case 1:
                                 if (mMyId.equals(turno)) desbloquearCartas();
-                                if(faltaDirecta){
+                                if (faltaDirecta) {
                                     enviarMensajeNoQuiero(4);
-                                }else enviarMensajeNoQuiero(3);
-                                if(!turno.equals(mMyId)){
+                                } else enviarMensajeNoQuiero(3);
+                                if (!turno.equals(mMyId)) {
                                     cambiarBarraProgreso();
-                                }else reiniciarBarraProgreso();
+                                } else reiniciarBarraProgreso();
                                 break;
                         }
                         return true;
@@ -689,9 +707,9 @@ public class MainActivity extends Activity
                             case 0:
                                 hayRetruc = true;
                                 enviarMensajeQuieroRetruc();
-                                if(!turno.equals(mMyId)){
+                                if (!turno.equals(mMyId)) {
                                     cambiarBarraProgreso();
-                                }else{
+                                } else {
                                     reiniciarBarraProgreso();
                                     desbloquearCartas();
                                 }
@@ -705,7 +723,7 @@ public class MainActivity extends Activity
                             //No quiero
                             case 2:
                                 enviarMensajeNoQuieroTruc(2);
-                               // mostrarResultadosPerdedorMano("PRIMERO");
+                                // mostrarResultadosPerdedorMano("PRIMERO");
                                 break;
                         }
                         return true;
@@ -730,9 +748,9 @@ public class MainActivity extends Activity
                             case 0:
                                 hayCuatreVal = true;
                                 enviarMensajeQuieroCuatreVal();
-                                if(!turno.equals(mMyId)){
+                                if (!turno.equals(mMyId)) {
                                     cambiarBarraProgreso();
-                                }else{
+                                } else {
                                     reiniciarBarraProgreso();
                                     desbloquearCartas();
                                 }
@@ -746,7 +764,7 @@ public class MainActivity extends Activity
                             //No quiero
                             case 2:
                                 enviarMensajeNoQuieroTruc(3);
-                               // mostrarResultadosPerdedorMano("PRIMERO");
+                                // mostrarResultadosPerdedorMano("PRIMERO");
                                 break;
                         }
                         return true;
@@ -772,9 +790,9 @@ public class MainActivity extends Activity
                                 hayJocFora = true;
                                 enviarMensajeQuieroJocFora();
                                 desbloquearCartas();
-                                if(!turno.equals(mMyId)){
+                                if (!turno.equals(mMyId)) {
                                     cambiarBarraProgreso();
-                                }else{
+                                } else {
                                     reiniciarBarraProgreso();
                                     desbloquearCartas();
                                 }
@@ -782,7 +800,7 @@ public class MainActivity extends Activity
                             //No quiero
                             case 1:
                                 enviarMensajeNoQuieroTruc(4);
-                               // mostrarResultadosPerdedorMano("PRIMERO");
+                                // mostrarResultadosPerdedorMano("PRIMERO");
                                 break;
 
                         }
@@ -859,12 +877,22 @@ public class MainActivity extends Activity
     }
 
     private void envido() {
-        Toast.makeText(getApplicationContext(), "Esperando al Jugador", Toast.LENGTH_SHORT).show();
-        bloquearCartas();
-        miEnvid = comprobarEnvid();
-        enviarMensajeEnvid(miEnvid);
-        cambiarBarraProgreso();
+        switch (numeroJugadores) {
+            case 2:
+                Toast.makeText(getApplicationContext(), "Esperando al Jugador", Toast.LENGTH_SHORT).show();
+                bloquearCartas();
+                miEnvid = comprobarEnvid();
+                enviarMensajeEnvid(miEnvid);
+                cambiarBarraProgreso();
+                break;
+            case 4:
+                Toast.makeText(getApplicationContext(), "Esperando al Jugador", Toast.LENGTH_SHORT).show();
+                bloquearCartas();
+                enviarMensajeEnvid(0);
+                break;
+        }
     }
+
     private void envidoLaFalta() {
         Toast.makeText(getApplicationContext(), "Esperando al Jugador", Toast.LENGTH_SHORT).show();
         bloquearCartas();
@@ -1097,7 +1125,7 @@ public class MainActivity extends Activity
         // get the invitee list
         final ArrayList<String> invitees = data.getStringArrayListExtra(Games.EXTRA_PLAYER_IDS);
         Log.d(TAG, "Invitee count: " + invitees.size());
-        if(invitees.size() != 0){
+        if (invitees.size() != 0) {
             idInvitado = invitees.get(0);
         }
 
@@ -1378,7 +1406,7 @@ public class MainActivity extends Activity
         numeroJugadores = mParticipants.size();
         Log.e(TAG, "numero de jugadores" + numeroJugadores);
 
-        if(numeroJugadores == 2) {
+        if (numeroJugadores == 2) {
             ArrayList<String> ids = room.getParticipantIds();
             for (int i = 0; i < ids.size(); i++) {
                 String aux = ids.get(i);
@@ -1397,9 +1425,7 @@ public class MainActivity extends Activity
 
             turno = idJugador1;
             mano = idJugador1;
-        }
-
-        else if(numeroJugadores == 4){
+        } else if (numeroJugadores == 4) {
 
             ArrayList<String> ids4 = room.getParticipantIds();
             List<String> ids4ordenadas = ids4.subList(0, ids4.size());
@@ -1420,15 +1446,14 @@ public class MainActivity extends Activity
             mano = idJugador1;
 
 
-
-            Log.d("ZZZ", "IDJ1: "+idJugador1);
-            Log.d("ZZZ", "IDJ2: "+idJugador2);
-            Log.d("ZZZ", "IDJ3: "+idJugador3);
-            Log.d("ZZZ", "IDJ4: "+idJugador4);
-            Log.d("ZZZ", "Nombre : " +mParticipants.get(0).getDisplayName());
-            Log.d("ZZZ", "Nombre : " +mParticipants.get(1).getDisplayName());
-            Log.d("ZZZ", "Nombre : " +mParticipants.get(2).getDisplayName());
-            Log.d("ZZZ", "Nombre : " +mParticipants.get(3).getDisplayName());
+            Log.d("ZZZ", "IDJ1: " + idJugador1);
+            Log.d("ZZZ", "IDJ2: " + idJugador2);
+            Log.d("ZZZ", "IDJ3: " + idJugador3);
+            Log.d("ZZZ", "IDJ4: " + idJugador4);
+            Log.d("ZZZ", "Nombre : " + mParticipants.get(0).getDisplayName());
+            Log.d("ZZZ", "Nombre : " + mParticipants.get(1).getDisplayName());
+            Log.d("ZZZ", "Nombre : " + mParticipants.get(2).getDisplayName());
+            Log.d("ZZZ", "Nombre : " + mParticipants.get(3).getDisplayName());
 
         }
 
@@ -1438,7 +1463,7 @@ public class MainActivity extends Activity
 
                 if (pid.equals(mMyId)) {
                     new LoadProfileImage(imgPerfil).execute(p.getIconImageUrl());
-                }else {
+                } else {
                     new LoadProfileImage(imgPerfilRival).execute(p.getIconImageUrl());
                 }
             }
@@ -1529,7 +1554,7 @@ public class MainActivity extends Activity
     int mScore = 0; // user's current score
 
     void resetAll() {
-        if(numeroJugadores == 2) {
+        if (numeroJugadores == 2) {
             miValor = 0;
             valor1 = 0;
             valor2 = 0;
@@ -1569,7 +1594,7 @@ public class MainActivity extends Activity
 
             textoAccion1.setVisibility(View.INVISIBLE);
             textoAccion2.setVisibility(View.INVISIBLE);
-            if(mCountDownTimerJ1 != null && mCountDownTimerJ2 != null) cancelarBarraProgreso();
+            if (mCountDownTimerJ1 != null && mCountDownTimerJ2 != null) cancelarBarraProgreso();
             segundos = 40;
 
             progressBar1.setVisibility(View.INVISIBLE);
@@ -1609,11 +1634,9 @@ public class MainActivity extends Activity
                 tvMesaRival3.animate().scaleX((float) 1).scaleY((float) 1).setDuration(0);
                 hayAnimacionRival3 = false;
             }
-        }
-
-        else if(numeroJugadores == 4){
+        } else if (numeroJugadores == 4) {
             miValor = 0;
-            valorEmpate= 0;
+            valorEmpate = 0;
             ronda = 1;
             tvJugador1_4J.setVisibility(View.VISIBLE);
             tvJugador2_4J.setVisibility(View.VISIBLE);
@@ -1654,6 +1677,15 @@ public class MainActivity extends Activity
             ganadorRonda2_4J = "";
             ganadorRonda3_4J = "";
 
+            truc_4J.setVisibility(View.VISIBLE);
+            envid_4J.setVisibility(View.VISIBLE);
+            meVoy_4J.setVisibility(View.VISIBLE);
+            salir_4J.setVisibility(View.VISIBLE);
+            retruque_4J.setVisibility(View.GONE);
+            quatreVal_4J.setVisibility(View.GONE);
+            jocFora_4J.setVisibility(View.GONE);
+            laFalta_4J.setVisibility(View.VISIBLE);
+
             if (hayAnimaciones) {
                 deshacerAnimaciones(tvJugador1_4J);
                 deshacerAnimaciones(tvJugador2_4J);
@@ -1667,72 +1699,72 @@ public class MainActivity extends Activity
         }
     }
 
-    void resetPuntos(){
+    void resetPuntos() {
         puntosTotalesMios = 0;
         puntosTotalesJugador2 = 0;
         marcador.setText("");
         marcador2.setText("");
     }
 
-    void resetAnimaciones(){
+    void resetAnimaciones() {
         hayAnimaciones = false;
         hayAnimacionRival1 = false;
         hayAnimacionRival2 = false;
         hayAnimacionRival3 = false;
     }
 
-    void deshacerAnimaciones(View view){
+    void deshacerAnimaciones(View view) {
 
-        switch (numeroJugadores){
+        switch (numeroJugadores) {
 
             case 2:
-                if(view.equals(tvJugador1)){
+                if (view.equals(tvJugador1)) {
                     tvJugador1.animate().translationX(inicio1.x).rotation(0).setDuration(500);
                     tvJugador1.animate().translationY(inicio1.y).rotation(0).setDuration(500);
 
-                    if(posTvJugador1 == 1){
+                    if (posTvJugador1 == 1) {
                         view.animate().rotationXBy(-30).scaleX((float) 1).scaleY((float) 1)
                                 .rotationYBy(5).setDuration(500);
 
-                    }else if(posTvJugador1 == 2){
+                    } else if (posTvJugador1 == 2) {
                         view.animate().rotationXBy(-30)
                                 .scaleX((float) 1).scaleY((float) 1).setDuration(500);
 
-                    }else if(posTvJugador1 == 3){
+                    } else if (posTvJugador1 == 3) {
                         view.animate().rotationXBy(-30).scaleX((float) 1).scaleY((float) 1)
                                 .rotationYBy(-5).setDuration(600);
                     }
-                }else if(view.equals(tvJugador2)){
+                } else if (view.equals(tvJugador2)) {
                     tvJugador2.animate().translationX(inicio2.x).rotation(0).setDuration(500);
                     tvJugador2.animate().translationY(inicio2.y).rotation(0).setDuration(500);
                     view.bringToFront();
 
-                    if(posTvJugador2 == 1){
+                    if (posTvJugador2 == 1) {
                         view.animate().rotationXBy(-30).scaleX((float) 1).scaleY((float) 1)
                                 .rotationYBy(5).setDuration(500);
 
-                    }else if(posTvJugador2 == 2){
+                    } else if (posTvJugador2 == 2) {
                         view.animate().rotationXBy(-30)
                                 .scaleX((float) 1).scaleY((float) 1).setDuration(500);
 
-                    }else if(posTvJugador2 == 3){
+                    } else if (posTvJugador2 == 3) {
                         view.animate().rotationXBy(-30).scaleX((float) 1).scaleY((float) 1)
                                 .rotationYBy(-5).setDuration(600);
                     }
-                }else if(view.equals(tvJugador3)){
+                } else if (view.equals(tvJugador3)) {
                     tvJugador3.animate().translationX(inicio3.x).rotation(0).setDuration(500);
                     tvJugador3.animate().translationY(inicio3.y).rotation(0).setDuration(500);
                     view.bringToFront();
 
-                    if(posTvJugador3 == 1){
+                    if (posTvJugador3 == 1) {
                         view.animate().rotationXBy(-30).scaleX((float) 1).scaleY((float) 1)
                                 .rotationYBy(5).setDuration(500);
 
-                    }else if(posTvJugador3 == 2){
+                    } else if (posTvJugador3 == 2) {
                         view.animate().rotationXBy(-30)
                                 .scaleX((float) 1).scaleY((float) 1).setDuration(500);
 
-                    }else if(posTvJugador3 == 3){
+                    } else if (posTvJugador3 == 3) {
                         view.animate().rotationXBy(-30).scaleX((float) 1).scaleY((float) 1)
                                 .rotationYBy(-5).setDuration(600);
                     }
@@ -1740,53 +1772,53 @@ public class MainActivity extends Activity
                 break;
 
             case 4:
-                if(view.equals(tvJugador1_4J)){
+                if (view.equals(tvJugador1_4J)) {
                     tvJugador1_4J.animate().translationX(inicio1J1.x).rotation(0).setDuration(500);
                     tvJugador1_4J.animate().translationY(inicio1J1.y).rotation(0).setDuration(500);
 
-                    if(posTvJugador1 == 1){
+                    if (posTvJugador1 == 1) {
                         view.animate().rotationXBy(-30).scaleX((float) 1).scaleY((float) 1)
                                 .rotationYBy(5).setDuration(500);
 
-                    }else if(posTvJugador1 == 2){
+                    } else if (posTvJugador1 == 2) {
                         view.animate().rotationXBy(-30)
                                 .scaleX((float) 1).scaleY((float) 1).setDuration(500);
 
-                    }else if(posTvJugador1 == 3){
+                    } else if (posTvJugador1 == 3) {
                         view.animate().rotationXBy(-30).scaleX((float) 1).scaleY((float) 1)
                                 .rotationYBy(-5).setDuration(600);
                     }
-                }else if(view.equals(tvJugador2_4J)){
+                } else if (view.equals(tvJugador2_4J)) {
                     tvJugador2_4J.animate().translationX(inicio2J1.x).rotation(0).setDuration(500);
                     tvJugador2_4J.animate().translationY(inicio2J1.y).rotation(0).setDuration(500);
                     view.bringToFront();
 
-                    if(posTvJugador2 == 1){
+                    if (posTvJugador2 == 1) {
                         view.animate().rotationXBy(-30).scaleX((float) 1).scaleY((float) 1)
                                 .rotationYBy(5).setDuration(500);
 
-                    }else if(posTvJugador2 == 2){
+                    } else if (posTvJugador2 == 2) {
                         view.animate().rotationXBy(-30)
                                 .scaleX((float) 1).scaleY((float) 1).setDuration(500);
 
-                    }else if(posTvJugador2 == 3){
+                    } else if (posTvJugador2 == 3) {
                         view.animate().rotationXBy(-30).scaleX((float) 1).scaleY((float) 1)
                                 .rotationYBy(-5).setDuration(600);
                     }
-                }else if(view.equals(tvJugador3_4J)){
+                } else if (view.equals(tvJugador3_4J)) {
                     tvJugador3_4J.animate().translationX(inicio3J1.x).rotation(0).setDuration(500);
                     tvJugador3_4J.animate().translationY(inicio3J1.y).rotation(0).setDuration(500);
                     view.bringToFront();
 
-                    if(posTvJugador3 == 1){
+                    if (posTvJugador3 == 1) {
                         view.animate().rotationXBy(-30).scaleX((float) 1).scaleY((float) 1)
                                 .rotationYBy(5).setDuration(500);
 
-                    }else if(posTvJugador3 == 2){
+                    } else if (posTvJugador3 == 2) {
                         view.animate().rotationXBy(-30)
                                 .scaleX((float) 1).scaleY((float) 1).setDuration(500);
 
-                    }else if(posTvJugador3 == 3){
+                    } else if (posTvJugador3 == 3) {
                         view.animate().rotationXBy(-30).scaleX((float) 1).scaleY((float) 1)
                                 .rotationYBy(-5).setDuration(600);
                     }
@@ -1796,7 +1828,7 @@ public class MainActivity extends Activity
 
     }
 
-    void animarTextoAccion(final View view){
+    void animarTextoAccion(final View view) {
         view.setVisibility(View.VISIBLE);
         view.setAlpha(0.0f);
         view.animate().alpha(1.0f).setDuration(1000).start();
@@ -1824,13 +1856,11 @@ public class MainActivity extends Activity
 
     // Reset game variables in preparation for a new game.
     void desbloquearCartas() {
-        if(numeroJugadores == 2) {
+        if (numeroJugadores == 2) {
             tvJugador1.setEnabled(true);
             tvJugador2.setEnabled(true);
             tvJugador3.setEnabled(true);
-        }
-
-        else if(numeroJugadores == 4){
+        } else if (numeroJugadores == 4) {
             tvJugador1_4J.setEnabled(true);
             tvJugador2_4J.setEnabled(true);
             tvJugador3_4J.setEnabled(true);
@@ -1838,13 +1868,11 @@ public class MainActivity extends Activity
     }
 
     void bloquearCartas() {
-        if(numeroJugadores == 2) {
+        if (numeroJugadores == 2) {
             tvJugador1.setEnabled(false);
             tvJugador2.setEnabled(false);
             tvJugador3.setEnabled(false);
-        }
-
-        else if(numeroJugadores == 4){
+        } else if (numeroJugadores == 4) {
             tvJugador1_4J.setEnabled(false);
             tvJugador2_4J.setEnabled(false);
             tvJugador3_4J.setEnabled(false);
@@ -1862,14 +1890,13 @@ public class MainActivity extends Activity
 
     void cambiarTurno() {
 
-        if(numeroJugadores == 2) {
+        if (numeroJugadores == 2) {
             cambiarBarraProgreso();
             animarDesaparecerMenu();
             if (mMyId.equals(idJugador1) && turno.equals(idJugador1)) turno = idJugador2;
             if (mMyId.equals(idJugador2) && turno.equals(idJugador2)) turno = idJugador1;
-        }
-
-        else if(numeroJugadores == 4){
+        } else if (numeroJugadores == 4) {
+            animarDesaparecerMenu();
             if (mMyId.equals(idJugador1) && turno.equals(idJugador1)) turno = idJugador2;
             if (mMyId.equals(idJugador2) && turno.equals(idJugador2)) turno = idJugador3;
             if (mMyId.equals(idJugador3) && turno.equals(idJugador3)) turno = idJugador4;
@@ -1897,7 +1924,8 @@ public class MainActivity extends Activity
                 progressBar1.setProgress(segundos);
             }
         }.start();
-            }
+    }
+
     void iniciarBarraProgresoJ2() {
         mCountDownTimerJ2 = new CountDownTimer(40000, 1000) {
 
@@ -1918,14 +1946,14 @@ public class MainActivity extends Activity
     }
 
 
-    void cambiarBarraProgreso(){
-        if(progressBar1.getVisibility() == View.VISIBLE){
+    void cambiarBarraProgreso() {
+        if (progressBar1.getVisibility() == View.VISIBLE) {
             progressBar1.setVisibility(View.INVISIBLE);
             mCountDownTimerJ1.cancel();
             segundos = 40;
             progressBar2.setVisibility(View.VISIBLE);
             iniciarBarraProgresoJ2();
-        }else if(progressBar2.getVisibility() == View.VISIBLE){
+        } else if (progressBar2.getVisibility() == View.VISIBLE) {
             progressBar2.setVisibility(View.INVISIBLE);
             mCountDownTimerJ2.cancel();
             segundos = 40;
@@ -1934,28 +1962,28 @@ public class MainActivity extends Activity
         }
     }
 
-    void reiniciarBarraProgreso(){
-        if(progressBar1.getVisibility() == View.VISIBLE){
+    void reiniciarBarraProgreso() {
+        if (progressBar1.getVisibility() == View.VISIBLE) {
             mCountDownTimerJ1.cancel();
             segundos = 40;
             iniciarBarraProgresoJ1();
-        }else if(progressBar2.getVisibility() == View.VISIBLE){
+        } else if (progressBar2.getVisibility() == View.VISIBLE) {
             mCountDownTimerJ2.cancel();
             segundos = 40;
             iniciarBarraProgresoJ2();
         }
     }
 
-    void cancelarBarraProgreso(){
-        if(progressBar1.getVisibility() == View.VISIBLE){
+    void cancelarBarraProgreso() {
+        if (progressBar1.getVisibility() == View.VISIBLE) {
             mCountDownTimerJ1.cancel();
 
-        }else if(progressBar2.getVisibility() == View.VISIBLE){
+        } else if (progressBar2.getVisibility() == View.VISIBLE) {
             mCountDownTimerJ2.cancel();
         }
     }
 
-    void animacionAbrirCartas(){
+    void animacionAbrirCartas() {
         tvJugador1.animate().rotation(-20).setDuration(500);
         tvJugador3.animate().rotation(20).setDuration(500);
 
@@ -1965,7 +1993,7 @@ public class MainActivity extends Activity
         tvJugador3.animate().translationY(inicio3.y + 40).setDuration(500);
     }
 
-    void animarDesaparecerMano(){
+    void animarDesaparecerMano() {
         RelativeLayout.LayoutParams params =
                 (RelativeLayout.LayoutParams) tvJugador1.getLayoutParams();
 
@@ -1976,7 +2004,7 @@ public class MainActivity extends Activity
         dedo.animate().translationY(dedo.getY() + params.height).setDuration(300);
     }
 
-    void aparecerCartas(){
+    void aparecerCartas() {
         RelativeLayout.LayoutParams params =
                 (RelativeLayout.LayoutParams) tvJugador1.getLayoutParams();
 
@@ -2015,14 +2043,14 @@ public class MainActivity extends Activity
         dedo.animate().translationX(inicioManoDedo.x).setDuration(500);
         dedo.animate().translationY(inicioManoDedo.y).setDuration(500);
 
-        Log.d("KKKKKK","hay animacion carta rival 3 = true");
+        Log.d("KKKKKK", "hay animacion carta rival 3 = true");
     }
 
-    void animacionRival(View view){
+    void animacionRival(View view) {
         RelativeLayout.LayoutParams params =
                 (RelativeLayout.LayoutParams) view.getLayoutParams();
 
-        if(view.equals(tvMesaRival1)) {
+        if (view.equals(tvMesaRival1)) {
             view.setX(view.getX() + 150);
             view.setY(view.getY() - params.height - params.topMargin);
 
@@ -2031,8 +2059,8 @@ public class MainActivity extends Activity
             view.animate().translationY(inicio1Rival.y).scaleY((float) 0.8).setDuration(500);
             view.bringToFront();
             hayAnimacionRival1 = true;
-            Log.d("KKKKKK","hay animacion carta rival 1 = true");
-        }else if(view.equals(tvMesaRival2)) {
+            Log.d("KKKKKK", "hay animacion carta rival 1 = true");
+        } else if (view.equals(tvMesaRival2)) {
             view.setX(view.getX());
             view.setY(view.getY() - params.height - params.topMargin);
 
@@ -2041,8 +2069,8 @@ public class MainActivity extends Activity
             view.animate().translationY(inicio2Rival.y).scaleY((float) 0.8).setDuration(500);
             view.bringToFront();
             hayAnimacionRival2 = true;
-            Log.d("KKKKKK","hay animacion carta rival 2 = true");
-        }else if(view.equals(tvMesaRival3)) {
+            Log.d("KKKKKK", "hay animacion carta rival 2 = true");
+        } else if (view.equals(tvMesaRival3)) {
             view.setX(view.getX() - 150);
             view.setY(view.getY() - params.height - params.topMargin);
 
@@ -2051,37 +2079,66 @@ public class MainActivity extends Activity
             view.animate().translationY(inicio3Rival.y).scaleY((float) 0.8).setDuration(500);
             view.bringToFront();
             hayAnimacionRival3 = true;
-            Log.d("KKKKKK","hay animacion carta rival 3 = true");
+            Log.d("KKKKKK", "hay animacion carta rival 3 = true");
         }
     }
 
-    void animarAparecerMenu(){
-        actionButton.setVisibility(View.VISIBLE);
-        Animation animation = AnimationUtils.loadAnimation(getApplicationContext(),
-                R.anim.fab_scale_up);
-        actionButton.startAnimation(animation);
+    void animarAparecerMenu() {
+        if(numeroJugadores == 2){
+            actionButton.setVisibility(View.VISIBLE);
+            Animation animation = AnimationUtils.loadAnimation(getApplicationContext(),
+                    R.anim.fab_scale_up);
+            actionButton.startAnimation(animation);
+        }else if(numeroJugadores == 4){
+            actionButton_4J.setVisibility(View.VISIBLE);
+            Animation animation = AnimationUtils.loadAnimation(getApplicationContext(),
+                    R.anim.fab_scale_up);
+            actionButton_4J.startAnimation(animation);
+        }
     }
 
-    void animarDesaparecerMenu(){
-        Animation animation = AnimationUtils.loadAnimation(getApplicationContext(),
-                R.anim.fab_scale_down);
-        animation.setAnimationListener(new Animation.AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation animation) {
+    void animarDesaparecerMenu() {
+        if(numeroJugadores == 2){
+            Animation animation = AnimationUtils.loadAnimation(getApplicationContext(),
+                    R.anim.fab_scale_down);
+            animation.setAnimationListener(new Animation.AnimationListener() {
+                @Override
+                public void onAnimationStart(Animation animation) {
 
-            }
+                }
 
-            @Override
-            public void onAnimationEnd(Animation animation) {
-                actionButton.setVisibility(View.INVISIBLE);
-            }
+                @Override
+                public void onAnimationEnd(Animation animation) {
+                    actionButton.setVisibility(View.INVISIBLE);
+                }
 
-            @Override
-            public void onAnimationRepeat(Animation animation) {
+                @Override
+                public void onAnimationRepeat(Animation animation) {
 
-            }
-        });
-        actionButton.startAnimation(animation);
+                }
+            });
+            actionButton.startAnimation(animation);
+        }else if(numeroJugadores == 4){
+            Animation animation = AnimationUtils.loadAnimation(getApplicationContext(),
+                    R.anim.fab_scale_down);
+            animation.setAnimationListener(new Animation.AnimationListener() {
+                @Override
+                public void onAnimationStart(Animation animation) {
+
+                }
+
+                @Override
+                public void onAnimationEnd(Animation animation) {
+                    actionButton_4J.setVisibility(View.INVISIBLE);
+                }
+
+                @Override
+                public void onAnimationRepeat(Animation animation) {
+
+                }
+            });
+            actionButton_4J.startAnimation(animation);
+        }
     }
 
     // Start the gameplay phase of the game.
@@ -2090,62 +2147,62 @@ public class MainActivity extends Activity
         switch (numeroJugadores) {
 
             case 2:
-            asignarImagenCarta(carta1, tvJugador1);
-            asignarImagenCarta(carta2, tvJugador2);
-            asignarImagenCarta(carta3, tvJugador3);
+                asignarImagenCarta(carta1, tvJugador1);
+                asignarImagenCarta(carta2, tvJugador2);
+                asignarImagenCarta(carta3, tvJugador3);
 
-            tvJugador1.setOnTouchListener(new MyTouchListener());
-            tvJugador2.setOnTouchListener(new MyTouchListener());
-            tvJugador3.setOnTouchListener(new MyTouchListener());
+                tvJugador1.setOnTouchListener(new MyTouchListener());
+                tvJugador2.setOnTouchListener(new MyTouchListener());
+                tvJugador3.setOnTouchListener(new MyTouchListener());
 
-            truc.setOnClickListener(menuListener);
-            retruque.setOnClickListener(menuListener);
-            quatreVal.setOnClickListener(menuListener);
-            jocFora.setOnClickListener(menuListener);
-            envid.setOnClickListener(menuListener);
-            laFalta.setOnClickListener(menuListener);
-            salir.setOnClickListener(menuListener);
-            meVoy.setOnClickListener(menuListener);
+                truc.setOnClickListener(menuListener);
+                retruque.setOnClickListener(menuListener);
+                quatreVal.setOnClickListener(menuListener);
+                jocFora.setOnClickListener(menuListener);
+                envid.setOnClickListener(menuListener);
+                laFalta.setOnClickListener(menuListener);
+                salir.setOnClickListener(menuListener);
+                meVoy.setOnClickListener(menuListener);
 
 
-            if (mMyId.equals(turno) && ronda == 1) {
-                Toast.makeText(getApplicationContext(), "Es tu turno", Toast.LENGTH_SHORT).show();
-                aparecerCartas();
-                Handler handler = new Handler();
-                handler.postDelayed(new Runnable() {
-                    public void run() {
-                        // acciones que se ejecutan tras los milisegundos
-                        animacionAbrirCartas();
+                if (mMyId.equals(turno) && ronda == 1) {
+                    Toast.makeText(getApplicationContext(), "Es tu turno", Toast.LENGTH_SHORT).show();
+                    aparecerCartas();
+                    Handler handler = new Handler();
+                    handler.postDelayed(new Runnable() {
+                        public void run() {
+                            // acciones que se ejecutan tras los milisegundos
+                            animacionAbrirCartas();
 
-                    }
-                }, 500);
-                progressBar1.setVisibility(View.VISIBLE);
-                progressBar2.setVisibility(View.INVISIBLE);
-                iniciarBarraProgresoJ1();
-                animarAparecerMenu();
-            }
+                        }
+                    }, 500);
+                    progressBar1.setVisibility(View.VISIBLE);
+                    progressBar2.setVisibility(View.INVISIBLE);
+                    iniciarBarraProgresoJ1();
+                    animarAparecerMenu();
+                }
 
-            if (!mMyId.equals(turno) && ronda == 1) {
-                bloquearCartas();
-                Toast.makeText(getApplicationContext(), "Esperando al Jugador", Toast.LENGTH_SHORT).show();
-                aparecerCartas();
-                Handler handler = new Handler();
-                handler.postDelayed(new Runnable() {
-                    public void run() {
-                        // acciones que se ejecutan tras los milisegundos
-                        animacionAbrirCartas();
+                if (!mMyId.equals(turno) && ronda == 1) {
+                    bloquearCartas();
+                    Toast.makeText(getApplicationContext(), "Esperando al Jugador", Toast.LENGTH_SHORT).show();
+                    aparecerCartas();
+                    Handler handler = new Handler();
+                    handler.postDelayed(new Runnable() {
+                        public void run() {
+                            // acciones que se ejecutan tras los milisegundos
+                            animacionAbrirCartas();
 
-                    }
-                }, 500);
-                progressBar2.setVisibility(View.VISIBLE);
-                progressBar1.setVisibility(View.INVISIBLE);
-                iniciarBarraProgresoJ2();
-                animarDesaparecerMenu();
+                        }
+                    }, 500);
+                    progressBar2.setVisibility(View.VISIBLE);
+                    progressBar1.setVisibility(View.INVISIBLE);
+                    iniciarBarraProgresoJ2();
+                    animarDesaparecerMenu();
 
-            }
+                }
 
-            switchToScreen(R.id.screen_game);
-            mMultiplayer = multiplayer;
+                switchToScreen(R.id.screen_game);
+                mMultiplayer = multiplayer;
                 break;
 
             case 4:
@@ -2158,22 +2215,27 @@ public class MainActivity extends Activity
                 tvJugador2_4J.setOnTouchListener(new MyTouchListener4J());
                 tvJugador3_4J.setOnTouchListener(new MyTouchListener4J());
 
+                envid_4J.setOnClickListener(menuListener);
+                salir_4J.setOnClickListener(menuListener);
+
                 if (mMyId.equals(turno) && ronda == 1) {
                     Toast.makeText(getApplicationContext(), "Es tu turno", Toast.LENGTH_SHORT).show();
+                    animarAparecerMenu();
+                    envid_4J.setVisibility(View.GONE);
+                    laFalta_4J.setVisibility(View.GONE);
                 }
 
                 if (!mMyId.equals(turno) && ronda == 1) {
-                    tvJugador1_4J.setEnabled(false);
-                    tvJugador2_4J.setEnabled(false);
-                    tvJugador3_4J.setEnabled(false);
+                    bloquearCartas();
+                    animarDesaparecerMenu();
                     Toast.makeText(getApplicationContext(), "Esperando al Jugador", Toast.LENGTH_SHORT).show();
 
                 }
 
-                if(mMyId.equals(idJugador1)) txtNumeroJugador.setText("Soy el jugador 1");
-                else if(mMyId.equals(idJugador2)) txtNumeroJugador.setText("Soy el jugador 2");
-                else if(mMyId.equals(idJugador3)) txtNumeroJugador.setText("Soy el jugador 3");
-                else if(mMyId.equals(idJugador4)) txtNumeroJugador.setText("Soy el jugador 4");
+                if (mMyId.equals(idJugador1)) txtNumeroJugador.setText("Soy el jugador 1");
+                else if (mMyId.equals(idJugador2)) txtNumeroJugador.setText("Soy el jugador 2");
+                else if (mMyId.equals(idJugador3)) txtNumeroJugador.setText("Soy el jugador 3");
+                else if (mMyId.equals(idJugador4)) txtNumeroJugador.setText("Soy el jugador 4");
 
                 switchToScreen(R.id.screen_game_4_jugadores);
                 mMultiplayer = multiplayer;
@@ -2185,90 +2247,90 @@ public class MainActivity extends Activity
 
         switch (numeroJugadores) {
             case 2:
-            //Envio el valor de la carta
-            byte[] messageCarta = ("$" + aux.toString()).getBytes();
-            enviarValorCarta(messageCarta);
-            Log.d("KKKKK", "Ronda: " + ronda);
-            Log.d("KKKKK", "valor1: " + valor1);
-            Log.d("KKKKK", "valor2: " + valor2);
-            Log.d("KKKKK", "valor3: " + valor3);
+                //Envio el valor de la carta
+                byte[] messageCarta = ("$" + aux.toString()).getBytes();
+                enviarValorCarta(messageCarta);
+                Log.d("KKKKK", "Ronda: " + ronda);
+                Log.d("KKKKK", "valor1: " + valor1);
+                Log.d("KKKKK", "valor2: " + valor2);
+                Log.d("KKKKK", "valor3: " + valor3);
 
 
-            Log.d("KKKKK", "Tiro primero? " + tiroPrimero());
-            //Caso en el que tiro primero
-            if (tiroPrimero()) {
-                cambiarTurno();
-                Toast.makeText(getApplicationContext(), "Esperando al Jugador", Toast.LENGTH_SHORT).show();
-                bloquearCartas();
-                enviarMensajeTurno();
+                Log.d("KKKKK", "Tiro primero? " + tiroPrimero());
+                //Caso en el que tiro primero
+                if (tiroPrimero()) {
+                    cambiarTurno();
+                    Toast.makeText(getApplicationContext(), "Esperando al Jugador", Toast.LENGTH_SHORT).show();
+                    bloquearCartas();
+                    enviarMensajeTurno();
 
-                //Caso en que tiro segundo
-            } else {
-                //No hay empate
-                if (!hayEmpate()) {
-                    //Gano la ronda
-                    if (soyGanadorRonda()) {
-                        if (ronda == 1) {
-                            misRondasGanadas = 1;
-                            ganadorRonda1 = mMyId;
-                        } else if (ronda == 2) {
-                            misRondasGanadas++;
-                        } else if (ronda == 3) {
-                            misRondasGanadas = 2;
-                        }
-                        //He ganado la mano
-                        if (misRondasGanadas == 2) {
-                            //enviarMensajeHasPerdido();
-                            Handler handler = new Handler();
-                            handler.postDelayed(new Runnable() {
-                                public void run() {
-                                    // acciones que se ejecutan tras los milisegundos
-                                    mostrarResultadosGanadorMano("PRIMERO");
-
-                                }
-                            }, 1500);
-
-                            //Vuelvo a tirar
-                        } else {
-                            Toast.makeText(getApplicationContext(), "Es tu turno", Toast.LENGTH_SHORT).show();
-                            actualizaRonda();
-                            enviarMensajeRonda();
-                            enviarMensajeTurno();
-                            reiniciarBarraProgreso();
-                        }
-                        //Pierdo la ronda
-                    } else {
-                        //enviarMensajeSumaRonda();
-                        if ((ronda == 2 && misRondasGanadas == 0) || (ronda == 3)) {
-                            //Pierdes en la segunda ronda o en la tercera
-                            Handler handler = new Handler();
-                            handler.postDelayed(new Runnable() {
-                                public void run() {
-                                    // acciones que se ejecutan tras los milisegundos
-                                    mostrarResultadosPerdedorMano("PRIMERO");
-                                }
-                            }, 1500);
-
-                        } else {
-                            cambiarTurno();
-                            Toast.makeText(getApplicationContext(), "Esperando al Jugador", Toast.LENGTH_SHORT).show();
-                            bloquearCartas();
-                            actualizaRonda();
-                            enviarMensajeRonda();
-                            enviarMensajeTurno();
-                        }
-                    }
-                    //Hay empate
+                    //Caso en que tiro segundo
                 } else {
-                    if (ronda == 1) {
-                        enviarMensajeHayEmpate();
-                        casoEmpatePrimero();
+                    //No hay empate
+                    if (!hayEmpate()) {
+                        //Gano la ronda
+                        if (soyGanadorRonda()) {
+                            if (ronda == 1) {
+                                misRondasGanadas = 1;
+                                ganadorRonda1 = mMyId;
+                            } else if (ronda == 2) {
+                                misRondasGanadas++;
+                            } else if (ronda == 3) {
+                                misRondasGanadas = 2;
+                            }
+                            //He ganado la mano
+                            if (misRondasGanadas == 2) {
+                                //enviarMensajeHasPerdido();
+                                Handler handler = new Handler();
+                                handler.postDelayed(new Runnable() {
+                                    public void run() {
+                                        // acciones que se ejecutan tras los milisegundos
+                                        mostrarResultadosGanadorMano("PRIMERO");
+
+                                    }
+                                }, 1500);
+
+                                //Vuelvo a tirar
+                            } else {
+                                Toast.makeText(getApplicationContext(), "Es tu turno", Toast.LENGTH_SHORT).show();
+                                actualizaRonda();
+                                enviarMensajeRonda();
+                                enviarMensajeTurno();
+                                reiniciarBarraProgreso();
+                            }
+                            //Pierdo la ronda
+                        } else {
+                            //enviarMensajeSumaRonda();
+                            if ((ronda == 2 && misRondasGanadas == 0) || (ronda == 3)) {
+                                //Pierdes en la segunda ronda o en la tercera
+                                Handler handler = new Handler();
+                                handler.postDelayed(new Runnable() {
+                                    public void run() {
+                                        // acciones que se ejecutan tras los milisegundos
+                                        mostrarResultadosPerdedorMano("PRIMERO");
+                                    }
+                                }, 1500);
+
+                            } else {
+                                cambiarTurno();
+                                Toast.makeText(getApplicationContext(), "Esperando al Jugador", Toast.LENGTH_SHORT).show();
+                                bloquearCartas();
+                                actualizaRonda();
+                                enviarMensajeRonda();
+                                enviarMensajeTurno();
+                            }
+                        }
+                        //Hay empate
                     } else {
-                        casoEmpateTercero();
+                        if (ronda == 1) {
+                            enviarMensajeHayEmpate();
+                            casoEmpatePrimero();
+                        } else {
+                            casoEmpateTercero();
+                        }
                     }
                 }
-            }
-            break;
+                break;
 
             case 4:
 
@@ -2279,14 +2341,14 @@ public class MainActivity extends Activity
                 Log.d("KKKKK", "Quien calcula? " + quienCalcula());
                 Log.d("KKKKK", "Calculo yo? " + mMyId.equals(quienCalcula()));
 
-                if(!mMyId.equals(quienCalcula())){
+                if (!mMyId.equals(quienCalcula())) {
                     cambiarTurno();
                     Toast.makeText(getApplicationContext(), "Esperando al Jugador", Toast.LENGTH_SHORT).show();
                     bloquearCartas();
                     enviarMensajeTurno4J(turno);
 
-                //Tiro ultimo
-                }else {
+                    //Tiro ultimo
+                } else {
                     if (!hayEmpate4J()) {
                         //Calculo quien gana, tanto si es de mi equipo como si no
                         if (ronda == 1) {
@@ -2372,8 +2434,8 @@ public class MainActivity extends Activity
 
                             }
                         }
-                    // Hay empate
-                    }else{
+                        // Hay empate
+                    } else {
                         if (ronda == 1) {
                             enviarMensajeHayEmpate();
                             casoEmpatePrimero();
@@ -2391,10 +2453,10 @@ public class MainActivity extends Activity
         if (!mMyId.equals(mano)) {
             switch (numeroJugadores) {
                 case 2:
-                Toast.makeText(getApplicationContext(), "Esperando al Jugador", Toast.LENGTH_SHORT).show();
-                bloquearCartas();
-                cambiarTurno();
-                enviarMensajeTurno();
+                    Toast.makeText(getApplicationContext(), "Esperando al Jugador", Toast.LENGTH_SHORT).show();
+                    bloquearCartas();
+                    cambiarTurno();
+                    enviarMensajeTurno();
                     break;
                 case 4:
                     Toast.makeText(getApplicationContext(), "Esperando al Jugador", Toast.LENGTH_SHORT).show();
@@ -2409,29 +2471,29 @@ public class MainActivity extends Activity
     void casoEmpateTercero() {
         switch (numeroJugadores) {
             case 2:
-            //Caso en el que gano
-            if (ganadorRonda1.equals(mMyId)) {
-                //enviarMensajeHasPerdido();
-                Handler handler = new Handler();
-                handler.postDelayed(new Runnable() {
-                    public void run() {
-                        // acciones que se ejecutan tras los milisegundos
-                        mostrarResultadosGanadorMano("PRIMERO");
+                //Caso en el que gano
+                if (ganadorRonda1.equals(mMyId)) {
+                    //enviarMensajeHasPerdido();
+                    Handler handler = new Handler();
+                    handler.postDelayed(new Runnable() {
+                        public void run() {
+                            // acciones que se ejecutan tras los milisegundos
+                            mostrarResultadosGanadorMano("PRIMERO");
 
-                    }
-                }, 1500);
+                        }
+                    }, 1500);
 
-                //Caso en el que pierdo
-            } else {
-                //enviarMensajeSumaRonda();
-                Handler handler = new Handler();
-                handler.postDelayed(new Runnable() {
-                    public void run() {
-                        // acciones que se ejecutan tras los milisegundos
-                        mostrarResultadosPerdedorMano("PRIMERO");
-                    }
-                }, 1500);
-            }
+                    //Caso en el que pierdo
+                } else {
+                    //enviarMensajeSumaRonda();
+                    Handler handler = new Handler();
+                    handler.postDelayed(new Runnable() {
+                        public void run() {
+                            // acciones que se ejecutan tras los milisegundos
+                            mostrarResultadosPerdedorMano("PRIMERO");
+                        }
+                    }, 1500);
+                }
                 break;
             case 4:
                 //Caso en el que gano
@@ -2471,46 +2533,46 @@ public class MainActivity extends Activity
 
         switch (numeroJugadores) {
             case 2:
-            // Si soy mano, tiro y cambio turno
-            if (mMyId.equals(mano)) {
-                cambiarTurno();
-                enviarMensajeTurno();
-                Toast.makeText(getApplicationContext(), "Esperando al Jugador", Toast.LENGTH_SHORT).show();
-                //Si no soy mano, compruebo quien gana
-            } else if (soyGanadorRondaEmpate()) {
-                //Caso en el que gano
-                //enviarMensajeHasPerdido();
-                Handler handler = new Handler();
-                handler.postDelayed(new Runnable() {
-                    public void run() {
-                        // acciones que se ejecutan tras los milisegundos
-                        mostrarResultadosGanadorMano("PRIMERO");
+                // Si soy mano, tiro y cambio turno
+                if (mMyId.equals(mano)) {
+                    cambiarTurno();
+                    enviarMensajeTurno();
+                    Toast.makeText(getApplicationContext(), "Esperando al Jugador", Toast.LENGTH_SHORT).show();
+                    //Si no soy mano, compruebo quien gana
+                } else if (soyGanadorRondaEmpate()) {
+                    //Caso en el que gano
+                    //enviarMensajeHasPerdido();
+                    Handler handler = new Handler();
+                    handler.postDelayed(new Runnable() {
+                        public void run() {
+                            // acciones que se ejecutan tras los milisegundos
+                            mostrarResultadosGanadorMano("PRIMERO");
 
-                    }
-                }, 1500);
+                        }
+                    }, 1500);
 
-            } else {
-                //Caso en el que pierdo
-                //enviarMensajeSumaRonda();
-                Handler handler = new Handler();
-                handler.postDelayed(new Runnable() {
-                    public void run() {
-                        // acciones que se ejecutan tras los milisegundos
-                        mostrarResultadosPerdedorMano("PRIMERO");
-                    }
-                }, 1500);
-            }
+                } else {
+                    //Caso en el que pierdo
+                    //enviarMensajeSumaRonda();
+                    Handler handler = new Handler();
+                    handler.postDelayed(new Runnable() {
+                        public void run() {
+                            // acciones que se ejecutan tras los milisegundos
+                            mostrarResultadosPerdedorMano("PRIMERO");
+                        }
+                    }, 1500);
+                }
                 break;
 
             case 4:
                 String realizaCalculo = "";
-                if(idJugador1.equals(mano)){
+                if (idJugador1.equals(mano)) {
                     realizaCalculo = idJugador4;
-                }else if(idJugador2.equals(mano)){
+                } else if (idJugador2.equals(mano)) {
                     realizaCalculo = idJugador1;
-                }else if(idJugador3.equals(mano)){
+                } else if (idJugador3.equals(mano)) {
                     realizaCalculo = idJugador2;
-                }else if(idJugador4.equals(mano)){
+                } else if (idJugador4.equals(mano)) {
                     realizaCalculo = idJugador3;
                 }
                 // Si tengo que calcular
@@ -2520,27 +2582,27 @@ public class MainActivity extends Activity
                     Toast.makeText(getApplicationContext(), "Esperando al Jugador", Toast.LENGTH_SHORT).show();
                     //Si no soy mano, compruebo quien gana
                 } else if (soyGanadorRondaEmpate4J()) {
-                    Log.d("ZZZZ","Soy ganador de ronda empate");
+                    Log.d("ZZZZ", "Soy ganador de ronda empate");
                     //Caso en el que gano
                     //enviarMensajeHasPerdido();
                     Handler handler = new Handler();
                     handler.postDelayed(new Runnable() {
                         public void run() {
                             // acciones que se ejecutan tras los milisegundos
-                           mostrarResultadosGanadorMano("PRIMERO");
+                            mostrarResultadosGanadorMano("PRIMERO");
 
                         }
                     }, 1500);
 
                 } else {
-                    Log.d("ZZZZ","Soy perdedor de ronda empate");
+                    Log.d("ZZZZ", "Soy perdedor de ronda empate");
                     //Caso en el que pierdo
                     //enviarMensajeSumaRonda();
                     Handler handler = new Handler();
                     handler.postDelayed(new Runnable() {
                         public void run() {
                             // acciones que se ejecutan tras los milisegundos
-                           mostrarResultadosPerdedorMano("PRIMERO");
+                            mostrarResultadosPerdedorMano("PRIMERO");
                         }
                     }, 1500);
                 }
@@ -2561,31 +2623,32 @@ public class MainActivity extends Activity
         else if (ronda == 3 && valor3 == 0) return true;
         return false;
     }
+
     String quienCalcula() {
 
-        if(ronda == 1 && mano.equals(idJugador1)){
+        if (ronda == 1 && mano.equals(idJugador1)) {
             return idJugador4;
-        }else if(ronda == 1 && mano.equals(idJugador2)){
+        } else if (ronda == 1 && mano.equals(idJugador2)) {
             return idJugador1;
-        }else if(ronda == 1 && mano.equals(idJugador3)){
+        } else if (ronda == 1 && mano.equals(idJugador3)) {
             return idJugador2;
-        }else if(ronda == 1 && mano.equals(idJugador4)){
+        } else if (ronda == 1 && mano.equals(idJugador4)) {
             return idJugador3;
-        } else if(ronda == 2 && ganadorRonda1_4J.equals(idJugador1)){
+        } else if (ronda == 2 && ganadorRonda1_4J.equals(idJugador1)) {
             return idJugador4;
-        }else if(ronda == 2 && ganadorRonda1_4J.equals(idJugador2)){
+        } else if (ronda == 2 && ganadorRonda1_4J.equals(idJugador2)) {
             return idJugador1;
-        }else if(ronda == 2 && ganadorRonda1_4J.equals(idJugador3)){
+        } else if (ronda == 2 && ganadorRonda1_4J.equals(idJugador3)) {
             return idJugador2;
-        }else if(ronda == 2 && ganadorRonda1_4J.equals(idJugador4)){
+        } else if (ronda == 2 && ganadorRonda1_4J.equals(idJugador4)) {
             return idJugador3;
-        }else if(ronda == 3 && ganadorRonda2_4J.equals(idJugador1)){
+        } else if (ronda == 3 && ganadorRonda2_4J.equals(idJugador1)) {
             return idJugador4;
-        }else if(ronda == 3 && ganadorRonda2_4J.equals(idJugador2)){
+        } else if (ronda == 3 && ganadorRonda2_4J.equals(idJugador2)) {
             return idJugador1;
-        }else if(ronda == 3 && ganadorRonda2_4J.equals(idJugador3)){
+        } else if (ronda == 3 && ganadorRonda2_4J.equals(idJugador3)) {
             return idJugador2;
-        }else if(ronda == 3 && ganadorRonda2_4J.equals(idJugador4)){
+        } else if (ronda == 3 && ganadorRonda2_4J.equals(idJugador4)) {
             return idJugador3;
         }
         return "";
@@ -2611,80 +2674,80 @@ public class MainActivity extends Activity
     String calcularGanadorRonda() {
         //Ronda 1
         if (ronda == 1) {
-            int[] valores = { valor1_derecha, valor1_arriba, valor1_izq, miValor };
+            int[] valores = {valor1_derecha, valor1_arriba, valor1_izq, miValor};
             int max = valores[0];
-            for(int i = 0; i <= valores.length-1; i++){
-                if(max<valores[i]) max = valores[i];
+            for (int i = 0; i <= valores.length - 1; i++) {
+                if (max < valores[i]) max = valores[i];
             }
-            if(max == miValor)return mMyId;
-            if(mMyId.equals(idJugador1)){
-                if(max == valor1_derecha) return idJugador2;
-                else if(max == valor1_arriba) return idJugador3;
+            if (max == miValor) return mMyId;
+            if (mMyId.equals(idJugador1)) {
+                if (max == valor1_derecha) return idJugador2;
+                else if (max == valor1_arriba) return idJugador3;
                 else if (max == valor1_izq) return idJugador4;
-            }else if(mMyId.equals(idJugador2)){
-                if(max == valor1_derecha) return idJugador3;
-                else if(max == valor1_arriba) return idJugador4;
+            } else if (mMyId.equals(idJugador2)) {
+                if (max == valor1_derecha) return idJugador3;
+                else if (max == valor1_arriba) return idJugador4;
                 else if (max == valor1_izq) return idJugador1;
-            }else if(mMyId.equals(idJugador3)){
-                if(max == valor1_derecha) return idJugador4;
-                else if(max == valor1_arriba) return idJugador1;
+            } else if (mMyId.equals(idJugador3)) {
+                if (max == valor1_derecha) return idJugador4;
+                else if (max == valor1_arriba) return idJugador1;
                 else if (max == valor1_izq) return idJugador2;
-            }else if(mMyId.equals(idJugador4)){
-                if(max == valor1_derecha) return idJugador1;
-                else if(max == valor1_arriba) return idJugador2;
+            } else if (mMyId.equals(idJugador4)) {
+                if (max == valor1_derecha) return idJugador1;
+                else if (max == valor1_arriba) return idJugador2;
                 else if (max == valor1_izq) return idJugador3;
             }
 
         }
         //Ronda 2
         if (ronda == 2) {
-            int[] valores = { valor2_derecha, valor2_arriba, valor2_izq, miValor };
+            int[] valores = {valor2_derecha, valor2_arriba, valor2_izq, miValor};
             int max = valores[0];
-            for(int i = 0; i <= valores.length-1; i++){
-                if(max<valores[i]) max = valores[i];
+            for (int i = 0; i <= valores.length - 1; i++) {
+                if (max < valores[i]) max = valores[i];
             }
-            if(max == miValor)return mMyId;
-            if(mMyId.equals(idJugador1)){
-                if(max == valor2_derecha) return idJugador2;
-                else if(max == valor2_arriba) return idJugador3;
+            if (max == miValor) return mMyId;
+            if (mMyId.equals(idJugador1)) {
+                if (max == valor2_derecha) return idJugador2;
+                else if (max == valor2_arriba) return idJugador3;
                 else if (max == valor2_izq) return idJugador4;
-            }else if(mMyId.equals(idJugador2)){
-                if(max == valor2_derecha) return idJugador3;
-                else if(max == valor2_arriba) return idJugador4;
+            } else if (mMyId.equals(idJugador2)) {
+                if (max == valor2_derecha) return idJugador3;
+                else if (max == valor2_arriba) return idJugador4;
                 else if (max == valor2_izq) return idJugador1;
-            }else if(mMyId.equals(idJugador3)){
-                if(max == valor2_derecha) return idJugador4;
-                else if(max == valor2_arriba) return idJugador1;
+            } else if (mMyId.equals(idJugador3)) {
+                if (max == valor2_derecha) return idJugador4;
+                else if (max == valor2_arriba) return idJugador1;
                 else if (max == valor2_izq) return idJugador2;
-            }else if(mMyId.equals(idJugador4)){
-                if(max == valor2_derecha) return idJugador1;
-                else if(max == valor2_arriba) return idJugador2;
+            } else if (mMyId.equals(idJugador4)) {
+                if (max == valor2_derecha) return idJugador1;
+                else if (max == valor2_arriba) return idJugador2;
                 else if (max == valor2_izq) return idJugador3;
             }
         }
         //Ronda 3
         if (ronda == 3) {
-            int[] valores = {  valor3_derecha, valor3_arriba, valor3_izq, miValor };
+            int[] valores = {valor3_derecha, valor3_arriba, valor3_izq, miValor};
             int max = valores[0];
-            for(int i = 0; i <= valores.length-1; i++){
-                if(max<valores[i]) max = valores[i];
+            for (int i = 0; i <= valores.length - 1; i++) {
+                if (max < valores[i]) max = valores[i];
             }
-            if(max == miValor)return mMyId;
-            if(mMyId.equals(idJugador1)){
-                if(max == valor3_derecha) return idJugador2;
-                else if(max == valor3_arriba) return idJugador3;
+            if (max == miValor) return mMyId;
+            if (mMyId.equals(idJugador1)) {
+                if (max == valor3_derecha) return idJugador2;
+                else if (max == valor3_arriba) return idJugador3;
                 else if (max == valor3_izq) return idJugador4;
-            }else if(mMyId.equals(idJugador2)){
-                if(max == valor3_derecha) return idJugador3;
-                else if(max == valor3_arriba) return idJugador4;
+            } else if (mMyId.equals(idJugador2)) {
+                if (max == valor3_derecha) return idJugador3;
+                else if (max == valor3_arriba) return idJugador4;
                 else if (max == valor3_izq) return idJugador1;
-            }else if(mMyId.equals(idJugador3)){
-                if(max == valor3_derecha) return idJugador4;
-                else if(max == valor3_arriba) return idJugador1;
+            } else if (mMyId.equals(idJugador3)) {
+                if (max == valor3_derecha) return idJugador4;
+                else if (max == valor3_arriba) return idJugador1;
                 else if (max == valor3_izq) return idJugador2;
-            }else if(mMyId.equals(idJugador4)){
-                if(max == valor3_derecha) return idJugador1;
-                else if(max == valor3_arriba) return idJugador2;
+            } else if (mMyId.equals(idJugador4)) {
+                if (max == valor3_derecha) return idJugador1;
+                else if (max == valor3_arriba) return idJugador2;
                 else if (max == valor3_izq) return idJugador3;
             }
         }
@@ -2744,8 +2807,7 @@ public class MainActivity extends Activity
                 return true;
             }
 
-        }
-        else if (ronda == 2) {
+        } else if (ronda == 2) {
 
             int maximoMiequipo = 0;
             int maximoEquipoRival = 0;
@@ -2761,9 +2823,7 @@ public class MainActivity extends Activity
                 return true;
             }
 
-        }
-
-        else if (ronda == 3) {
+        } else if (ronda == 3) {
 
             int maximoMiequipo = 0;
             int maximoEquipoRival = 0;
@@ -2785,7 +2845,7 @@ public class MainActivity extends Activity
 
 
     void actualizaRonda() {
-        if(ronda < 3 ) ronda++;
+        if (ronda < 3) ronda++;
 
     }
 
@@ -2802,11 +2862,11 @@ public class MainActivity extends Activity
     }
 
     public void mostrarResultadosGanadorMano(String contador) {
-        Log.d("FFFFFFF", "Hay truc? "+hayTruc);
-        Log.d("FFFFFFF", "Hay retruc? "+hayRetruc);
-        Log.d("FFFFFFF", "Hay cuatre? "+hayCuatreVal);
-        Log.d("FFFFFFF", "Hay joc? "+hayJocFora);
-        Log.d("FFFFFFF", "Hay envid? "+hayEnvid);
+        Log.d("FFFFFFF", "Hay truc? " + hayTruc);
+        Log.d("FFFFFFF", "Hay retruc? " + hayRetruc);
+        Log.d("FFFFFFF", "Hay cuatre? " + hayCuatreVal);
+        Log.d("FFFFFFF", "Hay joc? " + hayJocFora);
+        Log.d("FFFFFFF", "Hay envid? " + hayEnvid);
 
         if (!hayTruc) puntosTruc = NO_QUIERO_TRUC;
         if (hayTruc && !hayRetruc) puntosTruc = TRUC;
@@ -2814,7 +2874,7 @@ public class MainActivity extends Activity
         if (hayCuatreVal && !hayJocFora) puntosTruc = CUATRE_VAL;
         if (hayJocFora) puntosTruc = 24;
 
-        switch (numeroJugadores){
+        switch (numeroJugadores) {
             case 2:
                 puntosTotalesMios += (puntosTruc + puntosEnvid);
                 marcador.setText("Yo: " + puntosTotalesMios);
@@ -2824,9 +2884,9 @@ public class MainActivity extends Activity
                 //puntosTotalesMios += (puntosTruc + puntosEnvid);
                 //marcador.setText("Yo: "+puntosTotalesMios);
                 //actualizarMarcador2(puntosTotalesMios, "GANADOR", contador);
-                if(contador.equals("PRIMERO")){
+                if (contador.equals("PRIMERO")) {
                     actualizarMarcador2(0, "GANADOR", contador);
-                }else actualizarMarcador2_4J(0, "GANADOR", contador);
+                } else actualizarMarcador2_4J(0, "GANADOR", contador);
                 break;
         }
 
@@ -2834,28 +2894,28 @@ public class MainActivity extends Activity
 
     public void mostrarResultadosPerdedorMano(String contador) {
 
-        switch (numeroJugadores){
+        switch (numeroJugadores) {
             case 2:
                 puntosTotalesMios += puntosEnvid;
-                marcador.setText("Yo: "+puntosTotalesMios);
+                marcador.setText("Yo: " + puntosTotalesMios);
                 actualizarMarcador2(puntosTotalesMios, "PERDEDOR", contador);
                 break;
             case 4:
                 //puntosTotalesMios += puntosEnvid;
                 //marcador.setText("Yo: "+puntosTotalesMios);
                 //actualizarMarcador2(puntosTotalesMios, "PERDEDOR", contador);
-                if(contador.equals("PRIMERO")){
+                if (contador.equals("PRIMERO")) {
                     actualizarMarcador2(0, "PERDEDOR", contador);
-                }else actualizarMarcador2_4J(0, "PERDEDOR", contador);
+                } else actualizarMarcador2_4J(0, "PERDEDOR", contador);
                 break;
         }
 
     }
 
-    String comprobarGanadorPartida(){
-        if(puntosTotalesMios >= 24){
+    String comprobarGanadorPartida() {
+        if (puntosTotalesMios >= 24) {
             return "YO";
-        }else if(puntosTotalesJugador2 >= 24){
+        } else if (puntosTotalesJugador2 >= 24) {
             return "RIVAL";
         }
         return "NADIE";
@@ -2908,6 +2968,7 @@ public class MainActivity extends Activity
             }
         }
     }
+
     public void enviarMensajeTurno4J(String t) {
         byte[] messageTurno = t.getBytes();
         for (Participant p : mParticipants) {
@@ -2960,9 +3021,10 @@ public class MainActivity extends Activity
             }
         }
     }
+
     public void enviarMensajeRepartir4J() {
-        Log.d("BBBBBBBBB","Enviando el mensaje de repartir...");
-        byte[] messageRepartir = ("S"+" "+sCartasJ2+" "+sCartasJ3+" "+sCartasJ4).getBytes();
+        Log.d("BBBBBBBBB", "Enviando el mensaje de repartir...");
+        byte[] messageRepartir = ("S" + " " + sCartasJ2 + " " + sCartasJ3 + " " + sCartasJ4 + " " + sCartasJ1).getBytes();
         for (Participant p : mParticipants) {
             if (!p.getParticipantId().equals(mMyId)) {
                 Games.RealTimeMultiplayer.sendReliableMessage(mGoogleApiClient, null, messageRepartir,
@@ -2984,12 +3046,24 @@ public class MainActivity extends Activity
     }
 
     public void enviarMensajeEnvid(int envid) {
-        byte[] messageEnvid = ("N " + envid).getBytes();
-        for (Participant p : mParticipants) {
-            if (!p.getParticipantId().equals(mMyId)) {
-                Games.RealTimeMultiplayer.sendReliableMessage(mGoogleApiClient, null, messageEnvid,
-                        mRoomId, p.getParticipantId());
-            }
+        switch (numeroJugadores) {
+            case 2:
+                byte[] messageEnvid = ("N " + envid).getBytes();
+                for (Participant p : mParticipants) {
+                    if (!p.getParticipantId().equals(mMyId)) {
+                        Games.RealTimeMultiplayer.sendReliableMessage(mGoogleApiClient, null, messageEnvid,
+                                mRoomId, p.getParticipantId());
+                    }
+                }
+                break;
+            case 4:
+                for (Participant p : mParticipants) {
+                    if (!p.getParticipantId().equals(mMyId)) {
+                        Games.RealTimeMultiplayer.sendReliableMessage(mGoogleApiClient, null, "N".getBytes(),
+                                mRoomId, p.getParticipantId());
+                    }
+                }
+                break;
         }
     }
 
@@ -3024,7 +3098,7 @@ public class MainActivity extends Activity
     }
 
     public void enviarMensajeLaFalta(int caso) {
-        byte[] messageFalta = ("F " + miEnvid +" " +caso).getBytes();
+        byte[] messageFalta = ("F " + miEnvid + " " + caso).getBytes();
         for (Participant p : mParticipants) {
             if (!p.getParticipantId().equals(mMyId)) {
                 Games.RealTimeMultiplayer.sendReliableMessage(mGoogleApiClient, null, messageFalta,
@@ -3124,7 +3198,7 @@ public class MainActivity extends Activity
     }
 
     public void actualizarMarcador2(int puntosTotales, String usuario, String contador) {
-        byte[] messageMarcador = ("Z " + puntosTotales +" " +usuario+" "+contador).getBytes();
+        byte[] messageMarcador = ("Z " + puntosTotales + " " + usuario + " " + contador).getBytes();
         for (Participant p : mParticipants) {
             if (!p.getParticipantId().equals(mMyId)) {
                 Games.RealTimeMultiplayer.sendReliableMessage(mGoogleApiClient, null, messageMarcador,
@@ -3132,8 +3206,9 @@ public class MainActivity extends Activity
             }
         }
     }
+
     public void actualizarMarcador2_4J(int puntosTotales, String usuario, String contador) {
-        byte[] messageMarcador = ("Z " + puntosTotales +" " +usuario+" "+contador).getBytes();
+        byte[] messageMarcador = ("Z " + puntosTotales + " " + usuario + " " + contador).getBytes();
         for (Participant p : mParticipants) {
             if (p.getParticipantId().equals(contador)) {
                 Games.RealTimeMultiplayer.sendReliableMessage(mGoogleApiClient, null, messageMarcador,
@@ -3141,7 +3216,8 @@ public class MainActivity extends Activity
             }
         }
     }
-    public void enviarMensajeGanadorRonda4J(String ganador){
+
+    public void enviarMensajeGanadorRonda4J(String ganador) {
         byte[] messageGanadorRonda4J = ("O " + ganador).getBytes();
         for (Participant p : mParticipants) {
             if (!p.getParticipantId().equals(mMyId)) {
@@ -3183,7 +3259,7 @@ public class MainActivity extends Activity
         try {
             switch (buf[0]) {
                 case '$':
-                    if(numeroJugadores == 2) {
+                    if (numeroJugadores == 2) {
                         String sBuf = new String(buf, "UTF-8");
                         String arrayBuf[] = sBuf.split(" ");
                         String palo = arrayBuf[1];
@@ -3215,7 +3291,7 @@ public class MainActivity extends Activity
                         }
                     }//2 jugadores
 
-                    else if(numeroJugadores == 4) {
+                    else if (numeroJugadores == 4) {
                         String sBuf = new String(buf, "UTF-8");
                         String arrayBuf[] = sBuf.split(" ");
                         String palo = arrayBuf[1];
@@ -3493,7 +3569,7 @@ public class MainActivity extends Activity
                     //Si ha habido empate
                     Log.d("TTTTTT", "SUmo mis rondas ganadas");
                     if (hayEmpate) {
-                       // mostrarResultadosGanadorMano();
+                        // mostrarResultadosGanadorMano();
                     } else {
                         //Sumo rondas ganadas
                         if (ronda == 1) {
@@ -3502,19 +3578,20 @@ public class MainActivity extends Activity
                         misRondasGanadas++;
                         //Si llego a 2 he ganado
                         if (misRondasGanadas == 2) {
-                          //  mostrarResultadosGanadorMano();
+                            //  mostrarResultadosGanadorMano();
                         }
                     }
                     break;
                 case 'E':
                     //Mensaje que actualiza si hay empate en la primera ronda
-                    if (ronda == 1) showBasicAlert("Empate en la primera ronda!", "La carta que eljas será mostrada arriba");
+                    if (ronda == 1)
+                        showBasicAlert("Empate en la primera ronda!", "La carta que eljas será mostrada arriba");
                     hayEmpate = true;
                     hayEmpate4J = true;
                     break;
 
                 case 'S':
-                    if(numeroJugadores == 2) {
+                    if (numeroJugadores == 2) {
                         resetAll();
                         String ssBuf = new String(buf, "UTF-8");
                         String[] arrayCartasJ2 = ssBuf.split(" ");
@@ -3526,9 +3603,7 @@ public class MainActivity extends Activity
                         carta2 = new Carta(manoJugador.get(1).getNumero(), manoJugador.get(1).getPalo(), manoJugador.get(1).getValor());
                         carta3 = new Carta(manoJugador.get(2).getNumero(), manoJugador.get(2).getPalo(), manoJugador.get(2).getValor());
                         cerrarDialogoAndStart(4000);
-                    }
-
-                    else if(numeroJugadores == 4) {
+                    } else if (numeroJugadores == 4) {
                         marcador.setText("Yo: " + puntosTotalesMios);
                         marcador2.setText("Rival: " + puntosTotalesJugador2);
 
@@ -3536,32 +3611,28 @@ public class MainActivity extends Activity
                         Log.d("TTTTTT", "Recibo las cartas");
                         String ssBuf = new String(buf, "UTF-8");
                         Log.d("TTTTTT", ssBuf.toString());
-                        String[] arrayCartasJugadores = ssBuf.split(" ");
+                        arrayCartasJugadores = ssBuf.split(" ");
 
                         ArrayList<String> ids = new ArrayList<>(4);
                         ids.add(idJugador1);
                         ids.add(idJugador2);
                         ids.add(idJugador3);
                         ids.add(idJugador4);
-                        if(ids.get(0).equals(mano))ids.remove(0);
-                        else if(ids.get(1).equals(mano))ids.remove(1);
-                        else if(ids.get(2).equals(mano))ids.remove(2);
-                        else if(ids.get(3).equals(mano))ids.remove(3);
+                        if (ids.get(0).equals(mano)) ids.remove(0);
+                        else if (ids.get(1).equals(mano)) ids.remove(1);
+                        else if (ids.get(2).equals(mano)) ids.remove(2);
+                        else if (ids.get(3).equals(mano)) ids.remove(3);
 
 
-                        if(mMyId.equals(ids.get(0))) {
+                        if (mMyId.equals(ids.get(0))) {
                             numCarta[0] = Integer.parseInt(arrayCartasJugadores[1]);
                             numCarta[1] = Integer.parseInt(arrayCartasJugadores[2]);
                             numCarta[2] = Integer.parseInt(arrayCartasJugadores[3]);
-                        }
-
-                        else if(mMyId.equals(ids.get(1))) {
+                        } else if (mMyId.equals(ids.get(1))) {
                             numCarta[0] = Integer.parseInt(arrayCartasJugadores[4]);
                             numCarta[1] = Integer.parseInt(arrayCartasJugadores[5]);
                             numCarta[2] = Integer.parseInt(arrayCartasJugadores[6]);
-                        }
-
-                        else if(mMyId.equals(ids.get(2))) {
+                        } else if (mMyId.equals(ids.get(2))) {
                             numCarta[0] = Integer.parseInt(arrayCartasJugadores[7]);
                             numCarta[1] = Integer.parseInt(arrayCartasJugadores[8]);
                             numCarta[2] = Integer.parseInt(arrayCartasJugadores[9]);
@@ -3586,13 +3657,51 @@ public class MainActivity extends Activity
                     break;
 
                 case 'N':
-                    String aux1 = new String(buf, "UTF-8");
-                    String suEnvid[] = aux1.split(" ");
-                    envidOtro = Integer.parseInt(suEnvid[1]);
-                    showSingleChoiceAlertEnvid("Tu rival ha envidado", R.array.envid);
-                    envid.setVisibility(View.GONE);
-                    laFalta.setVisibility(View.GONE);
-                    cambiarBarraProgreso();
+
+                    switch (numeroJugadores) {
+                        case 2:
+                            String aux1 = new String(buf, "UTF-8");
+                            String suEnvid[] = aux1.split(" ");
+                            envidOtro = Integer.parseInt(suEnvid[1]);
+                            showSingleChoiceAlertEnvid("Tu rival ha envidado", R.array.envid);
+                            envid.setVisibility(View.GONE);
+                            laFalta.setVisibility(View.GONE);
+                            cambiarBarraProgreso();
+                            break;
+
+                        case 4:
+                            if (esDeMiEquipo(sender)) {
+                                //Animar bocadillo del compi
+                            } else {
+                                String calculaEnvid = "";
+                                if (mano.equals(idJugador1) && sender.equals(idJugador3)) {
+                                    calculaEnvid = idJugador4;
+                                } else if (mano.equals(idJugador1) && sender.equals(idJugador4)) {
+                                    calculaEnvid = idJugador3;
+                                } else if (mano.equals(idJugador2) && sender.equals(idJugador4)) {
+                                    calculaEnvid = idJugador1;
+                                } else if (mano.equals(idJugador2) && sender.equals(idJugador1)) {
+                                    calculaEnvid = idJugador4;
+                                } else if (mano.equals(idJugador3) && sender.equals(idJugador1)) {
+                                    calculaEnvid = idJugador2;
+                                } else if (mano.equals(idJugador3) && sender.equals(idJugador2)) {
+                                    calculaEnvid = idJugador1;
+                                } else if (mano.equals(idJugador4) && sender.equals(idJugador2)) {
+                                    calculaEnvid = idJugador3;
+                                } else if (mano.equals(idJugador4) && sender.equals(idJugador3)) {
+                                    calculaEnvid = idJugador2;
+                                }
+                                Log.d("EEEEEE", "Quien calcula: "+calculaEnvid);
+                                if (mMyId.equals(calculaEnvid)) {
+                                    showSingleChoiceAlertEnvid_4J("Tu rival ha envidado", R.array.envid);
+                                } else {
+                                    //Animar bocadillo del compi del que tiene que calcular
+                                }
+                            }
+                            envid_4J.setVisibility(View.GONE);
+                            laFalta_4J.setVisibility(View.GONE);
+                            break;
+                    }
                     break;
 
                 case 'K':
@@ -3600,33 +3709,67 @@ public class MainActivity extends Activity
                     String ganador[] = aux2.split(" ");
                     hayEnvid = true;
                     ganadorEnvid = ganador[1];
+                    Log.d("EEEEEE", "Ganador del envid es: "+ganadorEnvid);
                     envidOtro = Integer.parseInt(ganador[2]);
                     int caso = Integer.parseInt(ganador[3]);
-                    switch (caso) {
-                        case 1:
-                            textoAccion2.setText("Quiero el envid");
-                            animarTextoAccion(textoAccion2);
-                            cambiarBarraProgreso();
-                            break;
-                        case 2:
-                            textoAccion2.setText("Quiero el vuelvo");
-                            animarTextoAccion(textoAccion2);
-                            reiniciarBarraProgreso();
-                            break;
-                        case 3:
-                            textoAccion2.setText("Quiero la falta");
-                            animarTextoAccion(textoAccion2);
-                            if (!mMyId.equals(turno)) {
-                                reiniciarBarraProgreso();
-                            }else cambiarBarraProgreso();
-                            break;
-                    }
-                    if (ganadorEnvid.equals(mMyId) && caso == 1) puntosEnvid = ENVID;
-                    if (ganadorEnvid.equals(mMyId) && caso == 2) puntosEnvid = TORNE;
-                    if (ganadorEnvid.equals(mMyId) && caso == 3) puntosEnvid = 24;
 
-                    if (mMyId.equals(turno)) {
-                        desbloquearCartas();
+                    if(numeroJugadores == 2){
+                        switch (caso) {
+                            case 1:
+                                textoAccion2.setText("Quiero el envid");
+                                animarTextoAccion(textoAccion2);
+                                cambiarBarraProgreso();
+                                break;
+                            case 2:
+                                textoAccion2.setText("Quiero el vuelvo");
+                                animarTextoAccion(textoAccion2);
+                                reiniciarBarraProgreso();
+                                break;
+                            case 3:
+                                textoAccion2.setText("Quiero la falta");
+                                animarTextoAccion(textoAccion2);
+                                if (!mMyId.equals(turno)) {
+                                    reiniciarBarraProgreso();
+                                } else cambiarBarraProgreso();
+                                break;
+                        }
+                        if (ganadorEnvid.equals(mMyId) && caso == 1) puntosEnvid = ENVID;
+                        if (ganadorEnvid.equals(mMyId) && caso == 2) puntosEnvid = TORNE;
+                        if (ganadorEnvid.equals(mMyId) && caso == 3) puntosEnvid = 24;
+
+                        if (mMyId.equals(turno)) {
+                            desbloquearCartas();
+                        }
+
+
+                    }else if(numeroJugadores == 4){
+
+                    /*    switch (caso) {
+                            case 1:
+                                textoAccion2.setText("Quiero el envid");
+                                animarTextoAccion(textoAccion2);
+                                cambiarBarraProgreso();
+                                break;
+                            case 2:
+                                textoAccion2.setText("Quiero el vuelvo");
+                                animarTextoAccion(textoAccion2);
+                                reiniciarBarraProgreso();
+                                break;
+                            case 3:
+                                textoAccion2.setText("Quiero la falta");
+                                animarTextoAccion(textoAccion2);
+                                if (!mMyId.equals(turno)) {
+                                    reiniciarBarraProgreso();
+                                } else cambiarBarraProgreso();
+                                break;
+                        }
+                        if (ganadorEnvid.equals(mMyId) && caso == 1) puntosEnvid = ENVID;
+                        if (ganadorEnvid.equals(mMyId) && caso == 2) puntosEnvid = TORNE;
+                        if (ganadorEnvid.equals(mMyId) && caso == 3) puntosEnvid = 24;
+*/
+                        if (mMyId.equals(turno)) {
+                            desbloquearCartas();
+                        }
                     }
 
                     break;
@@ -3658,14 +3801,14 @@ public class MainActivity extends Activity
                             reiniciarBarraProgreso();
                             break;
                         case 3:
-                            if(hayVuelvo){
+                            if (hayVuelvo) {
                                 puntosEnvid = TORNE;
                             }
                             textoAccion2.setText("No quiero la falta");
                             animarTextoAccion(textoAccion2);
                             if (!mMyId.equals(turno)) {
                                 reiniciarBarraProgreso();
-                            }else cambiarBarraProgreso();
+                            } else cambiarBarraProgreso();
                             break;
                         case 4:
 
@@ -3722,7 +3865,7 @@ public class MainActivity extends Activity
                     String aux5 = new String(buf, "UTF-8");
                     String otro2[] = aux5.split(" ");
                     envidOtro = Integer.parseInt(otro2[1]);
-                    if(Integer.parseInt(otro2[2]) == 2) faltaDirecta = true;
+                    if (Integer.parseInt(otro2[2]) == 2) faltaDirecta = true;
                     showSingleChoiceAlertFalta("Tu rival ha envidado la falta", R.array.envid3);
                     envid.setVisibility(View.GONE);
                     laFalta.setVisibility(View.GONE);
@@ -3756,10 +3899,10 @@ public class MainActivity extends Activity
                     textoAccion2.setText("Quiero el retruc");
                     animarTextoAccion(textoAccion2);
 
-                    if(turno.equals(mMyId)){
+                    if (turno.equals(mMyId)) {
                         desbloquearCartas();
                         cambiarBarraProgreso();
-                    }else reiniciarBarraProgreso();
+                    } else reiniciarBarraProgreso();
                     break;
 
                 case 'C':
@@ -3772,10 +3915,10 @@ public class MainActivity extends Activity
                     textoAccion2.setText("Quiero el cuatre val");
                     animarTextoAccion(textoAccion2);
 
-                    if(turno.equals(mMyId)){
+                    if (turno.equals(mMyId)) {
                         cambiarBarraProgreso();
                         desbloquearCartas();
-                    }else reiniciarBarraProgreso();
+                    } else reiniciarBarraProgreso();
                     break;
 
                 case 'J':
@@ -3788,10 +3931,10 @@ public class MainActivity extends Activity
                     textoAccion2.setText("Quiero el joc fora");
                     animarTextoAccion(textoAccion2);
 
-                    if(turno.equals(mMyId)){
+                    if (turno.equals(mMyId)) {
                         cambiarBarraProgreso();
                         desbloquearCartas();
-                    }else reiniciarBarraProgreso();
+                    } else reiniciarBarraProgreso();
                     break;
 
                 case 'Z':
@@ -3804,13 +3947,14 @@ public class MainActivity extends Activity
                             puntosTotalesJugador2 = Integer.parseInt(otro5[1]);
                             String quien = otro5[2];
                             String contador = otro5[3];
-                            marcador2.setText("Rival: "+puntosTotalesJugador2);
+                            marcador2.setText("Rival: " + puntosTotalesJugador2);
 
 
                             //Para que actualice los puntos antes de comprobar quien es el ganador
                             //Primero y segundo para que no entre en un bucle
                             if (quien.equals("PERDEDOR")) {
-                                if (contador.equals("PRIMERO")) mostrarResultadosGanadorMano("SEGUNDO");
+                                if (contador.equals("PRIMERO"))
+                                    mostrarResultadosGanadorMano("SEGUNDO");
                             } else if (quien.equals("GANADOR")) {
                                 if (contador.equals("PRIMERO"))
                                     mostrarResultadosPerdedorMano("SEGUNDO");
@@ -3895,29 +4039,29 @@ public class MainActivity extends Activity
 
                             boolean soyGanador = false;
                             //Soy del equipo
-                            if(esDeMiEquipo(sender) && quien_4J.equals("PERDEDOR")){
+                            if (esDeMiEquipo(sender) && quien_4J.equals("PERDEDOR")) {
                                 Log.d("ZZZZ", "Soy del equipo del perdedor");
                                 soyGanador = false;
-                            }else if(esDeMiEquipo(sender) && quien_4J.equals("GANADOR")){
+                            } else if (esDeMiEquipo(sender) && quien_4J.equals("GANADOR")) {
                                 Log.d("ZZZZ", "Soy del equipo del ganador");
                                 soyGanador = true;
 
-                            //NO soy del equipo
-                            }else if(!esDeMiEquipo(sender)){
+                                //NO soy del equipo
+                            } else if (!esDeMiEquipo(sender)) {
                                 Log.d("ZZZZ", "NO soy del equipo del que envía");
                                 //Para que actualice los puntos antes de comprobar quien es el ganador
                                 //Primero y segundo para que no entre en un bucle
                                 if (quien_4J.equals("PERDEDOR")) {
                                     soyGanador = true;
                                     if (contador_4J.equals("PRIMERO") && (equipo1[0].equals(mMyId)
-                                            || equipo2[0].equals(mMyId))){
+                                            || equipo2[0].equals(mMyId))) {
                                         mostrarResultadosGanadorMano(sender);
                                         Log.d("ZZZZ", "Envío el segundo mensaje");
                                     }
                                 } else if (quien_4J.equals("GANADOR")) {
                                     soyGanador = false;
                                     if (contador_4J.equals("PRIMERO") && (equipo1[0].equals(mMyId)
-                                            || equipo2[0].equals(mMyId))){
+                                            || equipo2[0].equals(mMyId))) {
                                         Log.d("ZZZZ", "Envío el segundo mensaje");
                                         mostrarResultadosPerdedorMano(sender);
                                     }
@@ -3951,13 +4095,13 @@ public class MainActivity extends Activity
                             } else {   */
 
 
-                                //Lo recibe el ganador
-                                if (soyGanador) {
-       /*                             if (hayEnvid) {
+                            //Lo recibe el ganador
+                            if (soyGanador) {
+                                    if (hayEnvid) {
                                         LayoutInflater inflater = getLayoutInflater();
                                         ViewGroup container = null;
 
-                                        if (ganadorEnvid.equals(mMyId)) {
+                                        if (ganadorEnvid.equals(mMyId) || esDeMiEquipo(ganadorEnvid)) {
                                             View layout = inflater.inflate(R.layout.progres_content, container);
                                             showProgressCustomDialog(layout);
 
@@ -3969,18 +4113,17 @@ public class MainActivity extends Activity
                                         showProgressDialog("Enhorabuena, ganas la mano");
                                     }
 
-                   */               showProgressDialog("Enhorabuena, ganas la mano");
-                                    repartirTrasMano();
-                                    Log.d("KKKKKKKK", "Repartiendo tras mano..." + mMyId);
+                                repartirTrasMano();
+                                Log.d("KKKKKKKK", "Repartiendo tras mano..." + mMyId);
 
 
-                                    //Lo recibe el perdedor
-                                } else if (!soyGanador) {
-                 /*                   if (hayEnvid) {
+                                //Lo recibe el perdedor
+                            } else if (!soyGanador) {
+                                    if (hayEnvid) {
                                         LayoutInflater inflater = getLayoutInflater();
                                         ViewGroup container = null;
 
-                                        if (ganadorEnvid.equals(mMyId)) {
+                                        if (ganadorEnvid.equals(mMyId) || esDeMiEquipo(ganadorEnvid)) {
                                             View layout = inflater.inflate(R.layout.progres_content3, container);
                                             showProgressCustomDialog(layout);
 
@@ -3990,11 +4133,10 @@ public class MainActivity extends Activity
                                         }
                                     } else {
                                         showProgressDialog("Lástima, pierdes la mano");
-                                    }*/
-                                    showProgressDialog("Lástima, pierdes la mano");
-                                    repartirTrasMano();
-                                    Log.d("KKKKKKKK", "Repartiendo tras mano..." + mMyId);
-                                }
+                                    }
+                                repartirTrasMano();
+                                Log.d("KKKKKKKK", "Repartiendo tras mano..." + mMyId);
+                            }
 
                             break;
                     }
@@ -4005,12 +4147,11 @@ public class MainActivity extends Activity
                 case 'O':
                     String aux9 = new String(buf, "UTF-8");
                     String otro6[] = aux9.split(" ");
-                    if(ronda == 1)ganadorRonda1_4J = otro6[1];
-                    else if(ronda == 2)ganadorRonda2_4J = otro6[1];
-                    else if(ronda == 3)ganadorRonda3_4J = otro6[1];
+                    if (ronda == 1) ganadorRonda1_4J = otro6[1];
+                    else if (ronda == 2) ganadorRonda2_4J = otro6[1];
+                    else if (ronda == 3) ganadorRonda3_4J = otro6[1];
 
                     break;
-
 
 
                 default:
@@ -4018,51 +4159,49 @@ public class MainActivity extends Activity
                     switch (numeroJugadores) {
 
                         case 2:
-                        String turnoNuevo = new String(buf, "UTF-8");
-                        turno = turnoNuevo;
+                            String turnoNuevo = new String(buf, "UTF-8");
+                            turno = turnoNuevo;
 
-                        if (mMyId.equals(turno) && misRondasGanadas < 2) {
-                            if (ronda > 1 && !hayEnvid) {
+                            if (mMyId.equals(turno) && misRondasGanadas < 2) {
+                                if (ronda > 1 && !hayEnvid) {
+                                    envid.setVisibility(View.GONE);
+                                    laFalta.setVisibility(View.GONE);
+                                }
+                                desbloquearCartas();
+                                Toast.makeText(getApplicationContext(), "Es tu turno", Toast.LENGTH_SHORT).show();
+                                cambiarBarraProgreso();
+                                animarAparecerMenu();
+                            }
+
+                            if (!mMyId.equals(turno) && misRondasGanadas < 2) {
+                                bloquearCartas();
                                 envid.setVisibility(View.GONE);
                                 laFalta.setVisibility(View.GONE);
+
+                                Toast.makeText(getApplicationContext(), "Esperando al Jugador", Toast.LENGTH_SHORT).show();
+                                Log.d("LLLLLLL", "Me han comunicado cambio de turno");
+                                reiniciarBarraProgreso();
+
                             }
-                            desbloquearCartas();
-                            Toast.makeText(getApplicationContext(), "Es tu turno", Toast.LENGTH_SHORT).show();
-                            cambiarBarraProgreso();
-                            animarAparecerMenu();
-                        }
-
-                        if (!mMyId.equals(turno) && misRondasGanadas < 2) {
-                            bloquearCartas();
-                            envid.setVisibility(View.GONE);
-                            laFalta.setVisibility(View.GONE);
-
-                            Toast.makeText(getApplicationContext(), "Esperando al Jugador", Toast.LENGTH_SHORT).show();
-                            Log.d("LLLLLLL", "Me han comunicado cambio de turno");
-                            reiniciarBarraProgreso();
-
-                        }
                             break;
 
                         case 4:
                             String turnoNuevo4J = new String(buf, "UTF-8");
                             turno = turnoNuevo4J;
-                            Log.d("LLLLLLL", "Turno para: "+turno+" mi id: "+mMyId);
+                            Log.d("LLLLLLL", "Turno para: " + turno + " mi id: " + mMyId);
                             if (mMyId.equals(turno) && rondasGanadasMiEquipo < 2) {
-                                /*if (ronda > 1 && !hayEnvid) {
-                                    envid.setVisibility(View.GONE);
-                                    laFalta.setVisibility(View.GONE);
-                                }*/
+                                if ((mMyId.equals(comprobarSiguienteMano())) || (ronda > 1 && !hayEnvid)) {
+                                    envid_4J.setVisibility(View.GONE);
+                                    laFalta_4J.setVisibility(View.GONE);
+                                }
                                 desbloquearCartas();
                                 Toast.makeText(getApplicationContext(), "Es tu turno", Toast.LENGTH_SHORT).show();
                                 //cambiarBarraProgreso();
-                                //animarAparecerMenu();
+                                animarAparecerMenu();
                             }
 
                             if (!mMyId.equals(turno) && rondasGanadasMiEquipo < 2) {
                                 bloquearCartas();
-                                envid.setVisibility(View.GONE);
-                                laFalta.setVisibility(View.GONE);
 
                                 Toast.makeText(getApplicationContext(), "Esperando al Jugador", Toast.LENGTH_SHORT).show();
                                 Log.d("LLLLLLL", "Me han comunicado cambio de turno");
@@ -4106,6 +4245,57 @@ public class MainActivity extends Activity
         }*/
     }
 
+    String comprobarSiguienteMano(){
+        if(mano.equals(idJugador1)){
+            return idJugador2;
+        }else if(mano.equals(idJugador2)){
+            return idJugador3;
+        }else if(mano.equals(idJugador3)){
+            return idJugador4;
+        }else if(mano.equals(idJugador4)){
+            return idJugador1;
+        }
+        return "";
+    }
+
+    String[] comprobarUltimosJugadores(){
+        String[] ultimos = new String[2];
+        if(mano.equals(idJugador1)){
+            if(mMyId.equals(idJugador3)){
+                ultimos[0] = idJugador3;
+                ultimos[1] = idJugador4;
+            }else if(mMyId.equals(idJugador4)){
+                ultimos[0] = idJugador4;
+                ultimos[1] = idJugador3;
+            }
+        }else if(mano.equals(idJugador2)){
+            if(mMyId.equals(idJugador4)){
+                ultimos[0] = idJugador4;
+                ultimos[1] = idJugador1;
+            }else if(mMyId.equals(idJugador1)){
+                ultimos[0] = idJugador1;
+                ultimos[1] = idJugador4;
+            }
+        }else if(mano.equals(idJugador3)){
+            if(mMyId.equals(idJugador1)){
+                ultimos[0] = idJugador1;
+                ultimos[1] = idJugador2;
+            }else if(mMyId.equals(idJugador2)){
+                ultimos[0] = idJugador2;
+                ultimos[1] = idJugador1;
+            }
+        }else if(mano.equals(idJugador4)){
+            if(mMyId.equals(idJugador2)){
+                ultimos[0] = idJugador2;
+                ultimos[1] = idJugador3;
+            }else if(mMyId.equals(idJugador3)){
+                ultimos[0] = idJugador3;
+                ultimos[1] = idJugador2 ;
+            }
+        }
+        return ultimos;
+    }
+
     // Broadcast my score to everybody else.
     void broadcastScore(boolean finalScore) {
         if (!mMultiplayer)
@@ -4144,7 +4334,7 @@ public class MainActivity extends Activity
     final static int[] CLICKABLES = {
             R.id.button_accept_popup_invitation, R.id.button_invite_players,
             R.id.button_quick_game, R.id.button_see_invitations, R.id.button_sign_in,
-            R.id.button_sign_out, R.id.button_single_player,R.id.button_quick_game_4
+            R.id.button_sign_out, R.id.button_single_player, R.id.button_quick_game_4
     };
 
     // This array lists all the individual screens our game has.
@@ -4369,7 +4559,7 @@ public class MainActivity extends Activity
                     int aux8 = (int) (Math.random() * 22);
                     while (list[0] == aux8 || list[1] == aux8 || list[2] == aux8 || list2[0] == aux8
                             || list2[1] == aux8 || list2[2] == aux8 || list3[0] == aux8
-                            || list3[1] == aux8 ) {
+                            || list3[1] == aux8) {
                         aux8 = (int) (Math.random() * 22);
                     }
                     list3[2] = aux8;
@@ -4398,7 +4588,7 @@ public class MainActivity extends Activity
                     }
                     list4[2] = aux11;
 
-
+                    sCartasJ1 = list[0] + " " + list[1] + " " + list[2];
                     sCartasJ2 = list2[0] + " " + list2[1] + " " + list2[2];
                     sCartasJ3 = list3[0] + " " + list3[1] + " " + list3[2];
                     sCartasJ4 = list4[0] + " " + list4[1] + " " + list4[2];
@@ -4420,7 +4610,7 @@ public class MainActivity extends Activity
 
     public void inicializarMano() {
         //Preparando la partida
-        Log.d("BBBBBBBBB", "cartas2: "+sCartasJ2+" cartas3: "+sCartasJ3+" cartas3: "+sCartasJ3);
+        Log.d("BBBBBBBBB", "cartas2: " + sCartasJ2 + " cartas3: " + sCartasJ3 + " cartas3: " + sCartasJ3);
         resetAll();
         desbloquearCartas();
         //Si soy mano reparto
@@ -4431,10 +4621,10 @@ public class MainActivity extends Activity
             carta3 = new Carta(manoJugador.get(2).getNumero(), manoJugador.get(2).getPalo(), manoJugador.get(2).getValor());
             //Mando las cartas
             Log.d("BBBBBBBBB", "mandando cartas");
-            Log.d("BBBBBBBBB", "cartas2: "+sCartasJ2+" cartas3: "+sCartasJ3+" cartas3: "+sCartasJ3);
-            if(numeroJugadores == 2){
+            Log.d("BBBBBBBBB", "cartas2: " + sCartasJ2 + " cartas3: " + sCartasJ3 + " cartas3: " + sCartasJ3);
+            if (numeroJugadores == 2) {
                 enviarMensajeRepartir();
-            }else if(numeroJugadores == 4){
+            } else if (numeroJugadores == 4) {
                 enviarMensajeRepartir4J();
                 Log.d("BBBBBBBBB", "Mensaje 4J");
             }
@@ -4447,13 +4637,13 @@ public class MainActivity extends Activity
     public void cambiarMano() {
         switch (numeroJugadores) {
             case 2:
-            if (mano.equals(idJugador1)) {
-                mano = idJugador2;
-            } else if (mano.equals(idJugador2)) {
-                mano = idJugador1;
-            }
+                if (mano.equals(idJugador1)) {
+                    mano = idJugador2;
+                } else if (mano.equals(idJugador2)) {
+                    mano = idJugador1;
+                }
 
-            turno = mano;
+                turno = mano;
                 break;
 
             case 4:
@@ -4461,11 +4651,9 @@ public class MainActivity extends Activity
                     mano = idJugador2;
                 } else if (mano.equals(idJugador2)) {
                     mano = idJugador3;
-                }
-                else if (mano.equals(idJugador3)) {
+                } else if (mano.equals(idJugador3)) {
                     mano = idJugador4;
-                }
-                else if (mano.equals(idJugador4)) {
+                } else if (mano.equals(idJugador4)) {
                     mano = idJugador1;
                 }
 
@@ -4476,7 +4664,7 @@ public class MainActivity extends Activity
 
     public void repartirTrasMano() {
         cambiarMano();
-        if(mMyId.equals(mano)){
+        if (mMyId.equals(mano)) {
             inicializarMano();
         }
 
@@ -4486,7 +4674,8 @@ public class MainActivity extends Activity
             enviarMensajeMano(mano);
             Log.d("KKKKKKKK", "Soy mano..." + mMyId);
         }else Log.d("KKKKKKKK", "No soy mano..." + mMyId);
-   */ }
+   */
+    }
 
     public void asignarImagenCarta(Carta carta, ImageView view) {
         String sCarta = carta.getNumero() + carta.getPalo();
@@ -4574,7 +4763,7 @@ public class MainActivity extends Activity
                 InputStream in = new java.net.URL(urldisplay).openStream();
                 mIcon11 = BitmapFactory.decodeStream(in);
             } catch (Exception e) {
-                if(e.getMessage() != null) {
+                if (e.getMessage() != null) {
                     Log.e("Error", e.getMessage());
                     e.printStackTrace();
                 }
@@ -4601,10 +4790,10 @@ public class MainActivity extends Activity
                     view.bringToFront();
                     inicial.x = motionEvent.getX();
                     inicial.y = motionEvent.getY();
-                    if(view.equals(tvJugador1)) {
+                    if (view.equals(tvJugador1)) {
                         xDelta = inicial.x - Params.rightMargin;
                         yDelta = inicial.y - Params.topMargin;
-                    }else{
+                    } else {
                         xDelta = inicial.x - Params.leftMargin;
                         yDelta = inicial.y - Params.topMargin;
                     }
@@ -4613,8 +4802,8 @@ public class MainActivity extends Activity
                 case MotionEvent.ACTION_UP:
 
                     //Vemos donde colocamos la carta
-                    double medioLayout = ((float)view.getLayoutParams().height)/1.2;
-                    if (view.getY() < (medioLayout)){
+                    double medioLayout = ((float) view.getLayoutParams().height) / 1.2;
+                    if (view.getY() < (medioLayout)) {
                         if (tvCartaMesa1.getVisibility() == View.INVISIBLE) {
                             destino.x = tvCartaMesa1.getX();
                             destino.y = tvCartaMesa1.getY() + tvCartaMesa1.getHeight();
@@ -4625,18 +4814,21 @@ public class MainActivity extends Activity
                                     .rotationYBy(-5).rotation(3).setDuration(500);
                             view.setEnabled(false);
 
-                            if(view.equals(tvJugador1)){
+                            if (view.equals(tvJugador1)) {
                                 posTvJugador1 = 1;
                                 tvJugador1.bringToFront();
-                                tvJugador2.bringToFront();tvJugador3.bringToFront();
-                            }else if(view.equals(tvJugador2)){
+                                tvJugador2.bringToFront();
+                                tvJugador3.bringToFront();
+                            } else if (view.equals(tvJugador2)) {
                                 tvJugador2.bringToFront();
                                 posTvJugador2 = 1;
-                                tvJugador1.bringToFront();tvJugador3.bringToFront();
-                            }else if(view.equals(tvJugador3)){
+                                tvJugador1.bringToFront();
+                                tvJugador3.bringToFront();
+                            } else if (view.equals(tvJugador3)) {
                                 posTvJugador3 = 1;
                                 tvJugador3.bringToFront();
-                                tvJugador1.bringToFront();tvJugador2.bringToFront();
+                                tvJugador1.bringToFront();
+                                tvJugador2.bringToFront();
                             }
 
 
@@ -4649,30 +4841,36 @@ public class MainActivity extends Activity
                                     .scaleX((float) 0.63).scaleY((float) 0.63).setDuration(500);
                             view.setEnabled(false);
 
-                            if(view.equals(tvJugador1) && posTvJugador2 == 0){
+                            if (view.equals(tvJugador1) && posTvJugador2 == 0) {
                                 posTvJugador1 = 2;
                                 tvJugador1.bringToFront();
-                                tvJugador2.bringToFront();Log.d("RRRRRRR", "Actualizada pos2");
-                            }else if(view.equals(tvJugador1) && posTvJugador3 == 0){
+                                tvJugador2.bringToFront();
+                                Log.d("RRRRRRR", "Actualizada pos2");
+                            } else if (view.equals(tvJugador1) && posTvJugador3 == 0) {
                                 posTvJugador1 = 2;
                                 tvJugador1.bringToFront();
-                                tvJugador3.bringToFront();Log.d("RRRRRRR", "Actualizada pos2");
-                            }else if(view.equals(tvJugador2) && posTvJugador1 == 0){
+                                tvJugador3.bringToFront();
+                                Log.d("RRRRRRR", "Actualizada pos2");
+                            } else if (view.equals(tvJugador2) && posTvJugador1 == 0) {
                                 posTvJugador2 = 2;
                                 tvJugador2.bringToFront();
-                                tvJugador1.bringToFront();Log.d("RRRRRRR", "Actualizada pos2");
-                            }else if(view.equals(tvJugador2) && posTvJugador3 == 0){
+                                tvJugador1.bringToFront();
+                                Log.d("RRRRRRR", "Actualizada pos2");
+                            } else if (view.equals(tvJugador2) && posTvJugador3 == 0) {
                                 posTvJugador2 = 2;
                                 tvJugador2.bringToFront();
-                                tvJugador3.bringToFront();Log.d("RRRRRRR", "Actualizada pos2");
-                            }else if(view.equals(tvJugador3) && posTvJugador1 == 0){
+                                tvJugador3.bringToFront();
+                                Log.d("RRRRRRR", "Actualizada pos2");
+                            } else if (view.equals(tvJugador3) && posTvJugador1 == 0) {
                                 posTvJugador3 = 2;
                                 tvJugador3.bringToFront();
-                                tvJugador1.bringToFront();Log.d("RRRRRRR", "Actualizada pos2");
-                            }else if(view.equals(tvJugador3) && posTvJugador2 == 0){
+                                tvJugador1.bringToFront();
+                                Log.d("RRRRRRR", "Actualizada pos2");
+                            } else if (view.equals(tvJugador3) && posTvJugador2 == 0) {
                                 posTvJugador3 = 2;
                                 tvJugador3.bringToFront();
-                                tvJugador2.bringToFront();Log.d("RRRRRRR", "Actualizada pos2");
+                                tvJugador2.bringToFront();
+                                Log.d("RRRRRRR", "Actualizada pos2");
                             }
 
 
@@ -4686,13 +4884,13 @@ public class MainActivity extends Activity
                                     .rotationYBy(-5).rotation(3).setDuration(500);
                             view.setEnabled(false);
 
-                            if(view.equals(tvJugador1)){
+                            if (view.equals(tvJugador1)) {
                                 posTvJugador1 = 3;
                                 tvJugador1.bringToFront();
-                            }else if(view.equals(tvJugador2)){
+                            } else if (view.equals(tvJugador2)) {
                                 posTvJugador2 = 3;
                                 tvJugador2.bringToFront();
-                            }else if(view.equals(tvJugador3)){
+                            } else if (view.equals(tvJugador3)) {
                                 posTvJugador3 = 3;
                                 tvJugador3.bringToFront();
                             }
@@ -4722,7 +4920,7 @@ public class MainActivity extends Activity
 
                         hayAnimaciones = true;
 
-                    }else {
+                    } else {
                         if (view.equals(tvJugador1)) {
                             view.animate().translationX(inicio1.x - 100).setDuration(500);
                             view.animate().translationY(inicio1.y + 40);
@@ -4753,6 +4951,7 @@ public class MainActivity extends Activity
             return true;
         }
     }
+
     private final class MyTouchListener4J implements View.OnTouchListener {
         public boolean onTouch(View view, MotionEvent motionEvent) {
             PointF inicial = new PointF();
@@ -4767,10 +4966,10 @@ public class MainActivity extends Activity
                     view.bringToFront();
                     inicial.x = motionEvent.getX();
                     inicial.y = motionEvent.getY();
-                    if(view.equals(tvJugador1_4J)) {
+                    if (view.equals(tvJugador1_4J)) {
                         xDelta_4J = inicial.x - Params.rightMargin;
                         yDelta_4J = inicial.y - Params.topMargin;
-                    }else{
+                    } else {
                         xDelta_4J = inicial.x - Params.leftMargin;
                         yDelta_4J = inicial.y - Params.topMargin;
                     }
@@ -4779,8 +4978,8 @@ public class MainActivity extends Activity
                 case MotionEvent.ACTION_UP:
 
                     //Vemos donde colocamos la carta
-                    double medioLayout = ((float)view.getLayoutParams().height)/1.2;
-                    if (view.getY() < (medioLayout)){
+                    double medioLayout = ((float) view.getLayoutParams().height) / 1.2;
+                    if (view.getY() < (medioLayout)) {
                         if (tvCartaMesa1_4J.getVisibility() == View.INVISIBLE) {
                             destino.x = tvCartaMesa1_4J.getX();
                             destino.y = tvCartaMesa1_4J.getY() + tvCartaMesa1_4J.getHeight();
@@ -4791,19 +4990,19 @@ public class MainActivity extends Activity
                                     .rotationYBy(-5).rotation(3).setDuration(500);
                             view.setEnabled(false);
 
-                            if(view.equals(tvJugador1_4J)){
+                            if (view.equals(tvJugador1_4J)) {
                                 posTvJugador1 = 1;
                                 tvJugador1_4J.bringToFront();
                                 tvJugador2_4J.bringToFront();
                                 tvJugador3_4J.bringToFront();
 
-                            }else if(view.equals(tvJugador2_4J)){
+                            } else if (view.equals(tvJugador2_4J)) {
                                 tvJugador2_4J.bringToFront();
                                 posTvJugador2 = 1;
                                 tvJugador1_4J.bringToFront();
                                 tvJugador3_4J.bringToFront();
 
-                            }else if(view.equals(tvJugador3_4J)){
+                            } else if (view.equals(tvJugador3_4J)) {
                                 posTvJugador3 = 1;
                                 tvJugador3_4J.bringToFront();
                                 tvJugador1_4J.bringToFront();
@@ -4820,30 +5019,36 @@ public class MainActivity extends Activity
                                     .scaleX((float) 0.63).scaleY((float) 0.63).setDuration(500);
                             view.setEnabled(false);
 
-                            if(view.equals(tvJugador1_4J) && posTvJugador2 == 0){
+                            if (view.equals(tvJugador1_4J) && posTvJugador2 == 0) {
                                 posTvJugador1 = 2;
                                 tvJugador1_4J.bringToFront();
-                                tvJugador2_4J.bringToFront();Log.d("RRRRRRR", "Actualizada pos2");
-                            }else if(view.equals(tvJugador1_4J) && posTvJugador3 == 0){
+                                tvJugador2_4J.bringToFront();
+                                Log.d("RRRRRRR", "Actualizada pos2");
+                            } else if (view.equals(tvJugador1_4J) && posTvJugador3 == 0) {
                                 posTvJugador1 = 2;
                                 tvJugador1_4J.bringToFront();
-                                tvJugador3_4J.bringToFront();Log.d("RRRRRRR", "Actualizada pos2");
-                            }else if(view.equals(tvJugador2_4J) && posTvJugador1 == 0){
+                                tvJugador3_4J.bringToFront();
+                                Log.d("RRRRRRR", "Actualizada pos2");
+                            } else if (view.equals(tvJugador2_4J) && posTvJugador1 == 0) {
                                 posTvJugador2 = 2;
                                 tvJugador2_4J.bringToFront();
-                                tvJugador1_4J.bringToFront();Log.d("RRRRRRR", "Actualizada pos2");
-                            }else if(view.equals(tvJugador2_4J) && posTvJugador2 == 0){
+                                tvJugador1_4J.bringToFront();
+                                Log.d("RRRRRRR", "Actualizada pos2");
+                            } else if (view.equals(tvJugador2_4J) && posTvJugador2 == 0) {
                                 posTvJugador2 = 2;
                                 tvJugador2_4J.bringToFront();
-                                tvJugador3_4J.bringToFront();Log.d("RRRRRRR", "Actualizada pos2");
-                            }else if(view.equals(tvJugador3_4J) && posTvJugador1 == 0){
+                                tvJugador3_4J.bringToFront();
+                                Log.d("RRRRRRR", "Actualizada pos2");
+                            } else if (view.equals(tvJugador3_4J) && posTvJugador1 == 0) {
                                 posTvJugador3 = 2;
                                 tvJugador3_4J.bringToFront();
-                                tvJugador1_4J.bringToFront();Log.d("RRRRRRR", "Actualizada pos2");
-                            }else if(view.equals(tvJugador3_4J) && posTvJugador2 == 0){
+                                tvJugador1_4J.bringToFront();
+                                Log.d("RRRRRRR", "Actualizada pos2");
+                            } else if (view.equals(tvJugador3_4J) && posTvJugador2 == 0) {
                                 posTvJugador3 = 2;
                                 tvJugador3_4J.bringToFront();
-                                tvJugador2_4J.bringToFront();Log.d("RRRRRRR", "Actualizada pos2");
+                                tvJugador2_4J.bringToFront();
+                                Log.d("RRRRRRR", "Actualizada pos2");
                             }
 
 
@@ -4857,13 +5062,13 @@ public class MainActivity extends Activity
                                     .rotationYBy(-5).rotation(3).setDuration(500);
                             view.setEnabled(false);
 
-                            if(view.equals(tvJugador1_4J)){
+                            if (view.equals(tvJugador1_4J)) {
                                 posTvJugador1 = 3;
                                 tvJugador1_4J.bringToFront();
-                            }else if(view.equals(tvJugador2_4J)){
+                            } else if (view.equals(tvJugador2_4J)) {
                                 posTvJugador2 = 3;
                                 tvJugador2_4J.bringToFront();
-                            }else if(view.equals(tvJugador3_4J)){
+                            } else if (view.equals(tvJugador3_4J)) {
                                 posTvJugador3 = 3;
                                 tvJugador3_4J.bringToFront();
                             }
@@ -4893,7 +5098,7 @@ public class MainActivity extends Activity
 
                         hayAnimaciones = true;
 
-                    }else {
+                    } else {
                         if (view.equals(tvJugador1_4J)) {
                             view.animate().translationX(inicio1J1.x - 100).setDuration(500);
                             view.animate().translationY(inicio1J1.y + 40);
@@ -4925,20 +5130,464 @@ public class MainActivity extends Activity
         }
     }
 
-    public boolean esDeMiEquipo(String id){
+    public boolean esDeMiEquipo(String id) {
 
-        if(mMyId.equals(equipo1[0]) || mMyId.equals(equipo1[1])){
-            if(id.equals(equipo1[0]) || id.equals(equipo1[1])) return true;
-        }
-
-        else if(mMyId.equals(equipo2[0]) || mMyId.equals(equipo2[1])){
-            if(id.equals(equipo2[0]) || id.equals(equipo2[1])) return true;
+        if (mMyId.equals(equipo1[0]) || mMyId.equals(equipo1[1])) {
+            if (id.equals(equipo1[0]) || id.equals(equipo1[1])) return true;
+        } else if (mMyId.equals(equipo2[0]) || mMyId.equals(equipo2[1])) {
+            if (id.equals(equipo2[0]) || id.equals(equipo2[1])) return true;
         }
 
         return false;
     }
 
+    private void showSingleChoiceAlertEnvid_4J(String title, int array) {
+        new MaterialDialog.Builder(this)
+                .title(title)
+                .titleColorRes(R.color.menuItems)
+                .items(array)
+                .itemColorRes(R.color.menuItems)
+                .itemsCallbackSingleChoice(1, new MaterialDialog.ListCallbackSingleChoice() {
+                    @Override
+                    public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+                        switch (which) {
+                            //Quiero
+                            case 0:
+                                hayEnvid = true;
+                                ganadorEnvid = comprobarGanadorEnvid_4J();
+                                puntosEnvid = ENVID;
+                                enviarMensajeHayEnvidAndGanador(ganadorEnvid, 1);
+                                //cambiarBarraProgreso();
+                                break;
+                            //Vuelvo
+                            case 1:
+                                enviarMensajeVuelvoAEnvidar();
+                                //cambiarBarraProgreso();
+                                hayVuelvo = true;
+                                break;
+                            //Falta
+                            case 2:
+                                enviarMensajeLaFalta(1);
+                                //cambiarBarraProgreso();
+                                break;
+                            //No quiero
+                            case 3:
+                                enviarMensajeNoQuiero(1);
+                                //cambiarBarraProgreso();
+                                break;
+                        }
+                        return true;
+                    }
+                })
+                .positiveText("Elegir")
+                .cancelable(false)
+                .show().getWindow().setBackgroundDrawable(new ColorDrawable(0x30000000));
+    }
+
+    private void showSingleChoiceAlertVuelvo_4J(String title, int array) {
+        new MaterialDialog.Builder(this)
+                .title(title)
+                .titleColorRes(R.color.menuItems)
+                .items(array)
+                .itemColorRes(R.color.menuItems)
+                .itemsCallbackSingleChoice(1, new MaterialDialog.ListCallbackSingleChoice() {
+                    @Override
+                    public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+                        switch (which) {
+                            //Quiero
+                            case 0:
+                                hayEnvid = true;
+                                comprobarGanadorEnvid();
+                                enviarMensajeHayEnvidAndGanador(ganadorEnvid, 2);
+                                puntosEnvid = TORNE;
+                                desbloquearCartas();
+                                if (!turno.equals(mMyId)) {
+                                    cambiarBarraProgreso();
+                                } else reiniciarBarraProgreso();
+                                break;
+                            //Falta
+                            case 1:
+                                enviarMensajeLaFalta(1);
+                                cambiarBarraProgreso();
+                                break;
+                            //No quiero
+                            case 2:
+                                desbloquearCartas();
+                                enviarMensajeNoQuiero(2);
+                                if (!turno.equals(mMyId)) {
+                                    cambiarBarraProgreso();
+                                } else reiniciarBarraProgreso();
+                                break;
+                        }
+                        return true;
+                    }
+                })
+                .positiveText("Elegir")
+                .cancelable(false)
+                .show().getWindow().setBackgroundDrawable(new ColorDrawable(0x30000000));
+    }
+
+    private void showSingleChoiceAlertFalta_4J(String title, int array) {
+        new MaterialDialog.Builder(this)
+                .title(title)
+                .titleColorRes(R.color.menuItems)
+                .items(array)
+                .itemColorRes(R.color.menuItems)
+                .itemsCallbackSingleChoice(1, new MaterialDialog.ListCallbackSingleChoice() {
+                    @Override
+                    public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+                        switch (which) {
+                            //Quiero
+                            case 0:
+                                hayEnvid = true;
+                                if (mMyId.equals(turno)) desbloquearCartas();
+                                comprobarGanadorEnvid();
+                                //puntos a sumar por la falta
+                                if (ganadorEnvid.equals(mMyId)) {
+                                    if (puntosTotalesJugador2 <= 12) {
+                                        puntosEnvid = 24;
+                                    } else if (puntosTotalesJugador2 > 12) {
+                                        puntosEnvid = 24 - puntosTotalesJugador2;
+                                    }
+                                }
+                                enviarMensajeHayEnvidAndGanador(ganadorEnvid, 3);
+                                if (!turno.equals(mMyId)) {
+                                    cambiarBarraProgreso();
+                                } else reiniciarBarraProgreso();
+                                break;
+                            case 1:
+                                if (mMyId.equals(turno)) desbloquearCartas();
+                                if (faltaDirecta) {
+                                    enviarMensajeNoQuiero(4);
+                                } else enviarMensajeNoQuiero(3);
+                                if (!turno.equals(mMyId)) {
+                                    cambiarBarraProgreso();
+                                } else reiniciarBarraProgreso();
+                                break;
+                        }
+                        return true;
+                    }
+                })
+                .positiveText("Elegir")
+                .cancelable(false)
+                .show().getWindow().setBackgroundDrawable(new ColorDrawable(0x30000000));
+    }
+
+    private String comprobarGanadorEnvid_4J() {
+
+        int[] numCartaDerecha = new int[3];
+        int[] numCartaArriba = new int[3];
+        int[] numCartaIzq = new int[3];
+        int[] numCartaAbajo = new int[3];
+
+        int valorAbajo = 0;
+        int valorDerecha = 0;
+        int valorArriba = 0;
+        int valorIzq = 0;
+
+        if (idJugador1.equals(mano)) {
+            numCartaAbajo[0] = Integer.parseInt(arrayCartasJugadores[10]);
+            numCartaAbajo[1] = Integer.parseInt(arrayCartasJugadores[11]);
+            numCartaAbajo[2] = Integer.parseInt(arrayCartasJugadores[12]);
+            numCartaDerecha[0] = Integer.parseInt(arrayCartasJugadores[1]);
+            numCartaDerecha[1] = Integer.parseInt(arrayCartasJugadores[2]);
+            numCartaDerecha[2] = Integer.parseInt(arrayCartasJugadores[3]);
+            numCartaArriba[0] = Integer.parseInt(arrayCartasJugadores[4]);
+            numCartaArriba[1] = Integer.parseInt(arrayCartasJugadores[5]);
+            numCartaArriba[2] = Integer.parseInt(arrayCartasJugadores[6]);
+            numCartaIzq[0] = Integer.parseInt(arrayCartasJugadores[7]);
+            numCartaIzq[1] = Integer.parseInt(arrayCartasJugadores[8]);
+            numCartaIzq[2] = Integer.parseInt(arrayCartasJugadores[9]);
+            valorAbajo = 1;
+            valorDerecha = 2;
+            valorArriba = 3;
+            valorIzq = 4;
+        } else if (mano.equals(idJugador2)) {
+            numCartaIzq[0] = Integer.parseInt(arrayCartasJugadores[10]);
+            numCartaIzq[1] = Integer.parseInt(arrayCartasJugadores[11]);
+            numCartaIzq[2] = Integer.parseInt(arrayCartasJugadores[12]);
+            numCartaAbajo[0] = Integer.parseInt(arrayCartasJugadores[1]);
+            numCartaAbajo[1] = Integer.parseInt(arrayCartasJugadores[2]);
+            numCartaAbajo[2] = Integer.parseInt(arrayCartasJugadores[3]);
+            numCartaDerecha[0] = Integer.parseInt(arrayCartasJugadores[4]);
+            numCartaDerecha[1] = Integer.parseInt(arrayCartasJugadores[5]);
+            numCartaDerecha[2] = Integer.parseInt(arrayCartasJugadores[6]);
+            numCartaArriba[0] = Integer.parseInt(arrayCartasJugadores[7]);
+            numCartaArriba[1] = Integer.parseInt(arrayCartasJugadores[8]);
+            numCartaArriba[2] = Integer.parseInt(arrayCartasJugadores[9]);
+            valorAbajo = 2;
+            valorDerecha = 3;
+            valorArriba = 4;
+            valorIzq = 1;
+        } else if (mano.equals(idJugador3)) {
+            numCartaArriba[0] = Integer.parseInt(arrayCartasJugadores[10]);
+            numCartaArriba[1] = Integer.parseInt(arrayCartasJugadores[11]);
+            numCartaArriba[2] = Integer.parseInt(arrayCartasJugadores[12]);
+            numCartaIzq[0] = Integer.parseInt(arrayCartasJugadores[1]);
+            numCartaIzq[1] = Integer.parseInt(arrayCartasJugadores[2]);
+            numCartaIzq[2] = Integer.parseInt(arrayCartasJugadores[3]);
+            numCartaAbajo[0] = Integer.parseInt(arrayCartasJugadores[4]);
+            numCartaAbajo[1] = Integer.parseInt(arrayCartasJugadores[5]);
+            numCartaAbajo[2] = Integer.parseInt(arrayCartasJugadores[6]);
+            numCartaDerecha[0] = Integer.parseInt(arrayCartasJugadores[7]);
+            numCartaDerecha[1] = Integer.parseInt(arrayCartasJugadores[8]);
+            numCartaDerecha[2] = Integer.parseInt(arrayCartasJugadores[9]);
+            valorAbajo = 3;
+            valorDerecha = 4;
+            valorArriba = 1;
+            valorIzq = 2;
+        } else if (mano.equals(idJugador4)) {
+            numCartaDerecha[0] = Integer.parseInt(arrayCartasJugadores[10]);
+            numCartaDerecha[1] = Integer.parseInt(arrayCartasJugadores[11]);
+            numCartaDerecha[2] = Integer.parseInt(arrayCartasJugadores[12]);
+            numCartaArriba[0] = Integer.parseInt(arrayCartasJugadores[1]);
+            numCartaArriba[1] = Integer.parseInt(arrayCartasJugadores[2]);
+            numCartaArriba[2] = Integer.parseInt(arrayCartasJugadores[3]);
+            numCartaIzq[0] = Integer.parseInt(arrayCartasJugadores[4]);
+            numCartaIzq[1] = Integer.parseInt(arrayCartasJugadores[5]);
+            numCartaIzq[2] = Integer.parseInt(arrayCartasJugadores[6]);
+            numCartaAbajo[0] = Integer.parseInt(arrayCartasJugadores[7]);
+            numCartaAbajo[1] = Integer.parseInt(arrayCartasJugadores[8]);
+            numCartaAbajo[2] = Integer.parseInt(arrayCartasJugadores[9]);
+            valorAbajo = 4;
+            valorDerecha = 1;
+            valorArriba = 2;
+            valorIzq = 3;
+        }
+
+        baraja = crearBaraja();
+        Carta C1_J1 = baraja.get(numCartaAbajo[0]);
+        Carta C2_J1 = baraja.get(numCartaAbajo[1]);
+        Carta C3_J1 = baraja.get(numCartaAbajo[2]);
+        Carta C1_J2 = baraja.get(numCartaDerecha[0]);
+        Carta C2_J2 = baraja.get(numCartaDerecha[1]);
+        Carta C3_J2 = baraja.get(numCartaDerecha[2]);
+        Carta C1_J3 = baraja.get(numCartaArriba[0]);
+        Carta C2_J3 = baraja.get(numCartaArriba[1]);
+        Carta C3_J3 = baraja.get(numCartaArriba[2]);
+        Carta C1_J4 = baraja.get(numCartaIzq[0]);
+        Carta C2_J4 = baraja.get(numCartaIzq[1]);
+        Carta C3_J4 = baraja.get(numCartaIzq[2]);
+
+        int valorAbajoEnvid = 0;
+        int valorDerechaEnvid = 0;
+        int valorArribaEnvid = 0;
+        int valorIzqEnvid = 0;
 
 
+        /** Calculo del envid del JUGADOR 1 */
+        if (C1_J1.getPalo().equals(C2_J1.getPalo()) && C1_J1.getPalo().equals(C3_J1.getPalo()))
+            todosMismoPalo = true;
+
+        if (todosMismoPalo) {
+            if (C1_J1.getNumero().compareTo(C2_J1.getNumero()) > 0) {
+                if (C2_J1.getNumero().compareTo(C3_J1.getNumero()) > 0) {
+                    valorAbajoEnvid = Integer.parseInt(C1_J1.getNumero()) + Integer.parseInt(C2_J1.getNumero()) + 20;
+                } else {
+                    valorAbajoEnvid = Integer.parseInt(C1_J1.getNumero()) + Integer.parseInt(C3_J1.getNumero()) + 20;
+                }
+            } else {
+                if (C1_J1.getNumero().compareTo(C3_J1.getNumero()) > 0) {
+                    valorAbajoEnvid = Integer.parseInt(C1_J1.getNumero()) + Integer.parseInt(C2_J1.getNumero()) + 20;
+                } else
+                    valorAbajoEnvid = Integer.parseInt(C3_J1.getNumero()) + Integer.parseInt(C2_J1.getNumero()) + 20;
+
+            }
+
+        } else {
+            if (C1_J1.getPalo().equals(C2_J1.getPalo()))
+                valorAbajoEnvid = Integer.parseInt(C1_J1.getNumero()) + Integer.parseInt(C2_J1.getNumero()) + 20;
+            else if (C1_J1.getPalo().equals(C3_J1.getPalo()))
+                valorAbajoEnvid = Integer.parseInt(C1_J1.getNumero()) + Integer.parseInt(C3_J1.getNumero()) + 20;
+            else if (C2_J1.getPalo().equals(C3_J1.getPalo()))
+                valorAbajoEnvid = Integer.parseInt(C3_J1.getNumero()) + Integer.parseInt(C2_J1.getNumero()) + 20;
+        }
+
+        if (valorAbajoEnvid == 0) {
+
+            if (C1_J1.getNumero().compareTo(C2_J1.getNumero()) > 0) {
+                if (C1_J1.getNumero().compareTo(C3_J1.getNumero()) > 0) {
+                    valorAbajoEnvid = Integer.parseInt(C1_J1.getNumero());
+                } else valorAbajoEnvid = Integer.parseInt(C3_J1.getNumero());
+            } else if (C2_J1.getNumero().compareTo(C3_J1.getNumero()) > 0) {
+                valorAbajoEnvid = Integer.parseInt(C2_J1.getNumero());
+            } else valorAbajoEnvid = Integer.parseInt(C3_J1.getNumero());
+
+        }
+
+        todosMismoPalo = false;
+
+        /** Calculo del envid del JUGADOR 2 */
+        if (C1_J2.getPalo().equals(C2_J2.getPalo()) && C1_J2.getPalo().equals(C3_J2.getPalo()))
+            todosMismoPalo = true;
+
+        if (todosMismoPalo) {
+            if (C1_J2.getNumero().compareTo(C2_J2.getNumero()) > 0) {
+                if (C2_J2.getNumero().compareTo(C3_J2.getNumero()) > 0) {
+                    valorDerechaEnvid = Integer.parseInt(C1_J2.getNumero()) + Integer.parseInt(C2_J2.getNumero()) + 20;
+                } else {
+                    valorDerechaEnvid = Integer.parseInt(C1_J2.getNumero()) + Integer.parseInt(C3_J2.getNumero()) + 20;
+                }
+            } else {
+                if (C1_J2.getNumero().compareTo(C3_J2.getNumero()) > 0) {
+                    valorDerechaEnvid = Integer.parseInt(C1_J2.getNumero()) + Integer.parseInt(C2_J2.getNumero()) + 20;
+                } else
+                    valorDerechaEnvid = Integer.parseInt(C3_J2.getNumero()) + Integer.parseInt(C2_J2.getNumero()) + 20;
+
+            }
+
+        } else {
+            if (C1_J2.getPalo().equals(C2_J2.getPalo()))
+                valorDerechaEnvid = Integer.parseInt(C1_J2.getNumero()) + Integer.parseInt(C2_J2.getNumero()) + 20;
+            else if (C1_J2.getPalo().equals(C3_J2.getPalo()))
+                valorDerechaEnvid = Integer.parseInt(C1_J2.getNumero()) + Integer.parseInt(C3_J2.getNumero()) + 20;
+            else if (C2_J2.getPalo().equals(C3_J2.getPalo()))
+                valorDerechaEnvid = Integer.parseInt(C3_J2.getNumero()) + Integer.parseInt(C2_J2.getNumero()) + 20;
+        }
+
+        if (valorDerechaEnvid == 0) {
+
+            if (C1_J2.getNumero().compareTo(C2_J2.getNumero()) > 0) {
+                if (C1_J2.getNumero().compareTo(C3_J2.getNumero()) > 0) {
+                    valorDerechaEnvid = Integer.parseInt(C1_J2.getNumero());
+                } else valorDerechaEnvid = Integer.parseInt(C3_J2.getNumero());
+            } else if (C2_J2.getNumero().compareTo(C3_J2.getNumero()) > 0) {
+                valorDerechaEnvid = Integer.parseInt(C2_J2.getNumero());
+            } else valorDerechaEnvid = Integer.parseInt(C3_J2.getNumero());
+
+        }
+
+        todosMismoPalo = false;
+
+        /** Calculo del envid del JUGADOR 3 */
+        if (C1_J3.getPalo().equals(C2_J3.getPalo()) && C1_J3.getPalo().equals(C3_J3.getPalo()))
+            todosMismoPalo = true;
+
+        if (todosMismoPalo) {
+            if (C1_J3.getNumero().compareTo(C2_J3.getNumero()) > 0) {
+                if (C2_J3.getNumero().compareTo(C3_J3.getNumero()) > 0) {
+                    valorArribaEnvid = Integer.parseInt(C1_J3.getNumero()) + Integer.parseInt(C2_J3.getNumero()) + 20;
+                } else {
+                    valorArribaEnvid = Integer.parseInt(C1_J3.getNumero()) + Integer.parseInt(C3_J3.getNumero()) + 20;
+                }
+            } else {
+                if (C1_J3.getNumero().compareTo(C3_J3.getNumero()) > 0) {
+                    valorArribaEnvid = Integer.parseInt(C1_J3.getNumero()) + Integer.parseInt(C2_J3.getNumero()) + 20;
+                } else
+                    valorArribaEnvid = Integer.parseInt(C3_J3.getNumero()) + Integer.parseInt(C2_J3.getNumero()) + 20;
+
+            }
+
+        } else {
+            if (C1_J3.getPalo().equals(C2_J3.getPalo()))
+                valorArribaEnvid = Integer.parseInt(C1_J3.getNumero()) + Integer.parseInt(C2_J3.getNumero()) + 20;
+            else if (C1_J3.getPalo().equals(C3_J3.getPalo()))
+                valorArribaEnvid = Integer.parseInt(C1_J3.getNumero()) + Integer.parseInt(C3_J3.getNumero()) + 20;
+            else if (C2_J3.getPalo().equals(C3_J3.getPalo()))
+                valorArribaEnvid = Integer.parseInt(C3_J3.getNumero()) + Integer.parseInt(C2_J3.getNumero()) + 20;
+        }
+
+        if (valorArribaEnvid == 0) {
+
+            if (C1_J3.getNumero().compareTo(C2_J3.getNumero()) > 0) {
+                if (C1_J3.getNumero().compareTo(C3_J3.getNumero()) > 0) {
+                    valorArribaEnvid = Integer.parseInt(C1_J3.getNumero());
+                } else valorArribaEnvid = Integer.parseInt(C3_J3.getNumero());
+            } else if (C2_J3.getNumero().compareTo(C3_J3.getNumero()) > 0) {
+                valorArribaEnvid = Integer.parseInt(C2_J3.getNumero());
+            } else valorArribaEnvid = Integer.parseInt(C3_J3.getNumero());
+
+        }
+
+        todosMismoPalo = false;
+
+        /** Calculo del envid del JUGADOR 4 */
+        if (C1_J4.getPalo().equals(C2_J4.getPalo()) && C1_J4.getPalo().equals(C3_J4.getPalo()))
+            todosMismoPalo = true;
+
+        if (todosMismoPalo) {
+            if (C1_J4.getNumero().compareTo(C2_J4.getNumero()) > 0) {
+                if (C2_J4.getNumero().compareTo(C3_J4.getNumero()) > 0) {
+                    valorIzqEnvid = Integer.parseInt(C1_J4.getNumero()) + Integer.parseInt(C2_J4.getNumero()) + 20;
+                } else {
+                    valorIzqEnvid = Integer.parseInt(C1_J4.getNumero()) + Integer.parseInt(C3_J4.getNumero()) + 20;
+                }
+            } else {
+                if (C1_J4.getNumero().compareTo(C3_J4.getNumero()) > 0) {
+                    valorIzqEnvid = Integer.parseInt(C1_J4.getNumero()) + Integer.parseInt(C2_J4.getNumero()) + 20;
+                } else
+                    valorIzqEnvid = Integer.parseInt(C3_J4.getNumero()) + Integer.parseInt(C2_J4.getNumero()) + 20;
+
+            }
+
+        } else {
+            if (C1_J4.getPalo().equals(C2_J4.getPalo()))
+                valorIzqEnvid = Integer.parseInt(C1_J4.getNumero()) + Integer.parseInt(C2_J4.getNumero()) + 20;
+            else if (C1_J4.getPalo().equals(C3_J4.getPalo()))
+                valorIzqEnvid = Integer.parseInt(C1_J4.getNumero()) + Integer.parseInt(C3_J4.getNumero()) + 20;
+            else if (C2_J4.getPalo().equals(C3_J4.getPalo()))
+                valorIzqEnvid = Integer.parseInt(C3_J4.getNumero()) + Integer.parseInt(C2_J4.getNumero()) + 20;
+        }
+
+        if (valorIzqEnvid == 0) {
+
+            if (C1_J4.getNumero().compareTo(C2_J4.getNumero()) > 0) {
+                if (C1_J4.getNumero().compareTo(C3_J4.getNumero()) > 0) {
+                    valorIzqEnvid = Integer.parseInt(C1_J4.getNumero());
+                } else valorIzqEnvid = Integer.parseInt(C3_J4.getNumero());
+            } else if (C2_J4.getNumero().compareTo(C3_J4.getNumero()) > 0) {
+                valorIzqEnvid = Integer.parseInt(C2_J4.getNumero());
+            } else valorIzqEnvid = Integer.parseInt(C3_J4.getNumero());
+
+        }
+
+        todosMismoPalo = false;
+
+        int[] maximosPrime = { valorAbajoEnvid, valorDerechaEnvid, valorArribaEnvid, valorIzqEnvid};
+        maximo = maximosPrime[0];
+        for (int i = 0; i<maximosPrime.length; i++){
+            if(maximo > maximosPrime[i]){
+                maximo = maximosPrime[i];
+            }
+        }
+
+
+        if(maximo == valorAbajoEnvid && valorAbajo == 1){
+            return idJugador1;
+        }else if(maximo == valorAbajoEnvid && valorAbajo == 2){
+            return idJugador2;
+        }else if(maximo == valorAbajoEnvid && valorAbajo == 3){
+            return idJugador3;
+        }else if(maximo == valorAbajoEnvid && valorAbajo == 4) {
+            return idJugador4;
+        }else if(maximo == valorDerechaEnvid && valorDerecha == 1){
+            return idJugador2;
+        }else if(maximo == valorDerechaEnvid && valorDerecha == 2){
+            return idJugador3;
+        }else if(maximo == valorDerechaEnvid && valorDerecha == 3){
+            return idJugador4;
+        }else if(maximo == valorDerechaEnvid && valorDerecha == 4) {
+            return idJugador1;
+        }else if(maximo == valorArribaEnvid && valorArriba == 1){
+            return idJugador3;
+        }else if(maximo == valorArribaEnvid && valorArriba == 2){
+            return idJugador4;
+        }else if(maximo == valorArribaEnvid && valorArriba == 3){
+            return idJugador1;
+        }else if(maximo == valorArribaEnvid && valorArriba == 4) {
+            return idJugador2;
+        }else if(maximo == valorIzqEnvid && valorIzq == 1){
+            return idJugador4;
+        }else if(maximo == valorIzqEnvid && valorIzq == 2){
+            return idJugador1;
+        }else if(maximo == valorIzqEnvid && valorIzq == 3){
+            return idJugador2;
+        }else if(maximo == valorIzqEnvid && valorIzq == 4) {
+            return idJugador3;
+        }
+
+
+        return "";
+    }
 
 }
