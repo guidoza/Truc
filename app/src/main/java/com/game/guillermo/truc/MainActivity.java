@@ -272,6 +272,7 @@ public class MainActivity extends Activity
     int valorEmpateIzq = 0;
     int rondasGanadasMiEquipo = 0;
     int mensajesRecibidos = 0;
+    int mensajesRecibidosTruc = 0;
 
     //Strings
     String idJugador3 = null;
@@ -284,6 +285,7 @@ public class MainActivity extends Activity
     String ganadorRonda1_4J = "";
     String ganadorRonda2_4J = "";
     String ganadorRonda3_4J = "";
+    String sQuieroTruc = "NOQUIERO";
 
 
     //Boolean
@@ -410,6 +412,12 @@ public class MainActivity extends Activity
                         actionButton_4J.hide();
                         envid_4J.setVisibility(View.GONE);
                         laFalta_4J.setVisibility(View.GONE);
+                        break;
+
+                    case R.id.truco_4J:
+                        truco();
+                        actionButton_4J.hide();
+                        truc_4J.setVisibility(View.GONE);
                         break;
             }
 
@@ -961,7 +969,7 @@ public class MainActivity extends Activity
         Toast.makeText(getApplicationContext(), "Esperando al Jugador", Toast.LENGTH_SHORT).show();
         bloquearCartas();
         enviarMensajeTruc();
-        cambiarBarraProgreso();
+        //cambiarBarraProgreso();
     }
 
     public void retruco() {
@@ -1693,6 +1701,7 @@ public class MainActivity extends Activity
             ganadorRonda2_4J = "";
             ganadorRonda3_4J = "";
             mensajesRecibidos = 0;
+            mensajesRecibidosTruc = 0;
 
             truc_4J.setVisibility(View.VISIBLE);
             envid_4J.setVisibility(View.VISIBLE);
@@ -2232,6 +2241,7 @@ public class MainActivity extends Activity
                 tvJugador2_4J.setOnTouchListener(new MyTouchListener4J());
                 tvJugador3_4J.setOnTouchListener(new MyTouchListener4J());
 
+                truc_4J.setOnClickListener(menuListener);
                 envid_4J.setOnClickListener(menuListener);
                 salir_4J.setOnClickListener(menuListener);
 
@@ -2996,16 +3006,6 @@ public class MainActivity extends Activity
         }
     }
 
-    public void enviarMensajeHasPerdido() {
-        byte[] messageGanadorPartida = "W".getBytes();
-        for (Participant p : mParticipants) {
-            if (!p.getParticipantId().equals(mMyId)) {
-                Games.RealTimeMultiplayer.sendReliableMessage(mGoogleApiClient, null, messageGanadorPartida,
-                        mRoomId, p.getParticipantId());
-                Log.d("LLLLLLL", "He ganado la ronda, y la partida");
-            }
-        }
-    }
 
     public void enviarMensajeHayEmpate() {
         byte[] messageEmpatePrimero = ("E").getBytes();
@@ -3154,6 +3154,14 @@ public class MainActivity extends Activity
                         mRoomId, p.getParticipantId());
             }
         }
+    }
+
+    public void enviarMensajeQuieroTruc_4J(String sender, String respuesta, int caso) {
+        byte[] messageQuieroTruc = ("W "+respuesta+" "+caso).getBytes();
+        Games.RealTimeMultiplayer.sendReliableMessage(mGoogleApiClient, null, messageQuieroTruc,
+                        mRoomId, sender);
+
+
     }
 
     public void enviarMensajeRetruc() {
@@ -3597,10 +3605,7 @@ public class MainActivity extends Activity
                 case 'R':
                     actualizaRonda();
                     break;
-                case 'W':
-                    //Caso en que pierdo
-                    //mostrarResultadosPerdedorMano();
-                    break;
+
                 case 'G':
                     //Si ha habido empate
                     Log.d("TTTTTT", "SUmo mis rondas ganadas");
@@ -3897,36 +3902,65 @@ public class MainActivity extends Activity
                     String aux7 = new String(buf, "UTF-8");
                     String otro4[] = aux7.split(" ");
                     int caso2 = Integer.parseInt(otro4[1]);
-                    switch (caso2) {
-                        case 1:
-                            textoAccion2.setText("No quiero el truc");
-                            animarTextoAccion(textoAccion2);
-                            hayTruc = false;
-                            break;
-                        case 2:
-                            textoAccion2.setText("No quiero el retruc");
-                            animarTextoAccion(textoAccion2);
-                            hayTruc = true;
-                            break;
-                        case 3:
-                            textoAccion2.setText("No quiero el quatre val");
-                            animarTextoAccion(textoAccion2);
-                            hayRetruc = true;
-                            break;
-                        case 4:
-                            textoAccion2.setText("No quiero el joc fora");
-                            animarTextoAccion(textoAccion2);
-                            hayCuatreVal = true;
-                            break;
-                    }
-                    Handler handler = new Handler();
-                    handler.postDelayed(new Runnable() {
-                        public void run() {
-                            // acciones que se ejecutan tras los milisegundos
-                            mostrarResultadosGanadorMano("PRIMERO");
-
+                    if(numeroJugadores == 2){
+                        switch (caso2) {
+                            case 1:
+                                textoAccion2.setText("No quiero el truc");
+                                animarTextoAccion(textoAccion2);
+                                hayTruc = false;
+                                break;
+                            case 2:
+                                textoAccion2.setText("No quiero el retruc");
+                                animarTextoAccion(textoAccion2);
+                                hayTruc = true;
+                                break;
+                            case 3:
+                                textoAccion2.setText("No quiero el quatre val");
+                                animarTextoAccion(textoAccion2);
+                                hayRetruc = true;
+                                break;
+                            case 4:
+                                textoAccion2.setText("No quiero el joc fora");
+                                animarTextoAccion(textoAccion2);
+                                hayCuatreVal = true;
+                                break;
                         }
-                    }, 1500);
+                        Handler handler = new Handler();
+                        handler.postDelayed(new Runnable() {
+                            public void run() {
+                                // acciones que se ejecutan tras los milisegundos
+                                mostrarResultadosGanadorMano("PRIMERO");
+
+                            }
+                        }, 1500);
+
+                    }else if(numeroJugadores == 4){
+                        //Animar bocadillos correspondientes
+
+             /*           switch (caso2) {
+                            case 1:
+                                textoAccion2.setText("No quiero el truc");
+                                animarTextoAccion(textoAccion2);
+                                hayTruc = false;
+                                break;
+                            case 2:
+                                textoAccion2.setText("No quiero el retruc");
+                                animarTextoAccion(textoAccion2);
+                                hayTruc = true;
+                                break;
+                            case 3:
+                                textoAccion2.setText("No quiero el quatre val");
+                                animarTextoAccion(textoAccion2);
+                                hayRetruc = true;
+                                break;
+                            case 4:
+                                textoAccion2.setText("No quiero el joc fora");
+                                animarTextoAccion(textoAccion2);
+                                hayCuatreVal = true;
+                                break;
+                        }*/
+                    }
+
                     break;
 
                 case 'F':
@@ -3950,25 +3984,48 @@ public class MainActivity extends Activity
                     break;
 
                 case 'T':
-                    showSingleChoiceAlertTruco("Tu rival ha trucado", R.array.truc1);
-                    truc.setVisibility(View.GONE);
-                    cambiarBarraProgreso();
+                    if(numeroJugadores == 2) {
+                        showSingleChoiceAlertTruco("Tu rival ha trucado", R.array.truc1);
+                        truc.setVisibility(View.GONE);
+                        cambiarBarraProgreso();
+
+                    }else if(numeroJugadores == 4){
+                        if(esDeMiEquipo(sender)){
+                            //Mostrar bocadillo
+                        }else {
+                            showSingleChoiceAlertTruco_4J("Tu rival ha trucado", R.array.truc1, sender);
+                        }
+                    }
                     break;
 
                 case 'Q':
                     hayTruc = true;
-                    textoAccion2.setText("Quiero el truc");
-                    animarTextoAccion(textoAccion2);
-
+                    if(numeroJugadores == 2) {
+                        textoAccion2.setText("Quiero el truc");
+                        animarTextoAccion(textoAccion2);
+                        cambiarBarraProgreso();
+                    }else if(numeroJugadores == 4){
+                        //Animar bocadillos correspondientes
+                        //cambiarBarraProgreso();
+                    }
                     if (mMyId.equals(turno)) {
                         desbloquearCartas();
                     }
-                    cambiarBarraProgreso();
+
                     break;
 
                 case 'L':
-                    showSingleChoiceAlertRetruc("Tu rival ha retrucado", R.array.truc2);
-                    cambiarBarraProgreso();
+                    if(numeroJugadores == 2) {
+                        showSingleChoiceAlertRetruc("Tu rival ha retrucado", R.array.truc2);
+                        cambiarBarraProgreso();
+
+                    }else if(numeroJugadores == 4){
+                        if(esDeMiEquipo(sender)){
+                            //Mostrar bocadillo
+                        }else {
+                            showSingleChoiceAlertRetruc_4J("Tu rival ha retrucado", R.array.truc2, sender);
+                        }
+                    }
                     break;
 
                 case 'I':
@@ -3983,8 +4040,18 @@ public class MainActivity extends Activity
                     break;
 
                 case 'C':
-                    showSingleChoiceAlertCuatreVal("�Cuatre val!", R.array.truc3);
-                    cambiarBarraProgreso();
+                    if(numeroJugadores == 2) {
+                        showSingleChoiceAlertCuatreVal("¡Quatre val!", R.array.truc3);
+                        cambiarBarraProgreso();
+
+                    }else if(numeroJugadores == 4){
+                        if(esDeMiEquipo(sender)){
+                            //Mostrar bocadillo
+                        }else {
+                            showSingleChoiceAlertCuatreVal_4J("¡Quatre val!", R.array.truc3, sender);
+                        }
+                    }
+
                     break;
 
                 case 'B':
@@ -3999,8 +4066,17 @@ public class MainActivity extends Activity
                     break;
 
                 case 'J':
-                    showSingleChoiceAlertJocFora("�Joc fora!", R.array.envid3);
-                    cambiarBarraProgreso();
+                    if(numeroJugadores == 2) {
+                        showSingleChoiceAlertJocFora("¡Joc fora!", R.array.envid3);
+                        cambiarBarraProgreso();
+
+                    }else if(numeroJugadores == 4){
+                        if(esDeMiEquipo(sender)){
+                            //Mostrar bocadillo
+                        }else {
+                            showSingleChoiceAlertJocFora_4J("¡Quatre val!", R.array.envid3, sender);
+                        }
+                    }
                     break;
 
                 case 'Y':
@@ -4013,6 +4089,94 @@ public class MainActivity extends Activity
                         desbloquearCartas();
                     } else reiniciarBarraProgreso();
                     break;
+
+
+                case 'W':
+                    String aux10 = new String(buf, "UTF-8");
+                    String otro7[] = aux10.split(" ");
+                    String respuesta = otro7[1];
+                    int caso3 = Integer.parseInt(otro7[2]);
+                    mensajesRecibidosTruc++;
+
+                    if(respuesta.equals("QUIERO")){
+                        if(sQuieroTruc.equals("NOQUIERO"))sQuieroTruc = "QUIERO";
+                    }
+                    if(respuesta.equals("RETRUQUE")){
+                        sQuieroTruc = "RETRUQUE";
+                    }
+                    if(respuesta.equals("QUATRE")){
+                        sQuieroTruc = "QUATRE";
+                    }
+                    if(respuesta.equals("JOC")){
+                        sQuieroTruc = "JOC";
+                    }
+
+                    //Quieren el truc
+                    if(mensajesRecibidosTruc == 2 && sQuieroTruc.equals("QUIERO")) {
+                        if (caso3 == 1) hayTruc = true;
+                        else if (caso3 == 2) hayRetruc = true;
+                        else if (caso3 == 3) hayCuatreVal = true;
+                        else if (caso3 == 4) hayJocFora = true;
+                        if (mMyId.equals(turno)) {
+                            desbloquearCartas();
+                        }
+                        //Animar los bocadillos
+                        //cambiarBarraProgreso();
+                        enviarMensajeQuieroTruc();
+                        mensajesRecibidos = 0;
+                    }else if(mensajesRecibidosTruc == 2 && sQuieroTruc.equals("RETRUQUE")){
+
+                        if (mMyId.equals(turno)) {
+                            desbloquearCartas();
+                        }
+                        //Animar los bocadillos
+                        //cambiarBarraProgreso();
+                        enviarMensajeRetruc();
+                        mensajesRecibidos = 0;
+
+                    }else if(mensajesRecibidosTruc == 2 && sQuieroTruc.equals("QUATRE")){
+
+                        if (mMyId.equals(turno)) {
+                            desbloquearCartas();
+                        }
+                        //Animar los bocadillos
+                        //cambiarBarraProgreso();
+                        enviarMensajeCuatreVal();
+                        mensajesRecibidos = 0;
+
+                    }else if(mensajesRecibidosTruc == 2 && sQuieroTruc.equals("JOC")){
+
+                        if (mMyId.equals(turno)) {
+                            desbloquearCartas();
+                        }
+                        //Animar los bocadillos
+                        //cambiarBarraProgreso();
+                        enviarMensajeJocFora();
+                        mensajesRecibidos = 0;
+
+                    //No quieren el truc
+                    }else if(mensajesRecibidosTruc == 2 && sQuieroTruc.equals("NOQUIERO")){
+                        //Animar los bocadillos
+                        if(caso3 == 1) enviarMensajeNoQuieroTruc(1);
+                        else if(caso3 == 2) enviarMensajeNoQuieroTruc(2);
+                        else if(caso3 == 3) enviarMensajeNoQuieroTruc(3);
+                        else if(caso3 == 4) enviarMensajeNoQuieroTruc(4);
+
+                        Handler handler = new Handler();
+                        handler.postDelayed(new Runnable() {
+                            public void run() {
+                                // acciones que se ejecutan tras los milisegundos
+                                mostrarResultadosGanadorMano("PRIMERO");
+
+                            }
+                        }, 1500);
+                    }
+
+
+
+                    break;
+
+
 
                 case 'Z':
                     String aux8 = new String(buf, "UTF-8");
@@ -5673,6 +5837,161 @@ public class MainActivity extends Activity
         }
 
         return "";
+    }
+
+    private void showSingleChoiceAlertTruco_4J(String title, int array, final String sender) {
+        new MaterialDialog.Builder(this)
+                .title(title)
+                .titleColorRes(R.color.menuItems)
+                .items(array)
+                .itemColorRes(R.color.menuItems)
+                .itemsCallbackSingleChoice(2, new MaterialDialog.ListCallbackSingleChoice() {
+                    @Override
+                    public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+                        switch (which) {
+                            //Quiero
+                            case 0:
+                                hayTruc = true;
+                                enviarMensajeQuieroTruc_4J(sender, "QUIERO", 1);
+                                //cambiarBarraProgreso();
+                                retruque_4J.setVisibility(View.VISIBLE);
+                                break;
+                            //Retruque
+                            case 1:
+                                enviarMensajeQuieroTruc_4J(sender, "RETRUQUE", 1);
+                                //cambiarBarraProgreso();
+                                break;
+                            //No quiero
+                            case 2:
+                                enviarMensajeQuieroTruc_4J(sender, "NOQUIERO", 1);
+                                //mostrarResultadosPerdedorMano("PRIMERO");
+                                break;
+                        }
+                        return true;
+                    }
+                })
+                .positiveText("Elegir")
+                .cancelable(false)
+                .show().getWindow().setBackgroundDrawable(new ColorDrawable(0x30000000));
+    }
+
+    private void showSingleChoiceAlertRetruc_4J(String title, int array, final String sender) {
+        new MaterialDialog.Builder(this)
+                .title(title)
+                .titleColorRes(R.color.menuItems)
+                .items(array)
+                .itemColorRes(R.color.menuItems)
+                .itemsCallbackSingleChoice(2, new MaterialDialog.ListCallbackSingleChoice() {
+                    @Override
+                    public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+                        switch (which) {
+                            //Quiero
+                            case 0:
+                                hayRetruc = true;
+                                enviarMensajeQuieroTruc_4J(sender, "QUIERO", 2);
+                                if (!turno.equals(mMyId)) {
+                                    //cambiarBarraProgreso();
+                                } else {
+                                    //reiniciarBarraProgreso();
+                                    desbloquearCartas();
+                                }
+                                quatreVal_4J.setVisibility(View.VISIBLE);
+                                break;
+                            //Cuatre val
+                            case 1:
+                                enviarMensajeQuieroTruc_4J(sender, "QUATRE", 2);
+                                //cambiarBarraProgreso();
+                                break;
+                            //No quiero
+                            case 2:
+                                enviarMensajeQuieroTruc_4J(sender, "NOQUIERO", 2);
+                                // mostrarResultadosPerdedorMano("PRIMERO");
+                                break;
+                        }
+                        return true;
+                    }
+                })
+                .positiveText("Elegir")
+                .cancelable(false)
+                .show().getWindow().setBackgroundDrawable(new ColorDrawable(0x30000000));
+    }
+
+    private void showSingleChoiceAlertCuatreVal_4J(String title, int array, final String sender) {
+        new MaterialDialog.Builder(this)
+                .title(title)
+                .titleColorRes(R.color.menuItems)
+                .items(array)
+                .itemColorRes(R.color.menuItems)
+                .itemsCallbackSingleChoice(2, new MaterialDialog.ListCallbackSingleChoice() {
+                    @Override
+                    public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+                        switch (which) {
+                            //Quiero
+                            case 0:
+                                hayCuatreVal = true;
+                                enviarMensajeQuieroTruc_4J(sender, "QUIERO", 3);
+                                if (!turno.equals(mMyId)) {
+                                    //cambiarBarraProgreso();
+                                } else {
+                                    //reiniciarBarraProgreso();
+                                    desbloquearCartas();
+                                }
+                                jocFora_4J.setVisibility(View.VISIBLE);
+                                break;
+                            //Joc fora
+                            case 1:
+                                enviarMensajeQuieroTruc_4J(sender, "JOC", 3);
+                                //cambiarBarraProgreso();
+                                break;
+                            //No quiero
+                            case 2:
+                                enviarMensajeQuieroTruc_4J(sender, "NOQUIERO", 3);
+                                // mostrarResultadosPerdedorMano("PRIMERO");
+                                break;
+                        }
+                        return true;
+                    }
+                })
+                .positiveText("Elegir")
+                .cancelable(false)
+                .show().getWindow().setBackgroundDrawable(new ColorDrawable(0x30000000));
+    }
+
+    private void showSingleChoiceAlertJocFora_4J(String title, int array, final String sender) {
+        new MaterialDialog.Builder(this)
+                .title(title)
+                .titleColorRes(R.color.menuItems)
+                .items(array)
+                .itemColorRes(R.color.menuItems)
+                .itemsCallbackSingleChoice(2, new MaterialDialog.ListCallbackSingleChoice() {
+                    @Override
+                    public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+                        switch (which) {
+                            //Quiero
+                            case 0:
+                                hayJocFora = true;
+                                enviarMensajeQuieroTruc_4J(sender, "QUIERO", 4);
+                                desbloquearCartas();
+                                if (!turno.equals(mMyId)) {
+                                    //cambiarBarraProgreso();
+                                } else {
+                                    //reiniciarBarraProgreso();
+                                    desbloquearCartas();
+                                }
+                                break;
+                            //No quiero
+                            case 1:
+                                enviarMensajeQuieroTruc_4J(sender, "NOQUIERO", 4);
+                                // mostrarResultadosPerdedorMano("PRIMERO");
+                                break;
+
+                        }
+                        return true;
+                    }
+                })
+                .positiveText("Elegir")
+                .cancelable(false)
+                .show().getWindow().setBackgroundDrawable(new ColorDrawable(0x30000000));
     }
 
 }
