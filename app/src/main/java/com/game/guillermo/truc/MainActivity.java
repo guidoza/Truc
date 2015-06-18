@@ -271,6 +271,7 @@ public class MainActivity extends Activity
     int valorEmpateArriba = 0;
     int valorEmpateIzq = 0;
     int rondasGanadasMiEquipo = 0;
+    int mensajesRecibidos = 0;
 
     //Strings
     String idJugador3 = null;
@@ -399,8 +400,16 @@ public class MainActivity extends Activity
                         envid_4J.setVisibility(View.GONE);
                         laFalta_4J.setVisibility(View.GONE);
                       break;
+
                     case R.id.salir_4J:
                         actionButton_4J.hide();
+                        break;
+
+                    case R.id.la_falta_4J:
+                        envidoLaFalta();
+                        actionButton_4J.hide();
+                        envid_4J.setVisibility(View.GONE);
+                        laFalta_4J.setVisibility(View.GONE);
                         break;
             }
 
@@ -544,14 +553,14 @@ public class MainActivity extends Activity
                             //Vuelvo
                             case 1:
                                 miEnvid = comprobarEnvid();
-                                enviarMensajeVuelvoAEnvidar();
+                                enviarMensajeVuelvoAEnvidar("");
                                 cambiarBarraProgreso();
                                 hayVuelvo = true;
                                 break;
                             //Falta
                             case 2:
                                 miEnvid = comprobarEnvid();
-                                enviarMensajeLaFalta(1);
+                                enviarMensajeLaFalta(1, "");
                                 cambiarBarraProgreso();
                                 break;
                             //No quiero
@@ -591,7 +600,7 @@ public class MainActivity extends Activity
                                 break;
                             //Falta
                             case 1:
-                                enviarMensajeLaFalta(1);
+                                enviarMensajeLaFalta(1, "");
                                 cambiarBarraProgreso();
                                 break;
                             //No quiero
@@ -894,11 +903,18 @@ public class MainActivity extends Activity
     }
 
     private void envidoLaFalta() {
-        Toast.makeText(getApplicationContext(), "Esperando al Jugador", Toast.LENGTH_SHORT).show();
-        bloquearCartas();
-        miEnvid = comprobarEnvid();
-        enviarMensajeLaFalta(2);
-        cambiarBarraProgreso();
+        if(numeroJugadores == 2){
+            Toast.makeText(getApplicationContext(), "Esperando al Jugador", Toast.LENGTH_SHORT).show();
+            bloquearCartas();
+            miEnvid = comprobarEnvid();
+            enviarMensajeLaFalta(2, "");
+            cambiarBarraProgreso();
+        }else if(numeroJugadores == 4){
+            Toast.makeText(getApplicationContext(), "Esperando al Jugador", Toast.LENGTH_SHORT).show();
+            bloquearCartas();
+            enviarMensajeLaFalta(2, "");
+            //cambiarBarraProgreso();
+        }
     }
 
     private int comprobarEnvid() {
@@ -1676,6 +1692,7 @@ public class MainActivity extends Activity
             ganadorRonda1_4J = "";
             ganadorRonda2_4J = "";
             ganadorRonda3_4J = "";
+            mensajesRecibidos = 0;
 
             truc_4J.setVisibility(View.VISIBLE);
             envid_4J.setVisibility(View.VISIBLE);
@@ -3077,13 +3094,19 @@ public class MainActivity extends Activity
         }
     }
 
-    public void enviarMensajeVuelvoAEnvidar() {
-        byte[] messageVuelvo = ("V " + miEnvid).getBytes();
-        for (Participant p : mParticipants) {
-            if (!p.getParticipantId().equals(mMyId)) {
-                Games.RealTimeMultiplayer.sendReliableMessage(mGoogleApiClient, null, messageVuelvo,
-                        mRoomId, p.getParticipantId());
+    public void enviarMensajeVuelvoAEnvidar(String sender) {
+        if(numeroJugadores == 2){
+            byte[] messageVuelvo = ("V " + miEnvid).getBytes();
+            for (Participant p : mParticipants) {
+                if (!p.getParticipantId().equals(mMyId)) {
+                    Games.RealTimeMultiplayer.sendReliableMessage(mGoogleApiClient, null, messageVuelvo,
+                            mRoomId, p.getParticipantId());
+                }
             }
+        }else if(numeroJugadores == 4){
+            byte[] messageVuelvo = ("V").getBytes();
+            Games.RealTimeMultiplayer.sendReliableMessage(mGoogleApiClient, null, messageVuelvo,
+                    mRoomId, sender);
         }
     }
 
@@ -3097,13 +3120,19 @@ public class MainActivity extends Activity
         }
     }
 
-    public void enviarMensajeLaFalta(int caso) {
-        byte[] messageFalta = ("F " + miEnvid + " " + caso).getBytes();
-        for (Participant p : mParticipants) {
-            if (!p.getParticipantId().equals(mMyId)) {
-                Games.RealTimeMultiplayer.sendReliableMessage(mGoogleApiClient, null, messageFalta,
-                        mRoomId, p.getParticipantId());
+    public void enviarMensajeLaFalta(int caso, String sender) {
+        if(numeroJugadores ==2){
+            byte[] messageFalta = ("F " + miEnvid + " " + caso).getBytes();
+            for (Participant p : mParticipants) {
+                if (!p.getParticipantId().equals(mMyId)) {
+                    Games.RealTimeMultiplayer.sendReliableMessage(mGoogleApiClient, null, messageFalta,
+                            mRoomId, p.getParticipantId());
+                }
             }
+        }else if(numeroJugadores == 4){
+            byte[] messageVuelvo = ("F " + 0 + " " + caso).getBytes();
+            Games.RealTimeMultiplayer.sendReliableMessage(mGoogleApiClient, null, messageVuelvo,
+                    mRoomId, sender);
         }
     }
 
@@ -3225,6 +3254,13 @@ public class MainActivity extends Activity
                         mRoomId, p.getParticipantId());
             }
         }
+    }
+
+    public void enviarMensajeListo() {
+        byte[] messageGanadorRonda4J = ("H").getBytes();
+        Games.RealTimeMultiplayer.sendReliableMessage(mGoogleApiClient, null, messageGanadorRonda4J,
+                        mRoomId, mano);
+
     }
 
 
@@ -3693,7 +3729,7 @@ public class MainActivity extends Activity
                                 }
                                 Log.d("EEEEEE", "Quien calcula: "+calculaEnvid);
                                 if (mMyId.equals(calculaEnvid)) {
-                                    showSingleChoiceAlertEnvid_4J("Tu rival ha envidado", R.array.envid);
+                                    showSingleChoiceAlertEnvid_4J("Tu rival ha envidado", R.array.envid, sender);
                                 } else {
                                     //Animar bocadillo del compi del que tiene que calcular
                                 }
@@ -3775,49 +3811,81 @@ public class MainActivity extends Activity
                     break;
 
                 case 'V':
-                    String aux3 = new String(buf, "UTF-8");
-                    String otro[] = aux3.split(" ");
-                    envidOtro = Integer.parseInt(otro[1]);
-                    hayVuelvo = true;
-                    showSingleChoiceAlertVuelvo("Tu rival ha vuelto a envidar", R.array.envid2);
-                    cambiarBarraProgreso();
+                    if(numeroJugadores == 2){
+                        String aux3 = new String(buf, "UTF-8");
+                        String otro[] = aux3.split(" ");
+                        envidOtro = Integer.parseInt(otro[1]);
+                        hayVuelvo = true;
+                        showSingleChoiceAlertVuelvo("Tu rival ha vuelto a envidar", R.array.envid2);
+                        cambiarBarraProgreso();
+                    }else if(numeroJugadores == 4){
+                        hayVuelvo = true;
+                        showSingleChoiceAlertVuelvo_4J("Tu rival ha vuelto a envidar", R.array.envid2, sender);
+                    }
                     break;
 
                 case 'X':
                     String aux4 = new String(buf, "UTF-8");
                     String otro1[] = aux4.split(" ");
                     int caso1 = Integer.parseInt(otro1[1]);
-                    switch (caso1) {
-                        case 1:
-                            puntosEnvid = NO_QUIERO_ENVID;
-                            textoAccion2.setText("No quiero el envid");
-                            animarTextoAccion(textoAccion2);
-                            cambiarBarraProgreso();
-                            break;
-                        case 2:
-                            puntosEnvid = ENVID;
-                            textoAccion2.setText("No quiero el vuelvo");
-                            animarTextoAccion(textoAccion2);
-                            reiniciarBarraProgreso();
-                            break;
-                        case 3:
-                            if (hayVuelvo) {
-                                puntosEnvid = TORNE;
-                            }
-                            textoAccion2.setText("No quiero la falta");
-                            animarTextoAccion(textoAccion2);
-                            if (!mMyId.equals(turno)) {
+                    if(numeroJugadores == 2){
+                        switch (caso1) {
+                            case 1:
+                                puntosEnvid = NO_QUIERO_ENVID;
+                                textoAccion2.setText("No quiero el envid");
+                                animarTextoAccion(textoAccion2);
+                                cambiarBarraProgreso();
+                                break;
+                            case 2:
+                                puntosEnvid = ENVID;
+                                textoAccion2.setText("No quiero el vuelvo");
+                                animarTextoAccion(textoAccion2);
                                 reiniciarBarraProgreso();
-                            } else cambiarBarraProgreso();
-                            break;
-                        case 4:
+                                break;
+                            case 3:
+                                if (hayVuelvo) {
+                                    puntosEnvid = TORNE;
+                                } else puntosEnvid = ENVID;
 
-                            puntosEnvid = NO_QUIERO_ENVID;
-                            textoAccion2.setText("No quiero la falta");
-                            animarTextoAccion(textoAccion2);
-                            cambiarBarraProgreso();
-                            break;
+                                textoAccion2.setText("No quiero la falta");
+                                animarTextoAccion(textoAccion2);
+                                if (!mMyId.equals(turno)) {
+                                    reiniciarBarraProgreso();
+                                } else cambiarBarraProgreso();
+                                break;
+                            case 4:
 
+                                puntosEnvid = NO_QUIERO_ENVID;
+                                textoAccion2.setText("No quiero la falta");
+                                animarTextoAccion(textoAccion2);
+                                cambiarBarraProgreso();
+                                break;
+
+                        }
+
+                    //COPIAR DE ARRIBA
+                    }else if(numeroJugadores ==4){
+                        switch (caso1) {
+                            case 1:
+                                puntosEnvid = NO_QUIERO_ENVID;
+                                Log.d("KKKKKK", "Puntos del envid:" +puntosEnvid);
+                                break;
+                            case 2:
+                                puntosEnvid = ENVID;
+                                Log.d("KKKKKK", "Puntos del envid:" +puntosEnvid);
+                                break;
+                            case 3:
+                                if (hayVuelvo) {
+                                    puntosEnvid = TORNE;
+                                } else puntosEnvid = ENVID;
+                                Log.d("KKKKKK", "Puntos del envid:" +puntosEnvid);
+                                break;
+                            case 4:
+                                puntosEnvid = NO_QUIERO_ENVID;
+                                Log.d("KKKKKK", "Puntos del envid:" +puntosEnvid);
+                                break;
+
+                        }
                     }
                     if (mMyId.equals(turno)) {
                         desbloquearCartas();
@@ -3864,12 +3932,21 @@ public class MainActivity extends Activity
                 case 'F':
                     String aux5 = new String(buf, "UTF-8");
                     String otro2[] = aux5.split(" ");
-                    envidOtro = Integer.parseInt(otro2[1]);
-                    if (Integer.parseInt(otro2[2]) == 2) faltaDirecta = true;
-                    showSingleChoiceAlertFalta("Tu rival ha envidado la falta", R.array.envid3);
-                    envid.setVisibility(View.GONE);
-                    laFalta.setVisibility(View.GONE);
-                    cambiarBarraProgreso();
+
+                    if(numeroJugadores == 2){
+                        envidOtro = Integer.parseInt(otro2[1]);
+                        if (Integer.parseInt(otro2[2]) == 2) faltaDirecta = true;
+                        showSingleChoiceAlertFalta("Tu rival ha envidado la falta", R.array.envid3);
+                        envid.setVisibility(View.GONE);
+                        laFalta.setVisibility(View.GONE);
+                        cambiarBarraProgreso();
+
+                    }else if(numeroJugadores ==4){
+                        if (Integer.parseInt(otro2[2]) == 2) faltaDirecta = true;
+                        showSingleChoiceAlertFalta_4J("Tu rival ha envidado la falta", R.array.envid3);
+                        envid_4J.setVisibility(View.GONE);
+                        laFalta_4J.setVisibility(View.GONE);
+                    }
                     break;
 
                 case 'T':
@@ -4098,19 +4175,22 @@ public class MainActivity extends Activity
                             //Lo recibe el ganador
                             if (soyGanador) {
                                     if (hayEnvid) {
+                                        Log.d("KKKKKKKK", "Hay envid");
                                         LayoutInflater inflater = getLayoutInflater();
                                         ViewGroup container = null;
 
                                         if (ganadorEnvid.equals(mMyId) || esDeMiEquipo(ganadorEnvid)) {
                                             View layout = inflater.inflate(R.layout.progres_content, container);
                                             showProgressCustomDialog(layout);
-
+                                            Log.d("KKKKKKKK", "Gano todo");
                                         } else {
                                             View layout = inflater.inflate(R.layout.progres_content2, container);
                                             showProgressCustomDialog(layout);
+                                            Log.d("KKKKKKKK", "Gano truc pierdo envid");
                                         }
                                     } else {
                                         showProgressDialog("Enhorabuena, ganas la mano");
+                                        Log.d("KKKKKKKK", "No hay envid");
                                     }
 
                                 repartirTrasMano();
@@ -4120,19 +4200,23 @@ public class MainActivity extends Activity
                                 //Lo recibe el perdedor
                             } else if (!soyGanador) {
                                     if (hayEnvid) {
+                                        Log.d("KKKKKKKK", "Hay envid");
                                         LayoutInflater inflater = getLayoutInflater();
                                         ViewGroup container = null;
 
                                         if (ganadorEnvid.equals(mMyId) || esDeMiEquipo(ganadorEnvid)) {
                                             View layout = inflater.inflate(R.layout.progres_content3, container);
                                             showProgressCustomDialog(layout);
+                                            Log.d("KKKKKKKK", "pierdo truc gano envid");
 
                                         } else {
                                             View layout = inflater.inflate(R.layout.progres_content4, container);
                                             showProgressCustomDialog(layout);
+                                            Log.d("KKKKKKKK", "Pierdo todo");
                                         }
                                     } else {
                                         showProgressDialog("Lástima, pierdes la mano");
+                                        Log.d("KKKKKKKK", "No hay envid");
                                     }
                                 repartirTrasMano();
                                 Log.d("KKKKKKKK", "Repartiendo tras mano..." + mMyId);
@@ -4150,6 +4234,14 @@ public class MainActivity extends Activity
                     if (ronda == 1) ganadorRonda1_4J = otro6[1];
                     else if (ronda == 2) ganadorRonda2_4J = otro6[1];
                     else if (ronda == 3) ganadorRonda3_4J = otro6[1];
+
+                    break;
+
+                case 'H':
+                    mensajesRecibidos++;
+                    if(mensajesRecibidos == 3){
+                        inicializarMano();
+                    }
 
                     break;
 
@@ -4663,9 +4755,16 @@ public class MainActivity extends Activity
     }
 
     public void repartirTrasMano() {
-        cambiarMano();
-        if (mMyId.equals(mano)) {
-            inicializarMano();
+        if(numeroJugadores == 2){
+            cambiarMano();
+            if (mMyId.equals(mano)) {
+                inicializarMano();
+            }
+        }else if(numeroJugadores == 4){
+            cambiarMano();
+            if (!mMyId.equals(mano)) {
+                enviarMensajeListo();
+            }
         }
 
 
@@ -5141,7 +5240,7 @@ public class MainActivity extends Activity
         return false;
     }
 
-    private void showSingleChoiceAlertEnvid_4J(String title, int array) {
+    private void showSingleChoiceAlertEnvid_4J(String title, int array, final String sender) {
         new MaterialDialog.Builder(this)
                 .title(title)
                 .titleColorRes(R.color.menuItems)
@@ -5161,13 +5260,13 @@ public class MainActivity extends Activity
                                 break;
                             //Vuelvo
                             case 1:
-                                enviarMensajeVuelvoAEnvidar();
+                                enviarMensajeVuelvoAEnvidar(sender);
                                 //cambiarBarraProgreso();
                                 hayVuelvo = true;
                                 break;
                             //Falta
                             case 2:
-                                enviarMensajeLaFalta(1);
+                                enviarMensajeLaFalta(1, sender);
                                 //cambiarBarraProgreso();
                                 break;
                             //No quiero
@@ -5184,7 +5283,7 @@ public class MainActivity extends Activity
                 .show().getWindow().setBackgroundDrawable(new ColorDrawable(0x30000000));
     }
 
-    private void showSingleChoiceAlertVuelvo_4J(String title, int array) {
+    private void showSingleChoiceAlertVuelvo_4J(String title, int array, final String sender) {
         new MaterialDialog.Builder(this)
                 .title(title)
                 .titleColorRes(R.color.menuItems)
@@ -5197,27 +5296,27 @@ public class MainActivity extends Activity
                             //Quiero
                             case 0:
                                 hayEnvid = true;
-                                comprobarGanadorEnvid();
-                                enviarMensajeHayEnvidAndGanador(ganadorEnvid, 2);
+                                ganadorEnvid = comprobarGanadorEnvid_4J();
                                 puntosEnvid = TORNE;
+                                enviarMensajeHayEnvidAndGanador(ganadorEnvid, 2);
                                 desbloquearCartas();
-                                if (!turno.equals(mMyId)) {
+                               /* if (!turno.equals(mMyId)) {
                                     cambiarBarraProgreso();
                                 } else reiniciarBarraProgreso();
-                                break;
+                                */break;
                             //Falta
                             case 1:
-                                enviarMensajeLaFalta(1);
-                                cambiarBarraProgreso();
+                                enviarMensajeLaFalta(1, sender);
+                                //cambiarBarraProgreso();
                                 break;
                             //No quiero
                             case 2:
                                 desbloquearCartas();
                                 enviarMensajeNoQuiero(2);
-                                if (!turno.equals(mMyId)) {
+                              /*  if (!turno.equals(mMyId)) {
                                     cambiarBarraProgreso();
                                 } else reiniciarBarraProgreso();
-                                break;
+                             */   break;
                         }
                         return true;
                     }
@@ -5241,29 +5340,30 @@ public class MainActivity extends Activity
                             case 0:
                                 hayEnvid = true;
                                 if (mMyId.equals(turno)) desbloquearCartas();
-                                comprobarGanadorEnvid();
+                                ganadorEnvid = comprobarGanadorEnvid_4J();
+                                enviarMensajeHayEnvidAndGanador(ganadorEnvid, 3);
                                 //puntos a sumar por la falta
-                                if (ganadorEnvid.equals(mMyId)) {
+                                /*if (ganadorEnvid.equals(mMyId)) {
                                     if (puntosTotalesJugador2 <= 12) {
                                         puntosEnvid = 24;
                                     } else if (puntosTotalesJugador2 > 12) {
                                         puntosEnvid = 24 - puntosTotalesJugador2;
                                     }
                                 }
-                                enviarMensajeHayEnvidAndGanador(ganadorEnvid, 3);
+
                                 if (!turno.equals(mMyId)) {
                                     cambiarBarraProgreso();
-                                } else reiniciarBarraProgreso();
+                                } else reiniciarBarraProgreso();*/
                                 break;
                             case 1:
                                 if (mMyId.equals(turno)) desbloquearCartas();
                                 if (faltaDirecta) {
                                     enviarMensajeNoQuiero(4);
                                 } else enviarMensajeNoQuiero(3);
-                                if (!turno.equals(mMyId)) {
+                                /*if (!turno.equals(mMyId)) {
                                     cambiarBarraProgreso();
                                 } else reiniciarBarraProgreso();
-                                break;
+                               */ break;
                         }
                         return true;
                     }
@@ -5280,10 +5380,10 @@ public class MainActivity extends Activity
         int[] numCartaIzq = new int[3];
         int[] numCartaAbajo = new int[3];
 
-        int valorAbajo = 0;
-        int valorDerecha = 0;
-        int valorArriba = 0;
-        int valorIzq = 0;
+        String valorAbajo = "";
+        String valorDerecha = "";
+        String valorArriba = "";
+        String valorIzq = "";
 
         if (idJugador1.equals(mano)) {
             numCartaAbajo[0] = Integer.parseInt(arrayCartasJugadores[10]);
@@ -5298,61 +5398,61 @@ public class MainActivity extends Activity
             numCartaIzq[0] = Integer.parseInt(arrayCartasJugadores[7]);
             numCartaIzq[1] = Integer.parseInt(arrayCartasJugadores[8]);
             numCartaIzq[2] = Integer.parseInt(arrayCartasJugadores[9]);
-            valorAbajo = 1;
-            valorDerecha = 2;
-            valorArriba = 3;
-            valorIzq = 4;
+            valorAbajo = idJugador1;
+            valorDerecha = idJugador2;
+            valorArriba = idJugador3;
+            valorIzq = idJugador4;
         } else if (mano.equals(idJugador2)) {
-            numCartaIzq[0] = Integer.parseInt(arrayCartasJugadores[10]);
-            numCartaIzq[1] = Integer.parseInt(arrayCartasJugadores[11]);
-            numCartaIzq[2] = Integer.parseInt(arrayCartasJugadores[12]);
-            numCartaAbajo[0] = Integer.parseInt(arrayCartasJugadores[1]);
-            numCartaAbajo[1] = Integer.parseInt(arrayCartasJugadores[2]);
-            numCartaAbajo[2] = Integer.parseInt(arrayCartasJugadores[3]);
+            numCartaAbajo[0] = Integer.parseInt(arrayCartasJugadores[10]);
+            numCartaAbajo[1] = Integer.parseInt(arrayCartasJugadores[11]);
+            numCartaAbajo[2] = Integer.parseInt(arrayCartasJugadores[12]);
+            numCartaIzq[0] = Integer.parseInt(arrayCartasJugadores[1]);
+            numCartaIzq[1] = Integer.parseInt(arrayCartasJugadores[2]);
+            numCartaIzq[2] = Integer.parseInt(arrayCartasJugadores[3]);
             numCartaDerecha[0] = Integer.parseInt(arrayCartasJugadores[4]);
             numCartaDerecha[1] = Integer.parseInt(arrayCartasJugadores[5]);
             numCartaDerecha[2] = Integer.parseInt(arrayCartasJugadores[6]);
             numCartaArriba[0] = Integer.parseInt(arrayCartasJugadores[7]);
             numCartaArriba[1] = Integer.parseInt(arrayCartasJugadores[8]);
             numCartaArriba[2] = Integer.parseInt(arrayCartasJugadores[9]);
-            valorAbajo = 2;
-            valorDerecha = 3;
-            valorArriba = 4;
-            valorIzq = 1;
+            valorAbajo = idJugador2;
+            valorDerecha = idJugador3;
+            valorArriba = idJugador4;
+            valorIzq = idJugador1;
         } else if (mano.equals(idJugador3)) {
-            numCartaArriba[0] = Integer.parseInt(arrayCartasJugadores[10]);
-            numCartaArriba[1] = Integer.parseInt(arrayCartasJugadores[11]);
-            numCartaArriba[2] = Integer.parseInt(arrayCartasJugadores[12]);
-            numCartaIzq[0] = Integer.parseInt(arrayCartasJugadores[1]);
-            numCartaIzq[1] = Integer.parseInt(arrayCartasJugadores[2]);
-            numCartaIzq[2] = Integer.parseInt(arrayCartasJugadores[3]);
-            numCartaAbajo[0] = Integer.parseInt(arrayCartasJugadores[4]);
-            numCartaAbajo[1] = Integer.parseInt(arrayCartasJugadores[5]);
-            numCartaAbajo[2] = Integer.parseInt(arrayCartasJugadores[6]);
-            numCartaDerecha[0] = Integer.parseInt(arrayCartasJugadores[7]);
-            numCartaDerecha[1] = Integer.parseInt(arrayCartasJugadores[8]);
-            numCartaDerecha[2] = Integer.parseInt(arrayCartasJugadores[9]);
-            valorAbajo = 3;
-            valorDerecha = 4;
-            valorArriba = 1;
-            valorIzq = 2;
-        } else if (mano.equals(idJugador4)) {
-            numCartaDerecha[0] = Integer.parseInt(arrayCartasJugadores[10]);
-            numCartaDerecha[1] = Integer.parseInt(arrayCartasJugadores[11]);
-            numCartaDerecha[2] = Integer.parseInt(arrayCartasJugadores[12]);
+            numCartaAbajo[0] = Integer.parseInt(arrayCartasJugadores[10]);
+            numCartaAbajo[1] = Integer.parseInt(arrayCartasJugadores[11]);
+            numCartaAbajo[2] = Integer.parseInt(arrayCartasJugadores[12]);
             numCartaArriba[0] = Integer.parseInt(arrayCartasJugadores[1]);
             numCartaArriba[1] = Integer.parseInt(arrayCartasJugadores[2]);
             numCartaArriba[2] = Integer.parseInt(arrayCartasJugadores[3]);
             numCartaIzq[0] = Integer.parseInt(arrayCartasJugadores[4]);
             numCartaIzq[1] = Integer.parseInt(arrayCartasJugadores[5]);
             numCartaIzq[2] = Integer.parseInt(arrayCartasJugadores[6]);
-            numCartaAbajo[0] = Integer.parseInt(arrayCartasJugadores[7]);
-            numCartaAbajo[1] = Integer.parseInt(arrayCartasJugadores[8]);
-            numCartaAbajo[2] = Integer.parseInt(arrayCartasJugadores[9]);
-            valorAbajo = 4;
-            valorDerecha = 1;
-            valorArriba = 2;
-            valorIzq = 3;
+            numCartaDerecha[0] = Integer.parseInt(arrayCartasJugadores[7]);
+            numCartaDerecha[1] = Integer.parseInt(arrayCartasJugadores[8]);
+            numCartaDerecha[2] = Integer.parseInt(arrayCartasJugadores[9]);
+            valorAbajo = idJugador3;
+            valorDerecha = idJugador4;
+            valorArriba = idJugador1;
+            valorIzq = idJugador2;
+        } else if (mano.equals(idJugador4)) {
+            numCartaAbajo[0] = Integer.parseInt(arrayCartasJugadores[10]);
+            numCartaAbajo[1] = Integer.parseInt(arrayCartasJugadores[11]);
+            numCartaAbajo[2] = Integer.parseInt(arrayCartasJugadores[12]);
+            numCartaDerecha[0] = Integer.parseInt(arrayCartasJugadores[1]);
+            numCartaDerecha[1] = Integer.parseInt(arrayCartasJugadores[2]);
+            numCartaDerecha[2] = Integer.parseInt(arrayCartasJugadores[3]);
+            numCartaArriba[0] = Integer.parseInt(arrayCartasJugadores[4]);
+            numCartaArriba[1] = Integer.parseInt(arrayCartasJugadores[5]);
+            numCartaArriba[2] = Integer.parseInt(arrayCartasJugadores[6]);
+            numCartaIzq[0] = Integer.parseInt(arrayCartasJugadores[7]);
+            numCartaIzq[1] = Integer.parseInt(arrayCartasJugadores[8]);
+            numCartaIzq[2] = Integer.parseInt(arrayCartasJugadores[9]);
+            valorAbajo = idJugador4;
+            valorDerecha = idJugador1;
+            valorArriba = idJugador2;
+            valorIzq = idJugador3;
         }
 
         baraja = crearBaraja();
@@ -5374,6 +5474,7 @@ public class MainActivity extends Activity
         int valorArribaEnvid = 0;
         int valorIzqEnvid = 0;
 
+        todosMismoPalo = false;
 
         /** Calculo del envid del JUGADOR 1 */
         if (C1_J1.getPalo().equals(C2_J1.getPalo()) && C1_J1.getPalo().equals(C3_J1.getPalo()))
@@ -5543,49 +5644,33 @@ public class MainActivity extends Activity
 
         todosMismoPalo = false;
 
-        int[] maximosPrime = { valorAbajoEnvid, valorDerechaEnvid, valorArribaEnvid, valorIzqEnvid};
+        Log.d("KKKKKKKK", "valor envid del mano: " + valorAbajoEnvid);
+        Log.d("KKKKKKKK", "valor envid del de la derecha del mano: " + valorDerechaEnvid);
+        Log.d("KKKKKKKK", "valor envid del de arriba: " + valorArribaEnvid);
+        Log.d("KKKKKKKK", "valor envid del de la izquierda: " + valorIzqEnvid);
+
+        int[] maximosPrime = {valorAbajoEnvid, valorDerechaEnvid, valorArribaEnvid, valorIzqEnvid};
         maximo = maximosPrime[0];
-        for (int i = 0; i<maximosPrime.length; i++){
-            if(maximo > maximosPrime[i]){
+        for (int i = 0; i < maximosPrime.length; i++) {
+            if (maximo < maximosPrime[i]) {
                 maximo = maximosPrime[i];
             }
         }
 
 
-        if(maximo == valorAbajoEnvid && valorAbajo == 1){
-            return idJugador1;
-        }else if(maximo == valorAbajoEnvid && valorAbajo == 2){
-            return idJugador2;
-        }else if(maximo == valorAbajoEnvid && valorAbajo == 3){
-            return idJugador3;
-        }else if(maximo == valorAbajoEnvid && valorAbajo == 4) {
-            return idJugador4;
-        }else if(maximo == valorDerechaEnvid && valorDerecha == 1){
-            return idJugador2;
-        }else if(maximo == valorDerechaEnvid && valorDerecha == 2){
-            return idJugador3;
-        }else if(maximo == valorDerechaEnvid && valorDerecha == 3){
-            return idJugador4;
-        }else if(maximo == valorDerechaEnvid && valorDerecha == 4) {
-            return idJugador1;
-        }else if(maximo == valorArribaEnvid && valorArriba == 1){
-            return idJugador3;
-        }else if(maximo == valorArribaEnvid && valorArriba == 2){
-            return idJugador4;
-        }else if(maximo == valorArribaEnvid && valorArriba == 3){
-            return idJugador1;
-        }else if(maximo == valorArribaEnvid && valorArriba == 4) {
-            return idJugador2;
-        }else if(maximo == valorIzqEnvid && valorIzq == 1){
-            return idJugador4;
-        }else if(maximo == valorIzqEnvid && valorIzq == 2){
-            return idJugador1;
-        }else if(maximo == valorIzqEnvid && valorIzq == 3){
-            return idJugador2;
-        }else if(maximo == valorIzqEnvid && valorIzq == 4) {
-            return idJugador3;
+        if (maximo == valorAbajoEnvid) {
+            Log.d("KKKKKKKK", "id Ganador del envid: " + valorAbajo);
+            return valorAbajo;
+        } else if (maximo == valorDerechaEnvid) {
+            Log.d("KKKKKKKK", "id Ganador del envid: " + valorDerecha);
+            return valorDerecha;
+        } else if (maximo == valorArribaEnvid) {
+            Log.d("KKKKKKKK", "id Ganador del envid: " + valorArriba);
+            return valorArriba;
+        } else if (maximo == valorIzqEnvid) {
+            Log.d("KKKKKKKK", "id Ganador del envid: " + valorIzq);
+            return valorIzq;
         }
-
 
         return "";
     }
