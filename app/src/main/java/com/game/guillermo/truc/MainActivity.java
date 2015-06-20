@@ -976,21 +976,21 @@ public class MainActivity extends Activity
         Toast.makeText(getApplicationContext(), "Esperando al Jugador", Toast.LENGTH_SHORT).show();
         bloquearCartas();
         enviarMensajeRetruc();
-        cambiarBarraProgreso();
+        //cambiarBarraProgreso();
     }
 
     public void quatreVal() {
         Toast.makeText(getApplicationContext(), "Esperando al Jugador", Toast.LENGTH_SHORT).show();
         bloquearCartas();
         enviarMensajeCuatreVal();
-        cambiarBarraProgreso();
+        //cambiarBarraProgreso();
     }
 
     public void jocFora() {
         Toast.makeText(getApplicationContext(), "Esperando al Jugador", Toast.LENGTH_SHORT).show();
         bloquearCartas();
         enviarMensajeJocFora();
-        cambiarBarraProgreso();
+        //cambiarBarraProgreso();
     }
 
 
@@ -3156,10 +3156,30 @@ public class MainActivity extends Activity
         }
     }
 
-    public void enviarMensajeQuieroTruc_4J(String sender, String respuesta, int caso) {
-        byte[] messageQuieroTruc = ("W "+respuesta+" "+caso).getBytes();
+  /*  public void enviarMensajeQuieroTruc_4J(String sender, String respuesta, int caso) {
+        byte[] messageQuieroTruc = ("W "+respuesta+" "+caso+" "+sender).getBytes();
         Games.RealTimeMultiplayer.sendReliableMessage(mGoogleApiClient, null, messageQuieroTruc,
                         mRoomId, sender);
+
+
+    }*/
+    public void enviarMensajeReQuaJoc_4J(String respuesta, int caso) {
+        byte[] messageQuieroTruc = ("W "+respuesta+" "+caso).getBytes();
+        String rival1 = "";
+        String rival2 = "";
+        if(esDeMiEquipo(idJugador1) || esDeMiEquipo(idJugador3)){
+            rival1 = idJugador2;
+            rival2 = idJugador4;
+        }
+        else if(esDeMiEquipo(idJugador2) || esDeMiEquipo(idJugador4)){
+            rival1 = idJugador1;
+            rival2 = idJugador3;
+        }
+        Log.d("KKKKK", "le envio "+respuesta+" a: "+rival1+" y a "+rival2);
+        Games.RealTimeMultiplayer.sendReliableMessage(mGoogleApiClient, null, messageQuieroTruc,
+                mRoomId, rival1);
+        Games.RealTimeMultiplayer.sendReliableMessage(mGoogleApiClient, null, messageQuieroTruc,
+                mRoomId, rival2);
 
 
     }
@@ -3172,6 +3192,19 @@ public class MainActivity extends Activity
                         mRoomId, p.getParticipantId());
             }
         }
+    }
+
+    public void enviarMensajeRetruc_4J(){
+        byte[] messageRetruc = ("1").getBytes();
+        //Solo a mi compi
+        String compi = "";
+        if(esDeMiEquipo(idJugador1) && !idJugador1.equals(mMyId))compi = idJugador1;
+        else if(esDeMiEquipo(idJugador2) && !idJugador2.equals(mMyId))compi = idJugador2;
+        else if(esDeMiEquipo(idJugador3) && !idJugador3.equals(mMyId))compi = idJugador3;
+        else if(esDeMiEquipo(idJugador4) && !idJugador4.equals(mMyId))compi = idJugador4;
+
+        Games.RealTimeMultiplayer.sendReliableMessage(mGoogleApiClient, null, messageRetruc,
+                mRoomId, compi);
     }
 
     public void enviarMensajeQuieroRetruc() {
@@ -3194,6 +3227,19 @@ public class MainActivity extends Activity
         }
     }
 
+    public void enviarMensajeQuatreVal_4J(){
+        byte[] messageRetruc = ("2").getBytes();
+        //Solo a mi compi
+        String compi = "";
+        if(esDeMiEquipo(idJugador1) && !idJugador1.equals(mMyId))compi = idJugador1;
+        else if(esDeMiEquipo(idJugador2) && !idJugador2.equals(mMyId))compi = idJugador2;
+        else if(esDeMiEquipo(idJugador3) && !idJugador3.equals(mMyId))compi = idJugador3;
+        else if(esDeMiEquipo(idJugador4) && !idJugador4.equals(mMyId))compi = idJugador4;
+
+        Games.RealTimeMultiplayer.sendReliableMessage(mGoogleApiClient, null, messageRetruc,
+                mRoomId, compi);
+    }
+
     public void enviarMensajeQuieroCuatreVal() {
         byte[] messageQuieroCuatreVal = ("B").getBytes();
         for (Participant p : mParticipants) {
@@ -3212,6 +3258,19 @@ public class MainActivity extends Activity
                         mRoomId, p.getParticipantId());
             }
         }
+    }
+
+    public void enviarMensajeJocFora_4J(){
+        byte[] messageRetruc = ("3").getBytes();
+        //Solo a mi compi
+        String compi = "";
+        if(esDeMiEquipo(idJugador1) && !idJugador1.equals(mMyId))compi = idJugador1;
+        else if(esDeMiEquipo(idJugador2) && !idJugador2.equals(mMyId))compi = idJugador2;
+        else if(esDeMiEquipo(idJugador3) && !idJugador3.equals(mMyId))compi = idJugador3;
+        else if(esDeMiEquipo(idJugador4) && !idJugador4.equals(mMyId))compi = idJugador4;
+
+        Games.RealTimeMultiplayer.sendReliableMessage(mGoogleApiClient, null, messageRetruc,
+                mRoomId, compi);
     }
 
     public void enviarMensajeQuieroJocFora() {
@@ -4074,7 +4133,7 @@ public class MainActivity extends Activity
                         if(esDeMiEquipo(sender)){
                             //Mostrar bocadillo
                         }else {
-                            showSingleChoiceAlertJocFora_4J("¡Quatre val!", R.array.envid3, sender);
+                            showSingleChoiceAlertJocFora_4J("¡Joc fora!", R.array.envid3, sender);
                         }
                     }
                     break;
@@ -4090,13 +4149,24 @@ public class MainActivity extends Activity
                     } else reiniciarBarraProgreso();
                     break;
 
+                case '1':
+                    showSingleChoiceAlertRetruc_4J("Tu rival ha retrucado", R.array.truc2, sender);
+                    break;
+
+                case '2':
+                    showSingleChoiceAlertCuatreVal_4J("¡Quatre val!", R.array.truc3, sender);
+                    break;
+
+                case '3':
+                    showSingleChoiceAlertCuatreVal_4J("¡Joc fora!", R.array.envid3, sender);
+                    break;
+
 
                 case 'W':
                     String aux10 = new String(buf, "UTF-8");
                     String otro7[] = aux10.split(" ");
                     String respuesta = otro7[1];
                     int caso3 = Integer.parseInt(otro7[2]);
-                    mensajesRecibidosTruc++;
 
                     if(respuesta.equals("QUIERO")){
                         if(sQuieroTruc.equals("NOQUIERO"))sQuieroTruc = "QUIERO";
@@ -4111,6 +4181,9 @@ public class MainActivity extends Activity
                         sQuieroTruc = "JOC";
                     }
 
+                    mensajesRecibidosTruc++;
+                    Log.d("KKKKK", "Respuesta numero: "+mensajesRecibidosTruc+", respuesta: "+sQuieroTruc);
+
                     //Quieren el truc
                     if(mensajesRecibidosTruc == 2 && sQuieroTruc.equals("QUIERO")) {
                         if (caso3 == 1) hayTruc = true;
@@ -4122,37 +4195,35 @@ public class MainActivity extends Activity
                         }
                         //Animar los bocadillos
                         //cambiarBarraProgreso();
-                        enviarMensajeQuieroTruc();
-                        mensajesRecibidos = 0;
+                        //enviarMensajeQuieroTruc();
+                        mensajesRecibidosTruc = 0;
+                        sQuieroTruc = "NOQUIERO";
+
                     }else if(mensajesRecibidosTruc == 2 && sQuieroTruc.equals("RETRUQUE")){
 
-                        if (mMyId.equals(turno)) {
-                            desbloquearCartas();
-                        }
                         //Animar los bocadillos
                         //cambiarBarraProgreso();
-                        enviarMensajeRetruc();
-                        mensajesRecibidos = 0;
+                        //if(!haySender.equals("")) enviarMensajeRetruc_4J();
+                        showSingleChoiceAlertRetruc_4J("Tu rival ha retrucado", R.array.truc2, "");
+                        mensajesRecibidosTruc = 0;
 
                     }else if(mensajesRecibidosTruc == 2 && sQuieroTruc.equals("QUATRE")){
 
-                        if (mMyId.equals(turno)) {
-                            desbloquearCartas();
-                        }
                         //Animar los bocadillos
                         //cambiarBarraProgreso();
-                        enviarMensajeCuatreVal();
-                        mensajesRecibidos = 0;
+                        //if(!haySender.equals("")) enviarMensajeQuatreVal_4J();
+                        showSingleChoiceAlertCuatreVal_4J("¡Quatre val!", R.array.truc3, "");
+                        mensajesRecibidosTruc = 0;
+                        sQuieroTruc = "NOQUIERO";
 
                     }else if(mensajesRecibidosTruc == 2 && sQuieroTruc.equals("JOC")){
 
-                        if (mMyId.equals(turno)) {
-                            desbloquearCartas();
-                        }
                         //Animar los bocadillos
                         //cambiarBarraProgreso();
-                        enviarMensajeJocFora();
-                        mensajesRecibidos = 0;
+                        //if(!haySender.equals("")) enviarMensajeJocFora_4J();
+                        showSingleChoiceAlertJocFora_4J("¡Joc fora!", R.array.envid3, "");
+                        mensajesRecibidosTruc = 0;
+                        sQuieroTruc = "NOQUIERO";
 
                     //No quieren el truc
                     }else if(mensajesRecibidosTruc == 2 && sQuieroTruc.equals("NOQUIERO")){
@@ -4161,6 +4232,9 @@ public class MainActivity extends Activity
                         else if(caso3 == 2) enviarMensajeNoQuieroTruc(2);
                         else if(caso3 == 3) enviarMensajeNoQuieroTruc(3);
                         else if(caso3 == 4) enviarMensajeNoQuieroTruc(4);
+                        sQuieroTruc = "NOQUIERO";
+
+                        if(mMyId.equals(equipo1[0]) || mMyId.equals(equipo2[0])){
 
                         Handler handler = new Handler();
                         handler.postDelayed(new Runnable() {
@@ -4170,9 +4244,8 @@ public class MainActivity extends Activity
 
                             }
                         }, 1500);
+                        }
                     }
-
-
 
                     break;
 
@@ -5852,18 +5925,18 @@ public class MainActivity extends Activity
                             //Quiero
                             case 0:
                                 hayTruc = true;
-                                enviarMensajeQuieroTruc_4J(sender, "QUIERO", 1);
+                                enviarMensajeReQuaJoc_4J("QUIERO", 1);
                                 //cambiarBarraProgreso();
                                 retruque_4J.setVisibility(View.VISIBLE);
                                 break;
                             //Retruque
                             case 1:
-                                enviarMensajeQuieroTruc_4J(sender, "RETRUQUE", 1);
+                                enviarMensajeReQuaJoc_4J("RETRUQUE", 1);
                                 //cambiarBarraProgreso();
                                 break;
                             //No quiero
                             case 2:
-                                enviarMensajeQuieroTruc_4J(sender, "NOQUIERO", 1);
+                                enviarMensajeReQuaJoc_4J("NOQUIERO", 1);
                                 //mostrarResultadosPerdedorMano("PRIMERO");
                                 break;
                         }
@@ -5888,7 +5961,7 @@ public class MainActivity extends Activity
                             //Quiero
                             case 0:
                                 hayRetruc = true;
-                                enviarMensajeQuieroTruc_4J(sender, "QUIERO", 2);
+                                enviarMensajeReQuaJoc_4J("QUIERO", 2);
                                 if (!turno.equals(mMyId)) {
                                     //cambiarBarraProgreso();
                                 } else {
@@ -5899,12 +5972,12 @@ public class MainActivity extends Activity
                                 break;
                             //Cuatre val
                             case 1:
-                                enviarMensajeQuieroTruc_4J(sender, "QUATRE", 2);
+                                enviarMensajeReQuaJoc_4J("QUATRE", 2);
                                 //cambiarBarraProgreso();
                                 break;
                             //No quiero
                             case 2:
-                                enviarMensajeQuieroTruc_4J(sender, "NOQUIERO", 2);
+                                enviarMensajeReQuaJoc_4J("NOQUIERO", 2);
                                 // mostrarResultadosPerdedorMano("PRIMERO");
                                 break;
                         }
@@ -5929,7 +6002,7 @@ public class MainActivity extends Activity
                             //Quiero
                             case 0:
                                 hayCuatreVal = true;
-                                enviarMensajeQuieroTruc_4J(sender, "QUIERO", 3);
+                                enviarMensajeReQuaJoc_4J("QUIERO", 3);
                                 if (!turno.equals(mMyId)) {
                                     //cambiarBarraProgreso();
                                 } else {
@@ -5940,12 +6013,12 @@ public class MainActivity extends Activity
                                 break;
                             //Joc fora
                             case 1:
-                                enviarMensajeQuieroTruc_4J(sender, "JOC", 3);
+                                enviarMensajeReQuaJoc_4J("JOC", 3);
                                 //cambiarBarraProgreso();
                                 break;
                             //No quiero
                             case 2:
-                                enviarMensajeQuieroTruc_4J(sender, "NOQUIERO", 3);
+                                enviarMensajeReQuaJoc_4J("NOQUIERO", 3);
                                 // mostrarResultadosPerdedorMano("PRIMERO");
                                 break;
                         }
@@ -5970,7 +6043,7 @@ public class MainActivity extends Activity
                             //Quiero
                             case 0:
                                 hayJocFora = true;
-                                enviarMensajeQuieroTruc_4J(sender, "QUIERO", 4);
+                                enviarMensajeReQuaJoc_4J("QUIERO", 4);
                                 desbloquearCartas();
                                 if (!turno.equals(mMyId)) {
                                     //cambiarBarraProgreso();
@@ -5981,7 +6054,7 @@ public class MainActivity extends Activity
                                 break;
                             //No quiero
                             case 1:
-                                enviarMensajeQuieroTruc_4J(sender, "NOQUIERO", 4);
+                                enviarMensajeReQuaJoc_4J("NOQUIERO", 4);
                                 // mostrarResultadosPerdedorMano("PRIMERO");
                                 break;
 
