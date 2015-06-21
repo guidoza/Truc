@@ -94,7 +94,7 @@ public class MainActivity extends Activity
      * the game with the Google Play game services API.
      */
 
-    final static String TAG = "ButtonClicker2000";
+    final static String TAG = "Retruque";
 
     // Request codes for the UIs that we show with startActivityForResult:
     final static int RC_SELECT_PLAYERS = 10000;
@@ -419,9 +419,26 @@ public class MainActivity extends Activity
                         actionButton_4J.hide();
                         truc_4J.setVisibility(View.GONE);
                         break;
-            }
 
-                Toast.makeText(MainActivity.this, text, Toast.LENGTH_SHORT).show();
+                    case R.id.retruco_4J:
+                        retruco();
+                        actionButton_4J.hide();
+                        retruque_4J.setVisibility(View.GONE);
+                        break;
+
+                    case R.id.quatre_4J:
+                        quatreVal();
+                        actionButton_4J.hide();
+                        quatreVal_4J.setVisibility(View.GONE);
+                        break;
+
+                    case R.id.joc_fora_4J:
+                        jocFora();
+                        actionButton_4J.hide();
+                        jocFora_4J.setVisibility(View.GONE);
+                        break;
+                }
+
             }
         };
 
@@ -4049,6 +4066,7 @@ public class MainActivity extends Activity
                         cambiarBarraProgreso();
 
                     }else if(numeroJugadores == 4){
+                        truc_4J.setVisibility(View.GONE);
                         if(esDeMiEquipo(sender)){
                             //Mostrar bocadillo
                         }else {
