@@ -286,6 +286,7 @@ public class MainActivity extends Activity
     String ganadorRonda2_4J = "";
     String ganadorRonda3_4J = "";
     String sQuieroTruc = "NOQUIERO";
+    String primerMensaje = "";
 
 
     //Boolean
@@ -715,7 +716,7 @@ public class MainActivity extends Activity
                                 break;
                             //No quiero
                             case 2:
-                                enviarMensajeNoQuieroTruc(1);
+                                enviarMensajeNoQuieroTruc(1, "");
                                 //mostrarResultadosPerdedorMano("PRIMERO");
                                 break;
                         }
@@ -756,7 +757,7 @@ public class MainActivity extends Activity
                                 break;
                             //No quiero
                             case 2:
-                                enviarMensajeNoQuieroTruc(2);
+                                enviarMensajeNoQuieroTruc(2, "");
                                 // mostrarResultadosPerdedorMano("PRIMERO");
                                 break;
                         }
@@ -797,7 +798,7 @@ public class MainActivity extends Activity
                                 break;
                             //No quiero
                             case 2:
-                                enviarMensajeNoQuieroTruc(3);
+                                enviarMensajeNoQuieroTruc(3, "");
                                 // mostrarResultadosPerdedorMano("PRIMERO");
                                 break;
                         }
@@ -833,7 +834,7 @@ public class MainActivity extends Activity
                                 break;
                             //No quiero
                             case 1:
-                                enviarMensajeNoQuieroTruc(4);
+                                enviarMensajeNoQuieroTruc(4, "");
                                 // mostrarResultadosPerdedorMano("PRIMERO");
                                 break;
 
@@ -1719,6 +1720,15 @@ public class MainActivity extends Activity
             ganadorRonda3_4J = "";
             mensajesRecibidos = 0;
             mensajesRecibidosTruc = 0;
+            puntosEnvid = 0;
+            puntosTruc = 0;
+            hayTruc = false;
+            hayRetruc = false;
+            hayCuatreVal = false;
+            hayJocFora = false;
+            hayVuelvo = false;
+            faltaDirecta = false;
+            primerMensaje = "";
 
             truc_4J.setVisibility(View.VISIBLE);
             envid_4J.setVisibility(View.VISIBLE);
@@ -2259,8 +2269,13 @@ public class MainActivity extends Activity
                 tvJugador3_4J.setOnTouchListener(new MyTouchListener4J());
 
                 truc_4J.setOnClickListener(menuListener);
+                retruque_4J.setOnClickListener(menuListener);
+                quatreVal_4J.setOnClickListener(menuListener);
+                jocFora_4J.setOnClickListener(menuListener);
                 envid_4J.setOnClickListener(menuListener);
+                laFalta_4J.setOnClickListener(menuListener);
                 salir_4J.setOnClickListener(menuListener);
+                meVoy_4J.setOnClickListener(menuListener);
 
                 if (mMyId.equals(turno) && ronda == 1) {
                     Toast.makeText(getApplicationContext(), "Es tu turno", Toast.LENGTH_SHORT).show();
@@ -2426,6 +2441,7 @@ public class MainActivity extends Activity
                                     handler.postDelayed(new Runnable() {
                                         public void run() {
                                             // acciones que se ejecutan tras los milisegundos
+                                            primerMensaje = mMyId;
                                             mostrarResultadosGanadorMano("PRIMERO");
 
                                         }
@@ -2442,6 +2458,18 @@ public class MainActivity extends Activity
                                 }
                                 //Ha ganado mi compañero
                             } else {
+                                if (rondasGanadasMiEquipo == 2) {
+                                    //enviarMensajeHasPerdido();
+                                    Handler handler = new Handler();
+                                    handler.postDelayed(new Runnable() {
+                                        public void run() {
+                                            // acciones que se ejecutan tras los milisegundos
+                                            primerMensaje = mMyId;
+                                            mostrarResultadosGanadorMano("PRIMERO");
+
+                                        }
+                                    }, 1500);
+                                }else {
                                 Log.d("KKKKK", "gaa mi compi");
                                 Toast.makeText(getApplicationContext(), "Esperando al jugador", Toast.LENGTH_SHORT).show();
                                 if (ronda == 1) enviarMensajeTurno4J(ganadorRonda1_4J);
@@ -2449,7 +2477,7 @@ public class MainActivity extends Activity
                                 else if (ronda == 3) enviarMensajeTurno4J(ganadorRonda3_4J);
                                 actualizaRonda();
                                 enviarMensajeRonda();
-
+                                }
                             }
 
 
@@ -2461,6 +2489,7 @@ public class MainActivity extends Activity
                                 handler.postDelayed(new Runnable() {
                                     public void run() {
                                         // acciones que se ejecutan tras los milisegundos
+                                        primerMensaje = mMyId;
                                         mostrarResultadosPerdedorMano("PRIMERO");
                                     }
                                 }, 1500);
@@ -2548,6 +2577,7 @@ public class MainActivity extends Activity
                     handler.postDelayed(new Runnable() {
                         public void run() {
                             // acciones que se ejecutan tras los milisegundos
+                            primerMensaje = mMyId;
                             mostrarResultadosGanadorMano("PRIMERO");
 
                         }
@@ -2561,6 +2591,7 @@ public class MainActivity extends Activity
                     handler.postDelayed(new Runnable() {
                         public void run() {
                             // acciones que se ejecutan tras los milisegundos
+                            primerMensaje = mMyId;
                             mostrarResultadosPerdedorMano("PRIMERO");
                         }
                     }, 1500);
@@ -2633,6 +2664,7 @@ public class MainActivity extends Activity
                     handler.postDelayed(new Runnable() {
                         public void run() {
                             // acciones que se ejecutan tras los milisegundos
+                            primerMensaje = mMyId;
                             mostrarResultadosGanadorMano("PRIMERO");
 
                         }
@@ -2646,6 +2678,7 @@ public class MainActivity extends Activity
                     handler.postDelayed(new Runnable() {
                         public void run() {
                             // acciones que se ejecutan tras los milisegundos
+                            primerMensaje = mMyId;
                             mostrarResultadosPerdedorMano("PRIMERO");
                         }
                     }, 1500);
@@ -2925,12 +2958,12 @@ public class MainActivity extends Activity
                 actualizarMarcador2(puntosTotalesMios, "GANADOR", contador);
                 break;
             case 4:
-                //puntosTotalesMios += (puntosTruc + puntosEnvid);
+                puntosTotalesMios += (puntosTruc + puntosEnvid);
                 //marcador.setText("Yo: "+puntosTotalesMios);
                 //actualizarMarcador2(puntosTotalesMios, "GANADOR", contador);
                 if (contador.equals("PRIMERO")) {
-                    actualizarMarcador2(0, "GANADOR", contador);
-                } else actualizarMarcador2_4J(0, "GANADOR", contador);
+                    actualizarMarcador2(puntosTotalesMios, "GANADOR", contador);
+                } else actualizarMarcador2_4J(puntosTotalesMios, "GANADOR", contador);
                 break;
         }
 
@@ -2945,12 +2978,12 @@ public class MainActivity extends Activity
                 actualizarMarcador2(puntosTotalesMios, "PERDEDOR", contador);
                 break;
             case 4:
-                //puntosTotalesMios += puntosEnvid;
+                puntosTotalesMios += puntosEnvid;
                 //marcador.setText("Yo: "+puntosTotalesMios);
                 //actualizarMarcador2(puntosTotalesMios, "PERDEDOR", contador);
                 if (contador.equals("PRIMERO")) {
-                    actualizarMarcador2(0, "PERDEDOR", contador);
-                } else actualizarMarcador2_4J(0, "PERDEDOR", contador);
+                    actualizarMarcador2(puntosTotalesMios, "PERDEDOR", contador);
+                } else actualizarMarcador2_4J(puntosTotalesMios, "PERDEDOR", contador);
                 break;
         }
 
@@ -3182,7 +3215,7 @@ public class MainActivity extends Activity
     }*/
     public void enviarMensajeReQuaJoc_4J(String respuesta, int caso) {
         byte[] messageQuieroTruc = ("W "+respuesta+" "+caso).getBytes();
-        String rival1 = "";
+      /*  String rival1 = "";
         String rival2 = "";
         if(esDeMiEquipo(idJugador1) || esDeMiEquipo(idJugador3)){
             rival1 = idJugador2;
@@ -3196,8 +3229,14 @@ public class MainActivity extends Activity
         Games.RealTimeMultiplayer.sendReliableMessage(mGoogleApiClient, null, messageQuieroTruc,
                 mRoomId, rival1);
         Games.RealTimeMultiplayer.sendReliableMessage(mGoogleApiClient, null, messageQuieroTruc,
-                mRoomId, rival2);
+                mRoomId, rival2);*/
 
+        for (Participant p : mParticipants) {
+            if (!p.getParticipantId().equals(mMyId)) {
+                Games.RealTimeMultiplayer.sendReliableMessage(mGoogleApiClient, null, messageQuieroTruc,
+                        mRoomId, p.getParticipantId());
+            }
+        }
 
     }
 
@@ -3300,8 +3339,8 @@ public class MainActivity extends Activity
         }
     }
 
-    public void enviarMensajeNoQuieroTruc(int caso) {
-        byte[] messageNoQuieroTruc = ("D " + caso).getBytes();
+    public void enviarMensajeNoQuieroTruc(int caso, String primer) {
+        byte[] messageNoQuieroTruc = ("D " + caso +" "+primer).getBytes();
         for (Participant p : mParticipants) {
             if (!p.getParticipantId().equals(mMyId)) {
                 Games.RealTimeMultiplayer.sendReliableMessage(mGoogleApiClient, null, messageNoQuieroTruc,
@@ -3345,6 +3384,16 @@ public class MainActivity extends Activity
         Games.RealTimeMultiplayer.sendReliableMessage(mGoogleApiClient, null, messageGanadorRonda4J,
                         mRoomId, mano);
 
+    }
+
+    public void enviarPuntuacionCompi(int puntosMios, int puntosRival) {
+        byte[] messageGanadorRonda4J = ("A " + puntosMios +" "+puntosRival).getBytes();
+        for (Participant p : mParticipants) {
+            if (!p.getParticipantId().equals(mMyId) && esDeMiEquipo(p.getParticipantId())) {
+                Games.RealTimeMultiplayer.sendReliableMessage(mGoogleApiClient, null, messageGanadorRonda4J,
+                        mRoomId, p.getParticipantId());
+            }
+        }
     }
 
 
@@ -3884,6 +3933,17 @@ public class MainActivity extends Activity
                         if (ganadorEnvid.equals(mMyId) && caso == 2) puntosEnvid = TORNE;
                         if (ganadorEnvid.equals(mMyId) && caso == 3) puntosEnvid = 24;
 */
+
+                        if ((ganadorEnvid.equals(mMyId) || esDeMiEquipo(ganadorEnvid)) && caso == 1) puntosEnvid = ENVID;
+                        if ((ganadorEnvid.equals(mMyId) || esDeMiEquipo(ganadorEnvid)) && caso == 2) puntosEnvid = TORNE;
+                        if ((ganadorEnvid.equals(mMyId) || esDeMiEquipo(ganadorEnvid)) && caso == 3){
+                            if (puntosTotalesJugador2 <= 12) {
+                                puntosEnvid = 24;
+                            } else if (puntosTotalesJugador2 > 12) {
+                                puntosEnvid = 24 - puntosTotalesJugador2;
+                            }
+                        }
+
                         if (mMyId.equals(turno)) {
                             desbloquearCartas();
                         }
@@ -3946,26 +4006,28 @@ public class MainActivity extends Activity
 
                     //COPIAR DE ARRIBA
                     }else if(numeroJugadores ==4){
-                        switch (caso1) {
-                            case 1:
-                                puntosEnvid = NO_QUIERO_ENVID;
-                                Log.d("KKKKKK", "Puntos del envid:" +puntosEnvid);
-                                break;
-                            case 2:
-                                puntosEnvid = ENVID;
-                                Log.d("KKKKKK", "Puntos del envid:" +puntosEnvid);
-                                break;
-                            case 3:
-                                if (hayVuelvo) {
-                                    puntosEnvid = TORNE;
-                                } else puntosEnvid = ENVID;
-                                Log.d("KKKKKK", "Puntos del envid:" +puntosEnvid);
-                                break;
-                            case 4:
-                                puntosEnvid = NO_QUIERO_ENVID;
-                                Log.d("KKKKKK", "Puntos del envid:" +puntosEnvid);
-                                break;
+                        if(!esDeMiEquipo(sender)){
+                            switch (caso1) {
+                                case 1:
+                                    puntosEnvid = NO_QUIERO_ENVID;
+                                    Log.d("KKKKKK", "Puntos del envid:" +puntosEnvid);
+                                    break;
+                                case 2:
+                                    puntosEnvid = ENVID;
+                                    Log.d("KKKKKK", "Puntos del envid:" +puntosEnvid);
+                                    break;
+                                case 3:
+                                    if (hayVuelvo) {
+                                        puntosEnvid = TORNE;
+                                    } else puntosEnvid = ENVID;
+                                    Log.d("KKKKKK", "Puntos del envid:" +puntosEnvid);
+                                    break;
+                                case 4:
+                                    puntosEnvid = NO_QUIERO_ENVID;
+                                    Log.d("KKKKKK", "Puntos del envid:" +puntosEnvid);
+                                    break;
 
+                            }
                         }
                     }
                     if (mMyId.equals(turno)) {
@@ -3978,6 +4040,7 @@ public class MainActivity extends Activity
                     String aux7 = new String(buf, "UTF-8");
                     String otro4[] = aux7.split(" ");
                     int caso2 = Integer.parseInt(otro4[1]);
+
                     if(numeroJugadores == 2){
                         switch (caso2) {
                             case 1:
@@ -4011,30 +4074,31 @@ public class MainActivity extends Activity
                         }, 1500);
 
                     }else if(numeroJugadores == 4){
+                        primerMensaje = otro4[2];
                         //Animar bocadillos correspondientes
 
-             /*           switch (caso2) {
+                        switch (caso2) {
                             case 1:
-                                textoAccion2.setText("No quiero el truc");
-                                animarTextoAccion(textoAccion2);
+                                //textoAccion2.setText("No quiero el truc");
+                                //animarTextoAccion(textoAccion2);
                                 hayTruc = false;
                                 break;
                             case 2:
-                                textoAccion2.setText("No quiero el retruc");
-                                animarTextoAccion(textoAccion2);
+                                //textoAccion2.setText("No quiero el retruc");
+                                //animarTextoAccion(textoAccion2);
                                 hayTruc = true;
                                 break;
                             case 3:
-                                textoAccion2.setText("No quiero el quatre val");
-                                animarTextoAccion(textoAccion2);
+                               // textoAccion2.setText("No quiero el quatre val");
+                                //animarTextoAccion(textoAccion2);
                                 hayRetruc = true;
                                 break;
                             case 4:
-                                textoAccion2.setText("No quiero el joc fora");
-                                animarTextoAccion(textoAccion2);
+                                //textoAccion2.setText("No quiero el joc fora");
+                                //animarTextoAccion(textoAccion2);
                                 hayCuatreVal = true;
                                 break;
-                        }*/
+                        }
                     }
 
                     break;
@@ -4099,6 +4163,8 @@ public class MainActivity extends Activity
                     }else if(numeroJugadores == 4){
                         if(esDeMiEquipo(sender)){
                             //Mostrar bocadillo
+                            retruque_4J.setVisibility(View.GONE);
+
                         }else {
                             showSingleChoiceAlertRetruc_4J("Tu rival ha retrucado", R.array.truc2, sender);
                         }
@@ -4124,6 +4190,7 @@ public class MainActivity extends Activity
                     }else if(numeroJugadores == 4){
                         if(esDeMiEquipo(sender)){
                             //Mostrar bocadillo
+                            quatreVal_4J.setVisibility(View.GONE);
                         }else {
                             showSingleChoiceAlertCuatreVal_4J("¡Quatre val!", R.array.truc3, sender);
                         }
@@ -4150,6 +4217,7 @@ public class MainActivity extends Activity
                     }else if(numeroJugadores == 4){
                         if(esDeMiEquipo(sender)){
                             //Mostrar bocadillo
+                            jocFora_4J.setVisibility(View.GONE);
                         }else {
                             showSingleChoiceAlertJocFora_4J("¡Joc fora!", R.array.envid3, sender);
                         }
@@ -4186,82 +4254,117 @@ public class MainActivity extends Activity
                     String respuesta = otro7[1];
                     int caso3 = Integer.parseInt(otro7[2]);
 
-                    if(respuesta.equals("QUIERO")){
-                        if(sQuieroTruc.equals("NOQUIERO"))sQuieroTruc = "QUIERO";
-                    }
-                    if(respuesta.equals("RETRUQUE")){
-                        sQuieroTruc = "RETRUQUE";
-                    }
-                    if(respuesta.equals("QUATRE")){
-                        sQuieroTruc = "QUATRE";
-                    }
-                    if(respuesta.equals("JOC")){
-                        sQuieroTruc = "JOC";
-                    }
-
-                    mensajesRecibidosTruc++;
-                    Log.d("KKKKK", "Respuesta numero: "+mensajesRecibidosTruc+", respuesta: "+sQuieroTruc);
-
-                    //Quieren el truc
-                    if(mensajesRecibidosTruc == 2 && sQuieroTruc.equals("QUIERO")) {
-                        if (caso3 == 1) hayTruc = true;
-                        else if (caso3 == 2) hayRetruc = true;
-                        else if (caso3 == 3) hayCuatreVal = true;
-                        else if (caso3 == 4) hayJocFora = true;
-                        if (mMyId.equals(turno)) {
-                            desbloquearCartas();
-                        }
-                        //Animar los bocadillos
-                        //cambiarBarraProgreso();
-                        //enviarMensajeQuieroTruc();
-                        mensajesRecibidosTruc = 0;
-                        sQuieroTruc = "NOQUIERO";
-
-                    }else if(mensajesRecibidosTruc == 2 && sQuieroTruc.equals("RETRUQUE")){
-
-                        //Animar los bocadillos
-                        //cambiarBarraProgreso();
-                        //if(!haySender.equals("")) enviarMensajeRetruc_4J();
-                        showSingleChoiceAlertRetruc_4J("Tu rival ha retrucado", R.array.truc2, "");
-                        mensajesRecibidosTruc = 0;
-
-                    }else if(mensajesRecibidosTruc == 2 && sQuieroTruc.equals("QUATRE")){
-
-                        //Animar los bocadillos
-                        //cambiarBarraProgreso();
-                        //if(!haySender.equals("")) enviarMensajeQuatreVal_4J();
-                        showSingleChoiceAlertCuatreVal_4J("¡Quatre val!", R.array.truc3, "");
-                        mensajesRecibidosTruc = 0;
-                        sQuieroTruc = "NOQUIERO";
-
-                    }else if(mensajesRecibidosTruc == 2 && sQuieroTruc.equals("JOC")){
-
-                        //Animar los bocadillos
-                        //cambiarBarraProgreso();
-                        //if(!haySender.equals("")) enviarMensajeJocFora_4J();
-                        showSingleChoiceAlertJocFora_4J("¡Joc fora!", R.array.envid3, "");
-                        mensajesRecibidosTruc = 0;
-                        sQuieroTruc = "NOQUIERO";
-
-                    //No quieren el truc
-                    }else if(mensajesRecibidosTruc == 2 && sQuieroTruc.equals("NOQUIERO")){
-                        //Animar los bocadillos
-                        if(caso3 == 1) enviarMensajeNoQuieroTruc(1);
-                        else if(caso3 == 2) enviarMensajeNoQuieroTruc(2);
-                        else if(caso3 == 3) enviarMensajeNoQuieroTruc(3);
-                        else if(caso3 == 4) enviarMensajeNoQuieroTruc(4);
-                        sQuieroTruc = "NOQUIERO";
-
-                        if(mMyId.equals(equipo1[0]) || mMyId.equals(equipo2[0])){
-
-                        Handler handler = new Handler();
-                        handler.postDelayed(new Runnable() {
-                            public void run() {
-                                // acciones que se ejecutan tras los milisegundos
-                                mostrarResultadosGanadorMano("PRIMERO");
-
+                    if(esDeMiEquipo(sender)){
+                        //Bocadillos y eliminar botones
+                        if(respuesta.equals("QUIERO")){
+                            if (caso3 == 1){
+                                hayTruc = true;
+                                retruque_4J.setVisibility(View.VISIBLE);
                             }
-                        }, 1500);
+                            else if (caso3 == 2){
+                                hayRetruc = true;
+                                quatreVal_4J.setVisibility(View.VISIBLE);
+                            }
+                            else if (caso3 == 3){
+                                hayCuatreVal = true;
+                                jocFora_4J.setVisibility(View.VISIBLE);
+                            }
+                            else if (caso3 == 4){
+                                hayJocFora = true;
+                            }
+                        }
+
+                    }else if(!esDeMiEquipo(sender)){
+
+                        if(respuesta.equals("QUIERO")){
+                            if(sQuieroTruc.equals("NOQUIERO"))sQuieroTruc = "QUIERO";
+                        }
+                        if(respuesta.equals("RETRUQUE")){
+                            sQuieroTruc = "RETRUQUE";
+                        }
+                        if(respuesta.equals("QUATRE")){
+                            sQuieroTruc = "QUATRE";
+                        }
+                        if(respuesta.equals("JOC")){
+                            sQuieroTruc = "JOC";
+                        }
+
+                        mensajesRecibidosTruc++;
+                        Log.d("KKKKK", "Respuesta numero: "+mensajesRecibidosTruc+", respuesta: "+sQuieroTruc);
+
+                        //Quieren el truc
+                        if(mensajesRecibidosTruc == 2 && sQuieroTruc.equals("QUIERO")) {
+                            if (caso3 == 1) hayTruc = true;
+                            else if (caso3 == 2) hayRetruc = true;
+                            else if (caso3 == 3) hayCuatreVal = true;
+                            else if (caso3 == 4) hayJocFora = true;
+                            if (mMyId.equals(turno)) {
+                                desbloquearCartas();
+                            }
+                            //Animar los bocadillos
+                            //cambiarBarraProgreso();
+                            //enviarMensajeQuieroTruc();
+                            mensajesRecibidosTruc = 0;
+                            sQuieroTruc = "NOQUIERO";
+
+                        }else if(mensajesRecibidosTruc == 2 && sQuieroTruc.equals("RETRUQUE")){
+
+                            //Animar los bocadillos
+                            //cambiarBarraProgreso();
+                            //if(!haySender.equals("")) enviarMensajeRetruc_4J();
+                            showSingleChoiceAlertRetruc_4J("Tu rival ha retrucado", R.array.truc2, "");
+                            mensajesRecibidosTruc = 0;
+
+                        }else if(mensajesRecibidosTruc == 2 && sQuieroTruc.equals("QUATRE")){
+
+                            //Animar los bocadillos
+                            //cambiarBarraProgreso();
+                            //if(!haySender.equals("")) enviarMensajeQuatreVal_4J();
+                            showSingleChoiceAlertCuatreVal_4J("¡Quatre val!", R.array.truc3, "");
+                            mensajesRecibidosTruc = 0;
+                            sQuieroTruc = "NOQUIERO";
+
+                        }else if(mensajesRecibidosTruc == 2 && sQuieroTruc.equals("JOC")){
+
+                            //Animar los bocadillos
+                            //cambiarBarraProgreso();
+                            //if(!haySender.equals("")) enviarMensajeJocFora_4J();
+                            showSingleChoiceAlertJocFora_4J("¡Joc fora!", R.array.envid3, "");
+                            mensajesRecibidosTruc = 0;
+                            sQuieroTruc = "NOQUIERO";
+
+                        //No quieren el truc
+                        }else if(mensajesRecibidosTruc == 2 && sQuieroTruc.equals("NOQUIERO")){
+
+                            if(mMyId.equals(equipo1[0]) || mMyId.equals(equipo2[0])){
+                                primerMensaje = mMyId;
+                                //Animar los bocadillos
+                                if(caso3 == 1){
+                                    enviarMensajeNoQuieroTruc(1, primerMensaje);
+                                    hayTruc = false;
+                                }
+                                else if(caso3 == 2){
+                                    hayTruc = true;
+                                    enviarMensajeNoQuieroTruc(2, primerMensaje);
+                                }
+                                else if(caso3 == 3){
+                                    hayRetruc = true;
+                                    enviarMensajeNoQuieroTruc(3, primerMensaje);
+                                }
+                                else if(caso3 == 4){
+                                    hayCuatreVal = true;
+                                    enviarMensajeNoQuieroTruc(4, primerMensaje);
+                                }
+                                sQuieroTruc = "NOQUIERO";
+                                Handler handler = new Handler();
+                                handler.postDelayed(new Runnable() {
+                                    public void run() {
+                                        // acciones que se ejecutan tras los milisegundos
+                                        mostrarResultadosGanadorMano("PRIMERO");
+
+                                    }
+                                }, 1500);
+                            }
                         }
                     }
 
@@ -4364,7 +4467,14 @@ public class MainActivity extends Activity
                             break;
 
                         case 4:
-                            //puntosTotalesJugador2 = Integer.parseInt(otro5[1]);
+                            if(!esDeMiEquipo(sender)){
+                                puntosTotalesJugador2 = Integer.parseInt(otro5[1]);
+                            }
+                            if(mMyId.equals(primerMensaje)){
+                                enviarPuntuacionCompi(puntosTotalesMios, puntosTotalesJugador2);
+                                Log.d("KKKKK", "Puntos mi equipo: "+puntosTotalesMios);
+                                Log.d("KKKKK", "Puntos rquipo rival: " + puntosTotalesJugador2);
+                            }
                             String quien_4J = otro5[2];
                             String contador_4J = otro5[3];
                             //marcador2.setText("Rival: "+puntosTotalesJugador2);
@@ -4380,52 +4490,48 @@ public class MainActivity extends Activity
 
                                 //NO soy del equipo
                             } else if (!esDeMiEquipo(sender)) {
-                                Log.d("ZZZZ", "NO soy del equipo del que envía");
+                                Log.d("ZZZZ", "NO soy del equipo del que calcula");
                                 //Para que actualice los puntos antes de comprobar quien es el ganador
                                 //Primero y segundo para que no entre en un bucle
                                 if (quien_4J.equals("PERDEDOR")) {
                                     soyGanador = true;
-                                    if (contador_4J.equals("PRIMERO") && (equipo1[0].equals(mMyId)
-                                            || equipo2[0].equals(mMyId))) {
-                                        mostrarResultadosGanadorMano(sender);
-                                        Log.d("ZZZZ", "Envío el segundo mensaje");
+                                    if (contador_4J.equals("PRIMERO")){
+                                        if (!hayTruc) puntosTruc = NO_QUIERO_TRUC;
+                                        if (hayTruc && !hayRetruc) puntosTruc = TRUC;
+                                        if (hayRetruc && !hayCuatreVal) puntosTruc = RETRUC;
+                                        if (hayCuatreVal && !hayJocFora) puntosTruc = CUATRE_VAL;
+                                        if (hayJocFora) puntosTruc = 24;
+                                        puntosTotalesMios += (puntosTruc + puntosEnvid);
+                                        //marcador.setText("Yo: "+puntosTotalesMios);
+                                        //actualizarMarcador2(puntosTotalesMios, "GANADOR", contador);
+
+                                        Log.d("KKKKK", "Puntos mi equipo: "+puntosTotalesMios);
+                                        Log.d("KKKKK", "Puntos rquipo rival: "+puntosTotalesJugador2);
+
+                                        if(equipo1[0].equals(mMyId) || equipo2[0].equals(mMyId)) {
+                                            actualizarMarcador2_4J(puntosTotalesMios, "GANADOR", sender);
+                                            Log.d("ZZZZ", "Envío el segundo mensaje");
+                                        }
                                     }
+
                                 } else if (quien_4J.equals("GANADOR")) {
                                     soyGanador = false;
-                                    if (contador_4J.equals("PRIMERO") && (equipo1[0].equals(mMyId)
-                                            || equipo2[0].equals(mMyId))) {
-                                        Log.d("ZZZZ", "Envío el segundo mensaje");
-                                        mostrarResultadosPerdedorMano(sender);
+                                    if (contador_4J.equals("PRIMERO")){
+                                        puntosTotalesMios += puntosEnvid;
+                                        //marcador.setText("Yo: "+puntosTotalesMios);
+                                        //actualizarMarcador2(puntosTotalesMios, "PERDEDOR", contador);
+
+                                        Log.d("KKKKK", "Puntos mi equipo: "+puntosTotalesMios);
+                                        Log.d("KKKKK", "Puntos rquipo rival: "+puntosTotalesJugador2);
+
+                                        if(equipo1[0].equals(mMyId) || equipo2[0].equals(mMyId)) {
+                                            Log.d("ZZZZ", "Envío el segundo mensaje");
+                                            actualizarMarcador2_4J(puntosTotalesMios, "PERDEDOR", sender);
+                                        }
                                     }
 
                                 }
                             }
-
-              /*              Log.d("HHHHHH", "Mis puntos: " + puntosTotalesMios);
-                            Log.d("HHHHHH", "Puntos rival: " + puntosTotalesJugador2);
-
-                            String ganadorFinal_4J = comprobarGanadorPartida();
-                            Log.d("HHHHHH", "Ganador: " + ganadorFinal_4J);
-                            if (!ganadorFinal_4J.equals("NADIE")) {
-                                if (ganadorFinal_4J.equals("YO")) {
-                                /*
-                                if(quien.equals("GANADOR")){
-                                    if(contador.equals("PRIMERO"))mostrarResultadosPerdedorMano("SEGUNDO");
-                                }else if(quien.equals("PERDEDOR")){
-                                    if(contador.equals("PRIMERO"))mostrarResultadosGanadorMano("SEGUNDO");
-                                }
-                                    switchToScreen(R.id.screen_win);
-
-                                } else if (ganadorFinal_4J.equals("RIVAL")) {
-                               /* if(quien.equals("GANADOR")){
-                                    if(contador.equals("PRIMERO"))mostrarResultadosPerdedorMano("SEGUNDO");
-                                }else if(quien.equals("PERDEDOR")){
-                                    if(contador.equals("PRIMERO"))mostrarResultadosGanadorMano("SEGUNDO");
-                                }
-                                    switchToScreen(R.id.screen_lost);
-                                }
-                            } else {   */
-
 
                             //Lo recibe el ganador
                             if (soyGanador) {
@@ -4481,6 +4587,15 @@ public class MainActivity extends Activity
                     }
 
 
+                    break;
+
+                case 'A':
+                    String aux11 = new String(buf, "UTF-8");
+                    String otro8[] = aux11.split(" ");
+                    puntosTotalesMios = Integer.parseInt(otro8[1]);
+                    puntosTotalesJugador2 = Integer.parseInt(otro8[2]);
+                    Log.d("KKKKK", "Puntos mi equipo: "+puntosTotalesMios);
+                    Log.d("KKKKK", "Puntos rquipo rival: " + puntosTotalesJugador2);
                     break;
 
                 case 'O':
@@ -5598,14 +5713,14 @@ public class MainActivity extends Activity
                                 ganadorEnvid = comprobarGanadorEnvid_4J();
                                 enviarMensajeHayEnvidAndGanador(ganadorEnvid, 3);
                                 //puntos a sumar por la falta
-                                /*if (ganadorEnvid.equals(mMyId)) {
+                               if (ganadorEnvid.equals(mMyId)) {
                                     if (puntosTotalesJugador2 <= 12) {
                                         puntosEnvid = 24;
                                     } else if (puntosTotalesJugador2 > 12) {
                                         puntosEnvid = 24 - puntosTotalesJugador2;
                                     }
                                 }
-
+ /*
                                 if (!turno.equals(mMyId)) {
                                     cambiarBarraProgreso();
                                 } else reiniciarBarraProgreso();*/
@@ -5956,6 +6071,12 @@ public class MainActivity extends Activity
                             case 2:
                                 enviarMensajeReQuaJoc_4J("NOQUIERO", 1);
                                 //mostrarResultadosPerdedorMano("PRIMERO");
+                                if (!turno.equals(mMyId)) {
+                                    //cambiarBarraProgreso();
+                                } else {
+                                    //reiniciarBarraProgreso();
+                                    desbloquearCartas();
+                                }
                                 break;
                         }
                         return true;
@@ -5997,6 +6118,12 @@ public class MainActivity extends Activity
                             case 2:
                                 enviarMensajeReQuaJoc_4J("NOQUIERO", 2);
                                 // mostrarResultadosPerdedorMano("PRIMERO");
+                                if (!turno.equals(mMyId)) {
+                                    //cambiarBarraProgreso();
+                                } else {
+                                    //reiniciarBarraProgreso();
+                                    desbloquearCartas();
+                                }
                                 break;
                         }
                         return true;
@@ -6038,6 +6165,12 @@ public class MainActivity extends Activity
                             case 2:
                                 enviarMensajeReQuaJoc_4J("NOQUIERO", 3);
                                 // mostrarResultadosPerdedorMano("PRIMERO");
+                                if (!turno.equals(mMyId)) {
+                                    //cambiarBarraProgreso();
+                                } else {
+                                    //reiniciarBarraProgreso();
+                                    desbloquearCartas();
+                                }
                                 break;
                         }
                         return true;
