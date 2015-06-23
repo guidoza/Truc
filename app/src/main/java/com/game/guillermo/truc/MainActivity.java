@@ -323,6 +323,10 @@ public class MainActivity extends Activity
     ImageButton salir_4J;
     ImageButton laFalta_4J;
     ImageButton quatreVal_4J;
+    ImageView imgPerfilAbajo;
+    ImageView imgPerfilDerecha;
+    ImageView imgPerfilArriba;
+    ImageView imgPerfilIzq;
 
     //TextViews
     TextView txtNumeroJugador;
@@ -343,6 +347,14 @@ public class MainActivity extends Activity
     private float xDelta_4J;
     private float yDelta_4J;
     FabToolbar actionButton_4J;
+    ProgressBar progressBarAbajo;
+    ProgressBar progressBarDerecha;
+    ProgressBar progressBarArriba;
+    ProgressBar progressBarIzq;
+    CountDownTimer mCountDownTimerAbajo = null;
+    CountDownTimer mCountDownTimerDerecha = null;
+    CountDownTimer mCountDownTimerArriba = null;
+    CountDownTimer mCountDownTimerIzq = null;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -538,6 +550,11 @@ public class MainActivity extends Activity
         jocFora_4J = (ImageButton) findViewById(R.id.joc_fora_4J);
         salir_4J = (ImageButton) findViewById(R.id.salir_4J);
         laFalta_4J = (ImageButton) findViewById(R.id.la_falta_4J);
+
+        imgPerfilAbajo = (ImageView) findViewById(R.id.imgPerfilAbajo);
+        imgPerfilDerecha = (ImageView) findViewById(R.id.imgPerfilDerecha);
+        imgPerfilArriba = (ImageView) findViewById(R.id.imgPerfilArriba);
+        imgPerfilIzq = (ImageView) findViewById(R.id.imgPerfilIzq);
 
         txtNumeroJugador = (TextView) findViewById(R.id.textoNumeroJugador);
 
@@ -1500,13 +1517,40 @@ public class MainActivity extends Activity
         }
 
         if (mRoomId != null) {
-            for (Participant p : mParticipants) {
-                String pid = p.getParticipantId();
+            if(numeroJugadores == 2) {
+                for (Participant p : mParticipants) {
+                    String pid = p.getParticipantId();
 
-                if (pid.equals(mMyId)) {
-                    new LoadProfileImage(imgPerfil).execute(p.getIconImageUrl());
-                } else {
-                    new LoadProfileImage(imgPerfilRival).execute(p.getIconImageUrl());
+                    if (pid.equals(mMyId)) {
+                        new LoadProfileImage(imgPerfil).execute(p.getIconImageUrl());
+                    } else {
+                        new LoadProfileImage(imgPerfilRival).execute(p.getIconImageUrl());
+                    }
+                }
+            }else if(numeroJugadores == 4){
+                for (Participant p : mParticipants) {
+                    String pid = p.getParticipantId();
+                    if (mMyId.equals(idJugador1)) {
+                        if(pid.equals(idJugador1)) new LoadProfileImage(imgPerfilAbajo).execute(p.getIconImageUrl());
+                        if(pid.equals(idJugador2)) new LoadProfileImage(imgPerfilDerecha).execute(p.getIconImageUrl());
+                        if(pid.equals(idJugador3)) new LoadProfileImage(imgPerfilArriba).execute(p.getIconImageUrl());
+                        if(pid.equals(idJugador4)) new LoadProfileImage(imgPerfilIzq).execute(p.getIconImageUrl());
+                    } else if (mMyId.equals(idJugador2)) {
+                        if(pid.equals(idJugador1)) new LoadProfileImage(imgPerfilIzq).execute(p.getIconImageUrl());
+                        if(pid.equals(idJugador2)) new LoadProfileImage(imgPerfilAbajo).execute(p.getIconImageUrl());
+                        if(pid.equals(idJugador3)) new LoadProfileImage(imgPerfilDerecha).execute(p.getIconImageUrl());
+                        if(pid.equals(idJugador4)) new LoadProfileImage(imgPerfilArriba).execute(p.getIconImageUrl());
+                    } else if (mMyId.equals(idJugador3)) {
+                        if(pid.equals(idJugador1)) new LoadProfileImage(imgPerfilArriba).execute(p.getIconImageUrl());
+                        if(pid.equals(idJugador2)) new LoadProfileImage(imgPerfilIzq).execute(p.getIconImageUrl());
+                        if(pid.equals(idJugador3)) new LoadProfileImage(imgPerfilAbajo).execute(p.getIconImageUrl());
+                        if(pid.equals(idJugador4)) new LoadProfileImage(imgPerfilDerecha).execute(p.getIconImageUrl());
+                    } else if (mMyId.equals(idJugador4)) {
+                        if(pid.equals(idJugador1)) new LoadProfileImage(imgPerfilDerecha).execute(p.getIconImageUrl());
+                        if(pid.equals(idJugador2)) new LoadProfileImage(imgPerfilArriba).execute(p.getIconImageUrl());
+                        if(pid.equals(idJugador3)) new LoadProfileImage(imgPerfilIzq).execute(p.getIconImageUrl());
+                        if(pid.equals(idJugador4)) new LoadProfileImage(imgPerfilAbajo).execute(p.getIconImageUrl());
+                    }
                 }
             }
         }
@@ -1949,6 +1993,7 @@ public class MainActivity extends Activity
             if (mMyId.equals(idJugador1) && turno.equals(idJugador1)) turno = idJugador2;
             if (mMyId.equals(idJugador2) && turno.equals(idJugador2)) turno = idJugador1;
         } else if (numeroJugadores == 4) {
+            cambiarBarraProgreso();
             animarDesaparecerMenu();
             if (mMyId.equals(idJugador1) && turno.equals(idJugador1)) turno = idJugador2;
             if (mMyId.equals(idJugador2) && turno.equals(idJugador2)) turno = idJugador3;
@@ -1998,41 +2043,180 @@ public class MainActivity extends Activity
         }.start();
     }
 
+    void iniciarBarraProgresoAbajo() {
+
+        mCountDownTimerAbajo = new CountDownTimer(40000, 1000) {
+
+            @Override
+            public void onTick(long millisUntilFinished) {
+                segundos--;
+                progressBarAbajo.setProgress(segundos);
+
+            }
+
+            @Override
+            public void onFinish() {
+                //Do what you want
+                segundos--;
+                progressBarAbajo.setProgress(segundos);
+            }
+        }.start();
+    }
+
+    void iniciarBarraProgresoDerecha() {
+
+        mCountDownTimerDerecha = new CountDownTimer(40000, 1000) {
+
+            @Override
+            public void onTick(long millisUntilFinished) {
+                segundos--;
+                progressBarDerecha.setProgress(segundos);
+
+            }
+
+            @Override
+            public void onFinish() {
+                //Do what you want
+                segundos--;
+                progressBarDerecha.setProgress(segundos);
+            }
+        }.start();
+    }
+
+    void iniciarBarraProgresoArriba() {
+
+        mCountDownTimerArriba = new CountDownTimer(40000, 1000) {
+
+            @Override
+            public void onTick(long millisUntilFinished) {
+                segundos--;
+                progressBarArriba.setProgress(segundos);
+
+            }
+
+            @Override
+            public void onFinish() {
+                //Do what you want
+                segundos--;
+                progressBarArriba.setProgress(segundos);
+            }
+        }.start();
+    }
+
+    void iniciarBarraProgresoIzq() {
+
+        mCountDownTimerIzq = new CountDownTimer(40000, 1000) {
+
+            @Override
+            public void onTick(long millisUntilFinished) {
+                segundos--;
+                progressBarIzq.setProgress(segundos);
+
+            }
+
+            @Override
+            public void onFinish() {
+                //Do what you want
+                segundos--;
+                progressBarIzq.setProgress(segundos);
+            }
+        }.start();
+    }
+
 
     void cambiarBarraProgreso() {
-        if (progressBar1.getVisibility() == View.VISIBLE) {
-            progressBar1.setVisibility(View.INVISIBLE);
-            mCountDownTimerJ1.cancel();
-            segundos = 40;
-            progressBar2.setVisibility(View.VISIBLE);
-            iniciarBarraProgresoJ2();
-        } else if (progressBar2.getVisibility() == View.VISIBLE) {
-            progressBar2.setVisibility(View.INVISIBLE);
-            mCountDownTimerJ2.cancel();
-            segundos = 40;
-            progressBar1.setVisibility(View.VISIBLE);
-            iniciarBarraProgresoJ1();
+        if(numeroJugadores == 2) {
+            if (progressBar1.getVisibility() == View.VISIBLE) {
+                progressBar1.setVisibility(View.INVISIBLE);
+                mCountDownTimerJ1.cancel();
+                segundos = 40;
+                progressBar2.setVisibility(View.VISIBLE);
+                iniciarBarraProgresoJ2();
+            } else if (progressBar2.getVisibility() == View.VISIBLE) {
+                progressBar2.setVisibility(View.INVISIBLE);
+                mCountDownTimerJ2.cancel();
+                segundos = 40;
+                progressBar1.setVisibility(View.VISIBLE);
+                iniciarBarraProgresoJ1();
+            }
+        }else if(numeroJugadores == 4){
+            if (progressBarAbajo.getVisibility() == View.VISIBLE) {
+                progressBarAbajo.setVisibility(View.INVISIBLE);
+                mCountDownTimerAbajo.cancel();
+                segundos = 40;
+                progressBarDerecha.setVisibility(View.VISIBLE);
+                iniciarBarraProgresoDerecha();
+            } else if (progressBarDerecha.getVisibility() == View.VISIBLE) {
+                progressBarDerecha.setVisibility(View.INVISIBLE);
+                mCountDownTimerDerecha.cancel();
+                segundos = 40;
+                progressBarArriba.setVisibility(View.VISIBLE);
+                iniciarBarraProgresoArriba();
+            }else if (progressBarArriba.getVisibility() == View.VISIBLE) {
+                progressBarArriba.setVisibility(View.INVISIBLE);
+                mCountDownTimerArriba.cancel();
+                segundos = 40;
+                progressBarIzq.setVisibility(View.VISIBLE);
+                iniciarBarraProgresoIzq();
+            }else if (progressBarIzq.getVisibility() == View.VISIBLE) {
+                progressBarIzq.setVisibility(View.INVISIBLE);
+                mCountDownTimerIzq.cancel();
+                segundos = 40;
+                progressBarAbajo.setVisibility(View.VISIBLE);
+                iniciarBarraProgresoAbajo();
+            }
         }
     }
 
     void reiniciarBarraProgreso() {
-        if (progressBar1.getVisibility() == View.VISIBLE) {
-            mCountDownTimerJ1.cancel();
-            segundos = 40;
-            iniciarBarraProgresoJ1();
-        } else if (progressBar2.getVisibility() == View.VISIBLE) {
-            mCountDownTimerJ2.cancel();
-            segundos = 40;
-            iniciarBarraProgresoJ2();
+        if(numeroJugadores == 2) {
+            if (progressBar1.getVisibility() == View.VISIBLE) {
+                mCountDownTimerJ1.cancel();
+                segundos = 40;
+                iniciarBarraProgresoJ1();
+            } else if (progressBar2.getVisibility() == View.VISIBLE) {
+                mCountDownTimerJ2.cancel();
+                segundos = 40;
+                iniciarBarraProgresoJ2();
+            }
+        }else if(numeroJugadores == 4){
+            if (progressBarAbajo.getVisibility() == View.VISIBLE) {
+                mCountDownTimerAbajo.cancel();
+                segundos = 40;
+                iniciarBarraProgresoAbajo();
+            } else if (progressBarDerecha.getVisibility() == View.VISIBLE) {
+                mCountDownTimerDerecha.cancel();
+                segundos = 40;
+                iniciarBarraProgresoDerecha();
+            } else if (progressBarArriba.getVisibility() == View.VISIBLE) {
+                mCountDownTimerArriba.cancel();
+                segundos = 40;
+                iniciarBarraProgresoArriba();
+            } else if (progressBarIzq.getVisibility() == View.VISIBLE) {
+                mCountDownTimerIzq.cancel();
+                segundos = 40;
+                iniciarBarraProgresoIzq();
+            }
         }
     }
 
     void cancelarBarraProgreso() {
-        if (progressBar1.getVisibility() == View.VISIBLE) {
-            mCountDownTimerJ1.cancel();
-
-        } else if (progressBar2.getVisibility() == View.VISIBLE) {
-            mCountDownTimerJ2.cancel();
+        if(numeroJugadores == 2) {
+            if (progressBar1.getVisibility() == View.VISIBLE) {
+                mCountDownTimerJ1.cancel();
+            } else if (progressBar2.getVisibility() == View.VISIBLE) {
+                mCountDownTimerJ2.cancel();
+            }
+        }else if(numeroJugadores == 4){
+            if (progressBarAbajo.getVisibility() == View.VISIBLE) {
+                mCountDownTimerAbajo.cancel();
+            } else if (progressBarDerecha.getVisibility() == View.VISIBLE) {
+                mCountDownTimerDerecha.cancel();
+            }else if (progressBarArriba.getVisibility() == View.VISIBLE) {
+                mCountDownTimerArriba.cancel();
+            }else if (progressBarIzq.getVisibility() == View.VISIBLE) {
+                mCountDownTimerIzq.cancel();
+            }
         }
     }
 
@@ -2288,7 +2472,6 @@ public class MainActivity extends Activity
                     bloquearCartas();
                     animarDesaparecerMenu();
                     Toast.makeText(getApplicationContext(), "Esperando al Jugador", Toast.LENGTH_SHORT).show();
-
                 }
 
                 if (mMyId.equals(idJugador1)) txtNumeroJugador.setText("Soy el jugador 1");
