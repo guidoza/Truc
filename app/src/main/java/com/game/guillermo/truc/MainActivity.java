@@ -22,6 +22,9 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.PointF;
 import android.graphics.drawable.ColorDrawable;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
+import android.media.SoundPool;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -273,6 +276,10 @@ public class MainActivity extends Activity
     int rondasGanadasMiEquipo = 0;
     int mensajesRecibidos = 0;
     int mensajesRecibidosTruc = 0;
+    int sonidoRepartir = 0;
+    int sonidoBasto = 0;
+    int sonidoEspada = 0;
+    int sonidoTirar = 0;
 
     //Strings
     String idJugador3 = null;
@@ -355,6 +362,7 @@ public class MainActivity extends Activity
     CountDownTimer mCountDownTimerDerecha = null;
     CountDownTimer mCountDownTimerArriba = null;
     CountDownTimer mCountDownTimerIzq = null;
+    SoundPool soundPool;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -555,6 +563,12 @@ public class MainActivity extends Activity
         imgPerfilDerecha = (ImageView) findViewById(R.id.imgPerfilDerecha);
         imgPerfilArriba = (ImageView) findViewById(R.id.imgPerfilArriba);
         imgPerfilIzq = (ImageView) findViewById(R.id.imgPerfilIzq);
+
+        soundPool = new SoundPool(8, AudioManager.STREAM_MUSIC, 0);
+        sonidoBasto = soundPool.load(this,R.raw.basto,1);
+        sonidoEspada = soundPool.load(this,R.raw.espada,2);
+        sonidoRepartir = soundPool.load(this,R.raw.repartiendocartasrapido,3);
+        sonidoTirar = soundPool.load(this,R.raw.tirarcarta,4);
 
         txtNumeroJugador = (TextView) findViewById(R.id.textoNumeroJugador);
 
@@ -3624,6 +3638,12 @@ public class MainActivity extends Activity
                                 valorEmpate = valor;
                             } else valor1 = valor;
                             asignarImagenCarta(newCarta, tvMesaRival1);
+
+                            //Sonidos dependiendo de la carta que se tira
+                            if(newCarta.getValor().equals("9")) reproducirSonidoEspada();
+                            else if(newCarta.getValor().equals("8")) reproducirSonidoBasto();
+                            else reproducirSonidoTirarCarta();
+
                             animacionRival(tvMesaRival1);
                             Log.d("KKKKK", "Animando la carta rival 1");
                         } else if (tvMesaRival2.getVisibility() == View.INVISIBLE) {
@@ -3631,6 +3651,12 @@ public class MainActivity extends Activity
                                 valorEmpate = valor;
                             } else valor2 = valor;
                             asignarImagenCarta(newCarta, tvMesaRival2);
+
+                            //Sonidos dependiendo de la carta que se tira
+                            if(newCarta.getValor().equals("9")) reproducirSonidoEspada();
+                            else if(newCarta.getValor().equals("8")) reproducirSonidoBasto();
+                            else reproducirSonidoTirarCarta();
+
                             animacionRival(tvMesaRival2);
                             Log.d("KKKKK", "Animando la carta rival 2");
                         } else if (tvMesaRival3.getVisibility() == View.INVISIBLE) {
@@ -3638,6 +3664,12 @@ public class MainActivity extends Activity
                                 valorEmpate = valor;
                             } else valor3 = valor;
                             asignarImagenCarta(newCarta, tvMesaRival3);
+
+                            //Sonidos dependiendo de la carta que se tira
+                            if(newCarta.getValor().equals("9")) reproducirSonidoEspada();
+                            else if(newCarta.getValor().equals("8")) reproducirSonidoBasto();
+                            else reproducirSonidoTirarCarta();
+
                             animacionRival(tvMesaRival3);
                             Log.d("KKKKK", "Animando la carta rival 3");
                         }
@@ -3659,18 +3691,30 @@ public class MainActivity extends Activity
                                         valorEmpateDerecha = valor;
                                     } else valor1_derecha = valor;
                                     asignarImagenCarta(newCarta, tvMesaJ2_C1);
+                                    //Sonidos dependiendo de la carta que se tira
+                                    if(newCarta.getValor().equals("9")) reproducirSonidoEspada();
+                                    else if(newCarta.getValor().equals("8")) reproducirSonidoBasto();
+                                    else reproducirSonidoTirarCarta();
                                     tvMesaJ2_C1.setVisibility(View.VISIBLE);
                                 } else if (tvMesaJ2_C2.getVisibility() == View.INVISIBLE) {
                                     if (hayEmpate4J) {
                                         valorEmpateDerecha = valor;
                                     } else valor2_derecha = valor;
                                     asignarImagenCarta(newCarta, tvMesaJ2_C2);
+                                    //Sonidos dependiendo de la carta que se tira
+                                    if(newCarta.getValor().equals("9")) reproducirSonidoEspada();
+                                    else if(newCarta.getValor().equals("8")) reproducirSonidoBasto();
+                                    else reproducirSonidoTirarCarta();
                                     tvMesaJ2_C2.setVisibility(View.VISIBLE);
                                 } else if (tvMesaJ2_C3.getVisibility() == View.INVISIBLE) {
                                     if (hayEmpate4J) {
                                         valorEmpateDerecha = valor;
                                     } else valor3_derecha = valor;
                                     asignarImagenCarta(newCarta, tvMesaJ2_C3);
+                                    //Sonidos dependiendo de la carta que se tira
+                                    if(newCarta.getValor().equals("9")) reproducirSonidoEspada();
+                                    else if(newCarta.getValor().equals("8")) reproducirSonidoBasto();
+                                    else reproducirSonidoTirarCarta();
                                     tvMesaJ2_C3.setVisibility(View.VISIBLE);
                                 }
                             } else if (sender.equals(idJugador3)) {
@@ -3680,18 +3724,30 @@ public class MainActivity extends Activity
                                         valorEmpateArriba = valor;
                                     } else valor1_arriba = valor;
                                     asignarImagenCarta(newCarta, tvMesaJ3_C1);
+                                    //Sonidos dependiendo de la carta que se tira
+                                    if(newCarta.getValor().equals("9")) reproducirSonidoEspada();
+                                    else if(newCarta.getValor().equals("8")) reproducirSonidoBasto();
+                                    else reproducirSonidoTirarCarta();
                                     tvMesaJ3_C1.setVisibility(View.VISIBLE);
                                 } else if (tvMesaJ3_C2.getVisibility() == View.INVISIBLE) {
                                     if (hayEmpate4J) {
                                         valorEmpateArriba = valor;
                                     } else valor2_arriba = valor;
                                     asignarImagenCarta(newCarta, tvMesaJ3_C2);
+                                    //Sonidos dependiendo de la carta que se tira
+                                    if(newCarta.getValor().equals("9")) reproducirSonidoEspada();
+                                    else if(newCarta.getValor().equals("8")) reproducirSonidoBasto();
+                                    else reproducirSonidoTirarCarta();
                                     tvMesaJ3_C2.setVisibility(View.VISIBLE);
                                 } else if (tvMesaJ3_C3.getVisibility() == View.INVISIBLE) {
                                     if (hayEmpate4J) {
                                         valorEmpateArriba = valor;
                                     } else valor3_arriba = valor;
                                     asignarImagenCarta(newCarta, tvMesaJ3_C3);
+                                    //Sonidos dependiendo de la carta que se tira
+                                    if(newCarta.getValor().equals("9")) reproducirSonidoEspada();
+                                    else if(newCarta.getValor().equals("8")) reproducirSonidoBasto();
+                                    else reproducirSonidoTirarCarta();
                                     tvMesaJ3_C3.setVisibility(View.VISIBLE);
                                 }
                             } else if (sender.equals(idJugador4)) {
@@ -3700,18 +3756,30 @@ public class MainActivity extends Activity
                                         valorEmpateIzq = valor;
                                     } else valor1_izq = valor;
                                     asignarImagenCarta(newCarta, tvMesaJ4_C1);
+                                    //Sonidos dependiendo de la carta que se tira
+                                    if(newCarta.getValor().equals("9")) reproducirSonidoEspada();
+                                    else if(newCarta.getValor().equals("8")) reproducirSonidoBasto();
+                                    else reproducirSonidoTirarCarta();
                                     tvMesaJ4_C1.setVisibility(View.VISIBLE);
                                 } else if (tvMesaJ4_C2.getVisibility() == View.INVISIBLE) {
                                     if (hayEmpate4J) {
                                         valorEmpateIzq = valor;
                                     } else valor2_izq = valor;
                                     asignarImagenCarta(newCarta, tvMesaJ4_C2);
+                                    //Sonidos dependiendo de la carta que se tira
+                                    if(newCarta.getValor().equals("9")) reproducirSonidoEspada();
+                                    else if(newCarta.getValor().equals("8")) reproducirSonidoBasto();
+                                    else reproducirSonidoTirarCarta();
                                     tvMesaJ4_C2.setVisibility(View.VISIBLE);
                                 } else if (tvMesaJ4_C3.getVisibility() == View.INVISIBLE) {
                                     if (hayEmpate4J) {
                                         valorEmpateIzq = valor;
                                     } else valor3_izq = valor;
                                     asignarImagenCarta(newCarta, tvMesaJ4_C3);
+                                    //Sonidos dependiendo de la carta que se tira
+                                    if(newCarta.getValor().equals("9")) reproducirSonidoEspada();
+                                    else if(newCarta.getValor().equals("8")) reproducirSonidoBasto();
+                                    else reproducirSonidoTirarCarta();
                                     tvMesaJ4_C3.setVisibility(View.VISIBLE);
                                 }
                             }
@@ -3724,18 +3792,30 @@ public class MainActivity extends Activity
                                         valorEmpateIzq = valor;
                                     } else valor1_izq = valor;
                                     asignarImagenCarta(newCarta, tvMesaJ4_C1);
+                                    //Sonidos dependiendo de la carta que se tira
+                                    if(newCarta.getValor().equals("9")) reproducirSonidoEspada();
+                                    else if(newCarta.getValor().equals("8")) reproducirSonidoBasto();
+                                    else reproducirSonidoTirarCarta();
                                     tvMesaJ4_C1.setVisibility(View.VISIBLE);
                                 } else if (tvMesaJ4_C2.getVisibility() == View.INVISIBLE) {
                                     if (hayEmpate4J) {
                                         valorEmpateIzq = valor;
                                     } else valor2_izq = valor;
                                     asignarImagenCarta(newCarta, tvMesaJ4_C2);
+                                    //Sonidos dependiendo de la carta que se tira
+                                    if(newCarta.getValor().equals("9")) reproducirSonidoEspada();
+                                    else if(newCarta.getValor().equals("8")) reproducirSonidoBasto();
+                                    else reproducirSonidoTirarCarta();
                                     tvMesaJ4_C2.setVisibility(View.VISIBLE);
                                 } else if (tvMesaJ4_C3.getVisibility() == View.INVISIBLE) {
                                     if (hayEmpate4J) {
                                         valorEmpateIzq = valor;
                                     } else valor3_izq = valor;
                                     asignarImagenCarta(newCarta, tvMesaJ4_C3);
+                                    //Sonidos dependiendo de la carta que se tira
+                                    if(newCarta.getValor().equals("9")) reproducirSonidoEspada();
+                                    else if(newCarta.getValor().equals("8")) reproducirSonidoBasto();
+                                    else reproducirSonidoTirarCarta();
                                     tvMesaJ4_C3.setVisibility(View.VISIBLE);
                                 }
                             } else if (sender.equals(idJugador3)) {
@@ -3744,18 +3824,30 @@ public class MainActivity extends Activity
                                         valorEmpateDerecha = valor;
                                     } else valor1_derecha = valor;
                                     asignarImagenCarta(newCarta, tvMesaJ2_C1);
+                                    //Sonidos dependiendo de la carta que se tira
+                                    if(newCarta.getValor().equals("9")) reproducirSonidoEspada();
+                                    else if(newCarta.getValor().equals("8")) reproducirSonidoBasto();
+                                    else reproducirSonidoTirarCarta();
                                     tvMesaJ2_C1.setVisibility(View.VISIBLE);
                                 } else if (tvMesaJ2_C2.getVisibility() == View.INVISIBLE) {
                                     if (hayEmpate4J) {
                                         valorEmpateDerecha = valor;
                                     } else valor2_derecha = valor;
                                     asignarImagenCarta(newCarta, tvMesaJ2_C2);
+                                    //Sonidos dependiendo de la carta que se tira
+                                    if(newCarta.getValor().equals("9")) reproducirSonidoEspada();
+                                    else if(newCarta.getValor().equals("8")) reproducirSonidoBasto();
+                                    else reproducirSonidoTirarCarta();
                                     tvMesaJ2_C2.setVisibility(View.VISIBLE);
                                 } else if (tvMesaJ2_C3.getVisibility() == View.INVISIBLE) {
                                     if (hayEmpate4J) {
                                         valorEmpateDerecha = valor;
                                     } else valor3_derecha = valor;
                                     asignarImagenCarta(newCarta, tvMesaJ2_C3);
+                                    //Sonidos dependiendo de la carta que se tira
+                                    if(newCarta.getValor().equals("9")) reproducirSonidoEspada();
+                                    else if(newCarta.getValor().equals("8")) reproducirSonidoBasto();
+                                    else reproducirSonidoTirarCarta();
                                     tvMesaJ2_C3.setVisibility(View.VISIBLE);
                                 }
                             } else if (sender.equals(idJugador4)) {
@@ -3764,18 +3856,30 @@ public class MainActivity extends Activity
                                         valorEmpateArriba = valor;
                                     } else valor1_arriba = valor;
                                     asignarImagenCarta(newCarta, tvMesaJ3_C1);
+                                    //Sonidos dependiendo de la carta que se tira
+                                    if(newCarta.getValor().equals("9")) reproducirSonidoEspada();
+                                    else if(newCarta.getValor().equals("8")) reproducirSonidoBasto();
+                                    else reproducirSonidoTirarCarta();
                                     tvMesaJ3_C1.setVisibility(View.VISIBLE);
                                 } else if (tvMesaJ3_C2.getVisibility() == View.INVISIBLE) {
                                     if (hayEmpate4J) {
                                         valorEmpateArriba = valor;
                                     } else valor2_arriba = valor;
                                     asignarImagenCarta(newCarta, tvMesaJ3_C2);
+                                    //Sonidos dependiendo de la carta que se tira
+                                    if(newCarta.getValor().equals("9")) reproducirSonidoEspada();
+                                    else if(newCarta.getValor().equals("8")) reproducirSonidoBasto();
+                                    else reproducirSonidoTirarCarta();
                                     tvMesaJ3_C2.setVisibility(View.VISIBLE);
                                 } else if (tvMesaJ3_C3.getVisibility() == View.INVISIBLE) {
                                     if (hayEmpate4J) {
                                         valorEmpateArriba = valor;
                                     } else valor3_arriba = valor;
                                     asignarImagenCarta(newCarta, tvMesaJ3_C3);
+                                    //Sonidos dependiendo de la carta que se tira
+                                    if(newCarta.getValor().equals("9")) reproducirSonidoEspada();
+                                    else if(newCarta.getValor().equals("8")) reproducirSonidoBasto();
+                                    else reproducirSonidoTirarCarta();
                                     tvMesaJ3_C3.setVisibility(View.VISIBLE);
                                 }
                             }
@@ -3787,18 +3891,30 @@ public class MainActivity extends Activity
                                         valorEmpateArriba = valor;
                                     } else valor1_arriba = valor;
                                     asignarImagenCarta(newCarta, tvMesaJ3_C1);
+                                    //Sonidos dependiendo de la carta que se tira
+                                    if(newCarta.getValor().equals("9")) reproducirSonidoEspada();
+                                    else if(newCarta.getValor().equals("8")) reproducirSonidoBasto();
+                                    else reproducirSonidoTirarCarta();
                                     tvMesaJ3_C1.setVisibility(View.VISIBLE);
                                 } else if (tvMesaJ3_C2.getVisibility() == View.INVISIBLE) {
                                     if (hayEmpate4J) {
                                         valorEmpateArriba = valor;
                                     } else valor2_arriba = valor;
                                     asignarImagenCarta(newCarta, tvMesaJ3_C2);
+                                    //Sonidos dependiendo de la carta que se tira
+                                    if(newCarta.getValor().equals("9")) reproducirSonidoEspada();
+                                    else if(newCarta.getValor().equals("8")) reproducirSonidoBasto();
+                                    else reproducirSonidoTirarCarta();
                                     tvMesaJ3_C2.setVisibility(View.VISIBLE);
                                 } else if (tvMesaJ3_C3.getVisibility() == View.INVISIBLE) {
                                     if (hayEmpate4J) {
                                         valorEmpateArriba = valor;
                                     } else valor3_arriba = valor;
                                     asignarImagenCarta(newCarta, tvMesaJ3_C3);
+                                    //Sonidos dependiendo de la carta que se tira
+                                    if(newCarta.getValor().equals("9")) reproducirSonidoEspada();
+                                    else if(newCarta.getValor().equals("8")) reproducirSonidoBasto();
+                                    else reproducirSonidoTirarCarta();
                                     tvMesaJ3_C3.setVisibility(View.VISIBLE);
                                 }
                             } else if (sender.equals(idJugador2)) {
@@ -3807,18 +3923,30 @@ public class MainActivity extends Activity
                                         valorEmpateIzq = valor;
                                     } else valor1_izq = valor;
                                     asignarImagenCarta(newCarta, tvMesaJ4_C1);
+                                    //Sonidos dependiendo de la carta que se tira
+                                    if(newCarta.getValor().equals("9")) reproducirSonidoEspada();
+                                    else if(newCarta.getValor().equals("8")) reproducirSonidoBasto();
+                                    else reproducirSonidoTirarCarta();
                                     tvMesaJ4_C1.setVisibility(View.VISIBLE);
                                 } else if (tvMesaJ4_C2.getVisibility() == View.INVISIBLE) {
                                     if (hayEmpate4J) {
                                         valorEmpateIzq = valor;
                                     } else valor2_izq = valor;
                                     asignarImagenCarta(newCarta, tvMesaJ4_C2);
+                                    //Sonidos dependiendo de la carta que se tira
+                                    if(newCarta.getValor().equals("9")) reproducirSonidoEspada();
+                                    else if(newCarta.getValor().equals("8")) reproducirSonidoBasto();
+                                    else reproducirSonidoTirarCarta();
                                     tvMesaJ4_C2.setVisibility(View.VISIBLE);
                                 } else if (tvMesaJ4_C3.getVisibility() == View.INVISIBLE) {
                                     if (hayEmpate4J) {
                                         valorEmpateIzq = valor;
                                     } else valor3_izq = valor;
                                     asignarImagenCarta(newCarta, tvMesaJ4_C3);
+                                    //Sonidos dependiendo de la carta que se tira
+                                    if(newCarta.getValor().equals("9")) reproducirSonidoEspada();
+                                    else if(newCarta.getValor().equals("8")) reproducirSonidoBasto();
+                                    else reproducirSonidoTirarCarta();
                                     tvMesaJ4_C3.setVisibility(View.VISIBLE);
                                 }
                             } else if (sender.equals(idJugador4)) {
@@ -3827,18 +3955,30 @@ public class MainActivity extends Activity
                                         valorEmpateDerecha = valor;
                                     } else valor1_derecha = valor;
                                     asignarImagenCarta(newCarta, tvMesaJ2_C1);
+                                    //Sonidos dependiendo de la carta que se tira
+                                    if(newCarta.getValor().equals("9")) reproducirSonidoEspada();
+                                    else if(newCarta.getValor().equals("8")) reproducirSonidoBasto();
+                                    else reproducirSonidoTirarCarta();
                                     tvMesaJ2_C1.setVisibility(View.VISIBLE);
                                 } else if (tvMesaJ2_C2.getVisibility() == View.INVISIBLE) {
                                     if (hayEmpate4J) {
                                         valorEmpateDerecha = valor;
                                     } else valor2_derecha = valor;
                                     asignarImagenCarta(newCarta, tvMesaJ2_C2);
+                                    //Sonidos dependiendo de la carta que se tira
+                                    if(newCarta.getValor().equals("9")) reproducirSonidoEspada();
+                                    else if(newCarta.getValor().equals("8")) reproducirSonidoBasto();
+                                    else reproducirSonidoTirarCarta();
                                     tvMesaJ2_C2.setVisibility(View.VISIBLE);
                                 } else if (tvMesaJ2_C3.getVisibility() == View.INVISIBLE) {
                                     if (hayEmpate4J) {
                                         valorEmpateDerecha = valor;
                                     } else valor3_derecha = valor;
                                     asignarImagenCarta(newCarta, tvMesaJ2_C3);
+                                    //Sonidos dependiendo de la carta que se tira
+                                    if(newCarta.getValor().equals("9")) reproducirSonidoEspada();
+                                    else if(newCarta.getValor().equals("8")) reproducirSonidoBasto();
+                                    else reproducirSonidoTirarCarta();
                                     tvMesaJ2_C3.setVisibility(View.VISIBLE);
                                 }
                             }
@@ -3850,18 +3990,30 @@ public class MainActivity extends Activity
                                         valorEmpateDerecha = valor;
                                     } else valor1_derecha = valor;
                                     asignarImagenCarta(newCarta, tvMesaJ2_C1);
+                                    //Sonidos dependiendo de la carta que se tira
+                                    if(newCarta.getValor().equals("9")) reproducirSonidoEspada();
+                                    else if(newCarta.getValor().equals("8")) reproducirSonidoBasto();
+                                    else reproducirSonidoTirarCarta();
                                     tvMesaJ2_C1.setVisibility(View.VISIBLE);
                                 } else if (tvMesaJ2_C2.getVisibility() == View.INVISIBLE) {
                                     if (hayEmpate4J) {
                                         valorEmpateDerecha = valor;
                                     } else valor2_derecha = valor;
                                     asignarImagenCarta(newCarta, tvMesaJ2_C2);
+                                    //Sonidos dependiendo de la carta que se tira
+                                    if(newCarta.getValor().equals("9")) reproducirSonidoEspada();
+                                    else if(newCarta.getValor().equals("8")) reproducirSonidoBasto();
+                                    else reproducirSonidoTirarCarta();
                                     tvMesaJ2_C2.setVisibility(View.VISIBLE);
                                 } else if (tvMesaJ2_C3.getVisibility() == View.INVISIBLE) {
                                     if (hayEmpate4J) {
                                         valorEmpateDerecha = valor;
                                     } else valor3_derecha = valor;
                                     asignarImagenCarta(newCarta, tvMesaJ2_C3);
+                                    //Sonidos dependiendo de la carta que se tira
+                                    if(newCarta.getValor().equals("9")) reproducirSonidoEspada();
+                                    else if(newCarta.getValor().equals("8")) reproducirSonidoBasto();
+                                    else reproducirSonidoTirarCarta();
                                     tvMesaJ2_C3.setVisibility(View.VISIBLE);
                                 }
                             } else if (sender.equals(idJugador2)) {
@@ -3870,18 +4022,30 @@ public class MainActivity extends Activity
                                         valorEmpateArriba = valor;
                                     } else valor1_arriba = valor;
                                     asignarImagenCarta(newCarta, tvMesaJ3_C1);
+                                    //Sonidos dependiendo de la carta que se tira
+                                    if(newCarta.getValor().equals("9")) reproducirSonidoEspada();
+                                    else if(newCarta.getValor().equals("8")) reproducirSonidoBasto();
+                                    else reproducirSonidoTirarCarta();
                                     tvMesaJ3_C1.setVisibility(View.VISIBLE);
                                 } else if (tvMesaJ3_C2.getVisibility() == View.INVISIBLE) {
                                     if (hayEmpate4J) {
                                         valorEmpateArriba = valor;
                                     } else valor2_arriba = valor;
                                     asignarImagenCarta(newCarta, tvMesaJ3_C2);
+                                    //Sonidos dependiendo de la carta que se tira
+                                    if(newCarta.getValor().equals("9")) reproducirSonidoEspada();
+                                    else if(newCarta.getValor().equals("8")) reproducirSonidoBasto();
+                                    else reproducirSonidoTirarCarta();
                                     tvMesaJ3_C2.setVisibility(View.VISIBLE);
                                 } else if (tvMesaJ3_C3.getVisibility() == View.INVISIBLE) {
                                     if (hayEmpate4J) {
                                         valorEmpateArriba = valor;
                                     } else valor3_arriba = valor;
                                     asignarImagenCarta(newCarta, tvMesaJ3_C3);
+                                    //Sonidos dependiendo de la carta que se tira
+                                    if(newCarta.getValor().equals("9")) reproducirSonidoEspada();
+                                    else if(newCarta.getValor().equals("8")) reproducirSonidoBasto();
+                                    else reproducirSonidoTirarCarta();
                                     tvMesaJ3_C3.setVisibility(View.VISIBLE);
                                 }
                             } else if (sender.equals(idJugador3)) {
@@ -3890,18 +4054,30 @@ public class MainActivity extends Activity
                                         valorEmpateIzq = valor;
                                     } else valor1_izq = valor;
                                     asignarImagenCarta(newCarta, tvMesaJ4_C1);
+                                    //Sonidos dependiendo de la carta que se tira
+                                    if(newCarta.getValor().equals("9")) reproducirSonidoEspada();
+                                    else if(newCarta.getValor().equals("8")) reproducirSonidoBasto();
+                                    else reproducirSonidoTirarCarta();
                                     tvMesaJ4_C1.setVisibility(View.VISIBLE);
                                 } else if (tvMesaJ4_C2.getVisibility() == View.INVISIBLE) {
                                     if (hayEmpate4J) {
                                         valorEmpateIzq = valor;
                                     } else valor2_izq = valor;
                                     asignarImagenCarta(newCarta, tvMesaJ4_C2);
+                                    //Sonidos dependiendo de la carta que se tira
+                                    if(newCarta.getValor().equals("9")) reproducirSonidoEspada();
+                                    else if(newCarta.getValor().equals("8")) reproducirSonidoBasto();
+                                    else reproducirSonidoTirarCarta();
                                     tvMesaJ4_C2.setVisibility(View.VISIBLE);
                                 } else if (tvMesaJ4_C3.getVisibility() == View.INVISIBLE) {
                                     if (hayEmpate4J) {
                                         valorEmpateIzq = valor;
                                     } else valor3_izq = valor;
                                     asignarImagenCarta(newCarta, tvMesaJ4_C3);
+                                    //Sonidos dependiendo de la carta que se tira
+                                    if(newCarta.getValor().equals("9")) reproducirSonidoEspada();
+                                    else if(newCarta.getValor().equals("8")) reproducirSonidoBasto();
+                                    else reproducirSonidoTirarCarta();
                                     tvMesaJ4_C3.setVisibility(View.VISIBLE);
                                 }
                             }
@@ -3948,6 +4124,7 @@ public class MainActivity extends Activity
                         numCarta[1] = Integer.parseInt(arrayCartasJ2[2]);
                         numCarta[2] = Integer.parseInt(arrayCartasJ2[3]);
                         repartir(numCarta);
+                        reproducirSonidoRepartir();
                         carta1 = new Carta(manoJugador.get(0).getNumero(), manoJugador.get(0).getPalo(), manoJugador.get(0).getValor());
                         carta2 = new Carta(manoJugador.get(1).getNumero(), manoJugador.get(1).getPalo(), manoJugador.get(1).getValor());
                         carta3 = new Carta(manoJugador.get(2).getNumero(), manoJugador.get(2).getPalo(), manoJugador.get(2).getValor());
@@ -3986,7 +4163,7 @@ public class MainActivity extends Activity
                             numCarta[1] = Integer.parseInt(arrayCartasJugadores[8]);
                             numCarta[2] = Integer.parseInt(arrayCartasJugadores[9]);
                         }
-
+                        reproducirSonidoRepartir();
                         repartir(numCarta);
                         carta1 = new Carta(manoJugador.get(0).getNumero(), manoJugador.get(0).getPalo(), manoJugador.get(0).getValor());
                         carta2 = new Carta(manoJugador.get(1).getNumero(), manoJugador.get(1).getPalo(), manoJugador.get(1).getValor());
@@ -4979,7 +5156,7 @@ public class MainActivity extends Activity
     final static int[] CLICKABLES = {
             R.id.button_accept_popup_invitation, R.id.button_invite_players,
             R.id.button_quick_game, R.id.button_see_invitations, R.id.button_sign_in,
-            R.id.button_sign_out, R.id.button_single_player, R.id.button_quick_game_4
+            R.id.button_sign_out, R.id.button_quick_game_4
     };
 
     // This array lists all the individual screens our game has.
@@ -5261,6 +5438,7 @@ public class MainActivity extends Activity
         //Si soy mano reparto
         if (mMyId.equals(mano)) {
             repartir(crearAleatorio());
+            reproducirSonidoRepartir();
             carta1 = new Carta(manoJugador.get(0).getNumero(), manoJugador.get(0).getPalo(), manoJugador.get(0).getValor());
             carta2 = new Carta(manoJugador.get(1).getNumero(), manoJugador.get(1).getPalo(), manoJugador.get(1).getValor());
             carta3 = new Carta(manoJugador.get(2).getNumero(), manoJugador.get(2).getPalo(), manoJugador.get(2).getValor());
@@ -5552,14 +5730,26 @@ public class MainActivity extends Activity
                         //Calculamos su valor para enviarlo
                         if (view.equals(tvJugador1)) {
                             aux = carta1;
+                            //Sonidos dependiendo de la carta que se tira
+                            if(aux.getValor().equals("9")) reproducirSonidoEspada();
+                            else if(aux.getValor().equals("8")) reproducirSonidoBasto();
+                            else reproducirSonidoTirarCarta();
                             miValor = Integer.parseInt(carta1.getValor());
                         }
                         if (view.equals(tvJugador2)) {
                             aux = carta2;
+                            //Sonidos dependiendo de la carta que se tira
+                            if(aux.getValor().equals("9")) reproducirSonidoEspada();
+                            else if(aux.getValor().equals("8")) reproducirSonidoBasto();
+                            else reproducirSonidoTirarCarta();
                             miValor = Integer.parseInt(carta2.getValor());
                         }
                         if (view.equals(tvJugador3)) {
                             aux = carta3;
+                            //Sonidos dependiendo de la carta que se tira
+                            if(aux.getValor().equals("9")) reproducirSonidoEspada();
+                            else if(aux.getValor().equals("8")) reproducirSonidoBasto();
+                            else reproducirSonidoTirarCarta();
                             miValor = Integer.parseInt(carta3.getValor());
                         }
 
@@ -5730,14 +5920,26 @@ public class MainActivity extends Activity
                         //Calculamos su valor para enviarlo
                         if (view.equals(tvJugador1_4J)) {
                             aux = carta1;
+                            //Sonidos dependiendo de la carta que se tira
+                            if(aux.getValor().equals("9")) reproducirSonidoEspada();
+                            else if(aux.getValor().equals("8")) reproducirSonidoBasto();
+                            else reproducirSonidoTirarCarta();
                             miValor = Integer.parseInt(carta1.getValor());
                         }
                         if (view.equals(tvJugador2_4J)) {
                             aux = carta2;
+                            //Sonidos dependiendo de la carta que se tira
+                            if(aux.getValor().equals("9")) reproducirSonidoEspada();
+                            else if(aux.getValor().equals("8")) reproducirSonidoBasto();
+                            else reproducirSonidoTirarCarta();
                             miValor = Integer.parseInt(carta2.getValor());
                         }
                         if (view.equals(tvJugador3_4J)) {
                             aux = carta3;
+                            //Sonidos dependiendo de la carta que se tira
+                            if(aux.getValor().equals("9")) reproducirSonidoEspada();
+                            else if(aux.getValor().equals("8")) reproducirSonidoBasto();
+                            else reproducirSonidoTirarCarta();
                             miValor = Integer.parseInt(carta3.getValor());
                         }
 
@@ -6399,6 +6601,19 @@ public class MainActivity extends Activity
                 .positiveText("Elegir")
                 .cancelable(false)
                 .show().getWindow().setBackgroundDrawable(new ColorDrawable(0x30000000));
+    }
+
+    private void reproducirSonidoBasto(){
+        soundPool.play(sonidoBasto, 1, 1, 0, 0, 1);
+    }
+    private void reproducirSonidoEspada(){
+        soundPool.play(sonidoEspada, 1, 1, 0, 0, 1);
+    }
+    private void reproducirSonidoRepartir(){
+        soundPool.play(sonidoRepartir, 1, 1, 0, 0, 1);
+    }
+    private void reproducirSonidoTirarCarta(){
+        soundPool.play(sonidoTirar, 1, 1, 0, 0, 1);
     }
 
 }
