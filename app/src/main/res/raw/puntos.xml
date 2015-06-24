@@ -1,0 +1,87 @@
+<baraja>
+
+    <!--- 12 -->
+    <carta
+        numero="12"
+        palo="bastos"
+        puntos="4"/>
+    <carta
+        numero="12"
+        palo="oros"
+        puntos="4"/>
+    <carta
+        numero="12"
+        palo="espadas"
+        puntos="4"/>
+    <carta
+        numero="12"
+        palo="copas"
+        puntos="4"/>
+
+    <!--- 11 -->
+    <carta
+        numero="11"
+        palo="bastos"
+        puntos="3"/>
+    <carta
+        numero="11"
+        palo="oros"
+        puntos="3"/>
+    <carta
+        numero="11"
+        palo="espadas"
+        puntos="3"/>
+    <carta
+        numero="11"
+        palo="copas"
+        puntos="3"/>
+
+    <!--- 10 -->
+    <carta
+        numero="10"
+        palo="bastos"
+        puntos="2"/>
+    <carta
+        numero="10"
+        palo="oros"
+        puntos="2"/>
+    <carta
+        numero="10"
+        palo="espadas"
+        puntos="2"/>
+    <carta
+        numero="10"
+        palo="copas"
+        puntos="2"/>
+
+    <!--- 2 -->
+    <carta
+        numero="2"
+        palo="bastos"
+        puntos="2"/>
+    <carta
+        numero="2"
+        palo="oros"
+        puntos="2"/>
+    <carta
+        numero="2"
+        palo="espadas"
+        puntos="2"/>
+    <carta
+        numero="2"
+        palo="copas"
+        puntos="2"/>
+
+    <!--- 1 -->
+    <carta
+        numero="1"
+        palo="copas"
+        puntos="1"/>
+    <carta
+        numero="1"
+        palo="oros"
+        puntos="1"/>
+
+
+
+</baraja>

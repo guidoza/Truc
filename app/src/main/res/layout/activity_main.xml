@@ -126,9 +126,6 @@
                             android:layout_weight="1"/>
                     </LinearLayout>
 
-
-
-
                             <RelativeLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent">
@@ -137,7 +134,7 @@
                                     android:layout_width="70dp"
                                     android:layout_height="110dp"
                                     android:id="@+id/carta1MesaRival"
-                                    android:src="@drawable/uno_bastos"
+                                    android:src="@drawable/ic_uno_bastos"
                                     android:layout_alignParentTop="true"
                                     android:layout_marginTop="100dp"
                                     android:layout_alignParentLeft="true"
@@ -150,7 +147,7 @@
                                     android:layout_width="70dp"
                                     android:layout_height="110dp"
                                     android:id="@+id/carta2MesaRival"
-                                    android:src="@drawable/siete_bastos"
+                                    android:src="@drawable/ic_siete_bastos"
                                     android:layout_alignParentTop="true"
                                     android:layout_marginTop="100dp"
                                     android:layout_centerHorizontal="true"
@@ -159,7 +156,7 @@
                                     android:layout_width="70dp"
                                     android:layout_height="110dp"
                                     android:id="@+id/carta3MesaRival"
-                                    android:src="@drawable/seis_bastos"
+                                    android:src="@drawable/ic_seis_bastos"
                                     android:layout_alignParentTop="true"
                                     android:layout_marginTop="100dp"
                                     android:layout_alignParentRight="true"
@@ -208,7 +205,7 @@
                                     android:layout_width="100dp"
                                     android:layout_height="160dp"
                                     android:id="@+id/carta1Jugador"
-                                    android:src="@drawable/seis_espadas"
+                                    android:src="@drawable/ic_seis_espadas"
                                     android:layout_alignParentBottom="true"
                                     android:layout_marginBottom="100dp"
                                     android:layout_alignParentLeft="true"
@@ -220,7 +217,7 @@
                                     android:layout_width="100dp"
                                     android:layout_height="160dp"
                                     android:id="@+id/carta2Jugador"
-                                    android:src="@drawable/siete_espadas"
+                                    android:src="@drawable/ic_siete_espadas"
                                     android:layout_alignParentBottom="true"
                                     android:layout_marginBottom="100dp"
                                     android:layout_centerHorizontal="true"
@@ -229,7 +226,7 @@
                                     android:layout_width="100dp"
                                     android:layout_height="160dp"
                                     android:id="@+id/carta3Jugador"
-                                    android:src="@drawable/uno_espadas"
+                                    android:src="@drawable/ic_uno_espadas"
                                     android:layout_alignParentBottom="true"
                                     android:layout_marginBottom="100dp"
                                     android:layout_alignParentRight="true"
@@ -591,7 +588,7 @@
                     android:layout_width="100dp"
                     android:layout_height="160dp"
                     android:id="@+id/carta1ManoJ1"
-                    android:src="@drawable/seis_espadas"
+                    android:src="@drawable/ic_seis_espadas"
                     android:layout_alignParentBottom="true"
                     android:layout_marginBottom="30dp"
                     android:layout_alignParentLeft="true"
@@ -603,7 +600,7 @@
                     android:layout_width="100dp"
                     android:layout_height="160dp"
                     android:id="@+id/carta2ManoJ1"
-                    android:src="@drawable/siete_espadas"
+                    android:src="@drawable/ic_siete_espadas"
                     android:layout_alignParentBottom="true"
                     android:layout_marginBottom="30dp"
                     android:layout_centerHorizontal="true"
@@ -612,7 +609,7 @@
                     android:layout_width="100dp"
                     android:layout_height="160dp"
                     android:id="@+id/carta3ManoJ1"
-                    android:src="@drawable/uno_espadas"
+                    android:src="@drawable/ic_uno_espadas"
                     android:layout_alignParentBottom="true"
                     android:layout_marginBottom="30dp"
                     android:layout_alignParentRight="true"

@@ -402,7 +402,12 @@ public class MainActivity extends Activity
                         break;
 
                     case R.id.me_voy:
-                        //A implementar
+                        if (!hayTruc) puntosTruc = NO_QUIERO_TRUC;
+                        if (hayTruc && !hayRetruc) puntosTruc = TRUC;
+                        if (hayRetruc && !hayCuatreVal) puntosTruc = RETRUC;
+                        if (hayCuatreVal && !hayJocFora) puntosTruc = CUATRE_VAL;
+                        if (hayJocFora) puntosTruc = 24;
+                        mostrarResultadosPerdedorMano("PRIMERO");
                         break;
 
                     case R.id.salir:
@@ -449,6 +454,14 @@ public class MainActivity extends Activity
                         jocFora();
                         actionButton_4J.hide();
                         jocFora_4J.setVisibility(View.GONE);
+                        break;
+                    case R.id.me_voy_4J:
+                        if (!hayTruc) puntosTruc = NO_QUIERO_TRUC;
+                        if (hayTruc && !hayRetruc) puntosTruc = TRUC;
+                        if (hayRetruc && !hayCuatreVal) puntosTruc = RETRUC;
+                        if (hayCuatreVal && !hayJocFora) puntosTruc = CUATRE_VAL;
+                        if (hayJocFora) puntosTruc = 24;
+                        mostrarResultadosPerdedorMano("PRIMERO");
                         break;
                 }
 
@@ -5621,6 +5634,61 @@ public class MainActivity extends Activity
                 break;
             case "7oros":
                 view.setImageResource(R.drawable.siete_oros);
+                break;
+            /** Cartas para contar los puntos **/
+            case "12oros":
+                view.setImageResource(R.drawable.doceoros);
+                break;
+            case "12bastos":
+                view.setImageResource(R.drawable.docebastos);
+                break;
+            case "12espadas":
+                view.setImageResource(R.drawable.doceespadas);
+                break;
+            case "12copas":
+                view.setImageResource(R.drawable.docecopas);
+                break;
+            case "11oros":
+                view.setImageResource(R.drawable.onceoros);
+                break;
+            case "11bastos":
+                view.setImageResource(R.drawable.oncebastos);
+                break;
+            case "11espadas":
+                view.setImageResource(R.drawable.onceespadas);
+                break;
+            case "11copas":
+                view.setImageResource(R.drawable.oncecopas);
+                break;
+            case "10oros":
+                view.setImageResource(R.drawable.diezoros);
+                break;
+            case "10bastos":
+                view.setImageResource(R.drawable.diesbastos);
+                break;
+            case "10espadas":
+                view.setImageResource(R.drawable.diezespadas);
+                break;
+            case "10copas":
+                view.setImageResource(R.drawable.diezcopas);
+                break;
+            case "2oros":
+                view.setImageResource(R.drawable.dosoros);
+                break;
+            case "2bastos":
+                view.setImageResource(R.drawable.dosbastos);
+                break;
+            case "2espadas":
+                view.setImageResource(R.drawable.dosespadas);
+                break;
+            case "2copas":
+                view.setImageResource(R.drawable.doscopas);
+                break;
+            case "1oros":
+                view.setImageResource(R.drawable.unooros);
+                break;
+            case "1copas":
+                view.setImageResource(R.drawable.unocopas);
                 break;
         }
     }
