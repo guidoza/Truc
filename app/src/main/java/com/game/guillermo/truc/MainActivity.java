@@ -22,9 +22,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.PointF;
 import android.graphics.drawable.ColorDrawable;
-import android.media.AudioManager;
-import android.media.MediaPlayer;
-import android.media.SoundPool;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -276,10 +273,6 @@ public class MainActivity extends Activity
     int rondasGanadasMiEquipo = 0;
     int mensajesRecibidos = 0;
     int mensajesRecibidosTruc = 0;
-    int sonidoRepartir = 0;
-    int sonidoBasto = 0;
-    int sonidoEspada = 0;
-    int sonidoTirar = 0;
 
     //Strings
     String idJugador3 = null;
@@ -362,7 +355,6 @@ public class MainActivity extends Activity
     CountDownTimer mCountDownTimerDerecha = null;
     CountDownTimer mCountDownTimerArriba = null;
     CountDownTimer mCountDownTimerIzq = null;
-    SoundPool soundPool;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -564,11 +556,10 @@ public class MainActivity extends Activity
         imgPerfilArriba = (ImageView) findViewById(R.id.imgPerfilArriba);
         imgPerfilIzq = (ImageView) findViewById(R.id.imgPerfilIzq);
 
-        soundPool = new SoundPool(8, AudioManager.STREAM_MUSIC, 0);
-        sonidoBasto = soundPool.load(this,R.raw.basto,1);
-        sonidoEspada = soundPool.load(this,R.raw.espada,2);
-        sonidoRepartir = soundPool.load(this,R.raw.repartiendocartasrapido,3);
-        sonidoTirar = soundPool.load(this,R.raw.tirarcarta,4);
+        progressBarAbajo = (ProgressBar) findViewById(R.id.progres_segundos_abajo);
+        progressBarDerecha = (ProgressBar) findViewById(R.id.progres_segundos_derecha);
+        progressBarArriba = (ProgressBar) findViewById(R.id.progres_segundos_arriba);
+        progressBarIzq = (ProgressBar) findViewById(R.id.progres_segundos_izq);
 
         txtNumeroJugador = (TextView) findViewById(R.id.textoNumeroJugador);
 
@@ -970,7 +961,7 @@ public class MainActivity extends Activity
             Toast.makeText(getApplicationContext(), "Esperando al Jugador", Toast.LENGTH_SHORT).show();
             bloquearCartas();
             enviarMensajeLaFalta(2, "");
-            //cambiarBarraProgreso();
+            cambiarBarraProgreso();
         }
     }
 
@@ -1018,28 +1009,28 @@ public class MainActivity extends Activity
         Toast.makeText(getApplicationContext(), "Esperando al Jugador", Toast.LENGTH_SHORT).show();
         bloquearCartas();
         enviarMensajeTruc();
-        //cambiarBarraProgreso();
+        cambiarBarraProgreso();
     }
 
     public void retruco() {
         Toast.makeText(getApplicationContext(), "Esperando al Jugador", Toast.LENGTH_SHORT).show();
         bloquearCartas();
         enviarMensajeRetruc();
-        //cambiarBarraProgreso();
+        cambiarBarraProgreso();
     }
 
     public void quatreVal() {
         Toast.makeText(getApplicationContext(), "Esperando al Jugador", Toast.LENGTH_SHORT).show();
         bloquearCartas();
         enviarMensajeCuatreVal();
-        //cambiarBarraProgreso();
+        cambiarBarraProgreso();
     }
 
     public void jocFora() {
         Toast.makeText(getApplicationContext(), "Esperando al Jugador", Toast.LENGTH_SHORT).show();
         bloquearCartas();
         enviarMensajeJocFora();
-        //cambiarBarraProgreso();
+        cambiarBarraProgreso();
     }
 
 
@@ -1788,6 +1779,10 @@ public class MainActivity extends Activity
             faltaDirecta = false;
             primerMensaje = "";
 
+            if (mCountDownTimerAbajo != null || mCountDownTimerArriba != null
+                    || mCountDownTimerDerecha != null || mCountDownTimerIzq != null) cancelarBarraProgreso();
+            segundos = 40;
+
             truc_4J.setVisibility(View.VISIBLE);
             envid_4J.setVisibility(View.VISIBLE);
             meVoy_4J.setVisibility(View.VISIBLE);
@@ -1796,6 +1791,11 @@ public class MainActivity extends Activity
             quatreVal_4J.setVisibility(View.GONE);
             jocFora_4J.setVisibility(View.GONE);
             laFalta_4J.setVisibility(View.VISIBLE);
+
+            progressBarAbajo.setVisibility(View.INVISIBLE);
+            progressBarDerecha.setVisibility(View.INVISIBLE);
+            progressBarIzq.setVisibility(View.INVISIBLE);
+            progressBarArriba.setVisibility(View.INVISIBLE);
 
             if (hayAnimaciones) {
                 deshacerAnimaciones(tvJugador1_4J);
@@ -2006,13 +2006,16 @@ public class MainActivity extends Activity
             animarDesaparecerMenu();
             if (mMyId.equals(idJugador1) && turno.equals(idJugador1)) turno = idJugador2;
             if (mMyId.equals(idJugador2) && turno.equals(idJugador2)) turno = idJugador1;
+
         } else if (numeroJugadores == 4) {
-            cambiarBarraProgreso();
-            animarDesaparecerMenu();
+
             if (mMyId.equals(idJugador1) && turno.equals(idJugador1)) turno = idJugador2;
             if (mMyId.equals(idJugador2) && turno.equals(idJugador2)) turno = idJugador3;
             if (mMyId.equals(idJugador3) && turno.equals(idJugador3)) turno = idJugador4;
             if (mMyId.equals(idJugador4) && turno.equals(idJugador4)) turno = idJugador1;
+
+            animarDesaparecerMenu();
+            cambiarBarraProgreso();
 
         }
 
@@ -2154,6 +2157,107 @@ public class MainActivity extends Activity
                 iniciarBarraProgresoJ1();
             }
         }else if(numeroJugadores == 4){
+
+            if(turno.equals(mMyId)){
+                if (progressBarAbajo.getVisibility() == View.VISIBLE) {
+                    reiniciarBarraProgreso();
+                } else if (progressBarDerecha.getVisibility() == View.VISIBLE) {
+                    progressBarDerecha.setVisibility(View.INVISIBLE);
+                    mCountDownTimerDerecha.cancel();
+                    segundos = 40;
+                    progressBarAbajo.setVisibility(View.VISIBLE);
+                    iniciarBarraProgresoAbajo();
+                }else if (progressBarArriba.getVisibility() == View.VISIBLE) {
+                    progressBarArriba.setVisibility(View.INVISIBLE);
+                    mCountDownTimerArriba.cancel();
+                    segundos = 40;
+                    progressBarAbajo.setVisibility(View.VISIBLE);
+                    iniciarBarraProgresoAbajo();
+                }else if (progressBarIzq.getVisibility() == View.VISIBLE) {
+                    progressBarIzq.setVisibility(View.INVISIBLE);
+                    mCountDownTimerIzq.cancel();
+                    segundos = 40;
+                    progressBarAbajo.setVisibility(View.VISIBLE);
+                    iniciarBarraProgresoAbajo();
+                }
+            }else {
+
+                if(mMyId.equals(comprobarDerechaTurno())){
+                    if (progressBarAbajo.getVisibility() == View.VISIBLE) {
+                        progressBarAbajo.setVisibility(View.INVISIBLE);
+                        mCountDownTimerAbajo.cancel();
+                        progressBarIzq.setVisibility(View.VISIBLE);
+                        iniciarBarraProgresoIzq();
+                    } else if (progressBarDerecha.getVisibility() == View.VISIBLE) {
+                        progressBarDerecha.setVisibility(View.INVISIBLE);
+                        mCountDownTimerDerecha.cancel();
+                        segundos = 40;
+                        progressBarIzq.setVisibility(View.VISIBLE);
+                        iniciarBarraProgresoIzq();
+                    }else if (progressBarArriba.getVisibility() == View.VISIBLE) {
+                        progressBarArriba.setVisibility(View.INVISIBLE);
+                        mCountDownTimerArriba.cancel();
+                        segundos = 40;
+                        progressBarIzq.setVisibility(View.VISIBLE);
+                        iniciarBarraProgresoIzq();
+                    }else if (progressBarIzq.getVisibility() == View.VISIBLE) {
+                        reiniciarBarraProgreso();
+                    }
+
+                }else if(mMyId.equals(comprobarArribaTurno())){
+                    if (progressBarAbajo.getVisibility() == View.VISIBLE) {
+                        progressBarAbajo.setVisibility(View.INVISIBLE);
+                        mCountDownTimerAbajo.cancel();
+                        progressBarArriba.setVisibility(View.VISIBLE);
+                        iniciarBarraProgresoArriba();
+                    } else if (progressBarDerecha.getVisibility() == View.VISIBLE) {
+                        progressBarDerecha.setVisibility(View.INVISIBLE);
+                        mCountDownTimerDerecha.cancel();
+                        segundos = 40;
+                        progressBarArriba.setVisibility(View.VISIBLE);
+                        iniciarBarraProgresoArriba();
+                    }else if (progressBarArriba.getVisibility() == View.VISIBLE) {
+                        reiniciarBarraProgreso();
+                    }else if (progressBarIzq.getVisibility() == View.VISIBLE) {
+                        progressBarIzq.setVisibility(View.INVISIBLE);
+                        mCountDownTimerIzq.cancel();
+                        segundos = 40;
+                        progressBarArriba.setVisibility(View.VISIBLE);
+                        iniciarBarraProgresoArriba();
+                    }
+
+                }else if(mMyId.equals(comprobarIzqTurno())){
+                    if (progressBarAbajo.getVisibility() == View.VISIBLE) {
+                        progressBarAbajo.setVisibility(View.INVISIBLE);
+                        mCountDownTimerAbajo.cancel();
+                        segundos = 40;
+                        progressBarDerecha.setVisibility(View.VISIBLE);
+                        iniciarBarraProgresoDerecha();
+                    } else if (progressBarDerecha.getVisibility() == View.VISIBLE) {
+                        reiniciarBarraProgreso();
+                    }else if (progressBarArriba.getVisibility() == View.VISIBLE) {
+                        progressBarArriba.setVisibility(View.INVISIBLE);
+                        mCountDownTimerArriba.cancel();
+                        segundos = 40;
+                        progressBarDerecha.setVisibility(View.VISIBLE);
+                        iniciarBarraProgresoDerecha();
+                    }else if (progressBarIzq.getVisibility() == View.VISIBLE) {
+                        progressBarIzq.setVisibility(View.INVISIBLE);
+                        mCountDownTimerIzq.cancel();
+                        segundos = 40;
+                        progressBarDerecha.setVisibility(View.VISIBLE);
+                        iniciarBarraProgresoDerecha();
+                    }
+                }
+
+            }
+
+
+
+
+
+
+/*
             if (progressBarAbajo.getVisibility() == View.VISIBLE) {
                 progressBarAbajo.setVisibility(View.INVISIBLE);
                 mCountDownTimerAbajo.cancel();
@@ -2178,7 +2282,7 @@ public class MainActivity extends Activity
                 segundos = 40;
                 progressBarAbajo.setVisibility(View.VISIBLE);
                 iniciarBarraProgresoAbajo();
-            }
+            }*/
         }
     }
 
@@ -2392,6 +2496,7 @@ public class MainActivity extends Activity
         }
     }
 
+
     // Start the gameplay phase of the game.
     void startGame(boolean multiplayer) {
 
@@ -2480,12 +2585,28 @@ public class MainActivity extends Activity
                     animarAparecerMenu();
                     envid_4J.setVisibility(View.GONE);
                     laFalta_4J.setVisibility(View.GONE);
+                    progressBarAbajo.setVisibility(View.VISIBLE);
+                    iniciarBarraProgresoAbajo();
                 }
 
                 if (!mMyId.equals(turno) && ronda == 1) {
                     bloquearCartas();
                     animarDesaparecerMenu();
                     Toast.makeText(getApplicationContext(), "Esperando al Jugador", Toast.LENGTH_SHORT).show();
+
+                    if(mMyId.equals(comprobarSiguienteMano())){
+                        progressBarIzq.setVisibility(View.VISIBLE);
+                        iniciarBarraProgresoIzq();
+
+                    }else if(mMyId.equals(comprobarSegundoMano())){
+                        progressBarArriba.setVisibility(View.VISIBLE);
+                        iniciarBarraProgresoArriba();
+
+                    }else if(mMyId.equals(comprobarTerceroeMano())){
+                        progressBarDerecha.setVisibility(View.VISIBLE);
+                        iniciarBarraProgresoDerecha();
+                    }
+
                 }
 
                 if (mMyId.equals(idJugador1)) txtNumeroJugador.setText("Soy el jugador 1");
@@ -2556,7 +2677,6 @@ public class MainActivity extends Activity
                             }
                             //Pierdo la ronda
                         } else {
-                            //enviarMensajeSumaRonda();
                             if ((ronda == 2 && misRondasGanadas == 0) || (ronda == 3)) {
                                 //Pierdes en la segunda ronda o en la tercera
                                 Handler handler = new Handler();
@@ -2651,7 +2771,7 @@ public class MainActivity extends Activity
                                     actualizaRonda();
                                     enviarMensajeRonda();
                                     enviarMensajeTurno4J(turno);
-                                    //reiniciarBarraProgreso();
+                                    reiniciarBarraProgreso();
                                 }
                                 //Ha ganado mi compañero
                             } else {
@@ -2669,9 +2789,21 @@ public class MainActivity extends Activity
                                 }else {
                                 Log.d("KKKKK", "gaa mi compi");
                                 Toast.makeText(getApplicationContext(), "Esperando al jugador", Toast.LENGTH_SHORT).show();
-                                if (ronda == 1) enviarMensajeTurno4J(ganadorRonda1_4J);
-                                else if (ronda == 2) enviarMensajeTurno4J(ganadorRonda2_4J);
-                                else if (ronda == 3) enviarMensajeTurno4J(ganadorRonda3_4J);
+                                    bloquearCartas();
+                                    if (ronda == 1){
+                                        enviarMensajeTurno4J(ganadorRonda1_4J);
+                                        turno = ganadorRonda1_4J;
+                                    }
+                                    else if (ronda == 2){
+                                        enviarMensajeTurno4J(ganadorRonda2_4J);
+                                        turno = ganadorRonda2_4J;
+                                    }
+                                    else if (ronda == 3){
+                                        enviarMensajeTurno4J(ganadorRonda3_4J);
+                                        turno = ganadorRonda3_4J;
+                                    }
+                                    animarDesaparecerMenu();
+                                    cambiarBarraProgreso();
                                 actualizaRonda();
                                 enviarMensajeRonda();
                                 }
@@ -2692,13 +2824,32 @@ public class MainActivity extends Activity
                                 }, 1500);
 
                             } else {
-                                Log.d("KKKKK", "perdemos la ronda");
+        /*                        Log.d("KKKKK", "perdemos la ronda");
                                 cambiarTurno();
                                 Toast.makeText(getApplicationContext(), "Esperando al Jugador", Toast.LENGTH_SHORT).show();
                                 bloquearCartas();
                                 if (ronda == 1) enviarMensajeTurno4J(ganadorRonda1_4J);
                                 else if (ronda == 2) enviarMensajeTurno4J(ganadorRonda2_4J);
                                 else if (ronda == 3) enviarMensajeTurno4J(ganadorRonda3_4J);
+                                actualizaRonda();
+                                enviarMensajeRonda();*/
+
+                                Toast.makeText(getApplicationContext(), "Esperando al Jugador", Toast.LENGTH_SHORT).show();
+                                bloquearCartas();
+                                if (ronda == 1){
+                                    enviarMensajeTurno4J(ganadorRonda1_4J);
+                                    turno = ganadorRonda1_4J;
+                                }
+                                else if (ronda == 2){
+                                    enviarMensajeTurno4J(ganadorRonda2_4J);
+                                    turno = ganadorRonda2_4J;
+                                }
+                                else if (ronda == 3){
+                                    enviarMensajeTurno4J(ganadorRonda3_4J);
+                                    turno = ganadorRonda3_4J;
+                                }
+                                animarDesaparecerMenu();
+                                cambiarBarraProgreso();
                                 actualizaRonda();
                                 enviarMensajeRonda();
 
@@ -3638,12 +3789,6 @@ public class MainActivity extends Activity
                                 valorEmpate = valor;
                             } else valor1 = valor;
                             asignarImagenCarta(newCarta, tvMesaRival1);
-
-                            //Sonidos dependiendo de la carta que se tira
-                            if(newCarta.getValor().equals("9")) reproducirSonidoEspada();
-                            else if(newCarta.getValor().equals("8")) reproducirSonidoBasto();
-                            else reproducirSonidoTirarCarta();
-
                             animacionRival(tvMesaRival1);
                             Log.d("KKKKK", "Animando la carta rival 1");
                         } else if (tvMesaRival2.getVisibility() == View.INVISIBLE) {
@@ -3651,12 +3796,6 @@ public class MainActivity extends Activity
                                 valorEmpate = valor;
                             } else valor2 = valor;
                             asignarImagenCarta(newCarta, tvMesaRival2);
-
-                            //Sonidos dependiendo de la carta que se tira
-                            if(newCarta.getValor().equals("9")) reproducirSonidoEspada();
-                            else if(newCarta.getValor().equals("8")) reproducirSonidoBasto();
-                            else reproducirSonidoTirarCarta();
-
                             animacionRival(tvMesaRival2);
                             Log.d("KKKKK", "Animando la carta rival 2");
                         } else if (tvMesaRival3.getVisibility() == View.INVISIBLE) {
@@ -3664,12 +3803,6 @@ public class MainActivity extends Activity
                                 valorEmpate = valor;
                             } else valor3 = valor;
                             asignarImagenCarta(newCarta, tvMesaRival3);
-
-                            //Sonidos dependiendo de la carta que se tira
-                            if(newCarta.getValor().equals("9")) reproducirSonidoEspada();
-                            else if(newCarta.getValor().equals("8")) reproducirSonidoBasto();
-                            else reproducirSonidoTirarCarta();
-
                             animacionRival(tvMesaRival3);
                             Log.d("KKKKK", "Animando la carta rival 3");
                         }
@@ -3691,30 +3824,18 @@ public class MainActivity extends Activity
                                         valorEmpateDerecha = valor;
                                     } else valor1_derecha = valor;
                                     asignarImagenCarta(newCarta, tvMesaJ2_C1);
-                                    //Sonidos dependiendo de la carta que se tira
-                                    if(newCarta.getValor().equals("9")) reproducirSonidoEspada();
-                                    else if(newCarta.getValor().equals("8")) reproducirSonidoBasto();
-                                    else reproducirSonidoTirarCarta();
                                     tvMesaJ2_C1.setVisibility(View.VISIBLE);
                                 } else if (tvMesaJ2_C2.getVisibility() == View.INVISIBLE) {
                                     if (hayEmpate4J) {
                                         valorEmpateDerecha = valor;
                                     } else valor2_derecha = valor;
                                     asignarImagenCarta(newCarta, tvMesaJ2_C2);
-                                    //Sonidos dependiendo de la carta que se tira
-                                    if(newCarta.getValor().equals("9")) reproducirSonidoEspada();
-                                    else if(newCarta.getValor().equals("8")) reproducirSonidoBasto();
-                                    else reproducirSonidoTirarCarta();
                                     tvMesaJ2_C2.setVisibility(View.VISIBLE);
                                 } else if (tvMesaJ2_C3.getVisibility() == View.INVISIBLE) {
                                     if (hayEmpate4J) {
                                         valorEmpateDerecha = valor;
                                     } else valor3_derecha = valor;
                                     asignarImagenCarta(newCarta, tvMesaJ2_C3);
-                                    //Sonidos dependiendo de la carta que se tira
-                                    if(newCarta.getValor().equals("9")) reproducirSonidoEspada();
-                                    else if(newCarta.getValor().equals("8")) reproducirSonidoBasto();
-                                    else reproducirSonidoTirarCarta();
                                     tvMesaJ2_C3.setVisibility(View.VISIBLE);
                                 }
                             } else if (sender.equals(idJugador3)) {
@@ -3724,30 +3845,18 @@ public class MainActivity extends Activity
                                         valorEmpateArriba = valor;
                                     } else valor1_arriba = valor;
                                     asignarImagenCarta(newCarta, tvMesaJ3_C1);
-                                    //Sonidos dependiendo de la carta que se tira
-                                    if(newCarta.getValor().equals("9")) reproducirSonidoEspada();
-                                    else if(newCarta.getValor().equals("8")) reproducirSonidoBasto();
-                                    else reproducirSonidoTirarCarta();
                                     tvMesaJ3_C1.setVisibility(View.VISIBLE);
                                 } else if (tvMesaJ3_C2.getVisibility() == View.INVISIBLE) {
                                     if (hayEmpate4J) {
                                         valorEmpateArriba = valor;
                                     } else valor2_arriba = valor;
                                     asignarImagenCarta(newCarta, tvMesaJ3_C2);
-                                    //Sonidos dependiendo de la carta que se tira
-                                    if(newCarta.getValor().equals("9")) reproducirSonidoEspada();
-                                    else if(newCarta.getValor().equals("8")) reproducirSonidoBasto();
-                                    else reproducirSonidoTirarCarta();
                                     tvMesaJ3_C2.setVisibility(View.VISIBLE);
                                 } else if (tvMesaJ3_C3.getVisibility() == View.INVISIBLE) {
                                     if (hayEmpate4J) {
                                         valorEmpateArriba = valor;
                                     } else valor3_arriba = valor;
                                     asignarImagenCarta(newCarta, tvMesaJ3_C3);
-                                    //Sonidos dependiendo de la carta que se tira
-                                    if(newCarta.getValor().equals("9")) reproducirSonidoEspada();
-                                    else if(newCarta.getValor().equals("8")) reproducirSonidoBasto();
-                                    else reproducirSonidoTirarCarta();
                                     tvMesaJ3_C3.setVisibility(View.VISIBLE);
                                 }
                             } else if (sender.equals(idJugador4)) {
@@ -3756,30 +3865,18 @@ public class MainActivity extends Activity
                                         valorEmpateIzq = valor;
                                     } else valor1_izq = valor;
                                     asignarImagenCarta(newCarta, tvMesaJ4_C1);
-                                    //Sonidos dependiendo de la carta que se tira
-                                    if(newCarta.getValor().equals("9")) reproducirSonidoEspada();
-                                    else if(newCarta.getValor().equals("8")) reproducirSonidoBasto();
-                                    else reproducirSonidoTirarCarta();
                                     tvMesaJ4_C1.setVisibility(View.VISIBLE);
                                 } else if (tvMesaJ4_C2.getVisibility() == View.INVISIBLE) {
                                     if (hayEmpate4J) {
                                         valorEmpateIzq = valor;
                                     } else valor2_izq = valor;
                                     asignarImagenCarta(newCarta, tvMesaJ4_C2);
-                                    //Sonidos dependiendo de la carta que se tira
-                                    if(newCarta.getValor().equals("9")) reproducirSonidoEspada();
-                                    else if(newCarta.getValor().equals("8")) reproducirSonidoBasto();
-                                    else reproducirSonidoTirarCarta();
                                     tvMesaJ4_C2.setVisibility(View.VISIBLE);
                                 } else if (tvMesaJ4_C3.getVisibility() == View.INVISIBLE) {
                                     if (hayEmpate4J) {
                                         valorEmpateIzq = valor;
                                     } else valor3_izq = valor;
                                     asignarImagenCarta(newCarta, tvMesaJ4_C3);
-                                    //Sonidos dependiendo de la carta que se tira
-                                    if(newCarta.getValor().equals("9")) reproducirSonidoEspada();
-                                    else if(newCarta.getValor().equals("8")) reproducirSonidoBasto();
-                                    else reproducirSonidoTirarCarta();
                                     tvMesaJ4_C3.setVisibility(View.VISIBLE);
                                 }
                             }
@@ -3792,30 +3889,18 @@ public class MainActivity extends Activity
                                         valorEmpateIzq = valor;
                                     } else valor1_izq = valor;
                                     asignarImagenCarta(newCarta, tvMesaJ4_C1);
-                                    //Sonidos dependiendo de la carta que se tira
-                                    if(newCarta.getValor().equals("9")) reproducirSonidoEspada();
-                                    else if(newCarta.getValor().equals("8")) reproducirSonidoBasto();
-                                    else reproducirSonidoTirarCarta();
                                     tvMesaJ4_C1.setVisibility(View.VISIBLE);
                                 } else if (tvMesaJ4_C2.getVisibility() == View.INVISIBLE) {
                                     if (hayEmpate4J) {
                                         valorEmpateIzq = valor;
                                     } else valor2_izq = valor;
                                     asignarImagenCarta(newCarta, tvMesaJ4_C2);
-                                    //Sonidos dependiendo de la carta que se tira
-                                    if(newCarta.getValor().equals("9")) reproducirSonidoEspada();
-                                    else if(newCarta.getValor().equals("8")) reproducirSonidoBasto();
-                                    else reproducirSonidoTirarCarta();
                                     tvMesaJ4_C2.setVisibility(View.VISIBLE);
                                 } else if (tvMesaJ4_C3.getVisibility() == View.INVISIBLE) {
                                     if (hayEmpate4J) {
                                         valorEmpateIzq = valor;
                                     } else valor3_izq = valor;
                                     asignarImagenCarta(newCarta, tvMesaJ4_C3);
-                                    //Sonidos dependiendo de la carta que se tira
-                                    if(newCarta.getValor().equals("9")) reproducirSonidoEspada();
-                                    else if(newCarta.getValor().equals("8")) reproducirSonidoBasto();
-                                    else reproducirSonidoTirarCarta();
                                     tvMesaJ4_C3.setVisibility(View.VISIBLE);
                                 }
                             } else if (sender.equals(idJugador3)) {
@@ -3824,30 +3909,18 @@ public class MainActivity extends Activity
                                         valorEmpateDerecha = valor;
                                     } else valor1_derecha = valor;
                                     asignarImagenCarta(newCarta, tvMesaJ2_C1);
-                                    //Sonidos dependiendo de la carta que se tira
-                                    if(newCarta.getValor().equals("9")) reproducirSonidoEspada();
-                                    else if(newCarta.getValor().equals("8")) reproducirSonidoBasto();
-                                    else reproducirSonidoTirarCarta();
                                     tvMesaJ2_C1.setVisibility(View.VISIBLE);
                                 } else if (tvMesaJ2_C2.getVisibility() == View.INVISIBLE) {
                                     if (hayEmpate4J) {
                                         valorEmpateDerecha = valor;
                                     } else valor2_derecha = valor;
                                     asignarImagenCarta(newCarta, tvMesaJ2_C2);
-                                    //Sonidos dependiendo de la carta que se tira
-                                    if(newCarta.getValor().equals("9")) reproducirSonidoEspada();
-                                    else if(newCarta.getValor().equals("8")) reproducirSonidoBasto();
-                                    else reproducirSonidoTirarCarta();
                                     tvMesaJ2_C2.setVisibility(View.VISIBLE);
                                 } else if (tvMesaJ2_C3.getVisibility() == View.INVISIBLE) {
                                     if (hayEmpate4J) {
                                         valorEmpateDerecha = valor;
                                     } else valor3_derecha = valor;
                                     asignarImagenCarta(newCarta, tvMesaJ2_C3);
-                                    //Sonidos dependiendo de la carta que se tira
-                                    if(newCarta.getValor().equals("9")) reproducirSonidoEspada();
-                                    else if(newCarta.getValor().equals("8")) reproducirSonidoBasto();
-                                    else reproducirSonidoTirarCarta();
                                     tvMesaJ2_C3.setVisibility(View.VISIBLE);
                                 }
                             } else if (sender.equals(idJugador4)) {
@@ -3856,30 +3929,18 @@ public class MainActivity extends Activity
                                         valorEmpateArriba = valor;
                                     } else valor1_arriba = valor;
                                     asignarImagenCarta(newCarta, tvMesaJ3_C1);
-                                    //Sonidos dependiendo de la carta que se tira
-                                    if(newCarta.getValor().equals("9")) reproducirSonidoEspada();
-                                    else if(newCarta.getValor().equals("8")) reproducirSonidoBasto();
-                                    else reproducirSonidoTirarCarta();
                                     tvMesaJ3_C1.setVisibility(View.VISIBLE);
                                 } else if (tvMesaJ3_C2.getVisibility() == View.INVISIBLE) {
                                     if (hayEmpate4J) {
                                         valorEmpateArriba = valor;
                                     } else valor2_arriba = valor;
                                     asignarImagenCarta(newCarta, tvMesaJ3_C2);
-                                    //Sonidos dependiendo de la carta que se tira
-                                    if(newCarta.getValor().equals("9")) reproducirSonidoEspada();
-                                    else if(newCarta.getValor().equals("8")) reproducirSonidoBasto();
-                                    else reproducirSonidoTirarCarta();
                                     tvMesaJ3_C2.setVisibility(View.VISIBLE);
                                 } else if (tvMesaJ3_C3.getVisibility() == View.INVISIBLE) {
                                     if (hayEmpate4J) {
                                         valorEmpateArriba = valor;
                                     } else valor3_arriba = valor;
                                     asignarImagenCarta(newCarta, tvMesaJ3_C3);
-                                    //Sonidos dependiendo de la carta que se tira
-                                    if(newCarta.getValor().equals("9")) reproducirSonidoEspada();
-                                    else if(newCarta.getValor().equals("8")) reproducirSonidoBasto();
-                                    else reproducirSonidoTirarCarta();
                                     tvMesaJ3_C3.setVisibility(View.VISIBLE);
                                 }
                             }
@@ -3891,30 +3952,18 @@ public class MainActivity extends Activity
                                         valorEmpateArriba = valor;
                                     } else valor1_arriba = valor;
                                     asignarImagenCarta(newCarta, tvMesaJ3_C1);
-                                    //Sonidos dependiendo de la carta que se tira
-                                    if(newCarta.getValor().equals("9")) reproducirSonidoEspada();
-                                    else if(newCarta.getValor().equals("8")) reproducirSonidoBasto();
-                                    else reproducirSonidoTirarCarta();
                                     tvMesaJ3_C1.setVisibility(View.VISIBLE);
                                 } else if (tvMesaJ3_C2.getVisibility() == View.INVISIBLE) {
                                     if (hayEmpate4J) {
                                         valorEmpateArriba = valor;
                                     } else valor2_arriba = valor;
                                     asignarImagenCarta(newCarta, tvMesaJ3_C2);
-                                    //Sonidos dependiendo de la carta que se tira
-                                    if(newCarta.getValor().equals("9")) reproducirSonidoEspada();
-                                    else if(newCarta.getValor().equals("8")) reproducirSonidoBasto();
-                                    else reproducirSonidoTirarCarta();
                                     tvMesaJ3_C2.setVisibility(View.VISIBLE);
                                 } else if (tvMesaJ3_C3.getVisibility() == View.INVISIBLE) {
                                     if (hayEmpate4J) {
                                         valorEmpateArriba = valor;
                                     } else valor3_arriba = valor;
                                     asignarImagenCarta(newCarta, tvMesaJ3_C3);
-                                    //Sonidos dependiendo de la carta que se tira
-                                    if(newCarta.getValor().equals("9")) reproducirSonidoEspada();
-                                    else if(newCarta.getValor().equals("8")) reproducirSonidoBasto();
-                                    else reproducirSonidoTirarCarta();
                                     tvMesaJ3_C3.setVisibility(View.VISIBLE);
                                 }
                             } else if (sender.equals(idJugador2)) {
@@ -3923,30 +3972,18 @@ public class MainActivity extends Activity
                                         valorEmpateIzq = valor;
                                     } else valor1_izq = valor;
                                     asignarImagenCarta(newCarta, tvMesaJ4_C1);
-                                    //Sonidos dependiendo de la carta que se tira
-                                    if(newCarta.getValor().equals("9")) reproducirSonidoEspada();
-                                    else if(newCarta.getValor().equals("8")) reproducirSonidoBasto();
-                                    else reproducirSonidoTirarCarta();
                                     tvMesaJ4_C1.setVisibility(View.VISIBLE);
                                 } else if (tvMesaJ4_C2.getVisibility() == View.INVISIBLE) {
                                     if (hayEmpate4J) {
                                         valorEmpateIzq = valor;
                                     } else valor2_izq = valor;
                                     asignarImagenCarta(newCarta, tvMesaJ4_C2);
-                                    //Sonidos dependiendo de la carta que se tira
-                                    if(newCarta.getValor().equals("9")) reproducirSonidoEspada();
-                                    else if(newCarta.getValor().equals("8")) reproducirSonidoBasto();
-                                    else reproducirSonidoTirarCarta();
                                     tvMesaJ4_C2.setVisibility(View.VISIBLE);
                                 } else if (tvMesaJ4_C3.getVisibility() == View.INVISIBLE) {
                                     if (hayEmpate4J) {
                                         valorEmpateIzq = valor;
                                     } else valor3_izq = valor;
                                     asignarImagenCarta(newCarta, tvMesaJ4_C3);
-                                    //Sonidos dependiendo de la carta que se tira
-                                    if(newCarta.getValor().equals("9")) reproducirSonidoEspada();
-                                    else if(newCarta.getValor().equals("8")) reproducirSonidoBasto();
-                                    else reproducirSonidoTirarCarta();
                                     tvMesaJ4_C3.setVisibility(View.VISIBLE);
                                 }
                             } else if (sender.equals(idJugador4)) {
@@ -3955,30 +3992,18 @@ public class MainActivity extends Activity
                                         valorEmpateDerecha = valor;
                                     } else valor1_derecha = valor;
                                     asignarImagenCarta(newCarta, tvMesaJ2_C1);
-                                    //Sonidos dependiendo de la carta que se tira
-                                    if(newCarta.getValor().equals("9")) reproducirSonidoEspada();
-                                    else if(newCarta.getValor().equals("8")) reproducirSonidoBasto();
-                                    else reproducirSonidoTirarCarta();
                                     tvMesaJ2_C1.setVisibility(View.VISIBLE);
                                 } else if (tvMesaJ2_C2.getVisibility() == View.INVISIBLE) {
                                     if (hayEmpate4J) {
                                         valorEmpateDerecha = valor;
                                     } else valor2_derecha = valor;
                                     asignarImagenCarta(newCarta, tvMesaJ2_C2);
-                                    //Sonidos dependiendo de la carta que se tira
-                                    if(newCarta.getValor().equals("9")) reproducirSonidoEspada();
-                                    else if(newCarta.getValor().equals("8")) reproducirSonidoBasto();
-                                    else reproducirSonidoTirarCarta();
                                     tvMesaJ2_C2.setVisibility(View.VISIBLE);
                                 } else if (tvMesaJ2_C3.getVisibility() == View.INVISIBLE) {
                                     if (hayEmpate4J) {
                                         valorEmpateDerecha = valor;
                                     } else valor3_derecha = valor;
                                     asignarImagenCarta(newCarta, tvMesaJ2_C3);
-                                    //Sonidos dependiendo de la carta que se tira
-                                    if(newCarta.getValor().equals("9")) reproducirSonidoEspada();
-                                    else if(newCarta.getValor().equals("8")) reproducirSonidoBasto();
-                                    else reproducirSonidoTirarCarta();
                                     tvMesaJ2_C3.setVisibility(View.VISIBLE);
                                 }
                             }
@@ -3990,30 +4015,18 @@ public class MainActivity extends Activity
                                         valorEmpateDerecha = valor;
                                     } else valor1_derecha = valor;
                                     asignarImagenCarta(newCarta, tvMesaJ2_C1);
-                                    //Sonidos dependiendo de la carta que se tira
-                                    if(newCarta.getValor().equals("9")) reproducirSonidoEspada();
-                                    else if(newCarta.getValor().equals("8")) reproducirSonidoBasto();
-                                    else reproducirSonidoTirarCarta();
                                     tvMesaJ2_C1.setVisibility(View.VISIBLE);
                                 } else if (tvMesaJ2_C2.getVisibility() == View.INVISIBLE) {
                                     if (hayEmpate4J) {
                                         valorEmpateDerecha = valor;
                                     } else valor2_derecha = valor;
                                     asignarImagenCarta(newCarta, tvMesaJ2_C2);
-                                    //Sonidos dependiendo de la carta que se tira
-                                    if(newCarta.getValor().equals("9")) reproducirSonidoEspada();
-                                    else if(newCarta.getValor().equals("8")) reproducirSonidoBasto();
-                                    else reproducirSonidoTirarCarta();
                                     tvMesaJ2_C2.setVisibility(View.VISIBLE);
                                 } else if (tvMesaJ2_C3.getVisibility() == View.INVISIBLE) {
                                     if (hayEmpate4J) {
                                         valorEmpateDerecha = valor;
                                     } else valor3_derecha = valor;
                                     asignarImagenCarta(newCarta, tvMesaJ2_C3);
-                                    //Sonidos dependiendo de la carta que se tira
-                                    if(newCarta.getValor().equals("9")) reproducirSonidoEspada();
-                                    else if(newCarta.getValor().equals("8")) reproducirSonidoBasto();
-                                    else reproducirSonidoTirarCarta();
                                     tvMesaJ2_C3.setVisibility(View.VISIBLE);
                                 }
                             } else if (sender.equals(idJugador2)) {
@@ -4022,30 +4035,18 @@ public class MainActivity extends Activity
                                         valorEmpateArriba = valor;
                                     } else valor1_arriba = valor;
                                     asignarImagenCarta(newCarta, tvMesaJ3_C1);
-                                    //Sonidos dependiendo de la carta que se tira
-                                    if(newCarta.getValor().equals("9")) reproducirSonidoEspada();
-                                    else if(newCarta.getValor().equals("8")) reproducirSonidoBasto();
-                                    else reproducirSonidoTirarCarta();
                                     tvMesaJ3_C1.setVisibility(View.VISIBLE);
                                 } else if (tvMesaJ3_C2.getVisibility() == View.INVISIBLE) {
                                     if (hayEmpate4J) {
                                         valorEmpateArriba = valor;
                                     } else valor2_arriba = valor;
                                     asignarImagenCarta(newCarta, tvMesaJ3_C2);
-                                    //Sonidos dependiendo de la carta que se tira
-                                    if(newCarta.getValor().equals("9")) reproducirSonidoEspada();
-                                    else if(newCarta.getValor().equals("8")) reproducirSonidoBasto();
-                                    else reproducirSonidoTirarCarta();
                                     tvMesaJ3_C2.setVisibility(View.VISIBLE);
                                 } else if (tvMesaJ3_C3.getVisibility() == View.INVISIBLE) {
                                     if (hayEmpate4J) {
                                         valorEmpateArriba = valor;
                                     } else valor3_arriba = valor;
                                     asignarImagenCarta(newCarta, tvMesaJ3_C3);
-                                    //Sonidos dependiendo de la carta que se tira
-                                    if(newCarta.getValor().equals("9")) reproducirSonidoEspada();
-                                    else if(newCarta.getValor().equals("8")) reproducirSonidoBasto();
-                                    else reproducirSonidoTirarCarta();
                                     tvMesaJ3_C3.setVisibility(View.VISIBLE);
                                 }
                             } else if (sender.equals(idJugador3)) {
@@ -4054,30 +4055,18 @@ public class MainActivity extends Activity
                                         valorEmpateIzq = valor;
                                     } else valor1_izq = valor;
                                     asignarImagenCarta(newCarta, tvMesaJ4_C1);
-                                    //Sonidos dependiendo de la carta que se tira
-                                    if(newCarta.getValor().equals("9")) reproducirSonidoEspada();
-                                    else if(newCarta.getValor().equals("8")) reproducirSonidoBasto();
-                                    else reproducirSonidoTirarCarta();
                                     tvMesaJ4_C1.setVisibility(View.VISIBLE);
                                 } else if (tvMesaJ4_C2.getVisibility() == View.INVISIBLE) {
                                     if (hayEmpate4J) {
                                         valorEmpateIzq = valor;
                                     } else valor2_izq = valor;
                                     asignarImagenCarta(newCarta, tvMesaJ4_C2);
-                                    //Sonidos dependiendo de la carta que se tira
-                                    if(newCarta.getValor().equals("9")) reproducirSonidoEspada();
-                                    else if(newCarta.getValor().equals("8")) reproducirSonidoBasto();
-                                    else reproducirSonidoTirarCarta();
                                     tvMesaJ4_C2.setVisibility(View.VISIBLE);
                                 } else if (tvMesaJ4_C3.getVisibility() == View.INVISIBLE) {
                                     if (hayEmpate4J) {
                                         valorEmpateIzq = valor;
                                     } else valor3_izq = valor;
                                     asignarImagenCarta(newCarta, tvMesaJ4_C3);
-                                    //Sonidos dependiendo de la carta que se tira
-                                    if(newCarta.getValor().equals("9")) reproducirSonidoEspada();
-                                    else if(newCarta.getValor().equals("8")) reproducirSonidoBasto();
-                                    else reproducirSonidoTirarCarta();
                                     tvMesaJ4_C3.setVisibility(View.VISIBLE);
                                 }
                             }
@@ -4124,7 +4113,6 @@ public class MainActivity extends Activity
                         numCarta[1] = Integer.parseInt(arrayCartasJ2[2]);
                         numCarta[2] = Integer.parseInt(arrayCartasJ2[3]);
                         repartir(numCarta);
-                        reproducirSonidoRepartir();
                         carta1 = new Carta(manoJugador.get(0).getNumero(), manoJugador.get(0).getPalo(), manoJugador.get(0).getValor());
                         carta2 = new Carta(manoJugador.get(1).getNumero(), manoJugador.get(1).getPalo(), manoJugador.get(1).getValor());
                         carta3 = new Carta(manoJugador.get(2).getNumero(), manoJugador.get(2).getPalo(), manoJugador.get(2).getValor());
@@ -4163,7 +4151,7 @@ public class MainActivity extends Activity
                             numCarta[1] = Integer.parseInt(arrayCartasJugadores[8]);
                             numCarta[2] = Integer.parseInt(arrayCartasJugadores[9]);
                         }
-                        reproducirSonidoRepartir();
+
                         repartir(numCarta);
                         carta1 = new Carta(manoJugador.get(0).getNumero(), manoJugador.get(0).getPalo(), manoJugador.get(0).getValor());
                         carta2 = new Carta(manoJugador.get(1).getNumero(), manoJugador.get(1).getPalo(), manoJugador.get(1).getValor());
@@ -4270,29 +4258,26 @@ public class MainActivity extends Activity
 
                     }else if(numeroJugadores == 4){
 
-                    /*    switch (caso) {
+                        switch (caso) {
                             case 1:
-                                textoAccion2.setText("Quiero el envid");
-                                animarTextoAccion(textoAccion2);
+                                //textoAccion2.setText("Quiero el envid");
+                                //animarTextoAccion(textoAccion2);
                                 cambiarBarraProgreso();
                                 break;
                             case 2:
-                                textoAccion2.setText("Quiero el vuelvo");
-                                animarTextoAccion(textoAccion2);
+                                //textoAccion2.setText("Quiero el vuelvo");
+                                //animarTextoAccion(textoAccion2);
                                 reiniciarBarraProgreso();
                                 break;
                             case 3:
-                                textoAccion2.setText("Quiero la falta");
-                                animarTextoAccion(textoAccion2);
+                                //textoAccion2.setText("Quiero la falta");
+                               // animarTextoAccion(textoAccion2);
                                 if (!mMyId.equals(turno)) {
                                     reiniciarBarraProgreso();
                                 } else cambiarBarraProgreso();
                                 break;
                         }
-                        if (ganadorEnvid.equals(mMyId) && caso == 1) puntosEnvid = ENVID;
-                        if (ganadorEnvid.equals(mMyId) && caso == 2) puntosEnvid = TORNE;
-                        if (ganadorEnvid.equals(mMyId) && caso == 3) puntosEnvid = 24;
-*/
+
 
                         if ((ganadorEnvid.equals(mMyId) || esDeMiEquipo(ganadorEnvid)) && caso == 1) puntosEnvid = ENVID;
                         if ((ganadorEnvid.equals(mMyId) || esDeMiEquipo(ganadorEnvid)) && caso == 2) puntosEnvid = TORNE;
@@ -4507,7 +4492,7 @@ public class MainActivity extends Activity
                         cambiarBarraProgreso();
                     }else if(numeroJugadores == 4){
                         //Animar bocadillos correspondientes
-                        //cambiarBarraProgreso();
+                        cambiarBarraProgreso();
                     }
                     if (mMyId.equals(turno)) {
                         desbloquearCartas();
@@ -4662,7 +4647,7 @@ public class MainActivity extends Activity
                                 desbloquearCartas();
                             }
                             //Animar los bocadillos
-                            //cambiarBarraProgreso();
+                            cambiarBarraProgreso();
                             //enviarMensajeQuieroTruc();
                             mensajesRecibidosTruc = 0;
                             sQuieroTruc = "NOQUIERO";
@@ -4670,7 +4655,7 @@ public class MainActivity extends Activity
                         }else if(mensajesRecibidosTruc == 2 && sQuieroTruc.equals("RETRUQUE")){
 
                             //Animar los bocadillos
-                            //cambiarBarraProgreso();
+                            cambiarBarraProgreso();
                             //if(!haySender.equals("")) enviarMensajeRetruc_4J();
                             showSingleChoiceAlertRetruc_4J("Tu rival ha retrucado", R.array.truc2, "");
                             mensajesRecibidosTruc = 0;
@@ -4678,7 +4663,7 @@ public class MainActivity extends Activity
                         }else if(mensajesRecibidosTruc == 2 && sQuieroTruc.equals("QUATRE")){
 
                             //Animar los bocadillos
-                            //cambiarBarraProgreso();
+                            cambiarBarraProgreso();
                             //if(!haySender.equals("")) enviarMensajeQuatreVal_4J();
                             showSingleChoiceAlertCuatreVal_4J("¡Quatre val!", R.array.truc3, "");
                             mensajesRecibidosTruc = 0;
@@ -4687,7 +4672,7 @@ public class MainActivity extends Activity
                         }else if(mensajesRecibidosTruc == 2 && sQuieroTruc.equals("JOC")){
 
                             //Animar los bocadillos
-                            //cambiarBarraProgreso();
+                            cambiarBarraProgreso();
                             //if(!haySender.equals("")) enviarMensajeJocFora_4J();
                             showSingleChoiceAlertJocFora_4J("¡Joc fora!", R.array.envid3, "");
                             mensajesRecibidosTruc = 0;
@@ -5018,7 +5003,7 @@ public class MainActivity extends Activity
                                 }
                                 desbloquearCartas();
                                 Toast.makeText(getApplicationContext(), "Es tu turno", Toast.LENGTH_SHORT).show();
-                                //cambiarBarraProgreso();
+                                cambiarBarraProgreso();
                                 animarAparecerMenu();
                             }
 
@@ -5027,7 +5012,7 @@ public class MainActivity extends Activity
 
                                 Toast.makeText(getApplicationContext(), "Esperando al Jugador", Toast.LENGTH_SHORT).show();
                                 Log.d("LLLLLLL", "Me han comunicado cambio de turno");
-                                //reiniciarBarraProgreso();
+                                cambiarBarraProgreso();
 
                             }
                             break;
@@ -5076,6 +5061,68 @@ public class MainActivity extends Activity
             return idJugador4;
         }else if(mano.equals(idJugador4)){
             return idJugador1;
+        }
+        return "";
+    }
+    String comprobarSegundoMano(){
+        if(mano.equals(idJugador1)){
+            return idJugador3;
+        }else if(mano.equals(idJugador2)){
+            return idJugador4;
+        }else if(mano.equals(idJugador3)){
+            return idJugador1;
+        }else if(mano.equals(idJugador4)){
+            return idJugador2;
+        }
+        return "";
+    }
+    String comprobarTerceroeMano(){
+        if(mano.equals(idJugador1)){
+            return idJugador4;
+        }else if(mano.equals(idJugador2)){
+            return idJugador1;
+        }else if(mano.equals(idJugador3)){
+            return idJugador2;
+        }else if(mano.equals(idJugador4)){
+            return idJugador3;
+        }
+        return "";
+    }
+
+    String comprobarDerechaTurno(){
+        if(turno.equals(idJugador1)){
+            return idJugador2;
+        }else if(turno.equals(idJugador2)){
+            return idJugador3;
+        }else if(turno.equals(idJugador3)){
+            return idJugador4;
+        }else if(turno.equals(idJugador4)){
+            return idJugador1;
+        }
+        return "";
+    }
+
+    String comprobarArribaTurno(){
+        if(turno.equals(idJugador1)){
+            return idJugador3;
+        }else if(turno.equals(idJugador2)){
+            return idJugador4;
+        }else if(turno.equals(idJugador3)){
+            return idJugador1;
+        }else if(turno.equals(idJugador4)){
+            return idJugador2;
+        }
+        return "";
+    }
+    String comprobarIzqTurno(){
+        if(turno.equals(idJugador1)){
+            return idJugador4;
+        }else if(turno.equals(idJugador2)){
+            return idJugador1;
+        }else if(turno.equals(idJugador3)){
+            return idJugador2;
+        }else if(turno.equals(idJugador4)){
+            return idJugador3;
         }
         return "";
     }
@@ -5438,7 +5485,6 @@ public class MainActivity extends Activity
         //Si soy mano reparto
         if (mMyId.equals(mano)) {
             repartir(crearAleatorio());
-            reproducirSonidoRepartir();
             carta1 = new Carta(manoJugador.get(0).getNumero(), manoJugador.get(0).getPalo(), manoJugador.get(0).getValor());
             carta2 = new Carta(manoJugador.get(1).getNumero(), manoJugador.get(1).getPalo(), manoJugador.get(1).getValor());
             carta3 = new Carta(manoJugador.get(2).getNumero(), manoJugador.get(2).getPalo(), manoJugador.get(2).getValor());
@@ -5730,26 +5776,14 @@ public class MainActivity extends Activity
                         //Calculamos su valor para enviarlo
                         if (view.equals(tvJugador1)) {
                             aux = carta1;
-                            //Sonidos dependiendo de la carta que se tira
-                            if(aux.getValor().equals("9")) reproducirSonidoEspada();
-                            else if(aux.getValor().equals("8")) reproducirSonidoBasto();
-                            else reproducirSonidoTirarCarta();
                             miValor = Integer.parseInt(carta1.getValor());
                         }
                         if (view.equals(tvJugador2)) {
                             aux = carta2;
-                            //Sonidos dependiendo de la carta que se tira
-                            if(aux.getValor().equals("9")) reproducirSonidoEspada();
-                            else if(aux.getValor().equals("8")) reproducirSonidoBasto();
-                            else reproducirSonidoTirarCarta();
                             miValor = Integer.parseInt(carta2.getValor());
                         }
                         if (view.equals(tvJugador3)) {
                             aux = carta3;
-                            //Sonidos dependiendo de la carta que se tira
-                            if(aux.getValor().equals("9")) reproducirSonidoEspada();
-                            else if(aux.getValor().equals("8")) reproducirSonidoBasto();
-                            else reproducirSonidoTirarCarta();
                             miValor = Integer.parseInt(carta3.getValor());
                         }
 
@@ -5920,26 +5954,14 @@ public class MainActivity extends Activity
                         //Calculamos su valor para enviarlo
                         if (view.equals(tvJugador1_4J)) {
                             aux = carta1;
-                            //Sonidos dependiendo de la carta que se tira
-                            if(aux.getValor().equals("9")) reproducirSonidoEspada();
-                            else if(aux.getValor().equals("8")) reproducirSonidoBasto();
-                            else reproducirSonidoTirarCarta();
                             miValor = Integer.parseInt(carta1.getValor());
                         }
                         if (view.equals(tvJugador2_4J)) {
                             aux = carta2;
-                            //Sonidos dependiendo de la carta que se tira
-                            if(aux.getValor().equals("9")) reproducirSonidoEspada();
-                            else if(aux.getValor().equals("8")) reproducirSonidoBasto();
-                            else reproducirSonidoTirarCarta();
                             miValor = Integer.parseInt(carta2.getValor());
                         }
                         if (view.equals(tvJugador3_4J)) {
                             aux = carta3;
-                            //Sonidos dependiendo de la carta que se tira
-                            if(aux.getValor().equals("9")) reproducirSonidoEspada();
-                            else if(aux.getValor().equals("8")) reproducirSonidoBasto();
-                            else reproducirSonidoTirarCarta();
                             miValor = Integer.parseInt(carta3.getValor());
                         }
 
@@ -6011,23 +6033,23 @@ public class MainActivity extends Activity
                                 ganadorEnvid = comprobarGanadorEnvid_4J();
                                 puntosEnvid = ENVID;
                                 enviarMensajeHayEnvidAndGanador(ganadorEnvid, 1);
-                                //cambiarBarraProgreso();
+                                cambiarBarraProgreso();
                                 break;
                             //Vuelvo
                             case 1:
                                 enviarMensajeVuelvoAEnvidar(sender);
-                                //cambiarBarraProgreso();
+                                cambiarBarraProgreso();
                                 hayVuelvo = true;
                                 break;
                             //Falta
                             case 2:
                                 enviarMensajeLaFalta(1, sender);
-                                //cambiarBarraProgreso();
+                                cambiarBarraProgreso();
                                 break;
                             //No quiero
                             case 3:
                                 enviarMensajeNoQuiero(1);
-                                //cambiarBarraProgreso();
+                                cambiarBarraProgreso();
                                 break;
                         }
                         return true;
@@ -6055,23 +6077,23 @@ public class MainActivity extends Activity
                                 puntosEnvid = TORNE;
                                 enviarMensajeHayEnvidAndGanador(ganadorEnvid, 2);
                                 desbloquearCartas();
-                               /* if (!turno.equals(mMyId)) {
+                                if (!turno.equals(mMyId)) {
                                     cambiarBarraProgreso();
                                 } else reiniciarBarraProgreso();
-                                */break;
+                                break;
                             //Falta
                             case 1:
                                 enviarMensajeLaFalta(1, sender);
-                                //cambiarBarraProgreso();
+                                cambiarBarraProgreso();
                                 break;
                             //No quiero
                             case 2:
                                 desbloquearCartas();
                                 enviarMensajeNoQuiero(2);
-                              /*  if (!turno.equals(mMyId)) {
+                                if (!turno.equals(mMyId)) {
                                     cambiarBarraProgreso();
                                 } else reiniciarBarraProgreso();
-                             */   break;
+                                break;
                         }
                         return true;
                     }
@@ -6105,20 +6127,20 @@ public class MainActivity extends Activity
                                         puntosEnvid = 24 - puntosTotalesJugador2;
                                     }
                                 }
- /*
+
                                 if (!turno.equals(mMyId)) {
                                     cambiarBarraProgreso();
-                                } else reiniciarBarraProgreso();*/
+                                } else reiniciarBarraProgreso();
                                 break;
                             case 1:
                                 if (mMyId.equals(turno)) desbloquearCartas();
                                 if (faltaDirecta) {
                                     enviarMensajeNoQuiero(4);
                                 } else enviarMensajeNoQuiero(3);
-                                /*if (!turno.equals(mMyId)) {
+                                if (!turno.equals(mMyId)) {
                                     cambiarBarraProgreso();
                                 } else reiniciarBarraProgreso();
-                               */ break;
+                                break;
                         }
                         return true;
                     }
@@ -6444,22 +6466,22 @@ public class MainActivity extends Activity
                             case 0:
                                 hayTruc = true;
                                 enviarMensajeReQuaJoc_4J("QUIERO", 1);
-                                //cambiarBarraProgreso();
+                                cambiarBarraProgreso();
                                 retruque_4J.setVisibility(View.VISIBLE);
                                 break;
                             //Retruque
                             case 1:
                                 enviarMensajeReQuaJoc_4J("RETRUQUE", 1);
-                                //cambiarBarraProgreso();
+                                cambiarBarraProgreso();
                                 break;
                             //No quiero
                             case 2:
                                 enviarMensajeReQuaJoc_4J("NOQUIERO", 1);
                                 //mostrarResultadosPerdedorMano("PRIMERO");
                                 if (!turno.equals(mMyId)) {
-                                    //cambiarBarraProgreso();
+                                    cambiarBarraProgreso();
                                 } else {
-                                    //reiniciarBarraProgreso();
+                                    reiniciarBarraProgreso();
                                     desbloquearCartas();
                                 }
                                 break;
@@ -6487,9 +6509,9 @@ public class MainActivity extends Activity
                                 hayRetruc = true;
                                 enviarMensajeReQuaJoc_4J("QUIERO", 2);
                                 if (!turno.equals(mMyId)) {
-                                    //cambiarBarraProgreso();
+                                    cambiarBarraProgreso();
                                 } else {
-                                    //reiniciarBarraProgreso();
+                                    reiniciarBarraProgreso();
                                     desbloquearCartas();
                                 }
                                 quatreVal_4J.setVisibility(View.VISIBLE);
@@ -6497,16 +6519,16 @@ public class MainActivity extends Activity
                             //Cuatre val
                             case 1:
                                 enviarMensajeReQuaJoc_4J("QUATRE", 2);
-                                //cambiarBarraProgreso();
+                                cambiarBarraProgreso();
                                 break;
                             //No quiero
                             case 2:
                                 enviarMensajeReQuaJoc_4J("NOQUIERO", 2);
                                 // mostrarResultadosPerdedorMano("PRIMERO");
                                 if (!turno.equals(mMyId)) {
-                                    //cambiarBarraProgreso();
+                                    cambiarBarraProgreso();
                                 } else {
-                                    //reiniciarBarraProgreso();
+                                    reiniciarBarraProgreso();
                                     desbloquearCartas();
                                 }
                                 break;
@@ -6534,9 +6556,9 @@ public class MainActivity extends Activity
                                 hayCuatreVal = true;
                                 enviarMensajeReQuaJoc_4J("QUIERO", 3);
                                 if (!turno.equals(mMyId)) {
-                                    //cambiarBarraProgreso();
+                                    cambiarBarraProgreso();
                                 } else {
-                                    //reiniciarBarraProgreso();
+                                    reiniciarBarraProgreso();
                                     desbloquearCartas();
                                 }
                                 jocFora_4J.setVisibility(View.VISIBLE);
@@ -6544,16 +6566,16 @@ public class MainActivity extends Activity
                             //Joc fora
                             case 1:
                                 enviarMensajeReQuaJoc_4J("JOC", 3);
-                                //cambiarBarraProgreso();
+                                cambiarBarraProgreso();
                                 break;
                             //No quiero
                             case 2:
                                 enviarMensajeReQuaJoc_4J("NOQUIERO", 3);
                                 // mostrarResultadosPerdedorMano("PRIMERO");
                                 if (!turno.equals(mMyId)) {
-                                    //cambiarBarraProgreso();
+                                    cambiarBarraProgreso();
                                 } else {
-                                    //reiniciarBarraProgreso();
+                                    reiniciarBarraProgreso();
                                     desbloquearCartas();
                                 }
                                 break;
@@ -6582,9 +6604,9 @@ public class MainActivity extends Activity
                                 enviarMensajeReQuaJoc_4J("QUIERO", 4);
                                 desbloquearCartas();
                                 if (!turno.equals(mMyId)) {
-                                    //cambiarBarraProgreso();
+                                    cambiarBarraProgreso();
                                 } else {
-                                    //reiniciarBarraProgreso();
+                                    reiniciarBarraProgreso();
                                     desbloquearCartas();
                                 }
                                 break;
@@ -6601,19 +6623,6 @@ public class MainActivity extends Activity
                 .positiveText("Elegir")
                 .cancelable(false)
                 .show().getWindow().setBackgroundDrawable(new ColorDrawable(0x30000000));
-    }
-
-    private void reproducirSonidoBasto(){
-        soundPool.play(sonidoBasto, 1, 1, 0, 0, 1);
-    }
-    private void reproducirSonidoEspada(){
-        soundPool.play(sonidoEspada, 1, 1, 0, 0, 1);
-    }
-    private void reproducirSonidoRepartir(){
-        soundPool.play(sonidoRepartir, 1, 1, 0, 0, 1);
-    }
-    private void reproducirSonidoTirarCarta(){
-        soundPool.play(sonidoTirar, 1, 1, 0, 0, 1);
     }
 
 }
