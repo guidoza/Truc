@@ -946,6 +946,90 @@ public class MainActivity extends Activity
         repartiendo = materialDialog.show();
     }
 
+    void activarDesactivarMiBarra(String activar){
+        if(activar.equals("ACTIVAR")){
+            segundos = 40;
+            progressBarAbajo.setVisibility(View.VISIBLE);
+            iniciarBarraProgresoAbajo();
+
+        }else if(activar.equals("DESACTIVAR")){
+            segundos = 40;
+            progressBarAbajo.setVisibility(View.INVISIBLE);
+            mCountDownTimerAbajo.cancel();
+
+        }
+    }
+
+    void barrasInvisibles(){
+        progressBarAbajo.setVisibility(View.INVISIBLE);
+        progressBarDerecha.setVisibility(View.INVISIBLE);
+        progressBarArriba.setVisibility(View.INVISIBLE);
+        progressBarIzq.setVisibility(View.INVISIBLE);
+    }
+
+    void activarBarraRival(String caso){
+        switch (caso){
+            case "TRUC":
+                progressBarDerecha.setVisibility(View.VISIBLE);
+                progressBarIzq.setVisibility(View.VISIBLE);
+                segundos = 40;
+                iniciarBarraProgresoDerecha();
+                iniciarBarraProgresoIzq();
+                break;
+
+            case "ENVID":
+                String calculaEnvid = "";
+                if (mano.equals(idJugador1) && mMyId.equals(idJugador3)) {
+                    calculaEnvid = idJugador4;
+                } else if (mano.equals(idJugador1) && mMyId.equals(idJugador4)) {
+                    calculaEnvid = idJugador3;
+                } else if (mano.equals(idJugador2) && mMyId.equals(idJugador4)) {
+                    calculaEnvid = idJugador1;
+                } else if (mano.equals(idJugador2) && mMyId.equals(idJugador1)) {
+                    calculaEnvid = idJugador4;
+                } else if (mano.equals(idJugador3) && mMyId.equals(idJugador1)) {
+                    calculaEnvid = idJugador2;
+                } else if (mano.equals(idJugador3) && mMyId.equals(idJugador2)) {
+                    calculaEnvid = idJugador1;
+                } else if (mano.equals(idJugador4) && mMyId.equals(idJugador2)) {
+                    calculaEnvid = idJugador3;
+                } else if (mano.equals(idJugador4) && mMyId.equals(idJugador3)) {
+                    calculaEnvid = idJugador2;
+                }
+                segundos = 40;
+
+                if(mMyId.equals(idJugador1) && calculaEnvid.equals(idJugador2)){
+                    progressBarDerecha.setVisibility(View.VISIBLE);
+                    iniciarBarraProgresoDerecha();
+                }else if(mMyId.equals(idJugador1) && calculaEnvid.equals(idJugador4)){
+                    progressBarIzq.setVisibility(View.VISIBLE);
+                    iniciarBarraProgresoIzq();
+                }
+                if(mMyId.equals(idJugador2) && calculaEnvid.equals(idJugador1)){
+                    progressBarIzq.setVisibility(View.VISIBLE);
+                    iniciarBarraProgresoIzq();
+                }else if(mMyId.equals(idJugador2) && calculaEnvid.equals(idJugador3)){
+                    progressBarDerecha.setVisibility(View.VISIBLE);
+                    iniciarBarraProgresoDerecha();
+                }
+                if(mMyId.equals(idJugador3) && calculaEnvid.equals(idJugador2)){
+                    progressBarIzq.setVisibility(View.VISIBLE);
+                    iniciarBarraProgresoIzq();
+                }else if(mMyId.equals(idJugador3) && calculaEnvid.equals(idJugador4)){
+                    progressBarDerecha.setVisibility(View.VISIBLE);
+                    iniciarBarraProgresoDerecha();
+                }
+                if(mMyId.equals(idJugador4) && calculaEnvid.equals(idJugador1)) {
+                    progressBarDerecha.setVisibility(View.VISIBLE);
+                    iniciarBarraProgresoDerecha();
+                }else if(mMyId.equals(idJugador4) && calculaEnvid.equals(idJugador3)){
+                    progressBarIzq.setVisibility(View.VISIBLE);
+                    iniciarBarraProgresoIzq();
+                }
+                break;
+        }
+    }
+
     private void envido() {
         switch (numeroJugadores) {
             case 2:
@@ -959,6 +1043,8 @@ public class MainActivity extends Activity
                 Toast.makeText(getApplicationContext(), "Esperando al Jugador", Toast.LENGTH_SHORT).show();
                 bloquearCartas();
                 enviarMensajeEnvid(0);
+                activarDesactivarMiBarra("DESACTIVAR");
+                activarBarraRival("ENVID");
                 break;
         }
     }
@@ -973,8 +1059,27 @@ public class MainActivity extends Activity
         }else if(numeroJugadores == 4){
             Toast.makeText(getApplicationContext(), "Esperando al Jugador", Toast.LENGTH_SHORT).show();
             bloquearCartas();
-            enviarMensajeLaFalta(2, "");
-            cambiarBarraProgreso();
+            String calculaEnvid = "";
+            if (mano.equals(idJugador1) && mMyId.equals(idJugador3)) {
+                calculaEnvid = idJugador4;
+            } else if (mano.equals(idJugador1) && mMyId.equals(idJugador4)) {
+                calculaEnvid = idJugador3;
+            } else if (mano.equals(idJugador2) && mMyId.equals(idJugador4)) {
+                calculaEnvid = idJugador1;
+            } else if (mano.equals(idJugador2) && mMyId.equals(idJugador1)) {
+                calculaEnvid = idJugador4;
+            } else if (mano.equals(idJugador3) && mMyId.equals(idJugador1)) {
+                calculaEnvid = idJugador2;
+            } else if (mano.equals(idJugador3) && mMyId.equals(idJugador2)) {
+                calculaEnvid = idJugador1;
+            } else if (mano.equals(idJugador4) && mMyId.equals(idJugador2)) {
+                calculaEnvid = idJugador3;
+            } else if (mano.equals(idJugador4) && mMyId.equals(idJugador3)) {
+                calculaEnvid = idJugador2;
+            }
+            enviarMensajeLaFalta(2, calculaEnvid);
+            activarDesactivarMiBarra("DESACTIVAR");
+            activarBarraRival("ENVID");
         }
     }
 
@@ -1022,28 +1127,49 @@ public class MainActivity extends Activity
         Toast.makeText(getApplicationContext(), "Esperando al Jugador", Toast.LENGTH_SHORT).show();
         bloquearCartas();
         enviarMensajeTruc();
-        cambiarBarraProgreso();
+
+        if(numeroJugadores == 2){
+            cambiarBarraProgreso();
+        }else if(numeroJugadores == 4){
+            activarDesactivarMiBarra("DESACTIVAR");
+            activarBarraRival("TRUC");
+        }
     }
 
     public void retruco() {
         Toast.makeText(getApplicationContext(), "Esperando al Jugador", Toast.LENGTH_SHORT).show();
         bloquearCartas();
         enviarMensajeRetruc();
-        cambiarBarraProgreso();
+        if(numeroJugadores == 2){
+            cambiarBarraProgreso();
+        }else if(numeroJugadores == 4){
+            activarDesactivarMiBarra("DESACTIVAR");
+            activarBarraRival("TRUC");
+        }
     }
 
     public void quatreVal() {
         Toast.makeText(getApplicationContext(), "Esperando al Jugador", Toast.LENGTH_SHORT).show();
         bloquearCartas();
         enviarMensajeCuatreVal();
-        cambiarBarraProgreso();
+        if(numeroJugadores == 2){
+            cambiarBarraProgreso();
+        }else if(numeroJugadores == 4){
+            activarDesactivarMiBarra("DESACTIVAR");
+            activarBarraRival("TRUC");
+        }
     }
 
     public void jocFora() {
         Toast.makeText(getApplicationContext(), "Esperando al Jugador", Toast.LENGTH_SHORT).show();
         bloquearCartas();
         enviarMensajeJocFora();
-        cambiarBarraProgreso();
+        if(numeroJugadores == 2){
+            cambiarBarraProgreso();
+        }else if(numeroJugadores == 4){
+            activarDesactivarMiBarra("DESACTIVAR");
+            activarBarraRival("TRUC");
+        }
     }
 
 
@@ -2199,6 +2325,7 @@ public class MainActivity extends Activity
                     if (progressBarAbajo.getVisibility() == View.VISIBLE) {
                         progressBarAbajo.setVisibility(View.INVISIBLE);
                         mCountDownTimerAbajo.cancel();
+                        segundos = 40;
                         progressBarIzq.setVisibility(View.VISIBLE);
                         iniciarBarraProgresoIzq();
                     } else if (progressBarDerecha.getVisibility() == View.VISIBLE) {
@@ -2221,6 +2348,7 @@ public class MainActivity extends Activity
                     if (progressBarAbajo.getVisibility() == View.VISIBLE) {
                         progressBarAbajo.setVisibility(View.INVISIBLE);
                         mCountDownTimerAbajo.cancel();
+                        segundos = 40;
                         progressBarArriba.setVisibility(View.VISIBLE);
                         iniciarBarraProgresoArriba();
                     } else if (progressBarDerecha.getVisibility() == View.VISIBLE) {
@@ -2800,7 +2928,7 @@ public class MainActivity extends Activity
                                         }
                                     }, 1500);
                                 }else {
-                                Log.d("KKKKK", "gaa mi compi");
+                                Log.d("KKKKK", "gana mi compi");
                                 Toast.makeText(getApplicationContext(), "Esperando al jugador", Toast.LENGTH_SHORT).show();
                                     bloquearCartas();
                                     if (ronda == 1){
@@ -4652,6 +4780,10 @@ public class MainActivity extends Activity
 
                         //Quieren el truc
                         if(mensajesRecibidosTruc == 2 && sQuieroTruc.equals("QUIERO")) {
+
+                            barrasInvisibles();
+                            cancelarBarraProgreso();
+                            activarDesactivarMiBarra("ACTIVAR");
                             if (caso3 == 1) hayTruc = true;
                             else if (caso3 == 2) hayRetruc = true;
                             else if (caso3 == 3) hayCuatreVal = true;
@@ -4667,26 +4799,32 @@ public class MainActivity extends Activity
 
                         }else if(mensajesRecibidosTruc == 2 && sQuieroTruc.equals("RETRUQUE")){
 
+                            barrasInvisibles();
+                            cancelarBarraProgreso();
+                            activarDesactivarMiBarra("ACTIVAR");
                             //Animar los bocadillos
                             cambiarBarraProgreso();
-                            //if(!haySender.equals("")) enviarMensajeRetruc_4J();
                             showSingleChoiceAlertRetruc_4J("Tu rival ha retrucado", R.array.truc2, "");
                             mensajesRecibidosTruc = 0;
 
                         }else if(mensajesRecibidosTruc == 2 && sQuieroTruc.equals("QUATRE")){
 
+                            barrasInvisibles();
+                            cancelarBarraProgreso();
+                            activarDesactivarMiBarra("ACTIVAR");
                             //Animar los bocadillos
                             cambiarBarraProgreso();
-                            //if(!haySender.equals("")) enviarMensajeQuatreVal_4J();
                             showSingleChoiceAlertCuatreVal_4J("¡Quatre val!", R.array.truc3, "");
                             mensajesRecibidosTruc = 0;
                             sQuieroTruc = "NOQUIERO";
 
                         }else if(mensajesRecibidosTruc == 2 && sQuieroTruc.equals("JOC")){
 
+                            barrasInvisibles();
+                            cancelarBarraProgreso();
+                            activarDesactivarMiBarra("ACTIVAR");
                             //Animar los bocadillos
                             cambiarBarraProgreso();
-                            //if(!haySender.equals("")) enviarMensajeJocFora_4J();
                             showSingleChoiceAlertJocFora_4J("¡Joc fora!", R.array.envid3, "");
                             mensajesRecibidosTruc = 0;
                             sQuieroTruc = "NOQUIERO";
@@ -4694,6 +4832,9 @@ public class MainActivity extends Activity
                         //No quieren el truc
                         }else if(mensajesRecibidosTruc == 2 && sQuieroTruc.equals("NOQUIERO")){
 
+                            barrasInvisibles();
+                            cancelarBarraProgreso();
+                            activarDesactivarMiBarra("ACTIVAR");
                             if(mMyId.equals(equipo1[0]) || mMyId.equals(equipo2[0])){
                                 primerMensaje = mMyId;
                                 //Animar los bocadillos
@@ -6086,6 +6227,9 @@ public class MainActivity extends Activity
     }
 
     private void showSingleChoiceAlertEnvid_4J(String title, int array, final String sender) {
+        barrasInvisibles();
+        cancelarBarraProgreso();
+        activarDesactivarMiBarra("ACTIVAR");
         new MaterialDialog.Builder(this)
                 .title(title)
                 .titleColorRes(R.color.menuItems)
@@ -6129,6 +6273,9 @@ public class MainActivity extends Activity
     }
 
     private void showSingleChoiceAlertVuelvo_4J(String title, int array, final String sender) {
+        barrasInvisibles();
+        cancelarBarraProgreso();
+        activarDesactivarMiBarra("ACTIVAR");
         new MaterialDialog.Builder(this)
                 .title(title)
                 .titleColorRes(R.color.menuItems)
@@ -6172,6 +6319,9 @@ public class MainActivity extends Activity
     }
 
     private void showSingleChoiceAlertFalta_4J(String title, int array) {
+        barrasInvisibles();
+        cancelarBarraProgreso();
+        activarDesactivarMiBarra("ACTIVAR");
         new MaterialDialog.Builder(this)
                 .title(title)
                 .titleColorRes(R.color.menuItems)
@@ -6521,6 +6671,9 @@ public class MainActivity extends Activity
     }
 
     private void showSingleChoiceAlertTruco_4J(String title, int array, final String sender) {
+        barrasInvisibles();
+        cancelarBarraProgreso();
+        activarDesactivarMiBarra("ACTIVAR");
         new MaterialDialog.Builder(this)
                 .title(title)
                 .titleColorRes(R.color.menuItems)
@@ -6563,6 +6716,9 @@ public class MainActivity extends Activity
     }
 
     private void showSingleChoiceAlertRetruc_4J(String title, int array, final String sender) {
+        barrasInvisibles();
+        cancelarBarraProgreso();
+        activarDesactivarMiBarra("ACTIVAR");
         new MaterialDialog.Builder(this)
                 .title(title)
                 .titleColorRes(R.color.menuItems)
@@ -6610,6 +6766,9 @@ public class MainActivity extends Activity
     }
 
     private void showSingleChoiceAlertCuatreVal_4J(String title, int array, final String sender) {
+        barrasInvisibles();
+        cancelarBarraProgreso();
+        activarDesactivarMiBarra("ACTIVAR");
         new MaterialDialog.Builder(this)
                 .title(title)
                 .titleColorRes(R.color.menuItems)
@@ -6657,6 +6816,9 @@ public class MainActivity extends Activity
     }
 
     private void showSingleChoiceAlertJocFora_4J(String title, int array, final String sender) {
+        barrasInvisibles();
+        cancelarBarraProgreso();
+        activarDesactivarMiBarra("ACTIVAR");
         new MaterialDialog.Builder(this)
                 .title(title)
                 .titleColorRes(R.color.menuItems)
