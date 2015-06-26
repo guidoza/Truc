@@ -46,6 +46,7 @@ import android.widget.Toast;
 import com.afollestad.materialdialogs.GravityEnum;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.afollestad.materialdialogs.Theme;
+import com.dd.CircularProgressButton;
 import com.github.alexkolpa.fabtoolbar.FabToolbar;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -243,6 +244,8 @@ public class MainActivity extends Activity
     PointF inicio3Rival;
     FabToolbar actionButton;
     View.OnClickListener menuListener;
+    CircularProgressButton botonMarcadorJ1;
+    CircularProgressButton botonMarcadorJ2;
 
     //Constantes
     final static int NO_QUIERO_TRUC = 1;
@@ -292,7 +295,7 @@ public class MainActivity extends Activity
     //Boolean
     private boolean hayEmpate4J = false;
 
-    //Listas y arrays
+    //Listas y arrays1
     int[] list3 = new int[3];
     int[] list4 = new int[3];
     String[] equipo1 = new String[2];
@@ -355,6 +358,7 @@ public class MainActivity extends Activity
     CountDownTimer mCountDownTimerDerecha = null;
     CountDownTimer mCountDownTimerArriba = null;
     CountDownTimer mCountDownTimerIzq = null;
+    CircularProgressButton circularProgressButton;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -468,6 +472,17 @@ public class MainActivity extends Activity
             }
         };
 
+       /* circularProgressButton = (CircularProgressButton)findViewById(R.id.btnWithText);
+        circularProgressButton.setIndeterminateProgressMode(true); // turn on indeterminate progress
+        circularProgressButton.setProgress(50); // set progress > 0 & < 100 to display indeterminate progress
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            public void run() {
+                // acciones que se ejecutan tras los milisegundos
+                circularProgressButton.setCompleteText("15");
+                circularProgressButton.setProgress(100);
+            }
+        }, 2500); */
 
         tvJugador1 = (ImageView) findViewById(R.id.carta1Jugador);
         tvJugador2 = (ImageView) findViewById(R.id.carta2Jugador);
@@ -573,6 +588,13 @@ public class MainActivity extends Activity
         progressBarDerecha = (ProgressBar) findViewById(R.id.progres_segundos_derecha);
         progressBarArriba = (ProgressBar) findViewById(R.id.progres_segundos_arriba);
         progressBarIzq = (ProgressBar) findViewById(R.id.progres_segundos_izq);
+
+        botonMarcadorJ1 = (CircularProgressButton) findViewById(R.id.botonMarcadorJ1);
+        botonMarcadorJ2 = (CircularProgressButton) findViewById(R.id.botonMarcadorJ2);
+        botonMarcadorJ1.setProgress(100);
+        botonMarcadorJ2.setProgress(100);
+        botonMarcadorJ1.setCompleteText("0");
+        botonMarcadorJ2.setCompleteText("0");
 
         txtNumeroJugador = (TextView) findViewById(R.id.textoNumeroJugador);
 
@@ -3443,7 +3465,17 @@ public class MainActivity extends Activity
         switch (numeroJugadores) {
             case 2:
                 puntosTotalesMios += (puntosTruc + puntosEnvid);
-                marcador.setText("Yo: " + puntosTotalesMios);
+                botonMarcadorJ1.setProgress(0);
+                botonMarcadorJ1.setIndeterminateProgressMode(true); // turn on indeterminate progress
+                botonMarcadorJ1.setProgress(50); // set progress > 0 & < 100 to display indeterminate progress
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    public void run() {
+                        // acciones que se ejecutan tras los milisegundos
+                        botonMarcadorJ1.setCompleteText(Integer.toString(puntosTotalesMios));
+                        botonMarcadorJ1.setProgress(100);
+                    }
+                }, 5000);
                 actualizarMarcador2(puntosTotalesMios, "GANADOR", contador);
                 break;
             case 4:
@@ -3463,7 +3495,17 @@ public class MainActivity extends Activity
         switch (numeroJugadores) {
             case 2:
                 puntosTotalesMios += puntosEnvid;
-                marcador.setText("Yo: " + puntosTotalesMios);
+                botonMarcadorJ1.setProgress(0);
+                botonMarcadorJ1.setIndeterminateProgressMode(true); // turn on indeterminate progress
+                botonMarcadorJ1.setProgress(50); // set progress > 0 & < 100 to display indeterminate progress
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    public void run() {
+                        // acciones que se ejecutan tras los milisegundos
+                        botonMarcadorJ1.setCompleteText(Integer.toString(puntosTotalesMios));
+                        botonMarcadorJ1.setProgress(100);
+                    }
+                }, 5000);
                 actualizarMarcador2(puntosTotalesMios, "PERDEDOR", contador);
                 break;
             case 4:
@@ -4881,8 +4923,17 @@ public class MainActivity extends Activity
                             puntosTotalesJugador2 = Integer.parseInt(otro5[1]);
                             String quien = otro5[2];
                             String contador = otro5[3];
-                            marcador2.setText("Rival: " + puntosTotalesJugador2);
-
+                            botonMarcadorJ2.setProgress(0);
+                            botonMarcadorJ2.setIndeterminateProgressMode(true); // turn on indeterminate progress
+                            botonMarcadorJ2.setProgress(50); // set progress > 0 & < 100 to display indeterminate progress
+                            Handler handler = new Handler();
+                            handler.postDelayed(new Runnable() {
+                                public void run() {
+                                    // acciones que se ejecutan tras los milisegundos
+                                    botonMarcadorJ2.setCompleteText(Integer.toString(puntosTotalesJugador2));
+                                    botonMarcadorJ2.setProgress(100);
+                                }
+                            }, 5000);
 
                             //Para que actualice los puntos antes de comprobar quien es el ganador
                             //Primero y segundo para que no entre en un bucle

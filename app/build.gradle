@@ -27,6 +27,7 @@ dependencies {
     compile 'com.afollestad:material-dialogs:0.7.4.2'
     compile 'com.github.alexkolpa:floating-action-button-toolbar:0.5.1'
     compile 'com.akexorcist:RoundCornerProgressBar:1.2.0'
+    compile 'com.github.dmytrodanylyk.circular-progress-button:library:1.1.3'
 
 
 }
