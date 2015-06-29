@@ -209,9 +209,9 @@
 
                                 <ImageView
                                     android:id="@+id/mano"
-                                    android:layout_width="200dp"
-                                    android:layout_height="165dp"
-                                    android:src="@drawable/ic_mano"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:src="@drawable/ic_manotipo1"
                                     android:layout_centerHorizontal="true"
                                     android:layout_alignParentBottom="true"
                                     />
@@ -264,9 +264,9 @@
                             </RelativeLayout>
             <ImageView
                 android:id="@+id/dedo"
-                android:layout_width="200dp"
-                android:layout_height="165dp"
-                android:src="@drawable/ic_dedo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_dedotipo1"
                 android:layout_gravity="bottom|center"
                 />
 
