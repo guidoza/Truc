@@ -438,6 +438,18 @@
             android:layout_height="match_parent"
             android:layout_weight="0.15">
 
+            <com.dd.CircularProgressButton
+                android:id="@+id/botonMarcadorArriba"
+                android:layout_width="65dp"
+                android:layout_height="38dp"
+                android:textColor="@color/cpb_white"
+                android:textSize="18sp"
+                android:layout_alignParentTop="true"
+                android:layout_marginTop="70dp"
+                android:layout_marginLeft="10dp"
+                fab:cpb_cornerRadius="8dp"
+                fab:cpb_selectorComplete="@color/cpb_blue"/>
+
             <com.game.guillermo.truc.CircleImageView
                 android:id="@+id/imgPerfilArriba"
                 android:layout_width="50dp"
@@ -639,6 +651,17 @@
                     android:layout_marginRight="100dp"
                     android:layout_marginEnd="50dp"
                     />
+                <com.dd.CircularProgressButton
+                    android:id="@+id/botonMarcadorAbajo"
+                    android:layout_width="65dp"
+                    android:layout_height="38dp"
+                    android:textColor="@color/cpb_white"
+                    android:textSize="18sp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginBottom="70dp"
+                    android:layout_marginLeft="310dp"
+                    fab:cpb_cornerRadius="8dp"
+                    fab:cpb_selectorComplete="@color/cpb_blue"/>
 
             </RelativeLayout>
     </FrameLayout>
