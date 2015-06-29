@@ -50,6 +50,7 @@ import com.dd.CircularProgressButton;
 import com.github.alexkolpa.fabtoolbar.FabToolbar;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.games.Games;
 import com.google.android.gms.games.GamesStatusCodes;
 import com.google.android.gms.games.GamesActivityResultCodes;
@@ -65,6 +66,7 @@ import com.google.android.gms.games.multiplayer.realtime.RoomStatusUpdateListene
 import com.google.android.gms.games.multiplayer.realtime.RoomUpdateListener;
 import com.google.android.gms.plus.Plus;
 import com.google.example.games.basegameutils.BaseGameUtils;
+import com.google.android.gms.games.leaderboard.*;
 
 
 import org.xmlpull.v1.XmlPullParser;
@@ -101,6 +103,7 @@ public class MainActivity extends Activity
     final static int RC_SELECT_PLAYERS = 10000;
     final static int RC_INVITATION_INBOX = 10001;
     final static int RC_WAITING_ROOM = 10002;
+    final static int REQUEST_LEADERBOARD = 10100;
 
     // Request code used to invoke sign in user interactions.
     private static final int RC_SIGN_IN = 9001;
@@ -1246,6 +1249,10 @@ public class MainActivity extends Activity
             case R.id.button_quick_game_4:
                 // user wants to play against a random opponent right now
                 startQuickGame4jugadores();
+                break;
+            case R.id.button_ranking:
+                startActivityForResult(Games.Leaderboards.getLeaderboardIntent(mGoogleApiClient,
+                        "CgkIpb6oxu8SEAIQCA"), REQUEST_LEADERBOARD);
                 break;
         }
     }
@@ -2655,7 +2662,6 @@ public class MainActivity extends Activity
             actionButton_4J.startAnimation(animation);
         }
     }
-
 
     // Start the gameplay phase of the game.
     void startGame(boolean multiplayer) {
@@ -4962,6 +4968,10 @@ public class MainActivity extends Activity
                             Log.d("HHHHHH", "Ganador: " + ganadorFinal);
                             if (!ganadorFinal.equals("NADIE")) {
                                 if (ganadorFinal.equals("YO")) {
+
+                                    //Actualiza el ranking sumando una victoria
+                                    updateLeaderboards(mGoogleApiClient, "CgkIpb6oxu8SEAIQCA");
+
                                 /*
                                 if(quien.equals("GANADOR")){
                                     if(contador.equals("PRIMERO"))mostrarResultadosPerdedorMano("SEGUNDO");
@@ -5463,7 +5473,7 @@ public class MainActivity extends Activity
     final static int[] CLICKABLES = {
             R.id.button_accept_popup_invitation, R.id.button_invite_players,
             R.id.button_quick_game, R.id.button_see_invitations, R.id.button_sign_in,
-            R.id.button_sign_out, R.id.button_quick_game_4
+            R.id.button_sign_out, R.id.button_quick_game_4,R.id.button_ranking
     };
 
     // This array lists all the individual screens our game has.
@@ -6959,6 +6969,30 @@ public class MainActivity extends Activity
                 .positiveText("Elegir")
                 .cancelable(false)
                 .show().getWindow().setBackgroundDrawable(new ColorDrawable(0x30000000));
+    }
+
+    private static void updateLeaderboards(final GoogleApiClient googleApiClient, final String leaderboardId) {
+        Games.Leaderboards.loadCurrentPlayerLeaderboardScore(
+                googleApiClient,
+                leaderboardId,
+                LeaderboardVariant.TIME_SPAN_ALL_TIME,
+                LeaderboardVariant.COLLECTION_PUBLIC
+        ).setResultCallback(new ResultCallback<Leaderboards.LoadPlayerScoreResult>() {
+
+            @Override
+            public void onResult(Leaderboards.LoadPlayerScoreResult loadPlayerScoreResult) {
+                if (loadPlayerScoreResult != null) {
+                    if (GamesStatusCodes.STATUS_OK == loadPlayerScoreResult.getStatus().getStatusCode()) {
+                        long score = 0;
+                        if (loadPlayerScoreResult.getScore() != null) {
+                            score = loadPlayerScoreResult.getScore().getRawScore();
+                        }
+                        Games.Leaderboards.submitScore(googleApiClient, leaderboardId, ++score);
+                    }
+                }
+            }
+
+        });
     }
 
 }

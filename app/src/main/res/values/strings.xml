@@ -38,6 +38,7 @@
     <string name="error">Error</string>
     <string name="game_problem">An error occurred while starting the game. Please try again.</string>
     <string name="click_me">Click me!</string>
+    <string name="LEADERBOARD_ID">CgkIpb6oxu8SEAIQCA</string>
     <string name="is_inviting_you">is challenging you to a game!</string>
     <string name="signin_other_error">There was an issue with sign in. Please try again later.</string>
 </resources>
