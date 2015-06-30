@@ -285,7 +285,7 @@ public class MainActivity extends Activity
     String sCartasJ1 = "";
     String sCartasJ3 = "";
     String sCartasJ4 = "";
-    String idCompañero = "";
+    String idCompaÃ±ero = "";
     String idInvitado = "";
     String ganadorRonda1_4J = "";
     String ganadorRonda2_4J = "";
@@ -335,6 +335,10 @@ public class MainActivity extends Activity
 
     //TextViews
     TextView txtNumeroJugador;
+    TextView bocadilloAbajo;
+    TextView bocadilloDerecha;
+    TextView bocadilloArriba;
+    TextView bocadilloIzq;
 
     //Otros objetos
     PointF inicio1J1;
@@ -600,6 +604,11 @@ public class MainActivity extends Activity
         botonMarcadorArriba_4J.setCompleteText("0");
 
         txtNumeroJugador = (TextView) findViewById(R.id.textoNumeroJugador);
+
+        bocadilloAbajo = (TextView) findViewById(R.id.bocadilloJ1);
+        bocadilloDerecha = (TextView) findViewById(R.id.bocadilloJ2);
+        bocadilloArriba = (TextView) findViewById(R.id.bocadilloJ3);
+        bocadilloIzq = (TextView) findViewById(R.id.bocadilloJ4);
 
         // Creamos el nuevo cliente de Google con acceso a Plus y Games
         mGoogleApiClient = new GoogleApiClient.Builder(this)
@@ -1461,7 +1470,7 @@ public class MainActivity extends Activity
     void acceptInviteToRoom(String invId) {
         // accept the invitation
         Log.d(TAG, "Accepting invitation: " + invId);
-        idCompañero = invId;
+        idCompaÃ±ero = invId;
         RoomConfig.Builder roomConfigBuilder = RoomConfig.builder(this);
         roomConfigBuilder.setInvitationIdToAccept(invId)
                 .setMessageReceivedListener(this)
@@ -2020,6 +2029,11 @@ public class MainActivity extends Activity
             progressBarIzq.setVisibility(View.INVISIBLE);
             progressBarArriba.setVisibility(View.INVISIBLE);
 
+            bocadilloAbajo.setVisibility(View.INVISIBLE);
+            bocadilloDerecha.setVisibility(View.INVISIBLE);
+            bocadilloIzq.setVisibility(View.INVISIBLE);
+            bocadilloArriba.setVisibility(View.INVISIBLE);
+
             if (hayAnimaciones) {
                 deshacerAnimaciones(tvJugador1_4J);
                 deshacerAnimaciones(tvJugador2_4J);
@@ -2186,6 +2200,192 @@ public class MainActivity extends Activity
             }
         });
         view.startAnimation(animation2);
+    }
+
+    void animarBocadillosEnvid(int caso, String sender, String quiero){
+
+        switch (caso) {
+
+            case 1:
+                if (esDeMiEquipo(sender)) {
+                    if(quiero.equals("QUIERO")){
+                        bocadilloArriba.setText("Quiero el envid");
+                    }else bocadilloArriba.setText("No quiero el envid");
+                    animarTextoAccion(bocadilloArriba);
+
+                } else {
+
+                    if(esRivalDerecha(sender)){
+                        if(quiero.equals("QUIERO")){
+                            bocadilloDerecha.setText("Quiero el envid");
+                        }else bocadilloDerecha.setText("No quiero el envid");
+                        animarTextoAccion(bocadilloDerecha);
+                    }else if(esRivalIzquierda(sender)){
+                        if(quiero.equals("QUIERO")){
+                            bocadilloIzq.setText("Quiero el envid");
+                        } else bocadilloIzq.setText("No quiero el envid");
+                        animarTextoAccion(bocadilloIzq);
+                    }
+                }
+
+                break;
+
+            case 2:
+                if (esDeMiEquipo(sender)) {
+                    if(quiero.equals("QUIERO")){
+                        bocadilloArriba.setText("Quiero el vuelvo");
+                    }else bocadilloArriba.setText("No quiero el vuelvo");
+                    animarTextoAccion(bocadilloArriba);
+                } else {
+                    if(esRivalDerecha(sender)){
+                        if(quiero.equals("QUIERO")){
+                            bocadilloDerecha.setText("Quiero el vuelvo");
+                        }else bocadilloDerecha.setText("No quiero el vuelvo");
+                        animarTextoAccion(bocadilloDerecha);
+                    }else if(esRivalIzquierda(sender)){
+                        if(quiero.equals("QUIERO")){
+                            bocadilloIzq.setText("Quiero el vuelvo");
+                        } else bocadilloIzq.setText("No quiero el vuelvo");
+                        animarTextoAccion(bocadilloIzq);
+                    }
+                }
+                break;
+
+            case 3:
+                if (esDeMiEquipo(sender)) {
+                    if(quiero.equals("QUIERO")){
+                        bocadilloArriba.setText("Quiero la falta");
+                    } else bocadilloArriba.setText("No quiero la falta");
+                    animarTextoAccion(bocadilloArriba);
+                } else {
+                    if(esRivalDerecha(sender)){
+                        if(quiero.equals("QUIERO")){
+                            bocadilloDerecha.setText("Quiero la falta");
+                        }else bocadilloDerecha.setText("No quiero la falta");
+                        animarTextoAccion(bocadilloDerecha);
+                    }else if(esRivalIzquierda(sender)){
+                        if(quiero.equals("QUIERO")){
+                            bocadilloIzq.setText("Quiero la falta");
+                        } else bocadilloIzq.setText("No quiero la falta");
+                        animarTextoAccion(bocadilloIzq);
+                    }
+                }
+        }
+    }
+
+    void animarBocadillosTruc(int caso, String quiero, String sender){
+        switch (quiero){
+            case "QUIERO":
+                if(esRivalDerecha(sender)){
+                    switch (caso){
+                        case 1:
+                            bocadilloDerecha.setText("Quiero el truc");
+                            animarTextoAccion(bocadilloDerecha);
+                            break;
+                        case 2:
+                            bocadilloDerecha.setText("Quiero el retruc");
+                            animarTextoAccion(bocadilloDerecha);
+                            break;
+                        case 3:
+                            bocadilloDerecha.setText("Quiero el quatre val");
+                            animarTextoAccion(bocadilloDerecha);
+                            break;
+                        case 4:
+                            bocadilloDerecha.setText("Quiero el joc fora");
+                            animarTextoAccion(bocadilloDerecha);
+                            break;
+                    }
+                }else if(esRivalIzquierda(sender)){
+                    switch (caso){
+                        case 1:
+                            bocadilloIzq.setText("Quiero el truc");
+                            animarTextoAccion(bocadilloIzq);
+                            break;
+                        case 2:
+                            bocadilloIzq.setText("Quiero el retruc");
+                            animarTextoAccion(bocadilloIzq);
+                            break;
+                        case 3:
+                            bocadilloIzq.setText("Quiero el quatre val");
+                            animarTextoAccion(bocadilloIzq);
+                            break;
+                        case 4:
+                            bocadilloIzq.setText("Quiero el joc fora");
+                            animarTextoAccion(bocadilloIzq);
+                            break;
+                    }
+                }
+                break;
+            case "RETRUQUE":
+                if(esRivalDerecha(sender)){
+                    bocadilloDerecha.setText("Retruque");
+                    animarTextoAccion(bocadilloDerecha);
+                }else if(esRivalIzquierda(sender)){
+                    bocadilloIzq.setText("Retruque");
+                    animarTextoAccion(bocadilloIzq);
+                }
+                break;
+            case "QUATRE":
+                if(esRivalDerecha(sender)){
+                    bocadilloDerecha.setText("Quatre val");
+                    animarTextoAccion(bocadilloDerecha);
+                }else if(esRivalIzquierda(sender)){
+                    bocadilloIzq.setText("Quatre val");
+                    animarTextoAccion(bocadilloIzq);
+                }
+                break;
+            case "JOC":
+                if(esRivalDerecha(sender)){
+                    bocadilloDerecha.setText("Joc fora");
+                    animarTextoAccion(bocadilloDerecha);
+                }else if(esRivalIzquierda(sender)){
+                    bocadilloIzq.setText("Joc fora");
+                    animarTextoAccion(bocadilloIzq);
+                }
+                break;
+            case "NOQUIERO":
+                if(esRivalDerecha(sender)){
+                    switch (caso){
+                        case 1:
+                            bocadilloDerecha.setText("No quiero el truc");
+                            animarTextoAccion(bocadilloDerecha);
+                            break;
+                        case 2:
+                            bocadilloDerecha.setText("No quiero el retruc");
+                            animarTextoAccion(bocadilloDerecha);
+                            break;
+                        case 3:
+                            bocadilloDerecha.setText("No quiero el quatre val");
+                            animarTextoAccion(bocadilloDerecha);
+                            break;
+                        case 4:
+                            bocadilloDerecha.setText("No quiero el joc fora");
+                            animarTextoAccion(bocadilloDerecha);
+                            break;
+                    }
+                }else if(esRivalIzquierda(sender)){
+                    switch (caso){
+                        case 1:
+                            bocadilloIzq.setText("No quiero el truc");
+                            animarTextoAccion(bocadilloIzq);
+                            break;
+                        case 2:
+                            bocadilloIzq.setText("No quiero el retruc");
+                            animarTextoAccion(bocadilloIzq);
+                            break;
+                        case 3:
+                            bocadilloIzq.setText("No quiero el quatre val");
+                            animarTextoAccion(bocadilloIzq);
+                            break;
+                        case 4:
+                            bocadilloIzq.setText("No quiero el joc fora");
+                            animarTextoAccion(bocadilloIzq);
+                            break;
+                    }
+                }
+                break;
+        }
+
     }
 
     // Reset game variables in preparation for a new game.
@@ -3779,9 +3979,13 @@ public class MainActivity extends Activity
                 }
             }
         }else if(numeroJugadores == 4){
-            byte[] messageVuelvo = ("V").getBytes();
-            Games.RealTimeMultiplayer.sendReliableMessage(mGoogleApiClient, null, messageVuelvo,
-                    mRoomId, sender);
+            byte[] messageVuelvo = ("V "+sender).getBytes();
+            for (Participant p : mParticipants) {
+                if (!p.getParticipantId().equals(mMyId)) {
+                    Games.RealTimeMultiplayer.sendReliableMessage(mGoogleApiClient, null, messageVuelvo,
+                            mRoomId, p.getParticipantId());
+                }
+            }
         }
     }
 
@@ -3805,9 +4009,13 @@ public class MainActivity extends Activity
                 }
             }
         }else if(numeroJugadores == 4){
-            byte[] messageVuelvo = ("F " + 0 + " " + caso).getBytes();
-            Games.RealTimeMultiplayer.sendReliableMessage(mGoogleApiClient, null, messageVuelvo,
-                    mRoomId, sender);
+            byte[] messageFalta = ("F " + sender + " " + caso).getBytes();
+            for (Participant p : mParticipants) {
+                if (!p.getParticipantId().equals(mMyId)) {
+                    Games.RealTimeMultiplayer.sendReliableMessage(mGoogleApiClient, null, messageFalta,
+                            mRoomId, p.getParticipantId());
+                }
+            }
         }
     }
 
@@ -4436,6 +4644,9 @@ public class MainActivity extends Activity
                         case 4:
                             if (esDeMiEquipo(sender)) {
                                 //Animar bocadillo del compi
+                                bocadilloArriba.setText("Envido!");
+                                animarTextoAccion(bocadilloArriba);
+
                             } else {
                                 String calculaEnvid = "";
                                 if (mano.equals(idJugador1) && sender.equals(idJugador3)) {
@@ -4463,6 +4674,8 @@ public class MainActivity extends Activity
                                     showSingleChoiceAlertEnvid_4J("Tu rival ha envidado", R.array.envid, sender);
                                 } else {
                                     //Animar bocadillo del compi del que tiene que calcular
+                                    bocadilloDerecha.setText("Envide!");
+                                    animarTextoAccion(bocadilloDerecha);
                                 }
                             }
                             envid_4J.setVisibility(View.GONE);
@@ -4514,24 +4727,20 @@ public class MainActivity extends Activity
 
                         switch (caso) {
                             case 1:
-                                //textoAccion2.setText("Quiero el envid");
-                                //animarTextoAccion(textoAccion2);
+                                animarBocadillosEnvid(1, sender, "QUIERO");
                                 cambiarBarraProgreso();
                                 break;
                             case 2:
-                                //textoAccion2.setText("Quiero el vuelvo");
-                                //animarTextoAccion(textoAccion2);
+                                animarBocadillosEnvid(2, sender, "QUIERO");
                                 reiniciarBarraProgreso();
                                 break;
                             case 3:
-                                //textoAccion2.setText("Quiero la falta");
-                               // animarTextoAccion(textoAccion2);
+                                animarBocadillosEnvid(3, sender, "QUIERO");
                                 if (!mMyId.equals(turno)) {
                                     reiniciarBarraProgreso();
                                 } else cambiarBarraProgreso();
                                 break;
                         }
-
 
                         if ((ganadorEnvid.equals(mMyId) || esDeMiEquipo(ganadorEnvid)) && caso == 1) puntosEnvid = ENVID;
                         if ((ganadorEnvid.equals(mMyId) || esDeMiEquipo(ganadorEnvid)) && caso == 2) puntosEnvid = TORNE;
@@ -4560,11 +4769,26 @@ public class MainActivity extends Activity
                         showSingleChoiceAlertVuelvo("Tu rival ha vuelto a envidar", R.array.envid2);
                         cambiarBarraProgreso();
                     }else if(numeroJugadores == 4){
-                        hayVuelvo = true;
-                        barrasInvisibles();
-                        cancelarBarraProgreso();
-                        activarDesactivarMiBarra("ACTIVAR");
-                        showSingleChoiceAlertVuelvo_4J("Tu rival ha vuelto a envidar", R.array.envid2, sender);
+                        String aux3 = new String(buf, "UTF-8");
+                        String otro[] = aux3.split(" ");
+                        String yo = otro[1];
+
+                        if(mMyId.equals(yo)){
+                            hayVuelvo = true;
+                            barrasInvisibles();
+                            cancelarBarraProgreso();
+                            activarDesactivarMiBarra("ACTIVAR");
+                            showSingleChoiceAlertVuelvo_4J("Tu rival ha vuelto a envidar", R.array.envid2, sender);
+
+                        }else {
+                            if(!mMyId.equals(sender) && esDeMiEquipo(sender)){
+                                bocadilloArriba.setText("Vuelvo a envidar!");
+                                animarTextoAccion(bocadilloArriba);
+                            } else if(!mMyId.equals(sender) && !esDeMiEquipo(sender)){
+                                bocadilloDerecha.setText("Vuelvo a envidar!");
+                                animarTextoAccion(bocadilloDerecha);
+                            }
+                        }
                     }
                     break;
 
@@ -4612,24 +4836,43 @@ public class MainActivity extends Activity
                         if(!esDeMiEquipo(sender)){
                             switch (caso1) {
                                 case 1:
+                                    animarBocadillosEnvid(1, sender, "NOQUIERO");
                                     puntosEnvid = NO_QUIERO_ENVID;
                                     Log.d("KKKKKK", "Puntos del envid:" +puntosEnvid);
                                     break;
                                 case 2:
+                                    animarBocadillosEnvid(2, sender, "NOQUIERO");
                                     puntosEnvid = ENVID;
                                     Log.d("KKKKKK", "Puntos del envid:" +puntosEnvid);
                                     break;
                                 case 3:
+                                    animarBocadillosEnvid(3, sender, "NOQUIERO");
                                     if (hayVuelvo) {
                                         puntosEnvid = TORNE;
                                     } else puntosEnvid = ENVID;
                                     Log.d("KKKKKK", "Puntos del envid:" +puntosEnvid);
                                     break;
                                 case 4:
+                                    animarBocadillosEnvid(3, sender, "NOQUIERO");
                                     puntosEnvid = NO_QUIERO_ENVID;
                                     Log.d("KKKKKK", "Puntos del envid:" +puntosEnvid);
                                     break;
 
+                            }
+                        }else {
+                            switch (caso1) {
+                                case 1:
+                                    animarBocadillosEnvid(1, sender, "NOQUIERO");
+                                    break;
+                                case 2:
+                                    animarBocadillosEnvid(2, sender, "NOQUIERO");
+                                    break;
+                                case 3:
+                                    animarBocadillosEnvid(3, sender, "NOQUIERO");
+                                    break;
+                                case 4:
+                                    animarBocadillosEnvid(3, sender, "NOQUIERO");
+                                    break;
                             }
                         }
                     }
@@ -4686,21 +4929,25 @@ public class MainActivity extends Activity
                             case 1:
                                 //textoAccion2.setText("No quiero el truc");
                                 //animarTextoAccion(textoAccion2);
+
                                 hayTruc = false;
                                 break;
                             case 2:
                                 //textoAccion2.setText("No quiero el retruc");
                                 //animarTextoAccion(textoAccion2);
+
                                 hayTruc = true;
                                 break;
                             case 3:
                                // textoAccion2.setText("No quiero el quatre val");
                                 //animarTextoAccion(textoAccion2);
+
                                 hayRetruc = true;
                                 break;
                             case 4:
                                 //textoAccion2.setText("No quiero el joc fora");
                                 //animarTextoAccion(textoAccion2);
+
                                 hayCuatreVal = true;
                                 break;
                         }
@@ -4721,13 +4968,25 @@ public class MainActivity extends Activity
                         cambiarBarraProgreso();
 
                     }else if(numeroJugadores ==4){
-                        if (Integer.parseInt(otro2[2]) == 2) faltaDirecta = true;
-                        barrasInvisibles();
-                        cancelarBarraProgreso();
-                        activarDesactivarMiBarra("ACTIVAR");
-                        showSingleChoiceAlertFalta_4J("Tu rival ha envidado la falta", R.array.envid3);
-                        envid_4J.setVisibility(View.GONE);
-                        laFalta_4J.setVisibility(View.GONE);
+                        String yo = otro2[1];
+
+                        if(mMyId.equals(yo)){
+                            if (Integer.parseInt(otro2[2]) == 2) faltaDirecta = true;
+                            barrasInvisibles();
+                            cancelarBarraProgreso();
+                            activarDesactivarMiBarra("ACTIVAR");
+                            showSingleChoiceAlertFalta_4J("Tu rival ha envidado la falta", R.array.envid3);
+                            envid_4J.setVisibility(View.GONE);
+                            laFalta_4J.setVisibility(View.GONE);
+                        }else {
+                            if(!mMyId.equals(sender) && esDeMiEquipo(sender)){
+                                bocadilloArriba.setText("La falta!");
+                                animarTextoAccion(bocadilloArriba);
+                            } else if(!mMyId.equals(sender) && !esDeMiEquipo(sender)){
+                                bocadilloDerecha.setText("Envido la falta!");
+                                animarTextoAccion(bocadilloDerecha);
+                            }
+                        }
                     }
                     break;
 
@@ -4741,6 +5000,9 @@ public class MainActivity extends Activity
                         truc_4J.setVisibility(View.GONE);
                         if(esDeMiEquipo(sender)){
                             //Mostrar bocadillo
+                            bocadilloArriba.setText("Truco!");
+                            animarTextoAccion(bocadilloArriba);
+
                         }else {
                             barrasInvisibles();
                             cancelarBarraProgreso();
@@ -4752,14 +5014,14 @@ public class MainActivity extends Activity
 
                 case 'Q':
                     hayTruc = true;
-                    if(numeroJugadores == 2) {
+                    //if(numeroJugadores == 2) {
                         textoAccion2.setText("Quiero el truc");
                         animarTextoAccion(textoAccion2);
                         cambiarBarraProgreso();
-                    }else if(numeroJugadores == 4){
+                    /*}else if(numeroJugadores == 4){
                         //Animar bocadillos correspondientes
                         cambiarBarraProgreso();
-                    }
+                    }*/
                     if (mMyId.equals(turno)) {
                         desbloquearCartas();
                         animarAparecerMenu();
@@ -4775,6 +5037,8 @@ public class MainActivity extends Activity
                     }else if(numeroJugadores == 4){
                         if(esDeMiEquipo(sender)){
                             //Mostrar bocadillo
+                            bocadilloArriba.setText("Retruque!");
+                            animarTextoAccion(bocadilloArriba);
                             retruque_4J.setVisibility(View.GONE);
 
                         }else {
@@ -4806,6 +5070,8 @@ public class MainActivity extends Activity
                     }else if(numeroJugadores == 4){
                         if(esDeMiEquipo(sender)){
                             //Mostrar bocadillo
+                            bocadilloArriba.setText("Quatre val!");
+                            animarTextoAccion(bocadilloArriba);
                             quatreVal_4J.setVisibility(View.GONE);
                         }else {
                             barrasInvisibles();
@@ -4837,6 +5103,8 @@ public class MainActivity extends Activity
                     }else if(numeroJugadores == 4){
                         if(esDeMiEquipo(sender)){
                             //Mostrar bocadillo
+                            bocadilloArriba.setText("Joc fora!");
+                            animarTextoAccion(bocadilloArriba);
                             jocFora_4J.setVisibility(View.GONE);
                         }else {
                             barrasInvisibles();
@@ -4875,22 +5143,98 @@ public class MainActivity extends Activity
                             if (caso3 == 1){
                                 hayTruc = true;
                                 retruque_4J.setVisibility(View.VISIBLE);
+                                bocadilloArriba.setText("Quiero el truc");
+                                animarTextoAccion(bocadilloArriba);
                             }
                             else if (caso3 == 2){
                                 hayRetruc = true;
                                 quatreVal_4J.setVisibility(View.VISIBLE);
+                                bocadilloArriba.setText("Quiero el retruq");
+                                animarTextoAccion(bocadilloArriba);
                             }
                             else if (caso3 == 3){
                                 hayCuatreVal = true;
                                 jocFora_4J.setVisibility(View.VISIBLE);
+                                bocadilloArriba.setText("Quiero el quatre val");
+                                animarTextoAccion(bocadilloArriba);
                             }
                             else if (caso3 == 4){
                                 hayJocFora = true;
+                                bocadilloArriba.setText("Quiero el Joc fora");
+                                animarTextoAccion(bocadilloArriba);
+                            }
+                        }else if(respuesta.equals("RETRUQUE")){
+                            bocadilloArriba.setText("Retruque");
+                            animarTextoAccion(bocadilloArriba);
+
+                        }else if(respuesta.equals("QUATRE")){
+                            bocadilloArriba.setText("Quatre val");
+                            animarTextoAccion(bocadilloArriba);
+
+                        }else if(respuesta.equals("JOC")){
+                            bocadilloArriba.setText("Joc fora");
+                            animarTextoAccion(bocadilloArriba);
+
+                        }else if(respuesta.equals("NOQUIERO")){
+                            if (caso3 == 1){
+                                bocadilloArriba.setText("No quiero el truc");
+                                animarTextoAccion(bocadilloArriba);
+                            }
+                            else if (caso3 == 2){
+                                bocadilloArriba.setText("No quiero el retruq");
+                                animarTextoAccion(bocadilloArriba);
+                            }
+                            else if (caso3 == 3){
+                                bocadilloArriba.setText("No quiero el quatre val");
+                                animarTextoAccion(bocadilloArriba);
+                            }
+                            else if (caso3 == 4){
+                                bocadilloArriba.setText("No quiero el Joc fora");
+                                animarTextoAccion(bocadilloArriba);
                             }
                         }
 
                     }else if(!esDeMiEquipo(sender)){
 
+                        //Bocadillos y eliminar botones
+                        if(respuesta.equals("QUIERO")){
+                            if (caso3 == 1){
+                                animarBocadillosTruc(1, "QUIERO", sender);
+                            }
+                            else if (caso3 == 2){
+                                animarBocadillosTruc(2, "QUIERO", sender);
+                            }
+                            else if (caso3 == 3){
+                                animarBocadillosTruc(3, "QUIERO", sender);
+                            }
+                            else if (caso3 == 4){
+                                animarBocadillosTruc(4, "QUIERO", sender);
+                            }
+                        }else if(respuesta.equals("RETRUQUE")){
+                            animarBocadillosTruc(1, "RETRUQUE", sender);
+
+                        }else if(respuesta.equals("QUATRE")){
+                            animarBocadillosTruc(1, "QUATRE", sender);
+
+                        }else if(respuesta.equals("JOC")){
+                            animarBocadillosTruc(1, "JOC", sender);
+
+                        }else if(respuesta.equals("NOQUIERO")){
+                            if (caso3 == 1){
+                                animarBocadillosTruc(1, "NOQUIERO", sender);
+                            }
+                            else if (caso3 == 2){
+                                animarBocadillosTruc(2, "NOQUIERO", sender);
+                            }
+                            else if (caso3 == 3){
+                                animarBocadillosTruc(3, "NOQUIERO", sender);
+                            }
+                            else if (caso3 == 4){
+                                animarBocadillosTruc(4, "NOQUIERO", sender);
+                            }
+                        }
+
+                        //Ejecucion tras los bocadillos
                         if(respuesta.equals("QUIERO")){
                             if(sQuieroTruc.equals("NOQUIERO"))sQuieroTruc = "QUIERO";
                         }
@@ -5488,6 +5832,39 @@ public class MainActivity extends Activity
             }
         }
         return ultimos;
+    }
+
+    boolean esRivalDerecha(String sender){
+        if(mMyId.equals(idJugador1)){
+            if(sender.equals(idJugador2)) return true;
+
+        }else if(mMyId.equals(idJugador2)){
+            if(sender.equals(idJugador3)) return true;
+
+        }else if(mMyId.equals(idJugador3)){
+            if(sender.equals(idJugador4)) return true;
+
+        }else if(mMyId.equals(idJugador4)){
+            if(sender.equals(idJugador1)) return true;
+
+        }
+        return false;
+    }
+    boolean esRivalIzquierda(String sender){
+        if(mMyId.equals(idJugador1)){
+            if(sender.equals(idJugador4)) return true;
+
+        }else if(mMyId.equals(idJugador2)){
+            if(sender.equals(idJugador1)) return true;
+
+        }else if(mMyId.equals(idJugador3)){
+            if(sender.equals(idJugador2)) return true;
+
+        }else if(mMyId.equals(idJugador4)){
+            if(sender.equals(idJugador3)) return true;
+
+        }
+        return false;
     }
 
     // Broadcast my score to everybody else.
@@ -6447,7 +6824,7 @@ public class MainActivity extends Activity
                                 break;
                             //Falta
                             case 2:
-                                enviarMensajeLaFalta(1, sender);
+                                enviarMensajeLaFalta( 1, sender);
                                 cambiarBarraProgreso();
                                 break;
                             //No quiero
