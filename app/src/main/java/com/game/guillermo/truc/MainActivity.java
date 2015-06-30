@@ -42,6 +42,8 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.media.AudioManager;
+import android.media.SoundPool;
 
 import com.afollestad.materialdialogs.GravityEnum;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -278,6 +280,10 @@ public class MainActivity extends Activity
     int rondasGanadasMiEquipo = 0;
     int mensajesRecibidos = 0;
     int mensajesRecibidosTruc = 0;
+    int sonidoRepartir = 0;
+    int sonidoBasto = 0;
+    int sonidoEspada = 0;
+    int sonidoTirar = 0;
 
     //Strings
     String idJugador3 = null;
@@ -285,14 +291,13 @@ public class MainActivity extends Activity
     String sCartasJ1 = "";
     String sCartasJ3 = "";
     String sCartasJ4 = "";
-    String idCompaÃ±ero = "";
+    String idCompanyero = "";
     String idInvitado = "";
     String ganadorRonda1_4J = "";
     String ganadorRonda2_4J = "";
     String ganadorRonda3_4J = "";
     String sQuieroTruc = "NOQUIERO";
     String primerMensaje = "";
-
 
     //Boolean
     private boolean hayEmpate4J = false;
@@ -368,6 +373,7 @@ public class MainActivity extends Activity
     CircularProgressButton botonMarcadorArriba;
     CircularProgressButton botonMarcadorAbajo_4J;
     CircularProgressButton botonMarcadorArriba_4J;
+    SoundPool soundPool;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -602,6 +608,12 @@ public class MainActivity extends Activity
         botonMarcadorArriba_4J.setProgress(100);
         botonMarcadorAbajo_4J.setCompleteText("0");
         botonMarcadorArriba_4J.setCompleteText("0");
+
+        soundPool = new SoundPool(8, AudioManager.STREAM_MUSIC, 0);
+        sonidoBasto = soundPool.load(this,R.raw.basto,1);
+        sonidoEspada = soundPool.load(this,R.raw.espada,2);
+        sonidoRepartir = soundPool.load(this,R.raw.repartiendocartasrapido,3);
+        sonidoTirar = soundPool.load(this,R.raw.tirarcarta,4);
 
         txtNumeroJugador = (TextView) findViewById(R.id.textoNumeroJugador);
 
@@ -1379,7 +1391,7 @@ public class MainActivity extends Activity
                     // ready to start playing
                     Log.d(TAG, "Starting game (waiting room returned OK).");
                     resetPuntos();
-                    showProgressDialog("ï¿½Empezamos!");
+                    showProgressDialog("?Empezamos!");
                     resetAnimaciones();
                     inicializarMano();
                 } else if (responseCode == GamesActivityResultCodes.RESULT_LEFT_ROOM) {
@@ -1470,7 +1482,7 @@ public class MainActivity extends Activity
     void acceptInviteToRoom(String invId) {
         // accept the invitation
         Log.d(TAG, "Accepting invitation: " + invId);
-        idCompaÃ±ero = invId;
+        idCompanyero = invId;
         RoomConfig.Builder roomConfigBuilder = RoomConfig.builder(this);
         roomConfigBuilder.setInvitationIdToAccept(invId)
                 .setMessageReceivedListener(this)
@@ -1534,9 +1546,10 @@ public class MainActivity extends Activity
         resetPuntos();
         stopKeepingScreenOn();
         if (mRoomId != null) {
+            enviarMensajeDesconectado();
             Games.RealTimeMultiplayer.leave(mGoogleApiClient, this, mRoomId);
             mRoomId = null;
-            switchToScreen(R.id.screen_wait);
+            switchToScreen(R.id.screen_lost);
         } else {
             switchToMainScreen();
         }
@@ -1658,7 +1671,13 @@ public class MainActivity extends Activity
     public void onLeftRoom(int statusCode, String roomId) {
         // we have left the room; return to main screen.
         Log.d(TAG, "onLeftRoom, code " + statusCode);
-        switchToMainScreen();
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            public void run() {
+                // acciones que se ejecutan tras los milisegundos
+                switchToMainScreen();
+            }
+        }, 5000);
     }
 
     // Called when we get disconnected from the room. We return to the main screen.
@@ -3219,7 +3238,7 @@ public class MainActivity extends Activity
                                     enviarMensajeTurno4J(turno);
                                     reiniciarBarraProgreso();
                                 }
-                                //Ha ganado mi compaÃ±ero
+                                //Ha ganado mi compañero
                             } else {
                                 if (rondasGanadasMiEquipo == 2) {
                                     //enviarMensajeHasPerdido();
@@ -3315,7 +3334,7 @@ public class MainActivity extends Activity
     }
 
     void casoEmpatePrimero() {
-        showBasicAlert("Empate en la primera ronda!", "La carta que elijas serï¿½ mostrada arriba");
+        showBasicAlert("Empate en la primera ronda!", "La carta que elijas ser? mostrada arriba");
         //Si no soy mano, cambio turno
         if (!mMyId.equals(mano)) {
             switch (numeroJugadores) {
@@ -3833,7 +3852,7 @@ public class MainActivity extends Activity
      * S: Mensaje de repartir las cartas.
      * M: Mensaje de actualizar la mano.
      * N: Mensaje indicador de que he envidado.
-     * K: Mensaje de envid aceptado y notificaciï¿½n de ganador de envid.
+     * K: Mensaje de envid aceptado y notificaci?n de ganador de envid.
      * V: Mensaje que indica que vuelvo a envidar (cuando mi rival me ha envidado).
      * X: Mensaje de que NO quiero envid o truc (Envid -> 1, Truc -> 2).
      * F: Mensaje de la falta del envid.
@@ -4200,7 +4219,15 @@ public class MainActivity extends Activity
         }
     }
 
-
+    public void enviarMensajeDesconectado() {
+        byte[] messageDesconectado = ("2").getBytes();
+        for (Participant p : mParticipants) {
+            if (!p.getParticipantId().equals(mMyId)) {
+                Games.RealTimeMultiplayer.sendReliableMessage(mGoogleApiClient, null, messageDesconectado,
+                        mRoomId, p.getParticipantId());
+            }
+        }
+    }
 
 
 
@@ -4247,6 +4274,7 @@ public class MainActivity extends Activity
                                 valorEmpate = valor;
                             } else valor1 = valor;
                             asignarImagenCarta(newCarta, tvMesaRival1);
+                            comprobarSonidosCartas(newCarta);
                             animacionRival(tvMesaRival1);
                             Log.d("KKKKK", "Animando la carta rival 1");
                         } else if (tvMesaRival2.getVisibility() == View.INVISIBLE) {
@@ -4254,6 +4282,7 @@ public class MainActivity extends Activity
                                 valorEmpate = valor;
                             } else valor2 = valor;
                             asignarImagenCarta(newCarta, tvMesaRival2);
+                            comprobarSonidosCartas(newCarta);
                             animacionRival(tvMesaRival2);
                             Log.d("KKKKK", "Animando la carta rival 2");
                         } else if (tvMesaRival3.getVisibility() == View.INVISIBLE) {
@@ -4261,6 +4290,7 @@ public class MainActivity extends Activity
                                 valorEmpate = valor;
                             } else valor3 = valor;
                             asignarImagenCarta(newCarta, tvMesaRival3);
+                            comprobarSonidosCartas(newCarta);
                             animacionRival(tvMesaRival3);
                             Log.d("KKKKK", "Animando la carta rival 3");
                         }
@@ -4282,18 +4312,21 @@ public class MainActivity extends Activity
                                         valorEmpateDerecha = valor;
                                     } else valor1_derecha = valor;
                                     asignarImagenCarta(newCarta, tvMesaJ2_C1);
+                                    comprobarSonidosCartas(newCarta);
                                     tvMesaJ2_C1.setVisibility(View.VISIBLE);
                                 } else if (tvMesaJ2_C2.getVisibility() == View.INVISIBLE) {
                                     if (hayEmpate4J) {
                                         valorEmpateDerecha = valor;
                                     } else valor2_derecha = valor;
                                     asignarImagenCarta(newCarta, tvMesaJ2_C2);
+                                    comprobarSonidosCartas(newCarta);
                                     tvMesaJ2_C2.setVisibility(View.VISIBLE);
                                 } else if (tvMesaJ2_C3.getVisibility() == View.INVISIBLE) {
                                     if (hayEmpate4J) {
                                         valorEmpateDerecha = valor;
                                     } else valor3_derecha = valor;
                                     asignarImagenCarta(newCarta, tvMesaJ2_C3);
+                                    comprobarSonidosCartas(newCarta);
                                     tvMesaJ2_C3.setVisibility(View.VISIBLE);
                                 }
                             } else if (sender.equals(idJugador3)) {
@@ -4303,18 +4336,21 @@ public class MainActivity extends Activity
                                         valorEmpateArriba = valor;
                                     } else valor1_arriba = valor;
                                     asignarImagenCarta(newCarta, tvMesaJ3_C1);
+                                    comprobarSonidosCartas(newCarta);
                                     tvMesaJ3_C1.setVisibility(View.VISIBLE);
                                 } else if (tvMesaJ3_C2.getVisibility() == View.INVISIBLE) {
                                     if (hayEmpate4J) {
                                         valorEmpateArriba = valor;
                                     } else valor2_arriba = valor;
                                     asignarImagenCarta(newCarta, tvMesaJ3_C2);
+                                    comprobarSonidosCartas(newCarta);
                                     tvMesaJ3_C2.setVisibility(View.VISIBLE);
                                 } else if (tvMesaJ3_C3.getVisibility() == View.INVISIBLE) {
                                     if (hayEmpate4J) {
                                         valorEmpateArriba = valor;
                                     } else valor3_arriba = valor;
                                     asignarImagenCarta(newCarta, tvMesaJ3_C3);
+                                    comprobarSonidosCartas(newCarta);
                                     tvMesaJ3_C3.setVisibility(View.VISIBLE);
                                 }
                             } else if (sender.equals(idJugador4)) {
@@ -4323,18 +4359,21 @@ public class MainActivity extends Activity
                                         valorEmpateIzq = valor;
                                     } else valor1_izq = valor;
                                     asignarImagenCarta(newCarta, tvMesaJ4_C1);
+                                    comprobarSonidosCartas(newCarta);
                                     tvMesaJ4_C1.setVisibility(View.VISIBLE);
                                 } else if (tvMesaJ4_C2.getVisibility() == View.INVISIBLE) {
                                     if (hayEmpate4J) {
                                         valorEmpateIzq = valor;
                                     } else valor2_izq = valor;
                                     asignarImagenCarta(newCarta, tvMesaJ4_C2);
+                                    comprobarSonidosCartas(newCarta);
                                     tvMesaJ4_C2.setVisibility(View.VISIBLE);
                                 } else if (tvMesaJ4_C3.getVisibility() == View.INVISIBLE) {
                                     if (hayEmpate4J) {
                                         valorEmpateIzq = valor;
                                     } else valor3_izq = valor;
                                     asignarImagenCarta(newCarta, tvMesaJ4_C3);
+                                    comprobarSonidosCartas(newCarta);
                                     tvMesaJ4_C3.setVisibility(View.VISIBLE);
                                 }
                             }
@@ -4347,18 +4386,21 @@ public class MainActivity extends Activity
                                         valorEmpateIzq = valor;
                                     } else valor1_izq = valor;
                                     asignarImagenCarta(newCarta, tvMesaJ4_C1);
+                                    comprobarSonidosCartas(newCarta);
                                     tvMesaJ4_C1.setVisibility(View.VISIBLE);
                                 } else if (tvMesaJ4_C2.getVisibility() == View.INVISIBLE) {
                                     if (hayEmpate4J) {
                                         valorEmpateIzq = valor;
                                     } else valor2_izq = valor;
                                     asignarImagenCarta(newCarta, tvMesaJ4_C2);
+                                    comprobarSonidosCartas(newCarta);
                                     tvMesaJ4_C2.setVisibility(View.VISIBLE);
                                 } else if (tvMesaJ4_C3.getVisibility() == View.INVISIBLE) {
                                     if (hayEmpate4J) {
                                         valorEmpateIzq = valor;
                                     } else valor3_izq = valor;
                                     asignarImagenCarta(newCarta, tvMesaJ4_C3);
+                                    comprobarSonidosCartas(newCarta);
                                     tvMesaJ4_C3.setVisibility(View.VISIBLE);
                                 }
                             } else if (sender.equals(idJugador3)) {
@@ -4367,18 +4409,21 @@ public class MainActivity extends Activity
                                         valorEmpateDerecha = valor;
                                     } else valor1_derecha = valor;
                                     asignarImagenCarta(newCarta, tvMesaJ2_C1);
+                                    comprobarSonidosCartas(newCarta);
                                     tvMesaJ2_C1.setVisibility(View.VISIBLE);
                                 } else if (tvMesaJ2_C2.getVisibility() == View.INVISIBLE) {
                                     if (hayEmpate4J) {
                                         valorEmpateDerecha = valor;
                                     } else valor2_derecha = valor;
                                     asignarImagenCarta(newCarta, tvMesaJ2_C2);
+                                    comprobarSonidosCartas(newCarta);
                                     tvMesaJ2_C2.setVisibility(View.VISIBLE);
                                 } else if (tvMesaJ2_C3.getVisibility() == View.INVISIBLE) {
                                     if (hayEmpate4J) {
                                         valorEmpateDerecha = valor;
                                     } else valor3_derecha = valor;
                                     asignarImagenCarta(newCarta, tvMesaJ2_C3);
+                                    comprobarSonidosCartas(newCarta);
                                     tvMesaJ2_C3.setVisibility(View.VISIBLE);
                                 }
                             } else if (sender.equals(idJugador4)) {
@@ -4387,18 +4432,21 @@ public class MainActivity extends Activity
                                         valorEmpateArriba = valor;
                                     } else valor1_arriba = valor;
                                     asignarImagenCarta(newCarta, tvMesaJ3_C1);
+                                    comprobarSonidosCartas(newCarta);
                                     tvMesaJ3_C1.setVisibility(View.VISIBLE);
                                 } else if (tvMesaJ3_C2.getVisibility() == View.INVISIBLE) {
                                     if (hayEmpate4J) {
                                         valorEmpateArriba = valor;
                                     } else valor2_arriba = valor;
                                     asignarImagenCarta(newCarta, tvMesaJ3_C2);
+                                    comprobarSonidosCartas(newCarta);
                                     tvMesaJ3_C2.setVisibility(View.VISIBLE);
                                 } else if (tvMesaJ3_C3.getVisibility() == View.INVISIBLE) {
                                     if (hayEmpate4J) {
                                         valorEmpateArriba = valor;
                                     } else valor3_arriba = valor;
                                     asignarImagenCarta(newCarta, tvMesaJ3_C3);
+                                    comprobarSonidosCartas(newCarta);
                                     tvMesaJ3_C3.setVisibility(View.VISIBLE);
                                 }
                             }
@@ -4410,18 +4458,21 @@ public class MainActivity extends Activity
                                         valorEmpateArriba = valor;
                                     } else valor1_arriba = valor;
                                     asignarImagenCarta(newCarta, tvMesaJ3_C1);
+                                    comprobarSonidosCartas(newCarta);
                                     tvMesaJ3_C1.setVisibility(View.VISIBLE);
                                 } else if (tvMesaJ3_C2.getVisibility() == View.INVISIBLE) {
                                     if (hayEmpate4J) {
                                         valorEmpateArriba = valor;
                                     } else valor2_arriba = valor;
                                     asignarImagenCarta(newCarta, tvMesaJ3_C2);
+                                    comprobarSonidosCartas(newCarta);
                                     tvMesaJ3_C2.setVisibility(View.VISIBLE);
                                 } else if (tvMesaJ3_C3.getVisibility() == View.INVISIBLE) {
                                     if (hayEmpate4J) {
                                         valorEmpateArriba = valor;
                                     } else valor3_arriba = valor;
                                     asignarImagenCarta(newCarta, tvMesaJ3_C3);
+                                    comprobarSonidosCartas(newCarta);
                                     tvMesaJ3_C3.setVisibility(View.VISIBLE);
                                 }
                             } else if (sender.equals(idJugador2)) {
@@ -4430,18 +4481,21 @@ public class MainActivity extends Activity
                                         valorEmpateIzq = valor;
                                     } else valor1_izq = valor;
                                     asignarImagenCarta(newCarta, tvMesaJ4_C1);
+                                    comprobarSonidosCartas(newCarta);
                                     tvMesaJ4_C1.setVisibility(View.VISIBLE);
                                 } else if (tvMesaJ4_C2.getVisibility() == View.INVISIBLE) {
                                     if (hayEmpate4J) {
                                         valorEmpateIzq = valor;
                                     } else valor2_izq = valor;
                                     asignarImagenCarta(newCarta, tvMesaJ4_C2);
+                                    comprobarSonidosCartas(newCarta);
                                     tvMesaJ4_C2.setVisibility(View.VISIBLE);
                                 } else if (tvMesaJ4_C3.getVisibility() == View.INVISIBLE) {
                                     if (hayEmpate4J) {
                                         valorEmpateIzq = valor;
                                     } else valor3_izq = valor;
                                     asignarImagenCarta(newCarta, tvMesaJ4_C3);
+                                    comprobarSonidosCartas(newCarta);
                                     tvMesaJ4_C3.setVisibility(View.VISIBLE);
                                 }
                             } else if (sender.equals(idJugador4)) {
@@ -4450,18 +4504,21 @@ public class MainActivity extends Activity
                                         valorEmpateDerecha = valor;
                                     } else valor1_derecha = valor;
                                     asignarImagenCarta(newCarta, tvMesaJ2_C1);
+                                    comprobarSonidosCartas(newCarta);
                                     tvMesaJ2_C1.setVisibility(View.VISIBLE);
                                 } else if (tvMesaJ2_C2.getVisibility() == View.INVISIBLE) {
                                     if (hayEmpate4J) {
                                         valorEmpateDerecha = valor;
                                     } else valor2_derecha = valor;
                                     asignarImagenCarta(newCarta, tvMesaJ2_C2);
+                                    comprobarSonidosCartas(newCarta);
                                     tvMesaJ2_C2.setVisibility(View.VISIBLE);
                                 } else if (tvMesaJ2_C3.getVisibility() == View.INVISIBLE) {
                                     if (hayEmpate4J) {
                                         valorEmpateDerecha = valor;
                                     } else valor3_derecha = valor;
                                     asignarImagenCarta(newCarta, tvMesaJ2_C3);
+                                    comprobarSonidosCartas(newCarta);
                                     tvMesaJ2_C3.setVisibility(View.VISIBLE);
                                 }
                             }
@@ -4473,18 +4530,21 @@ public class MainActivity extends Activity
                                         valorEmpateDerecha = valor;
                                     } else valor1_derecha = valor;
                                     asignarImagenCarta(newCarta, tvMesaJ2_C1);
+                                    comprobarSonidosCartas(newCarta);
                                     tvMesaJ2_C1.setVisibility(View.VISIBLE);
                                 } else if (tvMesaJ2_C2.getVisibility() == View.INVISIBLE) {
                                     if (hayEmpate4J) {
                                         valorEmpateDerecha = valor;
                                     } else valor2_derecha = valor;
                                     asignarImagenCarta(newCarta, tvMesaJ2_C2);
+                                    comprobarSonidosCartas(newCarta);
                                     tvMesaJ2_C2.setVisibility(View.VISIBLE);
                                 } else if (tvMesaJ2_C3.getVisibility() == View.INVISIBLE) {
                                     if (hayEmpate4J) {
                                         valorEmpateDerecha = valor;
                                     } else valor3_derecha = valor;
                                     asignarImagenCarta(newCarta, tvMesaJ2_C3);
+                                    comprobarSonidosCartas(newCarta);
                                     tvMesaJ2_C3.setVisibility(View.VISIBLE);
                                 }
                             } else if (sender.equals(idJugador2)) {
@@ -4493,18 +4553,21 @@ public class MainActivity extends Activity
                                         valorEmpateArriba = valor;
                                     } else valor1_arriba = valor;
                                     asignarImagenCarta(newCarta, tvMesaJ3_C1);
+                                    comprobarSonidosCartas(newCarta);
                                     tvMesaJ3_C1.setVisibility(View.VISIBLE);
                                 } else if (tvMesaJ3_C2.getVisibility() == View.INVISIBLE) {
                                     if (hayEmpate4J) {
                                         valorEmpateArriba = valor;
                                     } else valor2_arriba = valor;
                                     asignarImagenCarta(newCarta, tvMesaJ3_C2);
+                                    comprobarSonidosCartas(newCarta);
                                     tvMesaJ3_C2.setVisibility(View.VISIBLE);
                                 } else if (tvMesaJ3_C3.getVisibility() == View.INVISIBLE) {
                                     if (hayEmpate4J) {
                                         valorEmpateArriba = valor;
                                     } else valor3_arriba = valor;
                                     asignarImagenCarta(newCarta, tvMesaJ3_C3);
+                                    comprobarSonidosCartas(newCarta);
                                     tvMesaJ3_C3.setVisibility(View.VISIBLE);
                                 }
                             } else if (sender.equals(idJugador3)) {
@@ -4513,18 +4576,21 @@ public class MainActivity extends Activity
                                         valorEmpateIzq = valor;
                                     } else valor1_izq = valor;
                                     asignarImagenCarta(newCarta, tvMesaJ4_C1);
+                                    comprobarSonidosCartas(newCarta);
                                     tvMesaJ4_C1.setVisibility(View.VISIBLE);
                                 } else if (tvMesaJ4_C2.getVisibility() == View.INVISIBLE) {
                                     if (hayEmpate4J) {
                                         valorEmpateIzq = valor;
                                     } else valor2_izq = valor;
                                     asignarImagenCarta(newCarta, tvMesaJ4_C2);
+                                    comprobarSonidosCartas(newCarta);
                                     tvMesaJ4_C2.setVisibility(View.VISIBLE);
                                 } else if (tvMesaJ4_C3.getVisibility() == View.INVISIBLE) {
                                     if (hayEmpate4J) {
                                         valorEmpateIzq = valor;
                                     } else valor3_izq = valor;
                                     asignarImagenCarta(newCarta, tvMesaJ4_C3);
+                                    comprobarSonidosCartas(newCarta);
                                     tvMesaJ4_C3.setVisibility(View.VISIBLE);
                                 }
                             }
@@ -4557,7 +4623,7 @@ public class MainActivity extends Activity
                 case 'E':
                     //Mensaje que actualiza si hay empate en la primera ronda
                     if (ronda == 1)
-                        showBasicAlert("Empate en la primera ronda!", "La carta que eljas serÃ¡ mostrada arriba");
+                        showBasicAlert("Empate en la primera ronda!", "La carta que eljas será mostrada arriba");
                     hayEmpate = true;
                     hayEmpate4J = true;
                     break;
@@ -4571,6 +4637,7 @@ public class MainActivity extends Activity
                         numCarta[1] = Integer.parseInt(arrayCartasJ2[2]);
                         numCarta[2] = Integer.parseInt(arrayCartasJ2[3]);
                         repartir(numCarta);
+                        reproducirSonidoRepartir();
                         carta1 = new Carta(manoJugador.get(0).getNumero(), manoJugador.get(0).getPalo(), manoJugador.get(0).getValor());
                         carta2 = new Carta(manoJugador.get(1).getNumero(), manoJugador.get(1).getPalo(), manoJugador.get(1).getValor());
                         carta3 = new Carta(manoJugador.get(2).getNumero(), manoJugador.get(2).getPalo(), manoJugador.get(2).getValor());
@@ -4609,7 +4676,7 @@ public class MainActivity extends Activity
                             numCarta[1] = Integer.parseInt(arrayCartasJugadores[8]);
                             numCarta[2] = Integer.parseInt(arrayCartasJugadores[9]);
                         }
-
+                        reproducirSonidoRepartir();
                         repartir(numCarta);
                         carta1 = new Carta(manoJugador.get(0).getNumero(), manoJugador.get(0).getPalo(), manoJugador.get(0).getValor());
                         carta2 = new Carta(manoJugador.get(1).getNumero(), manoJugador.get(1).getPalo(), manoJugador.get(1).getValor());
@@ -5064,7 +5131,7 @@ public class MainActivity extends Activity
 
                 case 'C':
                     if(numeroJugadores == 2) {
-                        showSingleChoiceAlertCuatreVal("Â¡Quatre val!", R.array.truc3);
+                        showSingleChoiceAlertCuatreVal("¡Quatre val!", R.array.truc3);
                         cambiarBarraProgreso();
 
                     }else if(numeroJugadores == 4){
@@ -5077,7 +5144,7 @@ public class MainActivity extends Activity
                             barrasInvisibles();
                             cancelarBarraProgreso();
                             activarDesactivarMiBarra("ACTIVAR");
-                            showSingleChoiceAlertCuatreVal_4J("Â¡Quatre val!", R.array.truc3, sender);
+                            showSingleChoiceAlertCuatreVal_4J("¡Quatre val!", R.array.truc3, sender);
                         }
                     }
 
@@ -5097,7 +5164,7 @@ public class MainActivity extends Activity
 
                 case 'J':
                     if(numeroJugadores == 2) {
-                        showSingleChoiceAlertJocFora("Â¡Joc fora!", R.array.envid3);
+                        showSingleChoiceAlertJocFora("¡Joc fora!", R.array.envid3);
                         cambiarBarraProgreso();
 
                     }else if(numeroJugadores == 4){
@@ -5110,7 +5177,7 @@ public class MainActivity extends Activity
                             barrasInvisibles();
                             cancelarBarraProgreso();
                             activarDesactivarMiBarra("ACTIVAR");
-                            showSingleChoiceAlertJocFora_4J("Â¡Joc fora!", R.array.envid3, sender);
+                            showSingleChoiceAlertJocFora_4J("¡Joc fora!", R.array.envid3, sender);
                         }
                     }
                     break;
@@ -5291,7 +5358,7 @@ public class MainActivity extends Activity
                             //Animar los bocadillos
                             cambiarBarraProgreso();
                             enviarMensajeBarraProgreso();
-                            showSingleChoiceAlertCuatreVal_4J("Â¡Quatre val!", R.array.truc3, "");
+                            showSingleChoiceAlertCuatreVal_4J("¡Quatre val!", R.array.truc3, "");
                             mensajesRecibidosTruc = 0;
                             sQuieroTruc = "NOQUIERO";
 
@@ -5303,7 +5370,7 @@ public class MainActivity extends Activity
                             //Animar los bocadillos
                             cambiarBarraProgreso();
                             enviarMensajeBarraProgreso();
-                            showSingleChoiceAlertJocFora_4J("Â¡Joc fora!", R.array.envid3, "");
+                            showSingleChoiceAlertJocFora_4J("¡Joc fora!", R.array.envid3, "");
                             mensajesRecibidosTruc = 0;
                             sQuieroTruc = "NOQUIERO";
 
@@ -5448,7 +5515,7 @@ public class MainActivity extends Activity
                                             showProgressCustomDialog(layout);
                                         }
                                     } else {
-                                        showProgressDialog("LÃ¡stima, pierdes la mano");
+                                        showProgressDialog("Lástima, pierdes la mano");
                                     }
                                     repartirTrasMano();
                                     Log.d("KKKKKKKK", "Repartiendo tras mano..." + mMyId);
@@ -5501,7 +5568,7 @@ public class MainActivity extends Activity
 
                                         if(equipo1[0].equals(mMyId) || equipo2[0].equals(mMyId)) {
                                             actualizarMarcador2_4J(puntosTotalesMios, "GANADOR", sender);
-                                            Log.d("ZZZZ", "EnvÃ­o el segundo mensaje");
+                                            Log.d("ZZZZ", "Envío el segundo mensaje");
                                         }
                                     }
 
@@ -5516,7 +5583,7 @@ public class MainActivity extends Activity
                                         Log.d("KKKKK", "Puntos rquipo rival: "+puntosTotalesJugador2);
 
                                         if(equipo1[0].equals(mMyId) || equipo2[0].equals(mMyId)) {
-                                            Log.d("ZZZZ", "EnvÃ­o el segundo mensaje");
+                                            Log.d("ZZZZ", "Envío el segundo mensaje");
                                             actualizarMarcador2_4J(puntosTotalesMios, "PERDEDOR", sender);
                                         }
                                     }
@@ -5567,7 +5634,7 @@ public class MainActivity extends Activity
                                             Log.d("KKKKKKKK", "Pierdo todo");
                                         }
                                     } else {
-                                        showProgressDialog("LÃ¡stima, pierdes la mano");
+                                        showProgressDialog("Lástima, pierdes la mano");
                                         Log.d("KKKKKKKK", "No hay envid");
                                     }
                                 repartirTrasMano();
@@ -5629,6 +5696,18 @@ public class MainActivity extends Activity
 
                     break;
 
+                case '2':
+                    if(numeroJugadores == 2){
+                        updateLeaderboards(mGoogleApiClient, "CgkIpb6oxu8SEAIQCA");
+                        switchToScreen(R.id.screen_win);
+                    }else if(numeroJugadores == 4) {
+                        if (esDeMiEquipo(sender)) switchToScreen(R.id.screen_lost);
+                        else {
+                            updateLeaderboards(mGoogleApiClient, "CgkIpb6oxu8SEAIQCA");
+                            switchToScreen(R.id.screen_win);
+                        }
+                    }
+                    break;
 
                 default:
 
@@ -6026,7 +6105,7 @@ public class MainActivity extends Activity
                     String palo = parser.getAttributeValue(null, "palo");
                     String valor = parser.getAttributeValue(null, "valor");
                     carta = new Carta(numero, palo, valor);
-                    //Por cada question, la aï¿½adimos a la lista
+                    //Por cada question, la a?adimos a la lista
                     baraja.add(carta);
                 }
                 eventType = parser.next();
@@ -6188,6 +6267,7 @@ public class MainActivity extends Activity
         //Si soy mano reparto
         if (mMyId.equals(mano)) {
             repartir(crearAleatorio());
+            reproducirSonidoRepartir();
             carta1 = new Carta(manoJugador.get(0).getNumero(), manoJugador.get(0).getPalo(), manoJugador.get(0).getValor());
             carta2 = new Carta(manoJugador.get(1).getNumero(), manoJugador.get(1).getPalo(), manoJugador.get(1).getValor());
             carta3 = new Carta(manoJugador.get(2).getNumero(), manoJugador.get(2).getPalo(), manoJugador.get(2).getValor());
@@ -6557,14 +6637,17 @@ public class MainActivity extends Activity
                         //Calculamos su valor para enviarlo
                         if (view.equals(tvJugador1)) {
                             aux = carta1;
+                            comprobarSonidosCartas(aux);
                             miValor = Integer.parseInt(carta1.getValor());
                         }
                         if (view.equals(tvJugador2)) {
                             aux = carta2;
+                            comprobarSonidosCartas(aux);
                             miValor = Integer.parseInt(carta2.getValor());
                         }
                         if (view.equals(tvJugador3)) {
                             aux = carta3;
+                            comprobarSonidosCartas(aux);
                             miValor = Integer.parseInt(carta3.getValor());
                         }
 
@@ -6735,14 +6818,17 @@ public class MainActivity extends Activity
                         //Calculamos su valor para enviarlo
                         if (view.equals(tvJugador1_4J)) {
                             aux = carta1;
+                            comprobarSonidosCartas(aux);
                             miValor = Integer.parseInt(carta1.getValor());
                         }
                         if (view.equals(tvJugador2_4J)) {
                             aux = carta2;
+                            comprobarSonidosCartas(aux);
                             miValor = Integer.parseInt(carta2.getValor());
                         }
                         if (view.equals(tvJugador3_4J)) {
                             aux = carta3;
+                            comprobarSonidosCartas(aux);
                             miValor = Integer.parseInt(carta3.getValor());
                         }
 
@@ -7449,4 +7535,24 @@ public class MainActivity extends Activity
         });
     }
 
+    /* Funciones para el sonido del juego */
+
+    public void comprobarSonidosCartas(Carta newCarta){
+        //Sonidos dependiendo de la carta que se tira
+        if(newCarta.getValor().equals("9")) reproducirSonidoEspada();
+        else if(newCarta.getValor().equals("8")) reproducirSonidoBasto();
+        else reproducirSonidoTirarCarta();
+    }
+    private void reproducirSonidoBasto(){
+        soundPool.play(sonidoBasto, 1, 1, 0, 0, 1);
+    }
+    private void reproducirSonidoEspada(){
+        soundPool.play(sonidoEspada, 1, 1, 0, 0, 1);
+    }
+    private void reproducirSonidoRepartir(){
+        soundPool.play(sonidoRepartir, 1, 1, 0, 0, 1);
+    }
+    private void reproducirSonidoTirarCarta(){
+        soundPool.play(sonidoTirar, 1, 1, 0, 0, 1);
+    }
 }
