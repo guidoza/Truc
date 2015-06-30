@@ -31,6 +31,9 @@
         <Button android:id="@+id/button_ranking"
             style="@style/MainScreenButton"
             android:text="Ranking" />
+        <Button android:id="@+id/button_logros"
+            style="@style/MainScreenButton"
+            android:text="Logros" />
         <Button android:id="@+id/button_sign_out"
             style="@style/SignOutButton"
             android:text="@string/sign_out" />
@@ -211,7 +214,6 @@
                                     android:id="@+id/mano"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:src="@drawable/ic_manotipo1"
                                     android:layout_centerHorizontal="true"
                                     android:layout_alignParentBottom="true"
                                     />
@@ -266,7 +268,6 @@
                 android:id="@+id/dedo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_dedotipo1"
                 android:layout_gravity="bottom|center"
                 />
 
@@ -315,9 +316,6 @@
                     android:gravity="center_vertical|center_horizontal" />
 
             </LinearLayout>
-
-
-
 
 
         <com.github.alexkolpa.fabtoolbar.FabToolbar

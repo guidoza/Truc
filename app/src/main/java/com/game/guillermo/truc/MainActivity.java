@@ -68,7 +68,6 @@ import com.google.android.gms.plus.Plus;
 import com.google.example.games.basegameutils.BaseGameUtils;
 import com.google.android.gms.games.leaderboard.*;
 
-
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
@@ -104,6 +103,8 @@ public class MainActivity extends Activity
     final static int RC_INVITATION_INBOX = 10001;
     final static int RC_WAITING_ROOM = 10002;
     final static int REQUEST_LEADERBOARD = 10100;
+    final static int REQUEST_ACHIEVEMENTS = 10110;
+
 
     // Request code used to invoke sign in user interactions.
     private static final int RC_SIGN_IN = 9001;
@@ -284,7 +285,7 @@ public class MainActivity extends Activity
     String sCartasJ1 = "";
     String sCartasJ3 = "";
     String sCartasJ4 = "";
-    String idCompaÃ±ero = "";
+    String idCompañero = "";
     String idInvitado = "";
     String ganadorRonda1_4J = "";
     String ganadorRonda2_4J = "";
@@ -1307,6 +1308,10 @@ public class MainActivity extends Activity
                 startActivityForResult(Games.Leaderboards.getLeaderboardIntent(mGoogleApiClient,
                         "CgkIpb6oxu8SEAIQCA"), REQUEST_LEADERBOARD);
                 break;
+            case R.id.button_logros:
+                startActivityForResult(Games.Achievements.getAchievementsIntent(mGoogleApiClient),
+                        REQUEST_ACHIEVEMENTS);
+                break;
         }
     }
 
@@ -1456,7 +1461,7 @@ public class MainActivity extends Activity
     void acceptInviteToRoom(String invId) {
         // accept the invitation
         Log.d(TAG, "Accepting invitation: " + invId);
-        idCompaÃ±ero = invId;
+        idCompañero = invId;
         RoomConfig.Builder roomConfigBuilder = RoomConfig.builder(this);
         roomConfigBuilder.setInvitationIdToAccept(invId)
                 .setMessageReceivedListener(this)
@@ -5044,6 +5049,7 @@ public class MainActivity extends Activity
 
                                     //Actualiza el ranking sumando una victoria
                                     updateLeaderboards(mGoogleApiClient, "CgkIpb6oxu8SEAIQCA");
+                                    Games.Achievements.unlock(mGoogleApiClient, "CgkIpb6oxu8SEAIQCQ");
 
                                 /*
                                 if(quien.equals("GANADOR")){
@@ -5522,7 +5528,8 @@ public class MainActivity extends Activity
     final static int[] CLICKABLES = {
             R.id.button_accept_popup_invitation, R.id.button_invite_players,
             R.id.button_quick_game, R.id.button_see_invitations, R.id.button_sign_in,
-            R.id.button_sign_out, R.id.button_quick_game_4,R.id.button_ranking
+            R.id.button_sign_out, R.id.button_quick_game_4,R.id.button_ranking,
+            R.id.button_logros
     };
 
     // This array lists all the individual screens our game has.
