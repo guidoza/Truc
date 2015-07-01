@@ -433,7 +433,16 @@
                         android:src="@drawable/ic_salir"
                         android:layout_margin="10dp"
                         android:layout_weight="1"
+                        />
 
+                    <ImageButton
+                        android:id="@+id/abandonar"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/fondo_boton"
+                        android:src="@drawable/ic_salir"
+                        android:layout_margin="10dp"
+                        android:layout_weight="1"
                         />
 
 
@@ -926,6 +935,16 @@
                         android:layout_margin="10dp"
                         android:layout_weight="1"
 
+                        />
+
+                    <ImageButton
+                        android:id="@+id/abandonar_4J"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/fondo_boton"
+                        android:src="@drawable/ic_salir"
+                        android:layout_margin="10dp"
+                        android:layout_weight="1"
                         />
 
 

@@ -217,6 +217,7 @@ public class MainActivity extends Activity
     ImageButton laFalta;
     ImageView manoDedo;
     ImageView dedo;
+    ImageButton abandonar;
 
     //TextViews
     TextView marcador;
@@ -340,6 +341,7 @@ public class MainActivity extends Activity
     ImageButton salir_4J;
     ImageButton laFalta_4J;
     ImageButton quatreVal_4J;
+    ImageButton abandonar_4J;
     ImageView imgPerfilAbajo;
     ImageView imgPerfilDerecha;
     ImageView imgPerfilArriba;
@@ -444,6 +446,11 @@ public class MainActivity extends Activity
                         actionButton.hide();
                         break;
 
+                    case R.id.abandonar:
+                        enviarMensajeDesconectado();
+                        leaveRoom();
+                        break;
+
                     case R.id.envido_4J:
                         envido();
                         actionButton_4J.hide();
@@ -495,6 +502,10 @@ public class MainActivity extends Activity
                         primerMensaje = mMyId;
                         mostrarResultadosPerdedorMano("PRIMERO");
                         break;
+                    case R.id.abandonar_4J:
+                        enviarMensajeDesconectado();
+                        leaveRoom();
+                        break;
                 }
             }
         };
@@ -542,6 +553,7 @@ public class MainActivity extends Activity
         jocFora = (ImageButton) findViewById(R.id.joc_fora);
         salir = (ImageButton) findViewById(R.id.salir);
         laFalta = (ImageButton) findViewById(R.id.la_falta);
+        abandonar = (ImageButton) findViewById(R.id.abandonar);
 
         progressBar1 = (ProgressBar) findViewById(R.id.progres_segundos_1);
         progressBar2 = (ProgressBar) findViewById(R.id.progres_segundos_2);
@@ -593,6 +605,7 @@ public class MainActivity extends Activity
         jocFora_4J = (ImageButton) findViewById(R.id.joc_fora_4J);
         salir_4J = (ImageButton) findViewById(R.id.salir_4J);
         laFalta_4J = (ImageButton) findViewById(R.id.la_falta_4J);
+        abandonar_4J = (ImageButton) findViewById(R.id.abandonar_4J);
 
         imgPerfilAbajo = (ImageView) findViewById(R.id.imgPerfilAbajo);
         imgPerfilDerecha = (ImageView) findViewById(R.id.imgPerfilDerecha);
@@ -1567,10 +1580,8 @@ public class MainActivity extends Activity
         resetPuntos();
         stopKeepingScreenOn();
         if (mRoomId != null) {
-            enviarMensajeDesconectado();
             Games.RealTimeMultiplayer.leave(mGoogleApiClient, this, mRoomId);
             mRoomId = null;
-            switchToScreen(R.id.screen_lost);
         } else {
             switchToMainScreen();
         }
@@ -1692,13 +1703,8 @@ public class MainActivity extends Activity
     public void onLeftRoom(int statusCode, String roomId) {
         // we have left the room; return to main screen.
         Log.d(TAG, "onLeftRoom, code " + statusCode);
-        Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            public void run() {
-                // acciones que se ejecutan tras los milisegundos
-                switchToMainScreen();
-            }
-        }, 5000);
+        switchToMainScreen();
+
     }
 
     // Called when we get disconnected from the room. We return to the main screen.
@@ -1791,7 +1797,6 @@ public class MainActivity extends Activity
             List<String> ids4ordenadas = ids4.subList(0, ids4.size());
             Collections.sort(ids4ordenadas);
             Log.d("ZZZ", "Lista de jugadores ordenada: " + ids4ordenadas);
-
             idJugador1 = ids4ordenadas.get(0);
             idJugador2 = ids4ordenadas.get(1);
             idJugador3 = ids4ordenadas.get(2);
@@ -2141,6 +2146,8 @@ public class MainActivity extends Activity
             quatreVal_4J.setVisibility(View.GONE);
             jocFora_4J.setVisibility(View.GONE);
             laFalta_4J.setVisibility(View.VISIBLE);
+            abandonar.setVisibility(View.VISIBLE);
+            abandonar_4J.setVisibility(View.VISIBLE);
 
             progressBarAbajo.setVisibility(View.INVISIBLE);
             progressBarDerecha.setVisibility(View.INVISIBLE);
@@ -3083,6 +3090,7 @@ public class MainActivity extends Activity
                 laFalta.setOnClickListener(menuListener);
                 salir.setOnClickListener(menuListener);
                 meVoy.setOnClickListener(menuListener);
+                abandonar.setOnClickListener(menuListener);
 
 
                 if (mMyId.equals(turno) && ronda == 1) {
@@ -3143,6 +3151,7 @@ public class MainActivity extends Activity
                 laFalta_4J.setOnClickListener(menuListener);
                 salir_4J.setOnClickListener(menuListener);
                 meVoy_4J.setOnClickListener(menuListener);
+                abandonar_4J.setOnClickListener(menuListener);
 
                 if (mMyId.equals(turno) && ronda == 1) {
                     Toast.makeText(getApplicationContext(), "Es tu turno", Toast.LENGTH_SHORT).show();
@@ -5800,7 +5809,7 @@ public class MainActivity extends Activity
                         updateLeaderboards(mGoogleApiClient, LEADERBOARD_ID);
                         switchToScreen(R.id.screen_win);
                     }else if(numeroJugadores == 4) {
-                        if (esDeMiEquipo(sender)) switchToScreen(R.id.screen_lost);
+                        if(esDeMiEquipo(sender)){ switchToScreen(R.id.screen_lost);}
                         else {
                             updateLeaderboards(mGoogleApiClient, LEADERBOARD_ID);
                             switchToScreen(R.id.screen_win);
