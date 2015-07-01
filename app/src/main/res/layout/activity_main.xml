@@ -100,6 +100,14 @@
                                 android:layout_gravity="center"
                                 android:layout_margin="10dp"/>
 
+                            <TextView
+                                android:id="@+id/nombreJugador2"
+                                android:layout_width="match_parent"
+                                android:layout_height="15dp"
+                                android:gravity="center"
+                                android:textSize="10sp"
+                                />
+
                             <ProgressBar
                                 android:id="@+id/progres_segundos_2"
                                 android:layout_width="50dp"
@@ -295,6 +303,14 @@
                         android:layout_gravity="center"
                         android:layout_margin="10dp"/>
 
+                    <TextView
+                        android:id="@+id/nombreJugador1"
+                        android:layout_width="match_parent"
+                        android:layout_height="15dp"
+                        android:gravity="center"
+                        android:textSize="10sp"
+                        />
+
                     <ProgressBar
                         android:id="@+id/progres_segundos_1"
                         android:layout_width="50dp"
@@ -477,6 +493,14 @@
                         fab:border_color="#FFF"
                         />
 
+                    <TextView
+                        android:id="@+id/nombreJugadorArriba"
+                        android:layout_width="match_parent"
+                        android:layout_height="15dp"
+                        android:gravity="center"
+                        android:textSize="10sp"
+                        />
+
                     <ProgressBar
                         android:id="@+id/progres_segundos_arriba"
                         android:layout_width="50dp"
@@ -515,6 +539,14 @@
                         android:layout_gravity="center"
                         fab:border_width="2dp"
                         fab:border_color="#FFF"
+                        />
+
+                    <TextView
+                        android:id="@+id/nombreJugadorAbajo"
+                        android:layout_width="match_parent"
+                        android:layout_height="15dp"
+                        android:gravity="center"
+                        android:textSize="10sp"
                         />
 
                     <ProgressBar
@@ -556,6 +588,14 @@
                         android:layout_gravity="center"
                         fab:border_width="2dp"
                         fab:border_color="#FFF"
+                        />
+
+                    <TextView
+                        android:id="@+id/nombreJugadorDerecha"
+                        android:layout_width="match_parent"
+                        android:layout_height="15dp"
+                        android:gravity="center"
+                        android:textSize="10sp"
                         />
 
                     <ProgressBar
@@ -609,6 +649,14 @@
                         android:layout_gravity="center"
                         fab:border_width="2dp"
                         fab:border_color="#FFF"
+                        />
+
+                    <TextView
+                        android:id="@+id/nombreJugadorIzq"
+                        android:layout_width="match_parent"
+                        android:layout_height="15dp"
+                        android:gravity="center"
+                        android:textSize="10sp"
                         />
 
                     <ProgressBar

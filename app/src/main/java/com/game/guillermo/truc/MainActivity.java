@@ -106,7 +106,8 @@ public class MainActivity extends Activity
     final static int RC_WAITING_ROOM = 10002;
     final static int REQUEST_LEADERBOARD = 10100;
     final static int REQUEST_ACHIEVEMENTS = 10110;
-
+    final static String LEADERBOARD_ID = "CgkIpb6oxu8SEAIQCA";
+    final static String ACHIEVEMENTS_ID = "CgkIpb6oxu8SEAIQCQ";
 
     // Request code used to invoke sign in user interactions.
     private static final int RC_SIGN_IN = 9001;
@@ -222,6 +223,8 @@ public class MainActivity extends Activity
     TextView marcador2;
     TextView textoAccion1;
     TextView textoAccion2;
+    TextView nombreJugador1;
+    TextView nombreJugador2;
 
 
     //Otros objetos
@@ -298,6 +301,10 @@ public class MainActivity extends Activity
     String ganadorRonda3_4J = "";
     String sQuieroTruc = "NOQUIERO";
     String primerMensaje = "";
+    String nombreJ1 = "";
+    String nombreJ2 = "";
+    String nombreJ3 = "";
+    String nombreJ4 = "";
 
     //Boolean
     private boolean hayEmpate4J = false;
@@ -344,6 +351,10 @@ public class MainActivity extends Activity
     TextView bocadilloDerecha;
     TextView bocadilloArriba;
     TextView bocadilloIzq;
+    TextView nombreJugArriba;
+    TextView nombreJugAbajo;
+    TextView nombreJugDerecha;
+    TextView nombreJugIzq;
 
     //Otros objetos
     PointF inicio1J1;
@@ -621,6 +632,16 @@ public class MainActivity extends Activity
         bocadilloDerecha = (TextView) findViewById(R.id.bocadilloJ2);
         bocadilloArriba = (TextView) findViewById(R.id.bocadilloJ3);
         bocadilloIzq = (TextView) findViewById(R.id.bocadilloJ4);
+
+        //TextViews para los nombres de los jugadores (4J)
+        nombreJugAbajo = (TextView) findViewById(R.id.nombreJugadorAbajo);
+        nombreJugArriba = (TextView) findViewById(R.id.nombreJugadorArriba);
+        nombreJugIzq = (TextView) findViewById(R.id.nombreJugadorIzq);
+        nombreJugDerecha = (TextView) findViewById(R.id.nombreJugadorDerecha);
+
+        //TextViews para los nombres de los jugadores (2J)
+        nombreJugador1 = (TextView) findViewById(R.id.nombreJugador1);
+        nombreJugador2 = (TextView) findViewById(R.id.nombreJugador2);
 
         // Creamos el nuevo cliente de Google con acceso a Plus y Games
         mGoogleApiClient = new GoogleApiClient.Builder(this)
@@ -1327,7 +1348,7 @@ public class MainActivity extends Activity
                 break;
             case R.id.button_ranking:
                 startActivityForResult(Games.Leaderboards.getLeaderboardIntent(mGoogleApiClient,
-                        "CgkIpb6oxu8SEAIQCA"), REQUEST_LEADERBOARD);
+                        LEADERBOARD_ID), REQUEST_LEADERBOARD);
                 break;
             case R.id.button_logros:
                 startActivityForResult(Games.Achievements.getAchievementsIntent(mGoogleApiClient),
@@ -1733,9 +1754,33 @@ public class MainActivity extends Activity
             if (mMyId.compareTo(remoteId) > 0) {
                 idJugador1 = mMyId;
                 idJugador2 = remoteId;
+                if(mParticipants.get(0).getParticipantId().equals(idJugador1)){
+                    nombreJ1 = mParticipants.get(0).getDisplayName();
+                    nombreJ2 = mParticipants.get(1).getDisplayName();
+                }
+                else{
+                    nombreJ1 = mParticipants.get(1).getDisplayName();
+                    nombreJ2 = mParticipants.get(0).getDisplayName();
+                }
             } else {
                 idJugador1 = remoteId;
                 idJugador2 = mMyId;
+                if(mParticipants.get(0).getParticipantId().equals(idJugador1)){
+                    nombreJ1 = mParticipants.get(0).getDisplayName();
+                    nombreJ2 = mParticipants.get(1).getDisplayName();
+                }
+                else{
+                    nombreJ1 = mParticipants.get(1).getDisplayName();
+                    nombreJ2 = mParticipants.get(0).getDisplayName();
+                }
+            }
+
+            if(mMyId.equals(idJugador1)){
+                nombreJugador1.setText(nombreJ1);
+                nombreJugador2.setText(nombreJ2);
+            }else if(mMyId.equals(idJugador2)){
+                nombreJugador1.setText(nombreJ2);
+                nombreJugador2.setText(nombreJ1);
             }
 
             turno = idJugador1;
@@ -1760,15 +1805,21 @@ public class MainActivity extends Activity
             turno = idJugador1;
             mano = idJugador1;
 
+            for(int i=0;i<4;i++){
+                if (mParticipants.get(i).getParticipantId().equals(idJugador1)) nombreJ1 = mParticipants.get(i).getDisplayName();
+                else if (mParticipants.get(i).getParticipantId().equals(idJugador2)) nombreJ2 = mParticipants.get(i).getDisplayName();
+                else if (mParticipants.get(i).getParticipantId().equals(idJugador3)) nombreJ3 = mParticipants.get(i).getDisplayName();
+                else if (mParticipants.get(i).getParticipantId().equals(idJugador4)) nombreJ4 = mParticipants.get(i).getDisplayName();
+            }
 
             Log.d("ZZZ", "IDJ1: " + idJugador1);
             Log.d("ZZZ", "IDJ2: " + idJugador2);
             Log.d("ZZZ", "IDJ3: " + idJugador3);
             Log.d("ZZZ", "IDJ4: " + idJugador4);
-            Log.d("ZZZ", "Nombre : " + mParticipants.get(0).getDisplayName());
-            Log.d("ZZZ", "Nombre : " + mParticipants.get(1).getDisplayName());
-            Log.d("ZZZ", "Nombre : " + mParticipants.get(2).getDisplayName());
-            Log.d("ZZZ", "Nombre : " + mParticipants.get(3).getDisplayName());
+            Log.d("ZZZ", "Nombre J1: " + nombreJ1);
+            Log.d("ZZZ", "Nombre J2: " + nombreJ2);
+            Log.d("ZZZ", "Nombre J3: " + nombreJ3);
+            Log.d("ZZZ", "Nombre J4: " + nombreJ4);
 
         }
 
@@ -1787,25 +1838,73 @@ public class MainActivity extends Activity
                 for (Participant p : mParticipants) {
                     String pid = p.getParticipantId();
                     if (mMyId.equals(idJugador1)) {
-                        if(pid.equals(idJugador1)) new LoadProfileImage(imgPerfilAbajo).execute(p.getIconImageUrl());
-                        if(pid.equals(idJugador2)) new LoadProfileImage(imgPerfilDerecha).execute(p.getIconImageUrl());
-                        if(pid.equals(idJugador3)) new LoadProfileImage(imgPerfilArriba).execute(p.getIconImageUrl());
-                        if(pid.equals(idJugador4)) new LoadProfileImage(imgPerfilIzq).execute(p.getIconImageUrl());
+                        if(pid.equals(idJugador1)){
+                            new LoadProfileImage(imgPerfilAbajo).execute(p.getIconImageUrl());
+                            nombreJugAbajo.setText(nombreJ1);
+                        }
+                        if(pid.equals(idJugador2)){
+                            new LoadProfileImage(imgPerfilDerecha).execute(p.getIconImageUrl());
+                            nombreJugDerecha.setText(nombreJ2);
+                        }
+                        if(pid.equals(idJugador3)){
+                            new LoadProfileImage(imgPerfilArriba).execute(p.getIconImageUrl());
+                            nombreJugArriba.setText(nombreJ3);
+                        }
+                        if(pid.equals(idJugador4)){
+                            new LoadProfileImage(imgPerfilIzq).execute(p.getIconImageUrl());
+                            nombreJugIzq.setText(nombreJ4);
+                        }
                     } else if (mMyId.equals(idJugador2)) {
-                        if(pid.equals(idJugador1)) new LoadProfileImage(imgPerfilIzq).execute(p.getIconImageUrl());
-                        if(pid.equals(idJugador2)) new LoadProfileImage(imgPerfilAbajo).execute(p.getIconImageUrl());
-                        if(pid.equals(idJugador3)) new LoadProfileImage(imgPerfilDerecha).execute(p.getIconImageUrl());
-                        if(pid.equals(idJugador4)) new LoadProfileImage(imgPerfilArriba).execute(p.getIconImageUrl());
+                        if(pid.equals(idJugador1)){
+                            new LoadProfileImage(imgPerfilIzq).execute(p.getIconImageUrl());
+                            nombreJugIzq.setText(nombreJ1);
+                        }
+                        if(pid.equals(idJugador2)){
+                            new LoadProfileImage(imgPerfilAbajo).execute(p.getIconImageUrl());
+                            nombreJugAbajo.setText(nombreJ2);
+                        }
+                        if(pid.equals(idJugador3)){
+                            new LoadProfileImage(imgPerfilDerecha).execute(p.getIconImageUrl());
+                            nombreJugDerecha.setText(nombreJ3);
+                        }
+                        if(pid.equals(idJugador4)){
+                            new LoadProfileImage(imgPerfilArriba).execute(p.getIconImageUrl());
+                            nombreJugArriba.setText(nombreJ4);
+                        }
                     } else if (mMyId.equals(idJugador3)) {
-                        if(pid.equals(idJugador1)) new LoadProfileImage(imgPerfilArriba).execute(p.getIconImageUrl());
-                        if(pid.equals(idJugador2)) new LoadProfileImage(imgPerfilIzq).execute(p.getIconImageUrl());
-                        if(pid.equals(idJugador3)) new LoadProfileImage(imgPerfilAbajo).execute(p.getIconImageUrl());
-                        if(pid.equals(idJugador4)) new LoadProfileImage(imgPerfilDerecha).execute(p.getIconImageUrl());
+                        if(pid.equals(idJugador1)){
+                            new LoadProfileImage(imgPerfilArriba).execute(p.getIconImageUrl());
+                            nombreJugArriba.setText(nombreJ1);
+                        }
+                        if(pid.equals(idJugador2)){
+                            new LoadProfileImage(imgPerfilIzq).execute(p.getIconImageUrl());
+                            nombreJugIzq.setText(nombreJ2);
+                        }
+                        if(pid.equals(idJugador3)){
+                            new LoadProfileImage(imgPerfilAbajo).execute(p.getIconImageUrl());
+                            nombreJugAbajo.setText(nombreJ3);
+                        }
+                        if(pid.equals(idJugador4)) {
+                            new LoadProfileImage(imgPerfilDerecha).execute(p.getIconImageUrl());
+                            nombreJugDerecha.setText(nombreJ4);
+                        }
                     } else if (mMyId.equals(idJugador4)) {
-                        if(pid.equals(idJugador1)) new LoadProfileImage(imgPerfilDerecha).execute(p.getIconImageUrl());
-                        if(pid.equals(idJugador2)) new LoadProfileImage(imgPerfilArriba).execute(p.getIconImageUrl());
-                        if(pid.equals(idJugador3)) new LoadProfileImage(imgPerfilIzq).execute(p.getIconImageUrl());
-                        if(pid.equals(idJugador4)) new LoadProfileImage(imgPerfilAbajo).execute(p.getIconImageUrl());
+                        if(pid.equals(idJugador1)){
+                            new LoadProfileImage(imgPerfilDerecha).execute(p.getIconImageUrl());
+                            nombreJugDerecha.setText(nombreJ1);
+                        }
+                        if(pid.equals(idJugador2)){
+                            new LoadProfileImage(imgPerfilArriba).execute(p.getIconImageUrl());
+                            nombreJugArriba.setText(nombreJ2);
+                        }
+                        if(pid.equals(idJugador3)){
+                            new LoadProfileImage(imgPerfilIzq).execute(p.getIconImageUrl());
+                            nombreJugIzq.setText(nombreJ3);
+                        }
+                        if(pid.equals(idJugador4)){
+                            new LoadProfileImage(imgPerfilAbajo).execute(p.getIconImageUrl());
+                            nombreJugAbajo.setText(nombreJ4);
+                        }
                     }
                 }
             }
@@ -5459,8 +5558,8 @@ public class MainActivity extends Activity
                                 if (ganadorFinal.equals("YO")) {
 
                                     //Actualiza el ranking sumando una victoria
-                                    updateLeaderboards(mGoogleApiClient, "CgkIpb6oxu8SEAIQCA");
-                                    Games.Achievements.unlock(mGoogleApiClient, "CgkIpb6oxu8SEAIQCQ");
+                                    updateLeaderboards(mGoogleApiClient, LEADERBOARD_ID);
+                                    Games.Achievements.unlock(mGoogleApiClient, ACHIEVEMENTS_ID);
 
                                 /*
                                 if(quien.equals("GANADOR")){
@@ -5698,12 +5797,12 @@ public class MainActivity extends Activity
 
                 case '2':
                     if(numeroJugadores == 2){
-                        updateLeaderboards(mGoogleApiClient, "CgkIpb6oxu8SEAIQCA");
+                        updateLeaderboards(mGoogleApiClient, LEADERBOARD_ID);
                         switchToScreen(R.id.screen_win);
                     }else if(numeroJugadores == 4) {
                         if (esDeMiEquipo(sender)) switchToScreen(R.id.screen_lost);
                         else {
-                            updateLeaderboards(mGoogleApiClient, "CgkIpb6oxu8SEAIQCA");
+                            updateLeaderboards(mGoogleApiClient, LEADERBOARD_ID);
                             switchToScreen(R.id.screen_win);
                         }
                     }
