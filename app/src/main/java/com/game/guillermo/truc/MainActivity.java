@@ -173,6 +173,7 @@ public class MainActivity extends Activity
     String ganadorRonda1 = null;
     String sCartasJ2 = "";
     String ganadorEnvid = null;
+    String desconectado = "";
 
     //Boolean
     boolean hayEmpate = false;
@@ -447,8 +448,7 @@ public class MainActivity extends Activity
                         break;
 
                     case R.id.abandonar:
-                        enviarMensajeDesconectado();
-                        leaveRoom();
+                        showBasicAlertDesconectarse("Abandonar partida", "Si abandonas, perderás la partida. ¿Estás seguro?");
                         break;
 
                     case R.id.envido_4J:
@@ -503,8 +503,7 @@ public class MainActivity extends Activity
                         mostrarResultadosPerdedorMano("PRIMERO");
                         break;
                     case R.id.abandonar_4J:
-                        enviarMensajeDesconectado();
-                        leaveRoom();
+                        showBasicAlertDesconectarse("Abandonar partida","Si abandonas, perderás la partida. ¿Estás seguro?");
                         break;
                 }
             }
@@ -1004,6 +1003,30 @@ public class MainActivity extends Activity
                 .title(title)
                 .content(message)
                 .positiveText("Aceptar")
+                .cancelable(false);
+        materialDialog.show();
+    }
+
+    private void showBasicAlertDesconectarse(String title, String message) {
+        materialDialog = new MaterialDialog.Builder(this)
+                .title(title)
+                .content(message)
+                .positiveText("Aceptar")
+                .negativeText("Cancelar")
+                .callback(new MaterialDialog.ButtonCallback() {
+                    @Override
+                    public void onPositive(MaterialDialog dialog) {
+                        super.onPositive(dialog);
+                        desconectado = mMyId;
+                        leaveRoom();
+                    }
+
+                    @Override
+                    public void onNegative(MaterialDialog dialog) {
+                        super.onNegative(dialog);
+                        dialog.dismiss();
+                    }
+                })
                 .cancelable(false);
         materialDialog.show();
     }
@@ -1587,6 +1610,7 @@ public class MainActivity extends Activity
 
     // Leave the room.
     void leaveRoom() {
+       if(desconectado.equals(mMyId)){ enviarMensajeDesconectado();}
         Log.d(TAG, "Leaving room.");
         mSecondsLeft = 0;
         resetPuntos();
