@@ -1050,9 +1050,21 @@ public class MainActivity extends Activity
             iniciarBarraProgresoAbajo();
 
         }else if(activar.equals("DESACTIVAR")){
-            segundos = 40;
             progressBarAbajo.setVisibility(View.INVISIBLE);
             mCountDownTimerAbajo.cancel();
+
+        }
+    }
+
+    void activarDesactivarBarraCompi(String activar){
+        if(activar.equals("ACTIVAR")){
+            segundos = 40;
+            progressBarArriba.setVisibility(View.VISIBLE);
+            iniciarBarraProgresoArriba();
+
+        }else if(activar.equals("DESACTIVAR")){
+            progressBarArriba.setVisibility(View.INVISIBLE);
+            mCountDownTimerArriba.cancel();
 
         }
     }
@@ -2406,18 +2418,26 @@ public class MainActivity extends Activity
                         case 1:
                             bocadilloDerecha.setText("Quiero el truc");
                             animarTextoAccion(bocadilloDerecha);
+                            progressBarDerecha.setVisibility(View.INVISIBLE);
+                            mCountDownTimerDerecha.cancel();
                             break;
                         case 2:
                             bocadilloDerecha.setText("Quiero el retruc");
                             animarTextoAccion(bocadilloDerecha);
+                            progressBarDerecha.setVisibility(View.INVISIBLE);
+                            mCountDownTimerDerecha.cancel();
                             break;
                         case 3:
                             bocadilloDerecha.setText("Quiero el quatre val");
                             animarTextoAccion(bocadilloDerecha);
+                            progressBarDerecha.setVisibility(View.INVISIBLE);
+                            mCountDownTimerDerecha.cancel();
                             break;
                         case 4:
                             bocadilloDerecha.setText("Quiero el joc fora");
                             animarTextoAccion(bocadilloDerecha);
+                            progressBarDerecha.setVisibility(View.INVISIBLE);
+                            mCountDownTimerDerecha.cancel();
                             break;
                     }
                 }else if(esRivalIzquierda(sender)){
@@ -2425,18 +2445,26 @@ public class MainActivity extends Activity
                         case 1:
                             bocadilloIzq.setText("Quiero el truc");
                             animarTextoAccion(bocadilloIzq);
+                            progressBarIzq.setVisibility(View.INVISIBLE);
+                            mCountDownTimerIzq.cancel();
                             break;
                         case 2:
                             bocadilloIzq.setText("Quiero el retruc");
                             animarTextoAccion(bocadilloIzq);
+                            progressBarIzq.setVisibility(View.INVISIBLE);
+                            mCountDownTimerIzq.cancel();
                             break;
                         case 3:
                             bocadilloIzq.setText("Quiero el quatre val");
                             animarTextoAccion(bocadilloIzq);
+                            progressBarIzq.setVisibility(View.INVISIBLE);
+                            mCountDownTimerIzq.cancel();
                             break;
                         case 4:
                             bocadilloIzq.setText("Quiero el joc fora");
                             animarTextoAccion(bocadilloIzq);
+                            progressBarIzq.setVisibility(View.INVISIBLE);
+                            mCountDownTimerIzq.cancel();
                             break;
                     }
                 }
@@ -2445,27 +2473,39 @@ public class MainActivity extends Activity
                 if(esRivalDerecha(sender)){
                     bocadilloDerecha.setText("Retruque");
                     animarTextoAccion(bocadilloDerecha);
+                    progressBarDerecha.setVisibility(View.INVISIBLE);
+                    mCountDownTimerDerecha.cancel();
                 }else if(esRivalIzquierda(sender)){
                     bocadilloIzq.setText("Retruque");
                     animarTextoAccion(bocadilloIzq);
+                    progressBarIzq.setVisibility(View.INVISIBLE);
+                    mCountDownTimerIzq.cancel();
                 }
                 break;
             case "QUATRE":
                 if(esRivalDerecha(sender)){
                     bocadilloDerecha.setText("Quatre val");
                     animarTextoAccion(bocadilloDerecha);
+                    progressBarDerecha.setVisibility(View.INVISIBLE);
+                    mCountDownTimerDerecha.cancel();
                 }else if(esRivalIzquierda(sender)){
                     bocadilloIzq.setText("Quatre val");
                     animarTextoAccion(bocadilloIzq);
+                    progressBarIzq.setVisibility(View.INVISIBLE);
+                    mCountDownTimerIzq.cancel();
                 }
                 break;
             case "JOC":
                 if(esRivalDerecha(sender)){
                     bocadilloDerecha.setText("Joc fora");
                     animarTextoAccion(bocadilloDerecha);
+                    progressBarDerecha.setVisibility(View.INVISIBLE);
+                    mCountDownTimerDerecha.cancel();
                 }else if(esRivalIzquierda(sender)){
                     bocadilloIzq.setText("Joc fora");
                     animarTextoAccion(bocadilloIzq);
+                    progressBarIzq.setVisibility(View.INVISIBLE);
+                    mCountDownTimerIzq.cancel();
                 }
                 break;
             case "NOQUIERO":
@@ -2474,18 +2514,26 @@ public class MainActivity extends Activity
                         case 1:
                             bocadilloDerecha.setText("No quiero el truc");
                             animarTextoAccion(bocadilloDerecha);
+                            progressBarDerecha.setVisibility(View.INVISIBLE);
+                            mCountDownTimerDerecha.cancel();
                             break;
                         case 2:
                             bocadilloDerecha.setText("No quiero el retruc");
                             animarTextoAccion(bocadilloDerecha);
+                            progressBarDerecha.setVisibility(View.INVISIBLE);
+                            mCountDownTimerDerecha.cancel();
                             break;
                         case 3:
                             bocadilloDerecha.setText("No quiero el quatre val");
                             animarTextoAccion(bocadilloDerecha);
+                            progressBarDerecha.setVisibility(View.INVISIBLE);
+                            mCountDownTimerDerecha.cancel();
                             break;
                         case 4:
                             bocadilloDerecha.setText("No quiero el joc fora");
                             animarTextoAccion(bocadilloDerecha);
+                            progressBarDerecha.setVisibility(View.INVISIBLE);
+                            mCountDownTimerDerecha.cancel();
                             break;
                     }
                 }else if(esRivalIzquierda(sender)){
@@ -2493,18 +2541,26 @@ public class MainActivity extends Activity
                         case 1:
                             bocadilloIzq.setText("No quiero el truc");
                             animarTextoAccion(bocadilloIzq);
+                            progressBarIzq.setVisibility(View.INVISIBLE);
+                            mCountDownTimerIzq.cancel();
                             break;
                         case 2:
                             bocadilloIzq.setText("No quiero el retruc");
                             animarTextoAccion(bocadilloIzq);
+                            progressBarIzq.setVisibility(View.INVISIBLE);
+                            mCountDownTimerIzq.cancel();
                             break;
                         case 3:
                             bocadilloIzq.setText("No quiero el quatre val");
                             animarTextoAccion(bocadilloIzq);
+                            progressBarIzq.setVisibility(View.INVISIBLE);
+                            mCountDownTimerIzq.cancel();
                             break;
                         case 4:
                             bocadilloIzq.setText("No quiero el joc fora");
                             animarTextoAccion(bocadilloIzq);
+                            progressBarIzq.setVisibility(View.INVISIBLE);
+                            mCountDownTimerIzq.cancel();
                             break;
                     }
                 }
@@ -3346,7 +3402,7 @@ public class MainActivity extends Activity
                                     enviarMensajeTurno4J(turno);
                                     reiniciarBarraProgreso();
                                 }
-                                //Ha ganado mi compañero
+                                //Ha ganado mi compaï¿½ero
                             } else {
                                 if (rondasGanadasMiEquipo == 2) {
                                     //enviarMensajeHasPerdido();
@@ -4317,8 +4373,8 @@ public class MainActivity extends Activity
         }
     }
 
-    public void enviarMensajeBarraProgreso() {
-        byte[] messageGanadorRonda4J = ("1 ").getBytes();
+    public void enviarMensajeBarraProgreso(String caso) {
+        byte[] messageGanadorRonda4J = ("1 "+caso).getBytes();
         for (Participant p : mParticipants) {
             if (!p.getParticipantId().equals(mMyId) && !esDeMiEquipo(p.getParticipantId())) {
                 Games.RealTimeMultiplayer.sendReliableMessage(mGoogleApiClient, null, messageGanadorRonda4J,
@@ -4731,7 +4787,7 @@ public class MainActivity extends Activity
                 case 'E':
                     //Mensaje que actualiza si hay empate en la primera ronda
                     if (ronda == 1)
-                        showBasicAlert("Empate en la primera ronda!", "La carta que eljas será mostrada arriba");
+                        showBasicAlert("Empate en la primera ronda!", "La carta que eljas serï¿½ mostrada arriba");
                     hayEmpate = true;
                     hayEmpate4J = true;
                     break;
@@ -5177,11 +5233,14 @@ public class MainActivity extends Activity
                             //Mostrar bocadillo
                             bocadilloArriba.setText("Truco!");
                             animarTextoAccion(bocadilloArriba);
+                            activarDesactivarBarraCompi("DESACTIVAR");
+                            activarBarraRival("TRUC");
 
                         }else {
-                            barrasInvisibles();
                             cancelarBarraProgreso();
+                            barrasInvisibles();
                             activarDesactivarMiBarra("ACTIVAR");
+                            activarDesactivarBarraCompi("ACTIVAR");
                             showSingleChoiceAlertTruco_4J("Tu rival ha trucado", R.array.truc1, sender);
                         }
                     }
@@ -5215,11 +5274,14 @@ public class MainActivity extends Activity
                             bocadilloArriba.setText("Retruque!");
                             animarTextoAccion(bocadilloArriba);
                             retruque_4J.setVisibility(View.GONE);
+                            activarDesactivarBarraCompi("DESACTIVAR");
+                            activarBarraRival("TRUC");
 
                         }else {
-                            barrasInvisibles();
                             cancelarBarraProgreso();
+                            barrasInvisibles();
                             activarDesactivarMiBarra("ACTIVAR");
+                            activarDesactivarBarraCompi("ACTIVAR");
                             showSingleChoiceAlertRetruc_4J("Tu rival ha retrucado", R.array.truc2, sender);
                         }
                     }
@@ -5239,7 +5301,7 @@ public class MainActivity extends Activity
 
                 case 'C':
                     if(numeroJugadores == 2) {
-                        showSingleChoiceAlertCuatreVal("¡Quatre val!", R.array.truc3);
+                        showSingleChoiceAlertCuatreVal("ï¿½Quatre val!", R.array.truc3);
                         cambiarBarraProgreso();
 
                     }else if(numeroJugadores == 4){
@@ -5248,11 +5310,15 @@ public class MainActivity extends Activity
                             bocadilloArriba.setText("Quatre val!");
                             animarTextoAccion(bocadilloArriba);
                             quatreVal_4J.setVisibility(View.GONE);
+                            activarDesactivarBarraCompi("DESACTIVAR");
+                            activarBarraRival("TRUC");
+
                         }else {
-                            barrasInvisibles();
                             cancelarBarraProgreso();
+                            barrasInvisibles();
                             activarDesactivarMiBarra("ACTIVAR");
-                            showSingleChoiceAlertCuatreVal_4J("¡Quatre val!", R.array.truc3, sender);
+                            activarDesactivarBarraCompi("ACTIVAR");
+                            showSingleChoiceAlertCuatreVal_4J("ï¿½Quatre val!", R.array.truc3, sender);
                         }
                     }
 
@@ -5272,7 +5338,7 @@ public class MainActivity extends Activity
 
                 case 'J':
                     if(numeroJugadores == 2) {
-                        showSingleChoiceAlertJocFora("¡Joc fora!", R.array.envid3);
+                        showSingleChoiceAlertJocFora("ï¿½Joc fora!", R.array.envid3);
                         cambiarBarraProgreso();
 
                     }else if(numeroJugadores == 4){
@@ -5281,11 +5347,15 @@ public class MainActivity extends Activity
                             bocadilloArriba.setText("Joc fora!");
                             animarTextoAccion(bocadilloArriba);
                             jocFora_4J.setVisibility(View.GONE);
+                            activarDesactivarBarraCompi("DESACTIVAR");
+                            activarBarraRival("TRUC");
+
                         }else {
-                            barrasInvisibles();
                             cancelarBarraProgreso();
+                            barrasInvisibles();
                             activarDesactivarMiBarra("ACTIVAR");
-                            showSingleChoiceAlertJocFora_4J("¡Joc fora!", R.array.envid3, sender);
+                            activarDesactivarBarraCompi("ACTIVAR");
+                            showSingleChoiceAlertJocFora_4J("ï¿½Joc fora!", R.array.envid3, sender);
                         }
                     }
                     break;
@@ -5303,7 +5373,19 @@ public class MainActivity extends Activity
                     break;
 
                 case '1':
-                    cambiarBarraProgreso();
+                    String sAux = new String(buf, "UTF-8");
+                    String sOtro[] = sAux.split(" ");
+                    String que = sOtro[1];
+
+                    if(que.equals("QUIERO")){
+                        cambiarBarraProgreso();
+                        if(mMyId.equals(turno)){
+                            reiniciarBarraProgreso();
+                            desbloquearCartas();
+                            animarAparecerMenu();
+                        }
+                    }
+                    else activarBarraRival("TRUC");
                     break;
 
                 case 'W':
@@ -5369,9 +5451,11 @@ public class MainActivity extends Activity
                             }
                         }
 
+                        activarDesactivarBarraCompi("DESACTIVAR");
+
                     }else if(!esDeMiEquipo(sender)){
 
-                        //Bocadillos y eliminar botones
+                        //Bocadillos y eliminar barras de progreso
                         if(respuesta.equals("QUIERO")){
                             if (caso3 == 1){
                                 animarBocadillosTruc(1, "QUIERO", sender);
@@ -5429,8 +5513,8 @@ public class MainActivity extends Activity
                         //Quieren el truc
                         if(mensajesRecibidosTruc == 2 && sQuieroTruc.equals("QUIERO")) {
 
-                            barrasInvisibles();
                             cancelarBarraProgreso();
+                            barrasInvisibles();
                             activarDesactivarMiBarra("ACTIVAR");
                             if (caso3 == 1) hayTruc = true;
                             else if (caso3 == 2) hayRetruc = true;
@@ -5442,43 +5526,47 @@ public class MainActivity extends Activity
                             }
                             //Animar los bocadillos
                             cambiarBarraProgreso();
-                            enviarMensajeBarraProgreso();
+                            enviarMensajeBarraProgreso("QUIERO");
                             //enviarMensajeQuieroTruc();
                             mensajesRecibidosTruc = 0;
                             sQuieroTruc = "NOQUIERO";
 
                         }else if(mensajesRecibidosTruc == 2 && sQuieroTruc.equals("RETRUQUE")){
 
-                            barrasInvisibles();
                             cancelarBarraProgreso();
+                            barrasInvisibles();
                             activarDesactivarMiBarra("ACTIVAR");
+                            activarDesactivarBarraCompi("ACTIVAR");
                             //Animar los bocadillos
-                            cambiarBarraProgreso();
-                            enviarMensajeBarraProgreso();
+                            //cambiarBarraProgreso();
+                            enviarMensajeBarraProgreso("RETRUQUE");
                             showSingleChoiceAlertRetruc_4J("Tu rival ha retrucado", R.array.truc2, "");
                             mensajesRecibidosTruc = 0;
+                            sQuieroTruc = "NOQUIERO";
 
                         }else if(mensajesRecibidosTruc == 2 && sQuieroTruc.equals("QUATRE")){
 
-                            barrasInvisibles();
                             cancelarBarraProgreso();
+                            barrasInvisibles();
                             activarDesactivarMiBarra("ACTIVAR");
+                            activarDesactivarBarraCompi("ACTIVAR");
                             //Animar los bocadillos
-                            cambiarBarraProgreso();
-                            enviarMensajeBarraProgreso();
-                            showSingleChoiceAlertCuatreVal_4J("¡Quatre val!", R.array.truc3, "");
+                            //cambiarBarraProgreso();
+                            enviarMensajeBarraProgreso("QUATRE");
+                            showSingleChoiceAlertCuatreVal_4J("ï¿½Quatre val!", R.array.truc3, "");
                             mensajesRecibidosTruc = 0;
                             sQuieroTruc = "NOQUIERO";
 
                         }else if(mensajesRecibidosTruc == 2 && sQuieroTruc.equals("JOC")){
 
-                            barrasInvisibles();
                             cancelarBarraProgreso();
+                            barrasInvisibles();
                             activarDesactivarMiBarra("ACTIVAR");
+                            activarDesactivarBarraCompi("ACTIVAR");
                             //Animar los bocadillos
-                            cambiarBarraProgreso();
-                            enviarMensajeBarraProgreso();
-                            showSingleChoiceAlertJocFora_4J("¡Joc fora!", R.array.envid3, "");
+                            //cambiarBarraProgreso();
+                            enviarMensajeBarraProgreso("JOC");
+                            showSingleChoiceAlertJocFora_4J("ï¿½Joc fora!", R.array.envid3, "");
                             mensajesRecibidosTruc = 0;
                             sQuieroTruc = "NOQUIERO";
 
@@ -5487,7 +5575,6 @@ public class MainActivity extends Activity
 
                             barrasInvisibles();
                             cancelarBarraProgreso();
-                            activarDesactivarMiBarra("ACTIVAR");
                             if(mMyId.equals(equipo1[0]) || mMyId.equals(equipo2[0])){
                                 primerMensaje = mMyId;
                                 //Animar los bocadillos
@@ -5623,7 +5710,7 @@ public class MainActivity extends Activity
                                             showProgressCustomDialog(layout);
                                         }
                                     } else {
-                                        showProgressDialog("Lástima, pierdes la mano");
+                                        showProgressDialog("Lï¿½stima, pierdes la mano");
                                     }
                                     repartirTrasMano();
                                     Log.d("KKKKKKKK", "Repartiendo tras mano..." + mMyId);
@@ -5676,7 +5763,7 @@ public class MainActivity extends Activity
 
                                         if(equipo1[0].equals(mMyId) || equipo2[0].equals(mMyId)) {
                                             actualizarMarcador2_4J(puntosTotalesMios, "GANADOR", sender);
-                                            Log.d("ZZZZ", "Envío el segundo mensaje");
+                                            Log.d("ZZZZ", "Envï¿½o el segundo mensaje");
                                         }
                                     }
 
@@ -5691,7 +5778,7 @@ public class MainActivity extends Activity
                                         Log.d("KKKKK", "Puntos rquipo rival: "+puntosTotalesJugador2);
 
                                         if(equipo1[0].equals(mMyId) || equipo2[0].equals(mMyId)) {
-                                            Log.d("ZZZZ", "Envío el segundo mensaje");
+                                            Log.d("ZZZZ", "Envï¿½o el segundo mensaje");
                                             actualizarMarcador2_4J(puntosTotalesMios, "PERDEDOR", sender);
                                         }
                                     }
@@ -5742,7 +5829,7 @@ public class MainActivity extends Activity
                                             Log.d("KKKKKKKK", "Pierdo todo");
                                         }
                                     } else {
-                                        showProgressDialog("Lástima, pierdes la mano");
+                                        showProgressDialog("Lï¿½stima, pierdes la mano");
                                         Log.d("KKKKKKKK", "No hay envid");
                                     }
                                 repartirTrasMano();
@@ -7454,25 +7541,18 @@ public class MainActivity extends Activity
                             case 0:
                                 hayTruc = true;
                                 enviarMensajeReQuaJoc_4J("QUIERO", 1);
-                                barrasInvisibles();
+                                activarDesactivarMiBarra("DESACTIVAR");
                                 retruque_4J.setVisibility(View.VISIBLE);
                                 break;
                             //Retruque
                             case 1:
                                 enviarMensajeReQuaJoc_4J("RETRUQUE", 1);
-                                barrasInvisibles();
+                                activarDesactivarMiBarra("DESACTIVAR");
                                 break;
                             //No quiero
                             case 2:
                                 enviarMensajeReQuaJoc_4J("NOQUIERO", 1);
-                                //mostrarResultadosPerdedorMano("PRIMERO");
-                                if (!turno.equals(mMyId)) {
-                                    barrasInvisibles();
-                                } else {
-                                    reiniciarBarraProgreso();
-                                    desbloquearCartas();
-                                    animarAparecerMenu();
-                                }
+                                activarDesactivarMiBarra("DESACTIVAR");
                                 break;
                         }
                         return true;
@@ -7497,31 +7577,19 @@ public class MainActivity extends Activity
                             case 0:
                                 hayRetruc = true;
                                 enviarMensajeReQuaJoc_4J("QUIERO", 2);
-                                if (!turno.equals(mMyId)) {
-                                    barrasInvisibles();
-                                } else {
-                                    reiniciarBarraProgreso();
-                                    desbloquearCartas();
-                                    animarAparecerMenu();
-                                }
+                                activarDesactivarMiBarra("DESACTIVAR");
                                 quatreVal_4J.setVisibility(View.VISIBLE);
                                 break;
                             //Cuatre val
                             case 1:
                                 enviarMensajeReQuaJoc_4J("QUATRE", 2);
-                                barrasInvisibles();
+                                activarDesactivarMiBarra("DESACTIVAR");
                                 break;
                             //No quiero
                             case 2:
                                 enviarMensajeReQuaJoc_4J("NOQUIERO", 2);
-                                // mostrarResultadosPerdedorMano("PRIMERO");
-                                if (!turno.equals(mMyId)) {
-                                    barrasInvisibles();
-                                } else {
-                                    reiniciarBarraProgreso();
-                                    desbloquearCartas();
-                                    animarAparecerMenu();
-                                }
+                                activarDesactivarMiBarra("DESACTIVAR");
+
                                 break;
                         }
                         return true;
@@ -7546,31 +7614,18 @@ public class MainActivity extends Activity
                             case 0:
                                 hayCuatreVal = true;
                                 enviarMensajeReQuaJoc_4J("QUIERO", 3);
-                                if (!turno.equals(mMyId)) {
-                                    barrasInvisibles();
-                                } else {
-                                    reiniciarBarraProgreso();
-                                    desbloquearCartas();
-                                    animarAparecerMenu();
-                                }
+                                activarDesactivarMiBarra("DESACTIVAR");
                                 jocFora_4J.setVisibility(View.VISIBLE);
                                 break;
                             //Joc fora
                             case 1:
                                 enviarMensajeReQuaJoc_4J("JOC", 3);
-                                barrasInvisibles();
+                                activarDesactivarMiBarra("DESACTIVAR");
                                 break;
                             //No quiero
                             case 2:
                                 enviarMensajeReQuaJoc_4J("NOQUIERO", 3);
-                                // mostrarResultadosPerdedorMano("PRIMERO");
-                                if (!turno.equals(mMyId)) {
-                                    barrasInvisibles();
-                                } else {
-                                    reiniciarBarraProgreso();
-                                    desbloquearCartas();
-                                    animarAparecerMenu();
-                                }
+                                activarDesactivarMiBarra("DESACTIVAR");
                                 break;
                         }
                         return true;
@@ -7596,18 +7651,11 @@ public class MainActivity extends Activity
                                 hayJocFora = true;
                                 enviarMensajeReQuaJoc_4J("QUIERO", 4);
                                 desbloquearCartas();
-                                if (!turno.equals(mMyId)) {
-                                    barrasInvisibles();
-                                } else {
-                                    reiniciarBarraProgreso();
-                                    desbloquearCartas();
-                                    animarAparecerMenu();
-                                }
+                                activarDesactivarMiBarra("DESACTIVAR");
                                 break;
                             //No quiero
                             case 1:
                                 enviarMensajeReQuaJoc_4J("NOQUIERO", 4);
-                                // mostrarResultadosPerdedorMano("PRIMERO");
                                 break;
 
                         }
@@ -7618,6 +7666,7 @@ public class MainActivity extends Activity
                 .cancelable(false)
                 .show().getWindow().setBackgroundDrawable(new ColorDrawable(0x30000000));
     }
+
 
     private static void updateLeaderboards(final GoogleApiClient googleApiClient, final String leaderboardId) {
         Games.Leaderboards.loadCurrentPlayerLeaderboardScore(
