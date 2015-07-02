@@ -2,6 +2,7 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:fab="http://schemas.android.com/apk/res-auto"
     xmlns:app="http://schemas.android.com/tools"
+    xmlns:fbutton="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -16,27 +17,98 @@
 
     <LinearLayout android:id="@+id/screen_main" style="@style/LLScreen">
         <TextView style="@style/GameTitle" />
-        <Button android:id="@+id/button_quick_game"
-            style="@style/MainScreenButton"
-            android:text="@string/quick_game" />
-        <Button android:id="@+id/button_quick_game_4"
-            style="@style/MainScreenButton"
-            android:text="@string/quick_game_4" />
-        <Button android:id="@+id/button_invite_players"
-            style="@style/MainScreenButton"
+        <info.hoang8f.widget.FButton
+            android:id="@+id/button_quick_game"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="6dp"
+            android:text="@string/quick_game"
+            android:textColor="@color/cpb_white"
+            fbutton:buttonColor="#1ABC9C"
+            fbutton:shadowColor="#16A085"
+            fbutton:shadowEnabled="true"
+            fbutton:shadowHeight="5dp"
+            fbutton:cornerRadius="5dp" />
+        <info.hoang8f.widget.FButton
+            android:id="@+id/button_quick_game_4"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="6dp"
+            android:text="@string/quick_game_4"
+            android:textColor="@color/cpb_white"
+            fbutton:buttonColor="#1ABC9C"
+            fbutton:shadowColor="#16A085"
+            fbutton:shadowEnabled="true"
+            fbutton:shadowHeight="5dp"
+            fbutton:cornerRadius="5dp"/>
+        <info.hoang8f.widget.FButton
+            android:id="@+id/button_invite_players"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="6dp"
+            android:textColor="@color/cpb_white"
+            fbutton:buttonColor="#1ABC9C"
+            fbutton:shadowColor="#16A085"
+            fbutton:shadowEnabled="true"
+            fbutton:shadowHeight="5dp"
+            fbutton:cornerRadius="5dp"
             android:text="@string/invite_players" />
-        <Button android:id="@+id/button_see_invitations"
-            style="@style/MainScreenButton"
-            android:text="@string/see_invitations" />
-        <Button android:id="@+id/button_ranking"
-            style="@style/MainScreenButton"
-            android:text="Ranking" />
-        <Button android:id="@+id/button_logros"
-            style="@style/MainScreenButton"
-            android:text="Logros" />
-        <Button android:id="@+id/button_sign_out"
-            style="@style/SignOutButton"
-            android:text="@string/sign_out" />
+        <info.hoang8f.widget.FButton
+            android:id="@+id/button_see_invitations"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="6dp"
+            android:text="@string/see_invitations"
+            android:textColor="@color/cpb_white"
+            fbutton:buttonColor="#1ABC9C"
+            fbutton:shadowColor="#16A085"
+            fbutton:shadowEnabled="true"
+            fbutton:shadowHeight="5dp"
+            fbutton:cornerRadius="5dp"/>
+        <LinearLayout
+            android:layout_width="250dp"
+            android:layout_height="wrap_content">
+        <info.hoang8f.widget.FButton
+            android:id="@+id/button_ranking"
+            android:layout_width="125dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="6dp"
+            android:layout_marginRight="3dp"
+            android:text="Ranking"
+            android:textColor="@color/cpb_white"
+            android:layout_weight="1"
+            fbutton:buttonColor="#1ABC9C"
+            fbutton:shadowColor="#16A085"
+            fbutton:shadowEnabled="true"
+            fbutton:shadowHeight="5dp"
+            fbutton:cornerRadius="5dp"/>
+        <info.hoang8f.widget.FButton
+            android:id="@+id/button_logros"
+            android:layout_width="125dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="6dp"
+            android:text="Logros"
+            android:textColor="@color/cpb_white"
+            android:layout_weight="1"
+            fbutton:buttonColor="#1ABC9C"
+            fbutton:shadowColor="#16A085"
+            fbutton:shadowEnabled="true"
+            fbutton:shadowHeight="5dp"
+            fbutton:cornerRadius="5dp"/>
+        </LinearLayout>
+        <info.hoang8f.widget.FButton
+            android:id="@+id/button_sign_out"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="6dp"
+            android:text="@string/sign_out"
+            android:textColor="@color/cpb_white"
+            fbutton:buttonColor="#1ABC9C"
+            fbutton:shadowColor="#16A085"
+            fbutton:shadowEnabled="true"
+            fbutton:shadowHeight="5dp"
+            fbutton:cornerRadius="5dp"/>
+
     </LinearLayout>
 
     <!-- INVITATION POPUP -->
