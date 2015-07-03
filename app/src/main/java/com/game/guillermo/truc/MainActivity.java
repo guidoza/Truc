@@ -448,7 +448,7 @@ public class MainActivity extends Activity
                         break;
 
                     case R.id.abandonar:
-                        showBasicAlertDesconectarse("Abandonar partida", "Si abandonas, perderás la partida. ¿Estás seguro?");
+                        showBasicAlertDesconectarse("Abandonar partida", "Si abandonas, perderï¿½s la partida. ï¿½Estï¿½s seguro?");
                         break;
 
                     case R.id.envido_4J:
@@ -503,7 +503,7 @@ public class MainActivity extends Activity
                         mostrarResultadosPerdedorMano("PRIMERO");
                         break;
                     case R.id.abandonar_4J:
-                        showBasicAlertDesconectarse("Abandonar partida","Si abandonas, perderás la partida. ¿Estás seguro?");
+                        showBasicAlertDesconectarse("Abandonar partida","Si abandonas, perderï¿½s la partida. ï¿½Estï¿½s seguro?");
                         break;
                 }
             }
@@ -1373,10 +1373,12 @@ public class MainActivity extends Activity
                 switchToScreen(R.id.screen_sign_in);
                 break;
             case R.id.button_invite_players:
+                switchToScreen(R.id.screen_game_4_jugadores);
+                /*
                 // show list of invitable players
                 intent = Games.RealTimeMultiplayer.getSelectOpponentsIntent(mGoogleApiClient, 1, 3);
                 switchToScreen(R.id.screen_wait);
-                startActivityForResult(intent, RC_SELECT_PLAYERS);
+                startActivityForResult(intent, RC_SELECT_PLAYERS);*/
                 break;
             case R.id.button_see_invitations:
                 // show list of pending invitations
@@ -3069,13 +3071,23 @@ public class MainActivity extends Activity
     }
 
     void animacionAbrirCartas() {
-        tvJugador1.animate().rotation(-20).setDuration(500);
-        tvJugador3.animate().rotation(20).setDuration(500);
+        if(numeroJugadores == 2){
+            tvJugador1.animate().rotation(-10).setDuration(500);
+            tvJugador3.animate().rotation(10).setDuration(500);
 
-        tvJugador1.animate().translationX(inicio1.x - 100).setDuration(500);
-        tvJugador3.animate().translationX(inicio3.x + 100).setDuration(500);
-        tvJugador1.animate().translationY(inicio1.y + 40).setDuration(500);
-        tvJugador3.animate().translationY(inicio3.y + 40).setDuration(500);
+            tvJugador1.animate().translationX(inicio1.x - 30).setDuration(500);
+            tvJugador3.animate().translationX(inicio3.x + 30).setDuration(500);
+            tvJugador1.animate().translationY(inicio1.y + 15).setDuration(500);
+            tvJugador3.animate().translationY(inicio3.y + 15).setDuration(500);
+        }else if(numeroJugadores == 4){
+            tvJugador1_4J.animate().rotation(-10).setDuration(500);
+            tvJugador3_4J.animate().rotation(10).setDuration(500);
+
+            tvJugador1_4J.animate().translationX(inicio1.x - 30).setDuration(500);
+            tvJugador3_4J.animate().translationX(inicio3.x + 30).setDuration(500);
+            tvJugador1_4J.animate().translationY(inicio1.y + 15).setDuration(500);
+            tvJugador3_4J.animate().translationY(inicio3.y + 15).setDuration(500);
+        }
     }
 
     void animarDesaparecerMano() {
@@ -3314,6 +3326,14 @@ public class MainActivity extends Activity
                 if (mMyId.equals(turno) && ronda == 1) {
                     Toast.makeText(getApplicationContext(), "Es tu turno", Toast.LENGTH_SHORT).show();
                     animarAparecerMenu();
+                    Handler handler = new Handler();
+                    handler.postDelayed(new Runnable() {
+                        public void run() {
+                            // acciones que se ejecutan tras los milisegundos
+                            animacionAbrirCartas();
+
+                        }
+                    }, 500);
                     envid_4J.setVisibility(View.GONE);
                     laFalta_4J.setVisibility(View.GONE);
                     progressBarAbajo.setVisibility(View.VISIBLE);
@@ -3324,6 +3344,14 @@ public class MainActivity extends Activity
                     bloquearCartas();
                     animarDesaparecerMenu();
                     Toast.makeText(getApplicationContext(), "Esperando al Jugador", Toast.LENGTH_SHORT).show();
+                    Handler handler = new Handler();
+                    handler.postDelayed(new Runnable() {
+                        public void run() {
+                            // acciones que se ejecutan tras los milisegundos
+                            animacionAbrirCartas();
+
+                        }
+                    }, 500);
 
                     if(mMyId.equals(comprobarSiguienteMano())){
                         progressBarIzq.setVisibility(View.VISIBLE);
@@ -6981,16 +7009,16 @@ public class MainActivity extends Activity
 
                     } else {
                         if (view.equals(tvJugador1)) {
-                            view.animate().translationX(inicio1.x - 100).setDuration(500);
-                            view.animate().translationY(inicio1.y + 40);
+                            view.animate().translationX(inicio1.x - 30).setDuration(500);
+                            view.animate().translationY(inicio1.y + 15);
                         }
                         if (view.equals(tvJugador2)) {
                             view.animate().translationX(inicio2.x).setDuration(500);
                             view.animate().translationY(inicio2.y).setDuration(500);
                         }
                         if (view.equals(tvJugador3)) {
-                            view.animate().translationX(inicio3.x + 100).setDuration(500);
-                            view.animate().translationY(inicio3.y + 40).setDuration(500);
+                            view.animate().translationX(inicio3.x + 30).setDuration(500);
+                            view.animate().translationY(inicio3.y + 15).setDuration(500);
                         }
                     }
                     break;
@@ -7162,16 +7190,16 @@ public class MainActivity extends Activity
 
                     } else {
                         if (view.equals(tvJugador1_4J)) {
-                            view.animate().translationX(inicio1J1.x - 100).setDuration(500);
-                            view.animate().translationY(inicio1J1.y + 40);
+                            view.animate().translationX(inicio1J1.x - 30).setDuration(500);
+                            view.animate().translationY(inicio1J1.y + 15);
                         }
                         if (view.equals(tvJugador2_4J)) {
                             view.animate().translationX(inicio2J1.x).setDuration(500);
                             view.animate().translationY(inicio2J1.y).setDuration(500);
                         }
                         if (view.equals(tvJugador3_4J)) {
-                            view.animate().translationX(inicio3J1.x + 100).setDuration(500);
-                            view.animate().translationY(inicio3J1.y + 40).setDuration(500);
+                            view.animate().translationX(inicio3J1.x + 30).setDuration(500);
+                            view.animate().translationY(inicio3J1.y + 15).setDuration(500);
                         }
                     }
                     break;
