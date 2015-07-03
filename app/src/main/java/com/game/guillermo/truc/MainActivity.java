@@ -160,6 +160,7 @@ public class MainActivity extends Activity
     int maximo = 0;
     int numeroJugadores = 0;
     int segundos = 40;
+    int segundos2 = 40;
     private float xDelta;
     private float yDelta;
     int posTvJugador1 = 0, posTvJugador2 = 0, posTvJugador3 = 0;
@@ -350,7 +351,6 @@ public class MainActivity extends Activity
 
     //TextViews
     TextView txtNumeroJugador;
-    TextView bocadilloAbajo;
     TextView bocadilloDerecha;
     TextView bocadilloArriba;
     TextView bocadilloIzq;
@@ -640,7 +640,6 @@ public class MainActivity extends Activity
 
         txtNumeroJugador = (TextView) findViewById(R.id.textoNumeroJugador);
 
-        bocadilloAbajo = (TextView) findViewById(R.id.bocadilloJ1);
         bocadilloDerecha = (TextView) findViewById(R.id.bocadilloJ2);
         bocadilloArriba = (TextView) findViewById(R.id.bocadilloJ3);
         bocadilloIzq = (TextView) findViewById(R.id.bocadilloJ4);
@@ -1069,6 +1068,7 @@ public class MainActivity extends Activity
     void activarDesactivarMiBarra(String activar){
         if(activar.equals("ACTIVAR")){
             segundos = 40;
+            segundos2 = 40;
             progressBarAbajo.setVisibility(View.VISIBLE);
             iniciarBarraProgresoAbajo();
 
@@ -1082,6 +1082,7 @@ public class MainActivity extends Activity
     void activarDesactivarBarraCompi(String activar){
         if(activar.equals("ACTIVAR")){
             segundos = 40;
+            segundos2 = 40;
             progressBarArriba.setVisibility(View.VISIBLE);
             iniciarBarraProgresoArriba();
 
@@ -1115,6 +1116,7 @@ public class MainActivity extends Activity
                 progressBarDerecha.setVisibility(View.VISIBLE);
                 progressBarIzq.setVisibility(View.VISIBLE);
                 segundos = 40;
+                segundos2 = 40;
                 iniciarBarraProgresoDerecha();
                 iniciarBarraProgresoIzq();
                 break;
@@ -1139,6 +1141,7 @@ public class MainActivity extends Activity
                     calculaEnvid = idJugador2;
                 }
                 segundos = 40;
+                segundos2 = 40;
 
                 if(mMyId.equals(idJugador1) && calculaEnvid.equals(idJugador2)){
                     progressBarDerecha.setVisibility(View.VISIBLE);
@@ -2078,6 +2081,7 @@ public class MainActivity extends Activity
             textoAccion2.setVisibility(View.INVISIBLE);
             if (mCountDownTimerJ1 != null && mCountDownTimerJ2 != null) cancelarBarraProgreso();
             segundos = 40;
+            segundos2 = 40;
 
             progressBar1.setVisibility(View.INVISIBLE);
             progressBar2.setVisibility(View.INVISIBLE);
@@ -2173,6 +2177,7 @@ public class MainActivity extends Activity
             if (mCountDownTimerAbajo != null || mCountDownTimerArriba != null
                     || mCountDownTimerDerecha != null || mCountDownTimerIzq != null) cancelarBarraProgreso();
             segundos = 40;
+            segundos2 = 40;
 
             truc_4J.setVisibility(View.VISIBLE);
             envid_4J.setVisibility(View.VISIBLE);
@@ -2190,7 +2195,6 @@ public class MainActivity extends Activity
             progressBarIzq.setVisibility(View.INVISIBLE);
             progressBarArriba.setVisibility(View.INVISIBLE);
 
-            bocadilloAbajo.setVisibility(View.INVISIBLE);
             bocadilloDerecha.setVisibility(View.INVISIBLE);
             bocadilloIzq.setVisibility(View.INVISIBLE);
             bocadilloArriba.setVisibility(View.INVISIBLE);
@@ -2690,82 +2694,101 @@ public class MainActivity extends Activity
 
     void iniciarBarraProgresoAbajo() {
 
-        mCountDownTimerAbajo = new CountDownTimer(40000, 1000) {
+        if(mCountDownTimerAbajo == null){
 
-            @Override
-            public void onTick(long millisUntilFinished) {
-                segundos--;
-                progressBarAbajo.setProgress(segundos);
+            mCountDownTimerAbajo = new CountDownTimer(40000, 1000) {
+                @Override
+                public void onTick(long millisUntilFinished) {
+                    segundos--;
+                    progressBarAbajo.setProgress(segundos);
 
-            }
-
-            @Override
-            public void onFinish() {
-                //Do what you want
-                segundos--;
-                progressBarAbajo.setProgress(segundos);
-            }
-        }.start();
+                }
+                @Override
+                public void onFinish() {
+                    //Do what you want
+                    segundos--;
+                    progressBarAbajo.setProgress(segundos);
+                }
+            }.start();
+        } else{
+            mCountDownTimerAbajo.cancel();
+            mCountDownTimerAbajo.start();
+        }
     }
 
     void iniciarBarraProgresoDerecha() {
 
-        mCountDownTimerDerecha = new CountDownTimer(40000, 1000) {
+        if(mCountDownTimerDerecha == null){
+            mCountDownTimerDerecha = new CountDownTimer(40000, 1000) {
 
-            @Override
-            public void onTick(long millisUntilFinished) {
-                segundos--;
-                progressBarDerecha.setProgress(segundos);
+                @Override
+                public void onTick(long millisUntilFinished) {
+                    segundos--;
+                    progressBarDerecha.setProgress(segundos);
 
-            }
+                }
 
-            @Override
-            public void onFinish() {
-                //Do what you want
-                segundos--;
-                progressBarDerecha.setProgress(segundos);
-            }
-        }.start();
+                @Override
+                public void onFinish() {
+                    //Do what you want
+                    segundos--;
+                    progressBarDerecha.setProgress(segundos);
+                }
+            }.start();
+        }else {
+            mCountDownTimerDerecha.cancel();
+            mCountDownTimerDerecha.start();
+        }
     }
 
     void iniciarBarraProgresoArriba() {
 
-        mCountDownTimerArriba = new CountDownTimer(40000, 1000) {
+        if(mCountDownTimerArriba == null){
+            mCountDownTimerArriba = new CountDownTimer(40000, 1000) {
 
-            @Override
-            public void onTick(long millisUntilFinished) {
-                segundos--;
-                progressBarArriba.setProgress(segundos);
+                @Override
+                public void onTick(long millisUntilFinished) {
+                    segundos2--;
+                    progressBarArriba.setProgress(segundos2);
 
-            }
+                }
 
-            @Override
-            public void onFinish() {
-                //Do what you want
-                segundos--;
-                progressBarArriba.setProgress(segundos);
-            }
-        }.start();
+                @Override
+                public void onFinish() {
+                    //Do what you want
+                    segundos2--;
+                    progressBarArriba.setProgress(segundos2);
+                }
+            }.start();
+        }else {
+            mCountDownTimerArriba.cancel();
+            mCountDownTimerArriba.start();
+        }
     }
 
     void iniciarBarraProgresoIzq() {
 
+        if(mCountDownTimerIzq == null){
         mCountDownTimerIzq = new CountDownTimer(40000, 1000) {
 
             @Override
             public void onTick(long millisUntilFinished) {
-                segundos--;
-                progressBarIzq.setProgress(segundos);
+                segundos2--;
+                progressBarIzq.setProgress(segundos2);
 
             }
 
             @Override
             public void onFinish() {
                 //Do what you want
-                segundos--;
-                progressBarIzq.setProgress(segundos);
+                segundos2--;
+                progressBarIzq.setProgress(segundos2);
             }
         }.start();
+        }else {
+            mCountDownTimerIzq.cancel();
+            mCountDownTimerIzq.start();
+        }
     }
 
 
@@ -2775,12 +2798,14 @@ public class MainActivity extends Activity
                 progressBar1.setVisibility(View.INVISIBLE);
                 mCountDownTimerJ1.cancel();
                 segundos = 40;
+                segundos2 = 40;
                 progressBar2.setVisibility(View.VISIBLE);
                 iniciarBarraProgresoJ2();
             } else if (progressBar2.getVisibility() == View.VISIBLE) {
                 progressBar2.setVisibility(View.INVISIBLE);
                 mCountDownTimerJ2.cancel();
                 segundos = 40;
+                segundos2 = 40;
                 progressBar1.setVisibility(View.VISIBLE);
                 iniciarBarraProgresoJ1();
             }
@@ -2789,6 +2814,7 @@ public class MainActivity extends Activity
             if(turno.equals(mMyId)){
                 if(isBarrasInvisibles()){
                     segundos = 40;
+                    segundos2 = 40;
                     progressBarAbajo.setVisibility(View.VISIBLE);
                     reiniciarBarraProgreso();
                 }else{
@@ -2798,18 +2824,21 @@ public class MainActivity extends Activity
                         progressBarDerecha.setVisibility(View.INVISIBLE);
                         mCountDownTimerDerecha.cancel();
                         segundos = 40;
+                        segundos2 = 40;
                         progressBarAbajo.setVisibility(View.VISIBLE);
                         iniciarBarraProgresoAbajo();
                     }else if (progressBarArriba.getVisibility() == View.VISIBLE) {
                         progressBarArriba.setVisibility(View.INVISIBLE);
                         mCountDownTimerArriba.cancel();
                         segundos = 40;
+                        segundos2 = 40;
                         progressBarAbajo.setVisibility(View.VISIBLE);
                         iniciarBarraProgresoAbajo();
                     }else if (progressBarIzq.getVisibility() == View.VISIBLE) {
                         progressBarIzq.setVisibility(View.INVISIBLE);
                         mCountDownTimerIzq.cancel();
                         segundos = 40;
+                        segundos2 = 40;
                         progressBarAbajo.setVisibility(View.VISIBLE);
                         iniciarBarraProgresoAbajo();
                     }
@@ -2818,6 +2847,7 @@ public class MainActivity extends Activity
                 if(mMyId.equals(comprobarDerechaTurno())) {
                     if(isBarrasInvisibles()){
                         segundos = 40;
+                        segundos2 = 40;
                         progressBarIzq.setVisibility(View.VISIBLE);
                         reiniciarBarraProgreso();
                     }else {
@@ -2825,18 +2855,21 @@ public class MainActivity extends Activity
                             progressBarAbajo.setVisibility(View.INVISIBLE);
                             mCountDownTimerAbajo.cancel();
                             segundos = 40;
+                            segundos2 = 40;
                             progressBarIzq.setVisibility(View.VISIBLE);
                             iniciarBarraProgresoIzq();
                         } else if (progressBarDerecha.getVisibility() == View.VISIBLE) {
                             progressBarDerecha.setVisibility(View.INVISIBLE);
                             mCountDownTimerDerecha.cancel();
                             segundos = 40;
+                            segundos2 = 40;
                             progressBarIzq.setVisibility(View.VISIBLE);
                             iniciarBarraProgresoIzq();
                         } else if (progressBarArriba.getVisibility() == View.VISIBLE) {
                             progressBarArriba.setVisibility(View.INVISIBLE);
                             mCountDownTimerArriba.cancel();
                             segundos = 40;
+                            segundos2 = 40;
                             progressBarIzq.setVisibility(View.VISIBLE);
                             iniciarBarraProgresoIzq();
                         } else if (progressBarIzq.getVisibility() == View.VISIBLE) {
@@ -2847,6 +2880,7 @@ public class MainActivity extends Activity
                 }else if(mMyId.equals(comprobarArribaTurno())){
                     if(isBarrasInvisibles()){
                         segundos = 40;
+                        segundos2 = 40;
                         progressBarArriba.setVisibility(View.VISIBLE);
                         reiniciarBarraProgreso();
                     }else {
@@ -2854,12 +2888,14 @@ public class MainActivity extends Activity
                             progressBarAbajo.setVisibility(View.INVISIBLE);
                             mCountDownTimerAbajo.cancel();
                             segundos = 40;
+                            segundos2 = 40;
                             progressBarArriba.setVisibility(View.VISIBLE);
                             iniciarBarraProgresoArriba();
                         } else if (progressBarDerecha.getVisibility() == View.VISIBLE) {
                             progressBarDerecha.setVisibility(View.INVISIBLE);
                             mCountDownTimerDerecha.cancel();
                             segundos = 40;
+                            segundos2 = 40;
                             progressBarArriba.setVisibility(View.VISIBLE);
                             iniciarBarraProgresoArriba();
                         } else if (progressBarArriba.getVisibility() == View.VISIBLE) {
@@ -2868,6 +2904,7 @@ public class MainActivity extends Activity
                             progressBarIzq.setVisibility(View.INVISIBLE);
                             mCountDownTimerIzq.cancel();
                             segundos = 40;
+                            segundos2 = 40;
                             progressBarArriba.setVisibility(View.VISIBLE);
                             iniciarBarraProgresoArriba();
                         }
@@ -2875,6 +2912,7 @@ public class MainActivity extends Activity
                 }else if(mMyId.equals(comprobarIzqTurno())){
                     if(isBarrasInvisibles()){
                         segundos = 40;
+                        segundos2 = 40;
                         progressBarDerecha.setVisibility(View.VISIBLE);
                         reiniciarBarraProgreso();
                     }else{
@@ -2882,6 +2920,7 @@ public class MainActivity extends Activity
                             progressBarAbajo.setVisibility(View.INVISIBLE);
                             mCountDownTimerAbajo.cancel();
                             segundos = 40;
+                            segundos2 = 40;
                             progressBarDerecha.setVisibility(View.VISIBLE);
                             iniciarBarraProgresoDerecha();
                         } else if (progressBarDerecha.getVisibility() == View.VISIBLE) {
@@ -2890,12 +2929,14 @@ public class MainActivity extends Activity
                             progressBarArriba.setVisibility(View.INVISIBLE);
                             mCountDownTimerArriba.cancel();
                             segundos = 40;
+                            segundos2 = 40;
                             progressBarDerecha.setVisibility(View.VISIBLE);
                             iniciarBarraProgresoDerecha();
                         }else if (progressBarIzq.getVisibility() == View.VISIBLE) {
                             progressBarIzq.setVisibility(View.INVISIBLE);
                             mCountDownTimerIzq.cancel();
                             segundos = 40;
+                            segundos2 = 40;
                             progressBarDerecha.setVisibility(View.VISIBLE);
                             iniciarBarraProgresoDerecha();
                         }
@@ -2943,6 +2984,7 @@ public class MainActivity extends Activity
             if (progressBar1.getVisibility() == View.VISIBLE) {
                 mCountDownTimerJ1.cancel();
                 segundos = 40;
+                segundos2 = 40;
                 iniciarBarraProgresoJ1();
             } else if (progressBar2.getVisibility() == View.VISIBLE) {
                 mCountDownTimerJ2.cancel();
@@ -2953,18 +2995,22 @@ public class MainActivity extends Activity
             if (progressBarAbajo.getVisibility() == View.VISIBLE) {
                 mCountDownTimerAbajo.cancel();
                 segundos = 40;
+                segundos2 = 40;
                 iniciarBarraProgresoAbajo();
             } else if (progressBarDerecha.getVisibility() == View.VISIBLE) {
                 mCountDownTimerDerecha.cancel();
                 segundos = 40;
+                segundos2 = 40;
                 iniciarBarraProgresoDerecha();
             } else if (progressBarArriba.getVisibility() == View.VISIBLE) {
                 mCountDownTimerArriba.cancel();
                 segundos = 40;
+                segundos2 = 40;
                 iniciarBarraProgresoArriba();
             } else if (progressBarIzq.getVisibility() == View.VISIBLE) {
                 mCountDownTimerIzq.cancel();
                 segundos = 40;
+                segundos2 = 40;
                 iniciarBarraProgresoIzq();
             }
         }
@@ -2978,6 +3024,8 @@ public class MainActivity extends Activity
                 mCountDownTimerJ2.cancel();
             }
         }else if(numeroJugadores == 4){
+            segundos = 40;
+            segundos2 = 40;
             if (progressBarAbajo.getVisibility() == View.VISIBLE) {
                 mCountDownTimerAbajo.cancel();
             } else if (progressBarDerecha.getVisibility() == View.VISIBLE) {
@@ -4901,6 +4949,10 @@ public class MainActivity extends Activity
                                 //Animar bocadillo del compi
                                 bocadilloArriba.setText("Envido!");
                                 animarTextoAccion(bocadilloArriba);
+                                cancelarBarraProgreso();
+                                activarDesactivarBarraCompi("DESACTIVAR");
+                                progressBarIzq.setVisibility(View.VISIBLE);
+                                iniciarBarraProgresoIzq();
 
                             } else {
                                 String calculaEnvid = "";
@@ -4923,14 +4975,17 @@ public class MainActivity extends Activity
                                 }
                                 Log.d("EEEEEE", "Quien calcula: "+calculaEnvid);
                                 if (mMyId.equals(calculaEnvid)) {
-                                    barrasInvisibles();
                                     cancelarBarraProgreso();
+                                    barrasInvisibles();
                                     activarDesactivarMiBarra("ACTIVAR");
                                     showSingleChoiceAlertEnvid_4J("Tu rival ha envidado", R.array.envid, sender);
                                 } else {
                                     //Animar bocadillo del compi del que tiene que calcular
                                     bocadilloDerecha.setText("Envide!");
                                     animarTextoAccion(bocadilloDerecha);
+                                    cancelarBarraProgreso();
+                                    barrasInvisibles();
+                                    activarDesactivarBarraCompi("ACTIVAR");
                                 }
                             }
                             envid_4J.setVisibility(View.GONE);
@@ -4983,17 +5038,12 @@ public class MainActivity extends Activity
                         switch (caso) {
                             case 1:
                                 animarBocadillosEnvid(1, sender, "QUIERO");
-                                cambiarBarraProgreso();
                                 break;
                             case 2:
                                 animarBocadillosEnvid(2, sender, "QUIERO");
-                                reiniciarBarraProgreso();
                                 break;
                             case 3:
                                 animarBocadillosEnvid(3, sender, "QUIERO");
-                                if (!mMyId.equals(turno)) {
-                                    reiniciarBarraProgreso();
-                                } else cambiarBarraProgreso();
                                 break;
                         }
 
@@ -5007,10 +5057,13 @@ public class MainActivity extends Activity
                             }
                         }
 
-                        if (mMyId.equals(turno)) {
+                        if (turno.equals(mMyId)) {
+                            cancelarBarraProgreso();
+                            barrasInvisibles();
+                            activarDesactivarMiBarra("ACTIVAR");
                             desbloquearCartas();
                             animarAparecerMenu();
-                        }
+                        }else cambiarBarraProgreso();
                     }
 
                     break;
@@ -5023,6 +5076,7 @@ public class MainActivity extends Activity
                         hayVuelvo = true;
                         showSingleChoiceAlertVuelvo("Tu rival ha vuelto a envidar", R.array.envid2);
                         cambiarBarraProgreso();
+
                     }else if(numeroJugadores == 4){
                         String aux3 = new String(buf, "UTF-8");
                         String otro[] = aux3.split(" ");
@@ -5030,8 +5084,8 @@ public class MainActivity extends Activity
 
                         if(mMyId.equals(yo)){
                             hayVuelvo = true;
-                            barrasInvisibles();
                             cancelarBarraProgreso();
+                            barrasInvisibles();
                             activarDesactivarMiBarra("ACTIVAR");
                             showSingleChoiceAlertVuelvo_4J("Tu rival ha vuelto a envidar", R.array.envid2, sender);
 
@@ -5039,9 +5093,18 @@ public class MainActivity extends Activity
                             if(!mMyId.equals(sender) && esDeMiEquipo(sender)){
                                 bocadilloArriba.setText("Vuelvo a envidar!");
                                 animarTextoAccion(bocadilloArriba);
+                                cancelarBarraProgreso();
+                                barrasInvisibles();
+                                progressBarIzq.setVisibility(View.VISIBLE);
+                                iniciarBarraProgresoIzq();
+
                             } else if(!mMyId.equals(sender) && !esDeMiEquipo(sender)){
                                 bocadilloDerecha.setText("Vuelvo a envidar!");
                                 animarTextoAccion(bocadilloDerecha);
+                                cancelarBarraProgreso();
+                                barrasInvisibles();
+                                progressBarArriba.setVisibility(View.VISIBLE);
+                                iniciarBarraProgresoArriba();
                             }
                         }
                     }
@@ -5132,10 +5195,12 @@ public class MainActivity extends Activity
                         }
                     }
                     if (turno.equals(mMyId)) {
+                        cancelarBarraProgreso();
+                        barrasInvisibles();
                         activarDesactivarMiBarra("ACTIVAR");
                         desbloquearCartas();
                         animarAparecerMenu();
-                    }
+                    }else cambiarBarraProgreso();
 
                     break;
 
@@ -5224,22 +5289,27 @@ public class MainActivity extends Activity
 
                     }else if(numeroJugadores ==4){
                         String yo = otro2[1];
+                        cancelarBarraProgreso();
+                        barrasInvisibles();
 
                         if(mMyId.equals(yo)){
                             if (Integer.parseInt(otro2[2]) == 2) faltaDirecta = true;
-                            barrasInvisibles();
-                            cancelarBarraProgreso();
                             activarDesactivarMiBarra("ACTIVAR");
                             showSingleChoiceAlertFalta_4J("Tu rival ha envidado la falta", R.array.envid3);
                             envid_4J.setVisibility(View.GONE);
                             laFalta_4J.setVisibility(View.GONE);
+
                         }else {
                             if(!mMyId.equals(sender) && esDeMiEquipo(sender)){
                                 bocadilloArriba.setText("La falta!");
                                 animarTextoAccion(bocadilloArriba);
+                                progressBarIzq.setVisibility(View.VISIBLE);
+                                iniciarBarraProgresoIzq();
+
                             } else if(!mMyId.equals(sender) && !esDeMiEquipo(sender)){
                                 bocadilloDerecha.setText("Envido la falta!");
                                 animarTextoAccion(bocadilloDerecha);
+                                activarDesactivarBarraCompi("ACTIVAR");
                             }
                         }
                     }
@@ -7124,13 +7194,41 @@ public class MainActivity extends Activity
                             //Vuelvo
                             case 1:
                                 enviarMensajeVuelvoAEnvidar(sender);
-                                cambiarBarraProgreso();
+                                //Soy el ultimo
+                                if(mMyId.equals(comprobarTerceroeMano())){
+                                    cancelarBarraProgreso();
+                                    barrasInvisibles();
+                                    progressBarIzq.setVisibility(View.VISIBLE);
+                                    iniciarBarraProgresoIzq();
+
+                                //Soy tercero
+                                }else if(mMyId.equals(comprobarSegundoMano())){
+                                    cancelarBarraProgreso();
+                                    barrasInvisibles();
+                                    progressBarDerecha.setVisibility(View.VISIBLE);
+                                    iniciarBarraProgresoDerecha();
+                                }
+                                //cambiarBarraProgreso();
                                 hayVuelvo = true;
                                 break;
                             //Falta
                             case 2:
-                                enviarMensajeLaFalta( 1, sender);
-                                cambiarBarraProgreso();
+                                enviarMensajeLaFalta(1, sender);
+                                //Soy el ultimo
+                                if(mMyId.equals(comprobarTerceroeMano())){
+                                    cancelarBarraProgreso();
+                                    barrasInvisibles();
+                                    progressBarIzq.setVisibility(View.VISIBLE);
+                                    iniciarBarraProgresoIzq();
+
+                                    //Soy tercero
+                                }else if(mMyId.equals(comprobarSegundoMano())){
+                                    cancelarBarraProgreso();
+                                    barrasInvisibles();
+                                    progressBarDerecha.setVisibility(View.VISIBLE);
+                                    iniciarBarraProgresoDerecha();
+                                }
+                                //cambiarBarraProgreso();
                                 break;
                             //No quiero
                             case 3:
@@ -7162,27 +7260,38 @@ public class MainActivity extends Activity
                                 ganadorEnvid = comprobarGanadorEnvid_4J();
                                 puntosEnvid = TORNE;
                                 enviarMensajeHayEnvidAndGanador(ganadorEnvid, 2);
-                                if (!turno.equals(mMyId)) {
-                                    cambiarBarraProgreso();
-                                } else {
-                                    reiniciarBarraProgreso();
+                                cambiarBarraProgreso();
+                                if (turno.equals(mMyId)) {
                                     desbloquearCartas();
                                     animarAparecerMenu();
                                 }
+
+
                                 break;
                             //Falta
                             case 1:
                                 enviarMensajeLaFalta(1, sender);
-                                cambiarBarraProgreso();
+                                //Soy el ultimo
+                                if(mMyId.equals(comprobarTerceroeMano())){
+                                    cancelarBarraProgreso();
+                                    barrasInvisibles();
+                                    progressBarIzq.setVisibility(View.VISIBLE);
+                                    iniciarBarraProgresoIzq();
+
+                                    //Soy tercero
+                                }else if(mMyId.equals(comprobarSegundoMano())){
+                                    cancelarBarraProgreso();
+                                    barrasInvisibles();
+                                    progressBarDerecha.setVisibility(View.VISIBLE);
+                                    iniciarBarraProgresoDerecha();
+                                }
+                                //cambiarBarraProgreso();
                                 break;
                             //No quiero
                             case 2:
-
                                 enviarMensajeNoQuiero(2);
-                                if (!turno.equals(mMyId)) {
-                                    cambiarBarraProgreso();
-                                } else {
-                                    reiniciarBarraProgreso();
+                                cambiarBarraProgreso();
+                                if (turno.equals(mMyId)) {
                                     desbloquearCartas();
                                     animarAparecerMenu();
                                 }
@@ -7219,23 +7328,19 @@ public class MainActivity extends Activity
                                         puntosEnvid = 24 - puntosTotalesJugador2;
                                     }
                                 }
-
-                                if (!turno.equals(mMyId)) {
-                                    cambiarBarraProgreso();
-                                } else{
-                                    reiniciarBarraProgreso();
+                                cambiarBarraProgreso();
+                                if (turno.equals(mMyId)) {
                                     desbloquearCartas();
                                     animarAparecerMenu();
                                 }
                                 break;
+
                             case 1:
                                 if (faltaDirecta) {
                                     enviarMensajeNoQuiero(4);
                                 } else enviarMensajeNoQuiero(3);
-                                if (!turno.equals(mMyId)) {
-                                    cambiarBarraProgreso();
-                                } else {
-                                    reiniciarBarraProgreso();
+                                cambiarBarraProgreso();
+                                if (turno.equals(mMyId)) {
                                     desbloquearCartas();
                                     animarAparecerMenu();
                                 }
