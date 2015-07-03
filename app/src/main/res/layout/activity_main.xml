@@ -68,20 +68,21 @@
         <LinearLayout
             android:layout_width="250dp"
             android:layout_height="wrap_content">
-        <info.hoang8f.widget.FButton
+        <!--<info.hoang8f.widget.FButton -->
+            <ImageButton
             android:id="@+id/button_ranking"
-            android:layout_width="125dp"
-            android:layout_height="wrap_content"
+            android:layout_width="90dp"
+            android:layout_height="90dp"
             android:layout_marginBottom="6dp"
             android:layout_marginRight="3dp"
-            android:text="Ranking"
             android:textColor="@color/cpb_white"
             android:layout_weight="1"
-            fbutton:buttonColor="#1ABC9C"
+                android:background="@drawable/ic_ranking"/>
+            <!--fbutton:buttonColor="#1ABC9C"
             fbutton:shadowColor="#16A085"
             fbutton:shadowEnabled="true"
             fbutton:shadowHeight="5dp"
-            fbutton:cornerRadius="5dp"/>
+            fbutton:cornerRadius="5dp"-->
         <info.hoang8f.widget.FButton
             android:id="@+id/button_logros"
             android:layout_width="125dp"

@@ -1016,6 +1016,7 @@ public class MainActivity extends Activity
                     @Override
                     public void onPositive(MaterialDialog dialog) {
                         super.onPositive(dialog);
+                        Log.d("FFFFF", "Aceptar en dialogo de desconectarse");
                         desconectado = mMyId;
                         leaveRoom();
                     }
@@ -1604,8 +1605,35 @@ public class MainActivity extends Activity
     // Handle back key to make sure we cleanly leave a game if we are in the middle of one
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent e) {
-        if (keyCode == KeyEvent.KEYCODE_BACK && mCurScreen == R.id.screen_game) {
+        /*if (keyCode == KeyEvent.KEYCODE_BACK && mCurScreen == R.id.screen_game) {
             leaveRoom();
+            return true;
+        }*/
+        if (keyCode == KeyEvent.KEYCODE_BACK){
+
+            Log.d("FFFFF","Entra en tecla atras");
+            if(mCurScreen == R.id.screen_lost){
+                Log.d("FFFFF", "Caso screen lost");
+                leaveRoom();
+                //switchToMainScreen();
+            }
+            else if(mCurScreen == R.id.screen_win){
+                Log.d("FFFFF", "Caso screen win");
+                leaveRoom();
+                //switchToMainScreen();
+            }
+            else if(mCurScreen == R.id.screen_game){
+                Log.d("FFFFF","Atras desde la pantalla de juego de 2 jugadores");
+                showBasicAlertDesconectarse("Abandonar partida", "Si abandonas, perderás la partida. ¿Estás seguro?");
+            }
+            else if(mCurScreen == R.id.screen_game_4_jugadores){
+                Log.d("FFFFF","Atras desde la pantalla de juego de 4 jugadores");
+                showBasicAlertDesconectarse("Abandonar partida", "Si abandonas, perderás la partida. ¿Estás seguro?");
+            }
+            else if(mCurScreen == R.id.screen_wait){
+                Log.d("FFFFF","Caso screen wait");
+                switchToMainScreen();
+            }
             return true;
         }
         return super.onKeyDown(keyCode, e);
@@ -2072,6 +2100,7 @@ public class MainActivity extends Activity
             hayJocFora = false;
             hayVuelvo = false;
             faltaDirecta = false;
+            desconectado = "";
 
             manoDedo.setVisibility(View.INVISIBLE);
             dedo.setVisibility(View.INVISIBLE);
@@ -2173,6 +2202,7 @@ public class MainActivity extends Activity
             hayVuelvo = false;
             faltaDirecta = false;
             primerMensaje = "";
+            desconectado = "";
 
             if (mCountDownTimerAbajo != null || mCountDownTimerArriba != null
                     || mCountDownTimerDerecha != null || mCountDownTimerIzq != null) cancelarBarraProgreso();
@@ -7841,6 +7871,30 @@ public class MainActivity extends Activity
     private void reproducirSonidoTirarCarta(){
         soundPool.play(sonidoTirar, 1, 1, 0, 0, 1);
     }
+
+    @Override
+    public void onBackPressed(){
+        Log.d("FFFFF","Entra en onBackPressed");
+        if(mCurScreen == R.id.screen_lost){
+            Log.d("FFFFF","Caso screen lost");
+            switchToMainScreen();
+        }
+        else if(mCurScreen == R.id.screen_win){
+            Log.d("FFFFF","Caso screen win");
+            switchToMainScreen();
+        }
+        else if(mCurScreen == R.id.screen_game){
+            Log.d("FFFFF","Atras desde la pantalla de juego de 2 jugadores");
+            showBasicAlertDesconectarse("Abandonar partida", "Si abandonas, perderás la partida. ¿Estás seguro?");
+        }
+        else if(mCurScreen == R.id.screen_game_4_jugadores){
+            Log.d("FFFFF","Atras desde la pantalla de juego de 4 jugadores");
+            showBasicAlertDesconectarse("Abandonar partida", "Si abandonas, perderás la partida. ¿Estás seguro?");
+        }
+        else super.onBackPressed();
+
+    }
+
 }
 
 
