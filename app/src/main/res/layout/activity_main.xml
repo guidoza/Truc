@@ -293,8 +293,9 @@
 
                                 <ImageView
                                     android:id="@+id/mano"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
+                                    android:layout_width="160dp"
+                                    android:layout_height="150dp"
+                                    android:background="@drawable/mano"
                                     android:layout_centerHorizontal="true"
                                     android:layout_alignParentBottom="true"
                                     />
@@ -350,9 +351,10 @@
                             </RelativeLayout>
             <ImageView
                 android:id="@+id/dedo"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="160dp"
+                android:layout_height="150dp"
                 android:layout_gravity="bottom|center"
+                android:background="@drawable/dedo"
                 />
 
 
@@ -549,93 +551,93 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginBottom="200dp">
+                android:layout_marginBottom="210dp">
                     <ImageView
                         android:id="@+id/carta1MesaJ1"
-                        android:layout_width="60dp"
-                        android:layout_height="90dp"
+                        android:layout_width="73dp"
+                        android:layout_height="120dp"
                         android:layout_centerHorizontal="true"
                         android:layout_alignParentBottom="true"
                         android:layout_marginBottom="10dp" />
                     <ImageView
                         android:id="@+id/carta2MesaJ1"
-                        android:layout_width="60dp"
-                        android:layout_height="90dp"
+                        android:layout_width="73dp"
+                        android:layout_height="120dp"
                         android:layout_centerHorizontal="true"
                         android:layout_alignParentBottom="true"
                         android:layout_marginBottom="30dp" />
                     <ImageView
                         android:id="@+id/carta3MesaJ1"
-                        android:layout_width="60dp"
-                        android:layout_height="90dp"
+                        android:layout_width="73dp"
+                        android:layout_height="120dp"
                         android:layout_centerHorizontal="true"
                         android:layout_alignParentBottom="true"
                         android:layout_marginBottom="50dp"/>
                     <ImageView
                         android:id="@+id/carta1MesaJ2"
-                        android:layout_width="60dp"
-                        android:layout_height="90dp"
+                        android:layout_width="73dp"
+                        android:layout_height="120dp"
                         android:layout_marginBottom="100dp"
                         android:layout_alignParentBottom="true"
                         android:layout_alignParentRight="true"
                         android:layout_marginRight="80dp"/>
                     <ImageView
                         android:id="@+id/carta2MesaJ2"
-                        android:layout_width="60dp"
-                        android:layout_height="90dp"
+                        android:layout_width="73dp"
+                        android:layout_height="120dp"
                         android:layout_marginBottom="120dp"
                         android:layout_alignParentBottom="true"
                         android:layout_alignParentRight="true"
                         android:layout_marginRight="80dp"/>
                     <ImageView
                         android:id="@+id/carta3MesaJ2"
-                        android:layout_width="60dp"
-                        android:layout_height="90dp"
+                        android:layout_width="73dp"
+                        android:layout_height="120dp"
                         android:layout_marginBottom="140dp"
                         android:layout_alignParentBottom="true"
                         android:layout_alignParentRight="true"
                         android:layout_marginRight="80dp" />
                     <ImageView
                         android:id="@+id/carta1MesaJ3"
-                        android:layout_width="60dp"
-                        android:layout_height="90dp"
+                        android:layout_width="73dp"
+                        android:layout_height="120dp"
                         android:layout_centerHorizontal="true"
                         android:layout_alignParentTop="true"
                         android:layout_marginTop="80dp" />
                     <ImageView
                         android:id="@+id/carta2MesaJ3"
-                        android:layout_width="60dp"
-                        android:layout_height="90dp"
+                        android:layout_width="73dp"
+                        android:layout_height="120dp"
                         android:layout_centerHorizontal="true"
                         android:layout_alignParentTop="true"
                         android:layout_marginTop="60dp"/>
                     <ImageView
                         android:id="@+id/carta3MesaJ3"
-                        android:layout_width="60dp"
-                        android:layout_height="90dp"
+                        android:layout_width="73dp"
+                        android:layout_height="120dp"
                         android:layout_centerHorizontal="true"
                         android:layout_alignParentTop="true"
                         android:layout_marginTop="40dp"/>
                     <ImageView
                         android:id="@+id/carta1MesaJ4"
-                        android:layout_width="60dp"
-                        android:layout_height="90dp"
+                        android:layout_width="73dp"
+                        android:layout_height="120dp"
                         android:layout_marginBottom="100dp"
                         android:layout_alignParentBottom="true"
                         android:layout_alignParentLeft="true"
                         android:layout_marginLeft="80dp"  />
                     <ImageView
                         android:id="@+id/carta2MesaJ4"
-                        android:layout_width="60dp"
-                        android:layout_height="90dp"
+                        android:layout_width="73dp"
+                        android:layout_height="120dp"
                         android:layout_marginBottom="120dp"
                         android:layout_alignParentBottom="true"
                         android:layout_alignParentLeft="true"
                         android:layout_marginLeft="80dp"/>
                     <ImageView
                         android:id="@+id/carta3MesaJ4"
-                        android:layout_width="60dp"
-                        android:layout_height="90dp"
+                        android:layout_width="73dp"
+                        android:layout_height="120dp"
                         android:layout_marginBottom="140dp"
                         android:layout_alignParentBottom="true"
                         android:layout_alignParentLeft="true"
@@ -646,6 +648,15 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
+                <ImageView
+                    android:id="@+id/mano_4J"
+                    android:layout_width="160dp"
+                    android:layout_height="150dp"
+                    android:background="@drawable/mano"
+                    android:layout_centerHorizontal="true"
+                    android:layout_alignParentBottom="true"
+                    />
 
                 <ImageView
                     android:layout_width="73dp"
@@ -698,6 +709,8 @@
                     android:layout_marginRight="15dp"
                     fab:cpb_cornerRadius="8dp"
                     fab:cpb_selectorComplete="@color/cpb_blue"/>
+
+
 
             </RelativeLayout>
 
@@ -906,7 +919,13 @@
                 </LinearLayout>
             </RelativeLayout>
 
-
+            <ImageView
+                android:id="@+id/dedo_4J"
+                android:layout_width="160dp"
+                android:layout_height="150dp"
+                android:background="@drawable/dedo"
+                android:layout_gravity="center_horizontal|bottom"
+                />
         <com.github.alexkolpa.fabtoolbar.FabToolbar
             android:id="@+id/fab_toolbar_4J"
             android:layout_width="match_parent"
