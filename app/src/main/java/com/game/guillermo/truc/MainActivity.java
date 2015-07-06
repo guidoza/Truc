@@ -191,6 +191,8 @@ public class MainActivity extends Activity
     boolean hayAnimacionRival1 = false;
     boolean hayAnimacionRival2 = false;
     boolean hayAnimacionRival3 = false;
+    boolean tapoPrimera = false;
+    boolean tapo = false;
 
     //Listas y arrays
     int[] list = new int[3];
@@ -220,6 +222,7 @@ public class MainActivity extends Activity
     ImageView manoDedo;
     ImageView dedo;
     ImageButton abandonar;
+    ImageButton tapar;
 
     //TextViews
     TextView marcador;
@@ -359,6 +362,7 @@ public class MainActivity extends Activity
     ImageView imgPerfilIzq;
     ImageView mano_4J;
     ImageView dedo_4J;
+    ImageButton tapar_4J;
 
     //TextViews
     TextView txtNumeroJugador;
@@ -515,7 +519,17 @@ public class MainActivity extends Activity
                         mostrarResultadosPerdedorMano("PRIMERO");
                         break;
                     case R.id.abandonar_4J:
-                        showBasicAlertDesconectarse("Abandonar partida","Si abandonas, perder�s la partida. �Est�s seguro?");
+                        showBasicAlertDesconectarse("Abandonar partida", "Si abandonas, perder�s la partida. �Est�s seguro?");
+                        break;
+                    case R.id.tapar:
+                        actionButton_4J.hide();
+                        if(ronda == 1) tapoPrimera = true;
+                        else tapo = true;
+                        break;
+                    case R.id.tapar_4J:
+                        actionButton_4J.hide();
+                        if(ronda == 1) tapoPrimera = true;
+                        else tapo = true;
                         break;
                 }
             }
@@ -565,6 +579,9 @@ public class MainActivity extends Activity
         salir = (ImageButton) findViewById(R.id.salir);
         laFalta = (ImageButton) findViewById(R.id.la_falta);
         abandonar = (ImageButton) findViewById(R.id.abandonar);
+
+        tapar = (ImageButton) findViewById(R.id.tapar);
+        tapar_4J = (ImageButton) findViewById(R.id.tapar_4J);
 
         progressBar1 = (ProgressBar) findViewById(R.id.progres_segundos_1);
         progressBar2 = (ProgressBar) findViewById(R.id.progres_segundos_2);
@@ -2129,6 +2146,8 @@ public class MainActivity extends Activity
             hayVuelvo = false;
             faltaDirecta = false;
             desconectado = "";
+            tapo = false;
+            tapoPrimera = false;
 
             manoDedo.setVisibility(View.INVISIBLE);
             dedo.setVisibility(View.INVISIBLE);
@@ -2232,6 +2251,8 @@ public class MainActivity extends Activity
             faltaDirecta = false;
             primerMensaje = "";
             desconectado = "";
+            tapo = false;
+            tapoPrimera = false;
 
             if (mCountDownTimerAbajo != null || mCountDownTimerArriba != null
                     || mCountDownTimerDerecha != null || mCountDownTimerIzq != null) cancelarBarraProgreso();
@@ -3469,6 +3490,7 @@ public class MainActivity extends Activity
                 salir.setOnClickListener(menuListener);
                 meVoy.setOnClickListener(menuListener);
                 abandonar.setOnClickListener(menuListener);
+                tapar.setOnClickListener(menuListener);
 
 
                 if (mMyId.equals(turno) && ronda == 1) {
@@ -3515,6 +3537,7 @@ public class MainActivity extends Activity
                 salir_4J.setOnClickListener(menuListener);
                 meVoy_4J.setOnClickListener(menuListener);
                 abandonar_4J.setOnClickListener(menuListener);
+                tapar_4J.setOnClickListener(menuListener);
 
                 if (mMyId.equals(turno) && ronda == 1) {
                     Toast.makeText(getApplicationContext(), "Es tu turno", Toast.LENGTH_SHORT).show();
@@ -7105,6 +7128,11 @@ public class MainActivity extends Activity
                             destino.y = tvCartaMesa1.getY() + tvCartaMesa1.getHeight();
                             tvCartaMesa1.setVisibility(View.VISIBLE);
 
+                            if(tapoPrimera || tapo){
+                                aux = new Carta("1", "oros", "0");
+                                asignarImagenCarta(aux, (ImageView) view);
+                            }
+
                             view.animate().x(destino.x).y(destino.y).rotation(0).setDuration(500);
                             view.animate().rotationXBy(30).scaleX((float) 0.63).scaleY((float) 0.63)
                                     .rotationYBy(-5).rotation(3).setDuration(500);
@@ -7132,6 +7160,11 @@ public class MainActivity extends Activity
                             destino.x = tvCartaMesa2.getX();
                             destino.y = tvCartaMesa2.getY() + tvCartaMesa2.getHeight();
                             tvCartaMesa2.setVisibility(View.VISIBLE);
+
+                            if(tapoPrimera || tapo){
+                                aux = new Carta("1", "oros", "0");
+                                asignarImagenCarta(aux, (ImageView) view);
+                            }
 
                             view.animate().x(destino.x).y(destino.y).rotation(0).rotationXBy(30)
                                     .scaleX((float) 0.63).scaleY((float) 0.63).setDuration(500);
@@ -7175,6 +7208,11 @@ public class MainActivity extends Activity
                             destino.y = tvCartaMesa3.getY() + tvCartaMesa3.getHeight();
                             tvCartaMesa3.setVisibility(View.VISIBLE);
 
+                            if(tapoPrimera || tapo){
+                                aux = new Carta("1", "oros", "0");
+                                asignarImagenCarta(aux, (ImageView) view);
+                            }
+
                             view.animate().x(destino.x).y(destino.y).rotation(0).setDuration(500);
                             view.animate().rotationXBy(30).scaleX((float) 0.63).scaleY((float) 0.63)
                                     .rotationYBy(-5).rotation(3).setDuration(500);
@@ -7192,22 +7230,27 @@ public class MainActivity extends Activity
                             }
                             Log.d("RRRRRRR", "Actualizada pos3");
                         }
-
-                        //Calculamos su valor para enviarlo
-                        if (view.equals(tvJugador1)) {
-                            aux = carta1;
+                        if(tapoPrimera || tapo){
+                            miValor = 0;
                             comprobarSonidosCartas(aux);
-                            miValor = Integer.parseInt(carta1.getValor());
-                        }
-                        if (view.equals(tvJugador2)) {
-                            aux = carta2;
-                            comprobarSonidosCartas(aux);
-                            miValor = Integer.parseInt(carta2.getValor());
-                        }
-                        if (view.equals(tvJugador3)) {
-                            aux = carta3;
-                            comprobarSonidosCartas(aux);
-                            miValor = Integer.parseInt(carta3.getValor());
+                            tapo = false;
+                        }else {
+                            //Calculamos su valor para enviarlo
+                            if (view.equals(tvJugador1)) {
+                                aux = carta1;
+                                comprobarSonidosCartas(aux);
+                                miValor = Integer.parseInt(carta1.getValor());
+                            }
+                            if (view.equals(tvJugador2)) {
+                                aux = carta2;
+                                comprobarSonidosCartas(aux);
+                                miValor = Integer.parseInt(carta2.getValor());
+                            }
+                            if (view.equals(tvJugador3)) {
+                                aux = carta3;
+                                comprobarSonidosCartas(aux);
+                                miValor = Integer.parseInt(carta3.getValor());
+                            }
                         }
 
                         envid.setVisibility(View.GONE);
@@ -7284,6 +7327,11 @@ public class MainActivity extends Activity
                             destino.y = tvCartaMesa1_4J.getY();
                             tvCartaMesa1_4J.setVisibility(View.VISIBLE);
 
+                            if(tapoPrimera || tapo){
+                                aux = new Carta("1", "oros", "0");
+                                asignarImagenCarta(aux, (ImageView) view);
+                            }
+
                             view.animate().x(destino.x).y(destino.y).rotation(0).rotationXBy(30)
                                     .scaleX((float) 0.6).scaleY((float) 0.6)
                                     .rotation(0).setDuration(500);
@@ -7313,6 +7361,11 @@ public class MainActivity extends Activity
                             destino.x = tvCartaMesa2_4J.getX();
                             destino.y = tvCartaMesa2_4J.getY();
                             tvCartaMesa2_4J.setVisibility(View.VISIBLE);
+
+                            if(tapoPrimera || tapo){
+                                aux = new Carta("1", "oros", "0");
+                                asignarImagenCarta(aux, (ImageView) view);
+                            }
 
                             view.animate().x(destino.x).y(destino.y).rotation(0).rotationXBy(30)
                                     .scaleX((float) 0.6).scaleY((float) 0.6)
@@ -7357,6 +7410,11 @@ public class MainActivity extends Activity
                             destino.y = tvCartaMesa3_4J.getY();
                             tvCartaMesa3_4J.setVisibility(View.VISIBLE);
 
+                            if(tapoPrimera || tapo){
+                                aux = new Carta("1", "oros", "0");
+                                asignarImagenCarta(aux, (ImageView) view);
+                            }
+
                             view.animate().x(destino.x).y(destino.y).rotation(0).rotationXBy(30)
                                     .scaleX((float) 0.6).scaleY((float) 0.6)
                                     .rotation(0).setDuration(500);
@@ -7376,22 +7434,28 @@ public class MainActivity extends Activity
                         }
 
                         //Calculamos su valor para enviarlo
-                        if (view.equals(tvJugador1_4J)) {
-                            aux = carta1;
+                        if(tapoPrimera || tapo){
+                            miValor = 0;
                             comprobarSonidosCartas(aux);
-                            miValor = Integer.parseInt(carta1.getValor());
-                        }
-                        if (view.equals(tvJugador2_4J)) {
-                            aux = carta2;
-                            comprobarSonidosCartas(aux);
-                            miValor = Integer.parseInt(carta2.getValor());
-                        }
-                        if (view.equals(tvJugador3_4J)) {
-                            aux = carta3;
-                            comprobarSonidosCartas(aux);
-                            miValor = Integer.parseInt(carta3.getValor());
-                        }
+                            tapo = false;
+                        }else {
 
+                            if (view.equals(tvJugador1_4J)) {
+                                aux = carta1;
+                                comprobarSonidosCartas(aux);
+                                miValor = Integer.parseInt(carta1.getValor());
+                            }
+                            if (view.equals(tvJugador2_4J)) {
+                                aux = carta2;
+                                comprobarSonidosCartas(aux);
+                                miValor = Integer.parseInt(carta2.getValor());
+                            }
+                            if (view.equals(tvJugador3_4J)) {
+                                aux = carta3;
+                                comprobarSonidosCartas(aux);
+                                miValor = Integer.parseInt(carta3.getValor());
+                            }
+                        }
                         envid_4J.setVisibility(View.GONE);
                         laFalta_4J.setVisibility(View.GONE);
 

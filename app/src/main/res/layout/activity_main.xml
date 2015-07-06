@@ -143,9 +143,10 @@
             >
 
 
+
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="80dp"
+                        android:layout_height="100dp"
                         android:orientation="horizontal"
                         android:layout_gravity="top">
                         <TextView
@@ -157,21 +158,25 @@
                             android:background="@drawable/bocadillo"
                             android:layout_margin="5dp"
                             android:gravity="center_vertical|center_horizontal" />
-
                         <LinearLayout
+                            android:id="@+id/layJ2"
+                            android:layout_weight="3.5"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:orientation="vertical"
-                            android:layout_weight="3">
+                            android:background="@drawable/fondo_carta"
+                            android:layout_marginRight="10dp"
+                            android:layout_marginTop="10dp">
 
                             <com.game.guillermo.truc.CircleImageView
                                 android:id="@+id/imgPerfilRival"
                                 android:layout_width="50dp"
                                 android:layout_height="50dp"
+                                android:layout_margin="3dp"
+                                android:layout_gravity="center"
                                 fab:border_width="2dp"
                                 fab:border_color="#FFF"
-                                android:layout_gravity="center"
-                                android:layout_margin="10dp"/>
+                                />
 
                             <TextView
                                 android:id="@+id/nombreJugador2"
@@ -183,34 +188,13 @@
 
                             <ProgressBar
                                 android:id="@+id/progres_segundos_2"
-                                android:layout_width="50dp"
-                                android:layout_height="match_parent"
+                                android:layout_width="match_parent"
+                                android:layout_height="20dp"
                                 android:layout_gravity="center"
                                 style="@android:style/Widget.DeviceDefault.Light.ProgressBar.Horizontal"
                                 android:max="40"
                                 android:progress="0"/>
-
                         </LinearLayout>
-
-                    </LinearLayout>
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="20dp"
-                        android:orientation="horizontal"
-                        android:layout_gravity="top"
-                        android:layout_marginTop="80dp">
-                        <TextView
-                            android:id="@+id/marcador"
-                            android:layout_gravity="center"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"/>
-                        <TextView
-                            android:id="@+id/marcador2"
-                            android:layout_gravity="center"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"/>
                     </LinearLayout>
 
                             <RelativeLayout
@@ -219,12 +203,12 @@
 
                                 <com.dd.CircularProgressButton
                                     android:id="@+id/botonMarcadorJ2"
-                                    android:layout_width="65dp"
+                                    android:layout_width="50dp"
                                     android:layout_height="38dp"
                                     android:textColor="@color/cpb_white"
                                     android:textSize="18sp"
                                     android:layout_alignParentTop="true"
-                                    android:layout_marginTop="70dp"
+                                    android:layout_marginTop="85dp"
                                     android:layout_marginLeft="10dp"
                                     fab:cpb_cornerRadius="8dp"
                                     fab:cpb_selectorComplete="@color/cpb_blue"/>
@@ -235,7 +219,7 @@
                                     android:id="@+id/carta1MesaRival"
                                     android:src="@drawable/ic_uno_bastos"
                                     android:layout_alignParentTop="true"
-                                    android:layout_marginTop="100dp"
+                                    android:layout_marginTop="120dp"
                                     android:layout_alignParentLeft="true"
                                     android:layout_alignParentStart="true"
                                     android:layout_marginLeft="30dp"
@@ -248,7 +232,7 @@
                                     android:id="@+id/carta2MesaRival"
                                     android:src="@drawable/ic_siete_bastos"
                                     android:layout_alignParentTop="true"
-                                    android:layout_marginTop="100dp"
+                                    android:layout_marginTop="120dp"
                                     android:layout_centerHorizontal="true"
                                     />
                                 <ImageView
@@ -257,7 +241,7 @@
                                     android:id="@+id/carta3MesaRival"
                                     android:src="@drawable/ic_seis_bastos"
                                     android:layout_alignParentTop="true"
-                                    android:layout_marginTop="100dp"
+                                    android:layout_marginTop="120dp"
                                     android:layout_alignParentRight="true"
                                     android:layout_alignParentEnd="true"
                                     android:layout_marginRight="30dp"
@@ -338,13 +322,14 @@
 
                                 <com.dd.CircularProgressButton
                                     android:id="@+id/botonMarcadorJ1"
-                                    android:layout_width="65dp"
+                                    android:layout_width="50dp"
                                     android:layout_height="38dp"
                                     android:textColor="@color/cpb_white"
                                     android:textSize="18sp"
                                     android:layout_alignParentBottom="true"
-                                    android:layout_marginBottom="70dp"
-                                    android:layout_marginLeft="310dp"
+                                    android:layout_alignParentRight="true"
+                                    android:layout_marginBottom="155dp"
+                                    android:layout_marginRight="10dp"
                                     fab:cpb_cornerRadius="8dp"
                                     fab:cpb_selectorComplete="@color/cpb_blue"/>
 
@@ -361,25 +346,30 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="80dp"
+                android:layout_height="100dp"
                 android:orientation="horizontal"
                 android:layout_gravity="bottom"
                 android:layout_marginBottom="70dp"
                 >
                 <LinearLayout
+                    android:id="@+id/layJ1"
+                    android:layout_weight="3.5"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical"
-                    android:layout_weight="3">
+                    android:background="@drawable/fondo_carta"
+                    android:layout_marginLeft="10dp"
+                    >
 
                     <com.game.guillermo.truc.CircleImageView
                         android:id="@+id/imgPerfil"
                         android:layout_width="50dp"
                         android:layout_height="50dp"
+                        android:layout_margin="3dp"
+                        android:layout_gravity="center"
                         fab:border_width="2dp"
                         fab:border_color="#FFF"
-                        android:layout_gravity="center"
-                        android:layout_margin="10dp"/>
+                        />
 
                     <TextView
                         android:id="@+id/nombreJugador1"
@@ -391,23 +381,23 @@
 
                     <ProgressBar
                         android:id="@+id/progres_segundos_1"
-                        android:layout_width="50dp"
-                        android:layout_height="match_parent"
+                        android:layout_width="match_parent"
+                        android:layout_height="20dp"
                         android:layout_gravity="center"
                         style="@android:style/Widget.DeviceDefault.Light.ProgressBar.Horizontal"
                         android:max="40"
                         android:progress="0"/>
+                    </LinearLayout>
 
-                </LinearLayout>
-                <TextView
-                    android:id="@+id/textoJugador1"
-                    android:layout_gravity="center"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:layout_weight="1"
-                    android:background="@drawable/bocadillo2"
-                    android:layout_margin="10dp"
-                    android:gravity="center_vertical|center_horizontal" />
+                    <TextView
+                        android:id="@+id/textoJugador1"
+                        android:layout_gravity="center"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/bocadillo2"
+                        android:layout_margin="10dp"
+                        android:gravity="center_vertical|center_horizontal" />
 
             </LinearLayout>
 
@@ -514,6 +504,16 @@
                         />
 
                     <ImageButton
+                        android:id="@+id/tapar"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/fondo_boton"
+                        android:src="@drawable/ic_salir"
+                        android:layout_margin="10dp"
+                        android:layout_weight="1"
+                        />
+
+                    <ImageButton
                         android:id="@+id/abandonar"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
@@ -531,7 +531,7 @@
     </LinearLayout>
 
 
-    <!--GAMEPLAY SCREEN J1 4 jugadores-->
+    <!--GAMEPLAY SCREEN J1 4 jugadores
     <LinearLayout android:id="@+id/screen_game_4_jugadores"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -551,21 +551,21 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginBottom="210dp">
+                android:layout_marginBottom="200dp">
                     <ImageView
                         android:id="@+id/carta1MesaJ1"
                         android:layout_width="73dp"
                         android:layout_height="120dp"
                         android:layout_centerHorizontal="true"
                         android:layout_alignParentBottom="true"
-                        android:layout_marginBottom="10dp" />
+                        android:layout_marginBottom="10dp"/>
                     <ImageView
                         android:id="@+id/carta2MesaJ1"
                         android:layout_width="73dp"
                         android:layout_height="120dp"
                         android:layout_centerHorizontal="true"
                         android:layout_alignParentBottom="true"
-                        android:layout_marginBottom="30dp" />
+                        android:layout_marginBottom="30dp"/>
                     <ImageView
                         android:id="@+id/carta3MesaJ1"
                         android:layout_width="73dp"
@@ -577,71 +577,89 @@
                         android:id="@+id/carta1MesaJ2"
                         android:layout_width="73dp"
                         android:layout_height="120dp"
-                        android:layout_marginBottom="80dp"
+                        android:layout_marginBottom="70dp"
                         android:layout_alignParentBottom="true"
                         android:layout_alignParentRight="true"
-                        android:layout_marginRight="75dp"/>
+                        android:layout_marginRight="75dp"
+                        android:background="@drawable/fondo_carta"
+                        android:padding="2dp"/>
                     <ImageView
                         android:id="@+id/carta2MesaJ2"
                         android:layout_width="73dp"
                         android:layout_height="120dp"
-                        android:layout_marginBottom="100dp"
+                        android:layout_marginBottom="90dp"
                         android:layout_alignParentBottom="true"
                         android:layout_alignParentRight="true"
-                        android:layout_marginRight="75dp"/>
+                        android:layout_marginRight="75dp"
+                        android:background="@drawable/fondo_carta"
+                        android:padding="2dp"/>
                     <ImageView
                         android:id="@+id/carta3MesaJ2"
                         android:layout_width="73dp"
                         android:layout_height="120dp"
-                        android:layout_marginBottom="120dp"
+                        android:layout_marginBottom="110dp"
                         android:layout_alignParentBottom="true"
                         android:layout_alignParentRight="true"
-                        android:layout_marginRight="75dp" />
+                        android:layout_marginRight="75dp"
+                        android:background="@drawable/fondo_carta"
+                        android:padding="2dp"/>
                     <ImageView
                         android:id="@+id/carta1MesaJ3"
                         android:layout_width="73dp"
                         android:layout_height="120dp"
                         android:layout_centerHorizontal="true"
-                        android:layout_alignParentTop="true"
-                        android:layout_marginTop="60dp" />
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginBottom="140dp"
+                        android:background="@drawable/fondo_carta"
+                        android:padding="2dp"/>
                     <ImageView
                         android:id="@+id/carta2MesaJ3"
                         android:layout_width="73dp"
                         android:layout_height="120dp"
                         android:layout_centerHorizontal="true"
-                        android:layout_alignParentTop="true"
-                        android:layout_marginTop="40dp"/>
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginBottom="170dp"
+                        android:background="@drawable/fondo_carta"
+                        android:padding="2dp"/>
                     <ImageView
                         android:id="@+id/carta3MesaJ3"
                         android:layout_width="73dp"
                         android:layout_height="120dp"
                         android:layout_centerHorizontal="true"
-                        android:layout_alignParentTop="true"
-                        android:layout_marginTop="20dp"/>
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginBottom="180dp"
+                        android:background="@drawable/fondo_carta"
+                        android:padding="2dp"/>
                     <ImageView
                         android:id="@+id/carta1MesaJ4"
                         android:layout_width="73dp"
                         android:layout_height="120dp"
-                        android:layout_marginBottom="80dp"
+                        android:layout_marginBottom="70dp"
                         android:layout_alignParentBottom="true"
                         android:layout_alignParentLeft="true"
-                        android:layout_marginLeft="75dp"  />
+                        android:layout_marginLeft="75dp"
+                        android:background="@drawable/fondo_carta"
+                        android:padding="2dp"/>
                     <ImageView
                         android:id="@+id/carta2MesaJ4"
                         android:layout_width="73dp"
                         android:layout_height="120dp"
-                        android:layout_marginBottom="100dp"
+                        android:layout_marginBottom="90dp"
                         android:layout_alignParentBottom="true"
                         android:layout_alignParentLeft="true"
-                        android:layout_marginLeft="75dp"/>
+                        android:layout_marginLeft="75dp"
+                        android:background="@drawable/fondo_carta"
+                        android:padding="2dp"/>
                     <ImageView
                         android:id="@+id/carta3MesaJ4"
                         android:layout_width="73dp"
                         android:layout_height="120dp"
-                        android:layout_marginBottom="120dp"
+                        android:layout_marginBottom="110dp"
                         android:layout_alignParentBottom="true"
                         android:layout_alignParentLeft="true"
-                        android:layout_marginLeft="75dp" />
+                        android:layout_marginLeft="75dp"
+                        android:background="@drawable/fondo_carta"
+                        android:padding="2dp"/>
 
             </RelativeLayout>
 
@@ -1029,6 +1047,16 @@
                         />
 
                     <ImageButton
+                        android:id="@+id/tapar_4J"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/fondo_boton"
+                        android:src="@drawable/ic_salir"
+                        android:layout_margin="10dp"
+                        android:layout_weight="1"
+                        />
+
+                    <ImageButton
                         android:id="@+id/abandonar_4J"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
@@ -1044,7 +1072,7 @@
         </com.github.alexkolpa.fabtoolbar.FabToolbar>
         </FrameLayout>
     </LinearLayout>
-
+-->
 
     <!-- "PLEASE WAIT" SCREEN -->
     <LinearLayout android:id="@+id/screen_win" style="@style/LLScreen">
