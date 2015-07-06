@@ -311,6 +311,15 @@ public class MainActivity extends Activity
 
     //Boolean
     private boolean hayEmpate4J = false;
+    private boolean hayAnimacionDerechaC1 = false;
+    private boolean hayAnimacionDerechaC2 = false;
+    private boolean hayAnimacionDerechaC3 = false;
+    private boolean hayAnimacionArribaC1 = false;
+    private boolean hayAnimacionArribaC2 = false;
+    private boolean hayAnimacionArribaC3 = false;
+    private boolean hayAnimacionIzqC1 = false;
+    private boolean hayAnimacionIzqC2 = false;
+    private boolean hayAnimacionIzqC3 = false;
 
     //Listas y arrays1
     int[] list3 = new int[3];
@@ -661,15 +670,15 @@ public class MainActivity extends Activity
         nombreJugador1 = (TextView) findViewById(R.id.nombreJugador1);
         nombreJugador2 = (TextView) findViewById(R.id.nombreJugador2);
 
-        tvMesaJ2_C1.animate().rotationXBy(30).rotationYBy(5).rotation(-3).setDuration(0);
-        tvMesaJ2_C2.animate().rotationXBy(30).rotationYBy(5).rotation(-3).setDuration(0);
-        tvMesaJ2_C3.animate().rotationXBy(30).rotationYBy(5).rotation(-3).setDuration(0);
+        tvMesaJ2_C1.animate().rotationXBy(30).setDuration(0);
+        tvMesaJ2_C2.animate().rotationXBy(30).setDuration(0);
+        tvMesaJ2_C3.animate().rotationXBy(30).setDuration(0);
         tvMesaJ3_C1.animate().rotationXBy(30).setDuration(0);
         tvMesaJ3_C2.animate().rotationXBy(30).setDuration(0);
         tvMesaJ3_C3.animate().rotationXBy(30).setDuration(0);
-        tvMesaJ4_C1.animate().rotationXBy(30).rotationYBy(-5).rotation(3).setDuration(0);
-        tvMesaJ4_C2.animate().rotationXBy(30).rotationYBy(-5).rotation(3).setDuration(0);
-        tvMesaJ4_C3.animate().rotationXBy(30).rotationYBy(-5).rotation(3).setDuration(0);
+        tvMesaJ4_C1.animate().rotationXBy(30).setDuration(0);
+        tvMesaJ4_C2.animate().rotationXBy(30).setDuration(0);
+        tvMesaJ4_C3.animate().rotationXBy(30).setDuration(0);
 
         // Creamos el nuevo cliente de Google con acceso a Plus y Games
         mGoogleApiClient = new GoogleApiClient.Builder(this)
@@ -2262,6 +2271,43 @@ public class MainActivity extends Activity
                 hayAnimaciones = false;
             }
 
+            if (hayAnimacionDerechaC1) {
+                tvMesaJ2_C1.animate().scaleX((float) 1).scaleY((float) 1).setDuration(0);
+                hayAnimacionDerechaC1 = false;
+            }
+            if (hayAnimacionDerechaC2) {
+                tvMesaJ2_C1.animate().scaleX((float) 1).scaleY((float) 1).setDuration(0);
+                hayAnimacionDerechaC2 = false;
+            }
+            if (hayAnimacionDerechaC3) {
+                tvMesaJ2_C1.animate().scaleX((float) 1).scaleY((float) 1).setDuration(0);
+                hayAnimacionDerechaC3 = false;
+            }
+            if (hayAnimacionArribaC1) {
+                tvMesaJ3_C1.animate().scaleX((float) 1).scaleY((float) 1).setDuration(0);
+                hayAnimacionArribaC1 = false;
+            }
+            if (hayAnimacionArribaC2) {
+                tvMesaJ3_C1.animate().scaleX((float) 1).scaleY((float) 1).setDuration(0);
+                hayAnimacionArribaC2 = false;
+            }
+            if (hayAnimacionArribaC3) {
+                tvMesaJ3_C1.animate().scaleX((float) 1).scaleY((float) 1).setDuration(0);
+                hayAnimacionArribaC3 = false;
+            }
+            if (hayAnimacionIzqC1) {
+                tvMesaJ4_C1.animate().scaleX((float) 1).scaleY((float) 1).setDuration(0);
+                hayAnimacionIzqC1 = false;
+            }
+            if (hayAnimacionIzqC2) {
+                tvMesaJ4_C1.animate().scaleX((float) 1).scaleY((float) 1).setDuration(0);
+                hayAnimacionIzqC2 = false;
+            }
+            if (hayAnimacionIzqC3) {
+                tvMesaJ4_C1.animate().scaleX((float) 1).scaleY((float) 1).setDuration(0);
+                hayAnimacionIzqC3 = false;
+            }
+
         }
     }
 
@@ -2338,57 +2384,34 @@ public class MainActivity extends Activity
                 break;
 
             case 4:
-                if (view.equals(tvJugador1_4J)) {
-                    tvJugador1_4J.animate().translationX(inicio1J1.x).rotation(0).setDuration(500);
-                    tvJugador1_4J.animate().translationY(inicio1J1.y).rotation(0).setDuration(500);
 
-                    if (posTvJugador1 == 1) {
-                        view.animate().rotationXBy(-30).scaleX((float) 1).scaleY((float) 1)
-                                .rotationYBy(5).setDuration(500);
+                if(view.equals(tvJugador1_4J)){
+                view.animate().translationX(inicio1J1.x).rotation(0).setDuration(500);
+                view.animate().translationY(inicio1J1.y).rotation(0).setDuration(500);
 
-                    } else if (posTvJugador1 == 2) {
-                        view.animate().rotationXBy(-30)
-                                .scaleX((float) 1).scaleY((float) 1).setDuration(500);
+                if (posTvJugador1 != 0) {
+                    view.animate().rotationXBy(-30).scaleX((float) 1).scaleY((float) 1).setDuration(500);
+                }
 
-                    } else if (posTvJugador1 == 3) {
-                        view.animate().rotationXBy(-30).scaleX((float) 1).scaleY((float) 1)
-                                .rotationYBy(-5).setDuration(600);
+                }else if(view.equals(tvJugador2_4J)){
+
+                    view.animate().translationX(inicio2J1.x).rotation(0).setDuration(500);
+                    view.animate().translationY(inicio2J1.y).rotation(0).setDuration(500);
+
+                    if (posTvJugador2 != 0) {
+                        view.animate().rotationXBy(-30).scaleX((float) 1).scaleY((float) 1).setDuration(500);
                     }
-                } else if (view.equals(tvJugador2_4J)) {
-                    tvJugador2_4J.animate().translationX(inicio2J1.x).rotation(0).setDuration(500);
-                    tvJugador2_4J.animate().translationY(inicio2J1.y).rotation(0).setDuration(500);
-                    view.bringToFront();
 
-                    if (posTvJugador2 == 1) {
-                        view.animate().rotationXBy(-30).scaleX((float) 1).scaleY((float) 1)
-                                .rotationYBy(5).setDuration(500);
+                } else if(view.equals(tvJugador3_4J)){
 
-                    } else if (posTvJugador2 == 2) {
-                        view.animate().rotationXBy(-30)
-                                .scaleX((float) 1).scaleY((float) 1).setDuration(500);
+                    view.animate().translationX(inicio3J1.x).rotation(0).setDuration(500);
+                    view.animate().translationY(inicio3J1.y).rotation(0).setDuration(500);
 
-                    } else if (posTvJugador2 == 3) {
-                        view.animate().rotationXBy(-30).scaleX((float) 1).scaleY((float) 1)
-                                .rotationYBy(-5).setDuration(600);
-                    }
-                } else if (view.equals(tvJugador3_4J)) {
-                    tvJugador3_4J.animate().translationX(inicio3J1.x).rotation(0).setDuration(500);
-                    tvJugador3_4J.animate().translationY(inicio3J1.y).rotation(0).setDuration(500);
-                    view.bringToFront();
-
-                    if (posTvJugador3 == 1) {
-                        view.animate().rotationXBy(-30).scaleX((float) 1).scaleY((float) 1)
-                                .rotationYBy(5).setDuration(500);
-
-                    } else if (posTvJugador3 == 2) {
-                        view.animate().rotationXBy(-30)
-                                .scaleX((float) 1).scaleY((float) 1).setDuration(500);
-
-                    } else if (posTvJugador3 == 3) {
-                        view.animate().rotationXBy(-30).scaleX((float) 1).scaleY((float) 1)
-                                .rotationYBy(-5).setDuration(600);
+                    if (posTvJugador3 != 0) {
+                        view.animate().rotationXBy(-30).scaleX((float) 1).scaleY((float) 1).setDuration(500);
                     }
                 }
+
                 break;
         }
 
@@ -3261,9 +3284,11 @@ public class MainActivity extends Activity
                 //view.setY(view.getY() - params.height - params.topMargin);
 
                 view.setVisibility(View.VISIBLE);
-                view.animate().translationX(inicio1RivalJ2.x).scaleX((float) 0.7).setDuration(500);
-                view.animate().translationY(inicio1RivalJ2.y).scaleY((float) 0.7).setDuration(500);
+                view.animate().translationX(inicio1RivalJ2.x).scaleX((float) 0.6).setDuration(500);
+                view.animate().translationY(inicio1RivalJ2.y).scaleY((float) 0.6).setDuration(500);
                 view.bringToFront();
+
+                hayAnimacionDerechaC1 = true;
 
                 //hayAnimacionRival1 = true;
                 //Log.d("KKKKKK", "hay animacion carta rival 1 = true");
@@ -3272,18 +3297,22 @@ public class MainActivity extends Activity
                 view.setY(0 - view.getHeight());
 
                 view.setVisibility(View.VISIBLE);
-                view.animate().translationX(inicio2RivalJ2.x).scaleX((float) 0.7).setDuration(500);
-                view.animate().translationY(inicio2RivalJ2.y).scaleY((float) 0.7).setDuration(500);
+                view.animate().translationX(inicio2RivalJ2.x).scaleX((float) 0.6).setDuration(500);
+                view.animate().translationY(inicio2RivalJ2.y).scaleY((float) 0.6).setDuration(500);
                 view.bringToFront();
+
+                hayAnimacionDerechaC2 = true;
 
             } else if (view.equals(tvMesaJ2_C3)) {
                 view.setX(view.getX());
                 view.setY(0);
 
                 view.setVisibility(View.VISIBLE);
-                view.animate().translationX(inicio3RivalJ2.x).scaleX((float) 0.7).setDuration(500);
-                view.animate().translationY(inicio3RivalJ2.y).scaleY((float) 0.7).setDuration(500);
+                view.animate().translationX(inicio3RivalJ2.x).scaleX((float) 0.6).setDuration(500);
+                view.animate().translationY(inicio3RivalJ2.y).scaleY((float) 0.6).setDuration(500);
                 view.bringToFront();
+
+                hayAnimacionDerechaC3 = true;
 
             }
             else
@@ -3293,27 +3322,33 @@ public class MainActivity extends Activity
                 //view.setY(view.getY() - params.height - params.topMargin);
 
                 view.setVisibility(View.VISIBLE);
-                view.animate().translationX(inicio1RivalJ3.x).scaleX((float) 0.7).setDuration(500);
-                view.animate().translationY(inicio1RivalJ3.y).scaleY((float) 0.7).setDuration(500);
+                view.animate().translationX(inicio1RivalJ3.x).scaleX((float) 0.6).setDuration(500);
+                view.animate().translationY(inicio1RivalJ3.y).scaleY((float) 0.6).setDuration(500);
                 view.bringToFront();
+
+                hayAnimacionArribaC1 = true;
 
             } else if (view.equals(tvMesaJ3_C2)) {
                 view.setX(view.getX());
                 view.setY(0 - view.getHeight());
 
                 view.setVisibility(View.VISIBLE);
-                view.animate().translationX(inicio2RivalJ3.x).scaleX((float) 0.7).setDuration(500);
-                view.animate().translationY(inicio2RivalJ3.y).scaleY((float) 0.7).setDuration(500);
+                view.animate().translationX(inicio2RivalJ3.x).scaleX((float) 0.6).setDuration(500);
+                view.animate().translationY(inicio2RivalJ3.y).scaleY((float) 0.6).setDuration(500);
                 view.bringToFront();
+
+                hayAnimacionArribaC2 = true;
 
             } else if (view.equals(tvMesaJ3_C3)) {
                 view.setX(view.getX());
                 view.setY(0 - view.getHeight());
 
                 view.setVisibility(View.VISIBLE);
-                view.animate().translationX(inicio3RivalJ3.x).scaleX((float) 0.7).setDuration(500);
-                view.animate().translationY(inicio3RivalJ3.y).scaleY((float) 0.7).setDuration(500);
+                view.animate().translationX(inicio3RivalJ3.x).scaleX((float) 0.6).setDuration(500);
+                view.animate().translationY(inicio3RivalJ3.y).scaleY((float) 0.6).setDuration(500);
                 view.bringToFront();
+
+                hayAnimacionArribaC3 = true;
 
             }
             else
@@ -3322,27 +3357,33 @@ public class MainActivity extends Activity
                 view.setY(0 - view.getHeight());
 
                 view.setVisibility(View.VISIBLE);
-                view.animate().translationX(inicio3RivalJ4.x).scaleX((float) 0.7).setDuration(500);
-                view.animate().translationY(inicio3RivalJ4.y).scaleY((float) 0.7).setDuration(500);
+                view.animate().translationX(inicio3RivalJ4.x).scaleX((float) 0.6).setDuration(500);
+                view.animate().translationY(inicio3RivalJ4.y).scaleY((float) 0.6).setDuration(500);
                 view.bringToFront();
+
+                hayAnimacionIzqC1 = true;
+
+            } else if (view.equals(tvMesaJ4_C2)) {
+                view.setX(view.getX());
+                view.setY(0 - view.getHeight());
+
+                view.setVisibility(View.VISIBLE);
+                view.animate().translationX(inicio3RivalJ4.x).scaleX((float) 0.6).setDuration(500);
+                view.animate().translationY(inicio3RivalJ4.y).scaleY((float) 0.6).setDuration(500);
+                view.bringToFront();
+
+                hayAnimacionIzqC2 = true;
 
             } else if (view.equals(tvMesaJ4_C3)) {
                 view.setX(view.getX());
                 view.setY(0 - view.getHeight());
 
                 view.setVisibility(View.VISIBLE);
-                view.animate().translationX(inicio3RivalJ4.x).scaleX((float) 0.7).setDuration(500);
-                view.animate().translationY(inicio3RivalJ4.y).scaleY((float) 0.7).setDuration(500);
+                view.animate().translationX(inicio3RivalJ4.x).scaleX((float) 0.6).setDuration(500);
+                view.animate().translationY(inicio3RivalJ4.y).scaleY((float) 0.6).setDuration(500);
                 view.bringToFront();
 
-            } else if (view.equals(tvMesaJ4_C3)) {
-                view.setX(view.getX());
-                view.setY(0 - view.getHeight());
-
-                view.setVisibility(View.VISIBLE);
-                view.animate().translationX(inicio3RivalJ4.x).scaleX((float) 0.7).setDuration(500);
-                view.animate().translationY(inicio3RivalJ4.y).scaleY((float) 0.7).setDuration(500);
-                view.bringToFront();
+                hayAnimacionIzqC3 = true;
             }
         }
     }
@@ -7244,7 +7285,7 @@ public class MainActivity extends Activity
                             tvCartaMesa1_4J.setVisibility(View.VISIBLE);
 
                             view.animate().x(destino.x).y(destino.y).rotation(0).rotationXBy(30)
-                                    .scaleX((float) 0.7).scaleY((float) 0.7)
+                                    .scaleX((float) 0.6).scaleY((float) 0.6)
                                     .rotation(0).setDuration(500);
                             view.setEnabled(false);
 
@@ -7274,7 +7315,7 @@ public class MainActivity extends Activity
                             tvCartaMesa2_4J.setVisibility(View.VISIBLE);
 
                             view.animate().x(destino.x).y(destino.y).rotation(0).rotationXBy(30)
-                                    .scaleX((float) 0.7).scaleY((float) 0.7)
+                                    .scaleX((float) 0.6).scaleY((float) 0.6)
                                     .rotation(0).setDuration(500);
                             view.setEnabled(false);
 
@@ -7317,7 +7358,7 @@ public class MainActivity extends Activity
                             tvCartaMesa3_4J.setVisibility(View.VISIBLE);
 
                             view.animate().x(destino.x).y(destino.y).rotation(0).rotationXBy(30)
-                                    .scaleX((float) 0.7).scaleY((float) 0.7)
+                                    .scaleX((float) 0.6).scaleY((float) 0.6)
                                     .rotation(0).setDuration(500);
                             view.setEnabled(false);
 

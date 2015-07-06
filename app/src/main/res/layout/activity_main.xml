@@ -577,71 +577,71 @@
                         android:id="@+id/carta1MesaJ2"
                         android:layout_width="73dp"
                         android:layout_height="120dp"
+                        android:layout_marginBottom="80dp"
+                        android:layout_alignParentBottom="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginRight="75dp"/>
+                    <ImageView
+                        android:id="@+id/carta2MesaJ2"
+                        android:layout_width="73dp"
+                        android:layout_height="120dp"
                         android:layout_marginBottom="100dp"
                         android:layout_alignParentBottom="true"
                         android:layout_alignParentRight="true"
-                        android:layout_marginRight="80dp"/>
+                        android:layout_marginRight="75dp"/>
                     <ImageView
-                        android:id="@+id/carta2MesaJ2"
+                        android:id="@+id/carta3MesaJ2"
                         android:layout_width="73dp"
                         android:layout_height="120dp"
                         android:layout_marginBottom="120dp"
                         android:layout_alignParentBottom="true"
                         android:layout_alignParentRight="true"
-                        android:layout_marginRight="80dp"/>
-                    <ImageView
-                        android:id="@+id/carta3MesaJ2"
-                        android:layout_width="73dp"
-                        android:layout_height="120dp"
-                        android:layout_marginBottom="140dp"
-                        android:layout_alignParentBottom="true"
-                        android:layout_alignParentRight="true"
-                        android:layout_marginRight="80dp" />
+                        android:layout_marginRight="75dp" />
                     <ImageView
                         android:id="@+id/carta1MesaJ3"
                         android:layout_width="73dp"
                         android:layout_height="120dp"
                         android:layout_centerHorizontal="true"
                         android:layout_alignParentTop="true"
-                        android:layout_marginTop="80dp" />
+                        android:layout_marginTop="60dp" />
                     <ImageView
                         android:id="@+id/carta2MesaJ3"
                         android:layout_width="73dp"
                         android:layout_height="120dp"
                         android:layout_centerHorizontal="true"
                         android:layout_alignParentTop="true"
-                        android:layout_marginTop="60dp"/>
+                        android:layout_marginTop="40dp"/>
                     <ImageView
                         android:id="@+id/carta3MesaJ3"
                         android:layout_width="73dp"
                         android:layout_height="120dp"
                         android:layout_centerHorizontal="true"
                         android:layout_alignParentTop="true"
-                        android:layout_marginTop="40dp"/>
+                        android:layout_marginTop="20dp"/>
                     <ImageView
                         android:id="@+id/carta1MesaJ4"
+                        android:layout_width="73dp"
+                        android:layout_height="120dp"
+                        android:layout_marginBottom="80dp"
+                        android:layout_alignParentBottom="true"
+                        android:layout_alignParentLeft="true"
+                        android:layout_marginLeft="75dp"  />
+                    <ImageView
+                        android:id="@+id/carta2MesaJ4"
                         android:layout_width="73dp"
                         android:layout_height="120dp"
                         android:layout_marginBottom="100dp"
                         android:layout_alignParentBottom="true"
                         android:layout_alignParentLeft="true"
-                        android:layout_marginLeft="80dp"  />
+                        android:layout_marginLeft="75dp"/>
                     <ImageView
-                        android:id="@+id/carta2MesaJ4"
+                        android:id="@+id/carta3MesaJ4"
                         android:layout_width="73dp"
                         android:layout_height="120dp"
                         android:layout_marginBottom="120dp"
                         android:layout_alignParentBottom="true"
                         android:layout_alignParentLeft="true"
-                        android:layout_marginLeft="80dp"/>
-                    <ImageView
-                        android:id="@+id/carta3MesaJ4"
-                        android:layout_width="73dp"
-                        android:layout_height="120dp"
-                        android:layout_marginBottom="140dp"
-                        android:layout_alignParentBottom="true"
-                        android:layout_alignParentLeft="true"
-                        android:layout_marginLeft="80dp" />
+                        android:layout_marginLeft="75dp" />
 
             </RelativeLayout>
 
