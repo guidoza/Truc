@@ -4,101 +4,101 @@
     <carta
         numero="4"
         palo="bastos"
-        valor="1"/>
+        valor="2"/>
     <carta
         numero="4"
         palo="espadas"
-        valor="1"/>
+        valor="2"/>
     <carta
         numero="4"
         palo="oros"
-        valor="1"/>
+        valor="2"/>
     <carta
         numero="4"
         palo="copas"
-        valor="1"/>
+        valor="2"/>
 
     <!--- Carta numero 5 -->
     <carta
         numero="5"
         palo="bastos"
-        valor="2"/>
+        valor="3"/>
     <carta
         numero="5"
         palo="espadas"
-        valor="2"/>
+        valor="3"/>
     <carta
         numero="5"
         palo="oros"
-        valor="2"/>
+        valor="3"/>
     <carta
         numero="5"
         palo="copas"
-        valor="2"/>
+        valor="3"/>
 
     <!--- Carta numero 6 -->
     <carta
         numero="6"
         palo="bastos"
-        valor="3"/>
+        valor="4"/>
     <carta
         numero="6"
         palo="espadas"
-        valor="3"/>
+        valor="4"/>
     <carta
         numero="6"
         palo="oros"
-        valor="3"/>
+        valor="4"/>
     <carta
         numero="6"
         palo="copas"
-        valor="3"/>
+        valor="4"/>
 
     <!--- Carta numero 3 -->
     <carta
         numero="3"
         palo="bastos"
-        valor="5" />
+        valor="6" />
     <carta
         numero="3"
         palo="espadas"
-        valor="5" />
+        valor="6" />
     <carta
         numero="3"
         palo="oros"
-        valor="5"/>
+        valor="6"/>
     <carta
         numero="3"
         palo="copas"
-        valor="5"/>
+        valor="6"/>
 
     <!--- Carta numero 7 -->
     <carta
         numero="7"
         palo="bastos"
-        valor="4" />
+        valor="5" />
     <carta
         numero="7"
         palo="espadas"
-        valor="7" />
+        valor="8" />
     <carta
         numero="7"
         palo="oros"
-        valor="6" />
+        valor="7" />
     <carta
         numero="7"
         palo="copas"
-        valor="4" />
+        valor="5" />
 
     <!--- Carta numero 1 -->
     <carta
         numero="1"
         palo="bastos"
-        valor="8" />
+        valor="9" />
     <carta
         numero="1"
         palo="espadas"
-        valor="9" />
+        valor="10" />
 
 
 </baraja>
