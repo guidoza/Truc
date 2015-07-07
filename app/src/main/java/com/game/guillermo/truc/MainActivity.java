@@ -23,6 +23,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.PointF;
 import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
@@ -69,6 +70,7 @@ import com.google.android.gms.games.multiplayer.realtime.RoomUpdateListener;
 import com.google.android.gms.plus.Plus;
 import com.google.example.games.basegameutils.BaseGameUtils;
 import com.google.android.gms.games.leaderboard.*;
+import android.support.v7.app.AppCompatActivity;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
@@ -91,7 +93,7 @@ import java.util.Set;
 public class MainActivity extends Activity
         implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,
         View.OnClickListener, RealTimeMessageReceivedListener,
-        RoomStatusUpdateListener, RoomUpdateListener, OnInvitationReceivedListener {
+        RoomStatusUpdateListener, RoomUpdateListener, OnInvitationReceivedListener{
 
     /*
      * API INTEGRATION SECTION. This section contains the code that integrates
@@ -362,6 +364,7 @@ public class MainActivity extends Activity
     ImageView mano_4J;
     ImageView dedo_4J;
     ImageButton tapar_4J;
+    ImageView img11;
 
     //TextViews
     TextView txtNumeroJugador;
@@ -403,6 +406,7 @@ public class MainActivity extends Activity
     CircularProgressButton botonMarcadorArriba_4J;
     PointF inicioManoDedo_4J;
     SoundPool soundPool;
+    ColorChooserDialog dialogoIconos;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -699,6 +703,8 @@ public class MainActivity extends Activity
         tvMesaJ4_C1.animate().rotationXBy(30).setDuration(0);
         tvMesaJ4_C2.animate().rotationXBy(30).setDuration(0);
         tvMesaJ4_C3.animate().rotationXBy(30).setDuration(0);
+
+        img11 = (ImageView) findViewById(R.id.imgF1C1);
 
         // Creamos el nuevo cliente de Google con acceso a Plus y Games
         mGoogleApiClient = new GoogleApiClient.Builder(this)
@@ -1050,6 +1056,18 @@ public class MainActivity extends Activity
                 .positiveText("Aceptar")
                 .cancelable(false);
         materialDialog.show();
+    }
+
+    private void showIconosAlert() {
+        MaterialDialog dialog = new MaterialDialog.Builder(this)
+                .title("¡Tiempo de señas!")
+                .autoDismiss(false)
+                .positiveText("Enviar")
+                .negativeText("No hago señas")
+                .customView(R.layout.dialog_color_chooser, false)
+                .build();
+        dialog.show();
+
     }
 
     private void showBasicAlertDesconectarse(String title, String message) {
@@ -1454,6 +1472,9 @@ public class MainActivity extends Activity
                 startActivityForResult(Games.Achievements.getAchievementsIntent(mGoogleApiClient),
                         REQUEST_ACHIEVEMENTS);
                 break;
+            case R.id.boton_iconos:
+                showIconosAlert();
+                break;
         }
     }
 
@@ -1672,11 +1693,11 @@ public class MainActivity extends Activity
             }
             else if(mCurScreen == R.id.screen_game){
                 Log.d("FFFFF","Atras desde la pantalla de juego de 2 jugadores");
-                showBasicAlertDesconectarse("Abandonar partida", "Si abandonas, perderï¿½s la partida. ï¿½Estï¿½s seguro?");
+                showBasicAlertDesconectarse("Abandonar partida", "Si abandonas, perderás la partida. ¿Estás seguro?");
             }
             else if(mCurScreen == R.id.screen_game_4_jugadores){
                 Log.d("FFFFF","Atras desde la pantalla de juego de 4 jugadores");
-                showBasicAlertDesconectarse("Abandonar partida", "Si abandonas, perderï¿½s la partida. ï¿½Estï¿½s seguro?");
+                showBasicAlertDesconectarse("Abandonar partida", "Si abandonas, perderás la partida. ¿Estás seguro?");
             }
             else if(mCurScreen == R.id.screen_wait){
                 Log.d("FFFFF","Caso screen wait");
@@ -3525,6 +3546,7 @@ public class MainActivity extends Activity
                 meVoy_4J.setOnClickListener(menuListener);
                 abandonar_4J.setOnClickListener(menuListener);
                 tapar_4J.setOnClickListener(menuListener);
+
 
                 if (mMyId.equals(turno) && ronda == 1) {
                     Toast.makeText(getApplicationContext(), "Es tu turno", Toast.LENGTH_SHORT).show();
@@ -6575,7 +6597,7 @@ public class MainActivity extends Activity
             R.id.button_accept_popup_invitation, R.id.button_invite_players,
             R.id.button_quick_game, R.id.button_see_invitations, R.id.button_sign_in,
             R.id.button_sign_out, R.id.button_quick_game_4,R.id.button_ranking,
-            R.id.button_logros
+            R.id.button_logros, R.id.boton_iconos
     };
 
     // This array lists all the individual screens our game has.
@@ -8178,33 +8200,14 @@ public class MainActivity extends Activity
     private void reproducirSonidoRepartir(){
         soundPool.play(sonidoRepartir, 1, 1, 0, 0, 1);
     }
-    private void reproducirSonidoTirarCarta(){
+    private void reproducirSonidoTirarCarta() {
         soundPool.play(sonidoTirar, 1, 1, 0, 0, 1);
     }
 
-    @Override
-    public void onBackPressed(){
-        Log.d("FFFFF","Entra en onBackPressed");
-        if(mCurScreen == R.id.screen_lost){
-            Log.d("FFFFF","Caso screen lost");
-            switchToMainScreen();
-        }
-        else if(mCurScreen == R.id.screen_win){
-            Log.d("FFFFF","Caso screen win");
-            switchToMainScreen();
-        }
-        else if(mCurScreen == R.id.screen_game){
-            Log.d("FFFFF","Atras desde la pantalla de juego de 2 jugadores");
-            showBasicAlertDesconectarse("Abandonar partida", "Si abandonas, perderï¿½s la partida. ï¿½Estï¿½s seguro?");
-        }
-        else if(mCurScreen == R.id.screen_game_4_jugadores){
-            Log.d("FFFFF","Atras desde la pantalla de juego de 4 jugadores");
-            showBasicAlertDesconectarse("Abandonar partida", "Si abandonas, perderï¿½s la partida. ï¿½Estï¿½s seguro?");
-        }
-        else super.onBackPressed();
-
-    }
-
 }
+
+
+
+
 
 
