@@ -410,7 +410,7 @@ public class MainActivity extends Activity
     CircularProgressButton botonMarcadorArriba_4J;
     PointF inicioManoDedo_4J;
     SoundPool soundPool;
-    ColorChooserDialog dialogoIconos;
+    MaterialDialog dialogIconos;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -1060,7 +1060,7 @@ public class MainActivity extends Activity
     }
 
     private void showIconosAlert() {
-        MaterialDialog dialog = new MaterialDialog.Builder(this)
+        dialogIconos = new MaterialDialog.Builder(this)
                 .title("�Tiempo de se�as!")
                 .autoDismiss(false)
                 .positiveText("Enviar")
@@ -1069,68 +1069,68 @@ public class MainActivity extends Activity
                     @Override
                     public void onPositive(MaterialDialog dialog) {
                         super.onPositive(dialog);
-                        String señaPrimera = "";
-                        String señaSegunda = "";
+                        String senyaPrimera = "";
+                        String senyaSegunda = "";
                         switch (senyas.get(0).getId()){
                             case R.id.espada:
-                                señaPrimera = "ESPADA";
+                                senyaPrimera = "ESPADA";
                                 break;
                             case R.id.basto:
-                                señaPrimera = "BASTO";
+                                senyaPrimera = "BASTO";
                                 break;
                             case R.id.manillaEspadas:
-                                señaPrimera = "7ESPADAS";
+                                senyaPrimera = "7ESPADAS";
                                 break;
                             case R.id.manillaOros:
-                                señaPrimera = "7OROS";
+                                senyaPrimera = "7OROS";
                                 break;
                             case R.id.tres:
-                                señaPrimera = "TRES";
+                                senyaPrimera = "TRES";
                                 break;
                             case R.id.ciego:
-                                señaPrimera = "CIEGO";
+                                senyaPrimera = "CIEGO";
                                 break;
                             case R.id.envid33:
-                                señaPrimera = "33";
+                                senyaPrimera = "33";
                                 break;
                             case R.id.envid32:
-                                señaPrimera = "32";
+                                senyaPrimera = "32";
                                 break;
                             case R.id.envid31:
-                                señaPrimera = "31";
+                                senyaPrimera = "31";
                                 break;
                         }
                         switch (senyas.get(1).getId()){
                             case R.id.espada:
-                                señaSegunda = "ESPADA";
+                                senyaSegunda = "ESPADA";
                                 break;
                             case R.id.basto:
-                                señaSegunda = "BASTO";
+                                senyaSegunda = "BASTO";
                                 break;
                             case R.id.manillaEspadas:
-                                señaSegunda = "7ESPADAS";
+                                senyaSegunda = "7ESPADAS";
                                 break;
                             case R.id.manillaOros:
-                                señaSegunda = "7OROS";
+                                senyaSegunda = "7OROS";
                                 break;
                             case R.id.tres:
-                                señaSegunda = "TRES";
+                                senyaSegunda = "TRES";
                                 break;
                             case R.id.ciego:
-                                señaSegunda = "CIEGO";
+                                senyaSegunda = "CIEGO";
                                 break;
                             case R.id.envid33:
-                                señaSegunda = "33";
+                                senyaSegunda = "33";
                                 break;
                             case R.id.envid32:
-                                señaSegunda = "32";
+                                senyaSegunda = "32";
                                 break;
                             case R.id.envid31:
-                                señaSegunda = "31";
+                                senyaSegunda = "31";
                                 break;
                         }
                         //DESCOMENTAR EL MENSAJE CUANDO LOS PONGAS DENTRO DEL JUEGO PARA COMPROBAR QUE FUNCIONA ANTES DE SEGUIR
-                        //enviarMensajeSenyas(señaPrimera, señaSegunda);
+                        enviarMensajeSenyas(senyaPrimera, senyaSegunda);
                         dialog.dismiss();
                     }
 
@@ -1142,7 +1142,7 @@ public class MainActivity extends Activity
                 })
                 .customView(R.layout.dialog_color_chooser, false)
                 .build();
-        dialog.show();
+        dialogIconos.show();
 
     }
 
@@ -3593,10 +3593,12 @@ public class MainActivity extends Activity
                 break;
 
             case 4:
+                switchToScreen(R.id.screen_game_4_jugadores);
+                mMultiplayer = multiplayer;
+
                 asignarImagenCarta(carta1, tvJugador1_4J);
                 asignarImagenCarta(carta2, tvJugador2_4J);
                 asignarImagenCarta(carta3, tvJugador3_4J);
-
 
                 tvJugador1_4J.setOnTouchListener(new MyTouchListener4J());
                 tvJugador2_4J.setOnTouchListener(new MyTouchListener4J());
@@ -3613,45 +3615,51 @@ public class MainActivity extends Activity
                 abandonar_4J.setOnClickListener(menuListener);
                 tapar_4J.setOnClickListener(menuListener);
 
+                showIconosAlert();
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    public void run() {
+                        // acciones que se ejecutan tras los milisegundos
+                        if(dialogIconos.isShowing()) dialogIconos.dismiss();
 
-                if (mMyId.equals(turno) && ronda == 1) {
-                    Toast.makeText(getApplicationContext(), "Es tu turno", Toast.LENGTH_SHORT).show();
-                    aparecerCartas();
-                    animarAparecerMenu();
-                    envid_4J.setVisibility(View.GONE);
-                    laFalta_4J.setVisibility(View.GONE);
-                    progressBarAbajo.setVisibility(View.VISIBLE);
-                    iniciarBarraProgresoAbajo();
-                }
+                        if (mMyId.equals(turno) && ronda == 1) {
+                            Toast.makeText(getApplicationContext(), "Es tu turno", Toast.LENGTH_SHORT).show();
+                            aparecerCartas();
+                            animarAparecerMenu();
+                            envid_4J.setVisibility(View.GONE);
+                            laFalta_4J.setVisibility(View.GONE);
+                            progressBarAbajo.setVisibility(View.VISIBLE);
+                            iniciarBarraProgresoAbajo();
+                        }
 
-                if (!mMyId.equals(turno) && ronda == 1) {
-                    aparecerCartas();
-                    animarDesaparecerMenu();
-                    Toast.makeText(getApplicationContext(), "Esperando al Jugador", Toast.LENGTH_SHORT).show();
-                    Handler handler = new Handler();
+                        if (!mMyId.equals(turno) && ronda == 1) {
+                            aparecerCartas();
+                            animarDesaparecerMenu();
+                            Toast.makeText(getApplicationContext(), "Esperando al Jugador", Toast.LENGTH_SHORT).show();
 
-                    if(mMyId.equals(comprobarSiguienteMano())){
-                        progressBarIzq.setVisibility(View.VISIBLE);
-                        iniciarBarraProgresoIzq();
+                            if(mMyId.equals(comprobarSiguienteMano())){
+                                progressBarIzq.setVisibility(View.VISIBLE);
+                                iniciarBarraProgresoIzq();
 
-                    }else if(mMyId.equals(comprobarSegundoMano())){
-                        progressBarArriba.setVisibility(View.VISIBLE);
-                        iniciarBarraProgresoArriba();
+                            }else if(mMyId.equals(comprobarSegundoMano())){
+                                progressBarArriba.setVisibility(View.VISIBLE);
+                                iniciarBarraProgresoArriba();
 
-                    }else if(mMyId.equals(comprobarTerceroeMano())){
-                        progressBarDerecha.setVisibility(View.VISIBLE);
-                        iniciarBarraProgresoDerecha();
+                            }else if(mMyId.equals(comprobarTerceroeMano())){
+                                progressBarDerecha.setVisibility(View.VISIBLE);
+                                iniciarBarraProgresoDerecha();
+                            }
+
+                        }
+
+                        if (mMyId.equals(idJugador1)) txtNumeroJugador.setText("Soy el jugador 1");
+                        else if (mMyId.equals(idJugador2)) txtNumeroJugador.setText("Soy el jugador 2");
+                        else if (mMyId.equals(idJugador3)) txtNumeroJugador.setText("Soy el jugador 3");
+                        else if (mMyId.equals(idJugador4)) txtNumeroJugador.setText("Soy el jugador 4");
+
                     }
+                }, 20000);
 
-                }
-
-                if (mMyId.equals(idJugador1)) txtNumeroJugador.setText("Soy el jugador 1");
-                else if (mMyId.equals(idJugador2)) txtNumeroJugador.setText("Soy el jugador 2");
-                else if (mMyId.equals(idJugador3)) txtNumeroJugador.setText("Soy el jugador 3");
-                else if (mMyId.equals(idJugador4)) txtNumeroJugador.setText("Soy el jugador 4");
-
-                switchToScreen(R.id.screen_game_4_jugadores);
-                mMultiplayer = multiplayer;
                 break;
         }
     }
@@ -4815,8 +4823,8 @@ public class MainActivity extends Activity
         }
     }
 
-    public void enviarMensajeSenyas(String seña1, String seña2) {
-        byte[] messageSenyas = ("3 "+seña1+" "+seña2).getBytes();
+    public void enviarMensajeSenyas(String senya1, String senya2) {
+        byte[] messageSenyas = ("3 "+senya1+" "+senya2).getBytes();
         for (Participant p : mParticipants) {
             if (!p.getParticipantId().equals(mMyId)) {
                 Games.RealTimeMultiplayer.sendReliableMessage(mGoogleApiClient, null, messageSenyas,
@@ -6405,14 +6413,14 @@ public class MainActivity extends Activity
                     if(esDeMiEquipo(sender)){
                         senyaCompi1 = otro9[1];
                         senyaCompi2 = otro9[2];
-                        //Toast.makeText(getApplicationContext(), senyaCompi1+" "+senyaCompi2, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), senyaCompi1+" "+senyaCompi2, Toast.LENGTH_SHORT).show();
                     }else{
                         if(esRivalDerecha(sender)) {
                             senyaRivalDerecha = otro9[1];
-                            //Toast.makeText(getApplicationContext(), senyaRivalDerecha, Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(), senyaRivalDerecha, Toast.LENGTH_SHORT).show();
                         }else{
                             senyaRivalIzq = otro9[1];
-                            //Toast.makeText(getApplicationContext(), senyaRivalIzq, Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(), senyaRivalIzq, Toast.LENGTH_SHORT).show();
                         }
 
                     }
@@ -7098,14 +7106,14 @@ public class MainActivity extends Activity
             case "1copas":
                 view.setImageResource(R.drawable.unocopas);
                 break;
-            case "1tick":
-                view.setImageResource(R.drawable.ic_check);
-                break;
         }
     }
 
     public void quitarTick(ImageView view) {
         view.setImageResource(0);
+    }
+    public void ponerTick(ImageView view) {
+        view.setImageResource(R.drawable.ic_check);
     }
 
 
@@ -7115,11 +7123,11 @@ public class MainActivity extends Activity
             quitarTick((ImageView)senyas.get(0));
             senyas.remove(0);
             senyas.add(view);
-            asignarImagenCarta(new Carta("1", "tick", "0"), (ImageView) view);
+            ponerTick((ImageView) view);
             //señas.add(0, señas.get(1));
             //señas.add(1, view.getId());
         }else senyas.add(view);
-        asignarImagenCarta(new Carta("1", "tick", "0"), (ImageView)view);
+        ponerTick((ImageView)view);
 
 
     }
