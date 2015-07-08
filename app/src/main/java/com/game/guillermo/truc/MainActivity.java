@@ -1155,7 +1155,7 @@ public class MainActivity extends Activity
                         dialog.dismiss();
                     }
                 })
-                .customView(R.layout.dialog_color_chooser, false)
+                .customView(R.layout.iconos_dialog, false)
                 .build();
         dialogIconos.show();
 
@@ -1565,6 +1565,18 @@ public class MainActivity extends Activity
             case R.id.boton_iconos:
                 showIconosAlert();
                 break;
+            case R.id.botonMenuPrincipal1:
+                leaveRoom();
+                break;
+            case R.id.botonMenuPrincipal2:
+                leaveRoom();
+                break;
+            case R.id.botonMenuPrincipal3:
+                leaveRoom();
+                break;
+            case R.id.botonMenuPrincipal4:
+                leaveRoom();
+                break;
         }
     }
 
@@ -1729,6 +1741,9 @@ public class MainActivity extends Activity
     public void onStop() {
         Log.d(TAG, "**** got onStop");
 
+        if(mCurScreen == R.id.screen_game || mCurScreen == R.id.screen_game_4_jugadores){
+            desconectado = mMyId;
+        }
         // if we're in a room, leave it.
         leaveRoom();
 
@@ -1792,6 +1807,9 @@ public class MainActivity extends Activity
             else if(mCurScreen == R.id.screen_wait){
                 Log.d("FFFFF","Caso screen wait");
                 switchToMainScreen();
+            }
+            else if(mCurScreen == R.id.screen_main){
+                finish();
             }
             return true;
         }
@@ -6434,12 +6452,12 @@ public class MainActivity extends Activity
                 case '2':
                     if(numeroJugadores == 2){
                         updateLeaderboards(mGoogleApiClient, LEADERBOARD_ID);
-                        switchToScreen(R.id.screen_win);
+                        switchToScreen(R.id.screen_win_rival_desconectado);
                     }else if(numeroJugadores == 4) {
-                        if(esDeMiEquipo(sender)){ switchToScreen(R.id.screen_lost);}
+                        if(esDeMiEquipo(sender)){ switchToScreen(R.id.screen_lost_companyero_desconectado);}
                         else {
                             updateLeaderboards(mGoogleApiClient, LEADERBOARD_ID);
-                            switchToScreen(R.id.screen_win);
+                            switchToScreen(R.id.screen_win_rival_desconectado);
                         }
                     }
                     break;
@@ -7066,7 +7084,8 @@ public class MainActivity extends Activity
             R.id.button_accept_popup_invitation, R.id.button_invite_players,
             R.id.button_quick_game, R.id.button_see_invitations, R.id.button_sign_in,
             R.id.button_sign_out, R.id.button_quick_game_4,R.id.button_ranking,
-            R.id.button_logros, R.id.boton_iconos
+            R.id.button_logros, R.id.boton_iconos, R.id.botonMenuPrincipal1,
+            R.id.botonMenuPrincipal2, R.id.botonMenuPrincipal3, R.id.botonMenuPrincipal4
     };
 
     // This array lists all the individual screens our game has.
@@ -7567,6 +7586,11 @@ public class MainActivity extends Activity
                     Log.e("Error", e.getMessage());
                     e.printStackTrace();
                 }
+            }
+            if(mIcon11 == null){
+                mIcon11 = BitmapFactory.decodeResource(getApplicationContext().getResources(),
+                        R.drawable.defaultprofile);
+                return mIcon11;
             }
             return mIcon11;
         }
