@@ -10,8 +10,8 @@
         android:id="@+id/grid"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:columnCount="4"
-        android:rowCount="5"
+        android:columnCount="3"
+        android:rowCount="3"
         android:orientation="vertical"
         tools:ignore="UselessParent"
         android:paddingBottom="20dp"
@@ -24,11 +24,12 @@
             tools:background="#000">
 
             <ImageView
-                android:id="@+id/imgF1C1"
+                android:id="@+id/espada"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:background="@drawable/cejas"
-                android:layout_gravity="center" />
+                android:layout_gravity="center"
+                android:onClick="seleccionaUnaSenya"/>
 
         </FrameLayout>
 
@@ -39,11 +40,12 @@
             tools:background="#000">
 
             <ImageView
+                android:id="@+id/basto"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:background="@drawable/cejas"
-                android:src="@drawable/ic_check"
-                android:layout_gravity="center" />
+                android:layout_gravity="center"
+                android:onClick="seleccionaUnaSenya"/>
 
         </FrameLayout>
 
@@ -54,11 +56,12 @@
             tools:background="#000">
 
             <ImageView
+                android:id="@+id/manillaEspadas"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:background="@drawable/cejas"
-                android:src="@drawable/ic_check"
-                android:layout_gravity="center" />
+                android:layout_gravity="center"
+                android:onClick="seleccionaUnaSenya"/>
 
         </FrameLayout>
 
@@ -69,11 +72,12 @@
             tools:background="#000">
 
             <ImageView
+                android:id="@+id/manillaOros"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:background="@drawable/cejas"
-                android:src="@drawable/ic_check"
-                android:layout_gravity="center" />
+                android:layout_gravity="center"
+                android:onClick="seleccionaUnaSenya"/>
 
         </FrameLayout>
 
@@ -84,11 +88,12 @@
             tools:background="#000">
 
             <ImageView
+                android:id="@+id/tres"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:background="@drawable/cejas"
-                android:src="@drawable/ic_check"
-                android:layout_gravity="center" />
+                android:layout_gravity="center"
+                android:onClick="seleccionaUnaSenya"/>
 
         </FrameLayout>
 
@@ -99,11 +104,12 @@
             tools:background="#000">
 
             <ImageView
+                android:id="@+id/ciego"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:background="@drawable/cejas"
-                android:src="@drawable/ic_check"
-                android:layout_gravity="center" />
+                android:layout_gravity="center"
+                android:onClick="seleccionaUnaSenya"/>
 
         </FrameLayout>
 
@@ -114,11 +120,12 @@
             tools:background="#000">
 
             <ImageView
+                android:id="@+id/envid33"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:background="@drawable/cejas"
-                android:src="@drawable/ic_check"
-                android:layout_gravity="center" />
+                android:layout_gravity="center"
+                android:onClick="seleccionaUnaSenya"/>
 
         </FrameLayout>
 
@@ -129,11 +136,12 @@
             tools:background="#000">
 
             <ImageView
+                android:id="@+id/envid32"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:background="@drawable/cejas"
-                android:src="@drawable/ic_check"
-                android:layout_gravity="center" />
+                android:layout_gravity="center"
+                android:onClick="seleccionaUnaSenya"/>
 
         </FrameLayout>
 
@@ -144,178 +152,15 @@
             tools:background="#000">
 
             <ImageView
+                android:id="@+id/envid31"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:background="@drawable/cejas"
-                android:src="@drawable/ic_check"
-                android:layout_gravity="center" />
+                android:layout_gravity="center"
+                android:onClick="seleccionaUnaSenya"/>
 
         </FrameLayout>
 
-        <FrameLayout
-            android:layout_width="56dp"
-            android:layout_height="56dp"
-            android:layout_margin="4dp"
-            tools:background="#000">
-
-            <ImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:background="@drawable/cejas"
-                android:src="@drawable/ic_check"
-                android:layout_gravity="center" />
-
-        </FrameLayout>
-
-        <FrameLayout
-            android:layout_width="56dp"
-            android:layout_height="56dp"
-            android:layout_margin="4dp"
-            tools:background="#000">
-
-            <ImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:background="@drawable/cejas"
-                android:src="@drawable/ic_check"
-                android:layout_gravity="center" />
-
-        </FrameLayout>
-
-        <FrameLayout
-            android:layout_width="56dp"
-            android:layout_height="56dp"
-            android:layout_margin="4dp"
-            tools:background="#000">
-
-            <ImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:background="@drawable/cejas"
-                android:src="@drawable/ic_check"
-                android:layout_gravity="center" />
-
-        </FrameLayout>
-
-        <FrameLayout
-            android:layout_width="56dp"
-            android:layout_height="56dp"
-            android:layout_margin="4dp"
-            tools:background="#000">
-
-            <ImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:background="@drawable/cejas"
-                android:src="@drawable/ic_check"
-                android:layout_gravity="center" />
-
-        </FrameLayout>
-
-        <FrameLayout
-            android:layout_width="56dp"
-            android:layout_height="56dp"
-            android:layout_margin="4dp"
-            tools:background="#000">
-
-            <ImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:background="@drawable/cejas"
-                android:src="@drawable/ic_check"
-                android:layout_gravity="center" />
-
-        </FrameLayout>
-
-        <FrameLayout
-            android:layout_width="56dp"
-            android:layout_height="56dp"
-            android:layout_margin="4dp"
-            tools:background="#000">
-
-            <ImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:background="@drawable/cejas"
-                android:src="@drawable/ic_check"
-                android:layout_gravity="center" />
-
-        </FrameLayout>
-
-        <FrameLayout
-            android:layout_width="56dp"
-            android:layout_height="56dp"
-            android:layout_margin="4dp"
-            tools:background="#000">
-
-            <ImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:src="@drawable/ic_check"
-                android:background="@drawable/cejas"
-                android:layout_gravity="center" />
-
-        </FrameLayout>
-
-        <FrameLayout
-            android:layout_width="56dp"
-            android:layout_height="56dp"
-            android:layout_margin="4dp"
-            tools:background="#000">
-
-            <ImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:src="@drawable/ic_check"
-                android:background="@drawable/cejas"
-                android:layout_gravity="center" />
-
-        </FrameLayout>
-
-        <FrameLayout
-            android:layout_width="56dp"
-            android:layout_height="56dp"
-            android:layout_margin="4dp"
-            tools:background="#000">
-
-            <ImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:background="@drawable/cejas"
-                android:src="@drawable/ic_check"
-                android:layout_gravity="center" />
-
-        </FrameLayout>
-
-        <FrameLayout
-            android:layout_width="56dp"
-            android:layout_height="56dp"
-            android:layout_margin="4dp"
-            tools:background="#000">
-
-            <ImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:background="@drawable/cejas"
-                android:src="@drawable/ic_check"
-                android:layout_gravity="center" />
-
-        </FrameLayout>
-
-        <FrameLayout
-            android:layout_width="56dp"
-            android:layout_height="56dp"
-            android:layout_margin="4dp"
-            tools:background="#000">
-
-            <ImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:background="@drawable/cejas"
-                android:src="@drawable/ic_check"
-                android:layout_gravity="center" />
-
-        </FrameLayout>
 
     </android.widget.GridLayout>
 

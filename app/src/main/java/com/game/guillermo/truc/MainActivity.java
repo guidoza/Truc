@@ -23,7 +23,6 @@ import android.graphics.BitmapFactory;
 import android.graphics.PointF;
 import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
@@ -70,7 +69,6 @@ import com.google.android.gms.games.multiplayer.realtime.RoomUpdateListener;
 import com.google.android.gms.plus.Plus;
 import com.google.example.games.basegameutils.BaseGameUtils;
 import com.google.android.gms.games.leaderboard.*;
-import android.support.v7.app.AppCompatActivity;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
@@ -202,6 +200,7 @@ public class MainActivity extends Activity
     int[] list2 = new int[3];
     int[] numCarta = new int[3];
 
+
     //ImageViews
     ImageView tvJugador1;
     ImageView tvJugador2;
@@ -294,6 +293,7 @@ public class MainActivity extends Activity
     int sonidoBasto = 0;
     int sonidoEspada = 0;
     int sonidoTirar = 0;
+    int numeroSenyas = 0;
 
     //Strings
     String idJugador3 = null;
@@ -312,6 +312,10 @@ public class MainActivity extends Activity
     String nombreJ2 = "";
     String nombreJ3 = "";
     String nombreJ4 = "";
+    String senyaCompi1 = "";
+    String senyaCompi2 = "";
+    String senyaRivalDerecha = "";
+    String senyaRivalIzq = "";
 
     //Boolean
     private boolean hayEmpate4J = false;
@@ -331,6 +335,7 @@ public class MainActivity extends Activity
     String[] equipo1 = new String[2];
     String[] equipo2 = new String[2];
     String[] arrayCartasJugadores;
+    ArrayList<View> senyas = new ArrayList<>(2);
 
     //ImageViews
     ImageView tvJugador1_4J; //Cartas de la mano del jugador 1
@@ -364,7 +369,6 @@ public class MainActivity extends Activity
     ImageView mano_4J;
     ImageView dedo_4J;
     ImageButton tapar_4J;
-    ImageView img11;
 
     //TextViews
     TextView txtNumeroJugador;
@@ -704,8 +708,6 @@ public class MainActivity extends Activity
         tvMesaJ4_C2.animate().rotationXBy(30).setDuration(0);
         tvMesaJ4_C3.animate().rotationXBy(30).setDuration(0);
 
-        img11 = (ImageView) findViewById(R.id.imgF1C1);
-
         // Creamos el nuevo cliente de Google con acceso a Plus y Games
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .addConnectionCallbacks(this)
@@ -720,7 +722,6 @@ public class MainActivity extends Activity
         }
 
     }
-
 
     private void showSingleChoiceAlertEnvid(String title, int array) {
         new MaterialDialog.Builder(this)
@@ -1060,10 +1061,85 @@ public class MainActivity extends Activity
 
     private void showIconosAlert() {
         MaterialDialog dialog = new MaterialDialog.Builder(this)
-                .title("�Tiempo de se�as!")
+                .title("�Tiempo de se�as!")
                 .autoDismiss(false)
                 .positiveText("Enviar")
-                .negativeText("No hago se�as")
+                .negativeText("No hago se�as")
+                .callback(new MaterialDialog.ButtonCallback() {
+                    @Override
+                    public void onPositive(MaterialDialog dialog) {
+                        super.onPositive(dialog);
+                        String señaPrimera = "";
+                        String señaSegunda = "";
+                        switch (senyas.get(0).getId()){
+                            case R.id.espada:
+                                señaPrimera = "ESPADA";
+                                break;
+                            case R.id.basto:
+                                señaPrimera = "BASTO";
+                                break;
+                            case R.id.manillaEspadas:
+                                señaPrimera = "7ESPADAS";
+                                break;
+                            case R.id.manillaOros:
+                                señaPrimera = "7OROS";
+                                break;
+                            case R.id.tres:
+                                señaPrimera = "TRES";
+                                break;
+                            case R.id.ciego:
+                                señaPrimera = "CIEGO";
+                                break;
+                            case R.id.envid33:
+                                señaPrimera = "33";
+                                break;
+                            case R.id.envid32:
+                                señaPrimera = "32";
+                                break;
+                            case R.id.envid31:
+                                señaPrimera = "31";
+                                break;
+                        }
+                        switch (senyas.get(1).getId()){
+                            case R.id.espada:
+                                señaSegunda = "ESPADA";
+                                break;
+                            case R.id.basto:
+                                señaSegunda = "BASTO";
+                                break;
+                            case R.id.manillaEspadas:
+                                señaSegunda = "7ESPADAS";
+                                break;
+                            case R.id.manillaOros:
+                                señaSegunda = "7OROS";
+                                break;
+                            case R.id.tres:
+                                señaSegunda = "TRES";
+                                break;
+                            case R.id.ciego:
+                                señaSegunda = "CIEGO";
+                                break;
+                            case R.id.envid33:
+                                señaSegunda = "33";
+                                break;
+                            case R.id.envid32:
+                                señaSegunda = "32";
+                                break;
+                            case R.id.envid31:
+                                señaSegunda = "31";
+                                break;
+                        }
+                        //DESCOMENTAR EL MENSAJE CUANDO LOS PONGAS DENTRO DEL JUEGO PARA COMPROBAR QUE FUNCIONA ANTES DE SEGUIR
+                        //enviarMensajeSenyas(señaPrimera, señaSegunda);
+                        dialog.dismiss();
+                    }
+
+                    @Override
+                    public void onNegative(MaterialDialog dialog) {
+                        super.onNegative(dialog);
+                        dialog.dismiss();
+                    }
+                })
                 .customView(R.layout.dialog_color_chooser, false)
                 .build();
         dialog.show();
@@ -1437,7 +1513,6 @@ public class MainActivity extends Activity
                 switchToScreen(R.id.screen_sign_in);
                 break;
             case R.id.button_invite_players:
-                switchToScreen(R.id.screen_game_4_jugadores);
                 /*
                 // show list of invitable players
                 intent = Games.RealTimeMultiplayer.getSelectOpponentsIntent(mGoogleApiClient, 1, 3);
@@ -1693,11 +1768,11 @@ public class MainActivity extends Activity
             }
             else if(mCurScreen == R.id.screen_game){
                 Log.d("FFFFF","Atras desde la pantalla de juego de 2 jugadores");
-                showBasicAlertDesconectarse("Abandonar partida", "Si abandonas, perder�s la partida. �Est�s seguro?");
+                showBasicAlertDesconectarse("Abandonar partida", "Si abandonas, perder�s la partida. �Est�s seguro?");
             }
             else if(mCurScreen == R.id.screen_game_4_jugadores){
                 Log.d("FFFFF","Atras desde la pantalla de juego de 4 jugadores");
-                showBasicAlertDesconectarse("Abandonar partida", "Si abandonas, perder�s la partida. �Est�s seguro?");
+                showBasicAlertDesconectarse("Abandonar partida", "Si abandonas, perder�s la partida. �Est�s seguro?");
             }
             else if(mCurScreen == R.id.screen_wait){
                 Log.d("FFFFF","Caso screen wait");
@@ -1712,7 +1787,6 @@ public class MainActivity extends Activity
     void leaveRoom() {
        if(desconectado.equals(mMyId)){ enviarMensajeDesconectado();}
         Log.d(TAG, "Leaving room.");
-        mSecondsLeft = 0;
         resetPuntos();
         stopKeepingScreenOn();
         if (mRoomId != null) {
@@ -2121,19 +2195,11 @@ public class MainActivity extends Activity
         if (room != null) {
             mParticipants = room.getParticipants();
         }
-        if (mParticipants != null) {
-            updatePeerScoresDisplay();
-        }
     }
 
     /*
      * GAME LOGIC SECTION. Methods that implement the game's rules.
      */
-
-    // Current state of the game:
-    int mSecondsLeft = -1; // how long until the game ends (seconds)
-    final static int GAME_DURATION = 20; // game duration, seconds.
-    int mScore = 0; // user's current score
 
     void resetAll() {
         if (numeroJugadores == 2) {
@@ -4749,6 +4815,17 @@ public class MainActivity extends Activity
         }
     }
 
+    public void enviarMensajeSenyas(String seña1, String seña2) {
+        byte[] messageSenyas = ("3 "+seña1+" "+seña2).getBytes();
+        for (Participant p : mParticipants) {
+            if (!p.getParticipantId().equals(mMyId)) {
+                Games.RealTimeMultiplayer.sendReliableMessage(mGoogleApiClient, null, messageSenyas,
+                        mRoomId, p.getParticipantId());
+            }
+        }
+    }
+
+
 
 
 
@@ -6321,6 +6398,27 @@ public class MainActivity extends Activity
                     }
                     break;
 
+                case '3':
+                    //DESCOMENTAR LOS TOAST CUANDO LOS PONGAS DENTRO DEL JUEGO PARA COMPROBAR QUE FUNCIONA ANTES DE SEGUIR
+                    String aux12 = new String(buf, "UTF-8");
+                    String otro9[] = aux12.split(" ");
+                    if(esDeMiEquipo(sender)){
+                        senyaCompi1 = otro9[1];
+                        senyaCompi2 = otro9[2];
+                        //Toast.makeText(getApplicationContext(), senyaCompi1+" "+senyaCompi2, Toast.LENGTH_SHORT).show();
+                    }else{
+                        if(esRivalDerecha(sender)) {
+                            senyaRivalDerecha = otro9[1];
+                            //Toast.makeText(getApplicationContext(), senyaRivalDerecha, Toast.LENGTH_SHORT).show();
+                        }else{
+                            senyaRivalIzq = otro9[1];
+                            //Toast.makeText(getApplicationContext(), senyaRivalIzq, Toast.LENGTH_SHORT).show();
+                        }
+
+                    }
+
+                    break;
+
                 default:
 
                     switch (numeroJugadores) {
@@ -6384,32 +6482,7 @@ public class MainActivity extends Activity
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
-/*
-        if (buf[0] == 'F' || buf[0] == 'U') {
-            // score update.
-            int existingScore = mParticipantScore.containsKey(sender) ?
-                    mParticipantScore.get(sender) : 0;
-            int thisScore = (int) buf[1];
-            if (thisScore > existingScore) {
-                // this check is necessary because packets may arrive out of
-                // order, so we
-                // should only ever consider the highest score we received, as
-                // we know in our
-                // game there is no way to lose points. If there was a way to
-                // lose points,
-                // we'd have to add a "serial number" to the packet.
-                mParticipantScore.put(sender, thisScore);
-            }
 
-            // update the scores on the screen
-            updatePeerScoresDisplay();
-
-            // if it's a final score, mark this participant as having finished
-            // the game
-            if ((char) buf[0] == 'F') {
-                mFinishedParticipants.add(rtm.getSenderParticipantId());
-            }
-        }*/
     }
 
     String comprobarSiguienteMano(){
@@ -6558,35 +6631,6 @@ public class MainActivity extends Activity
         return false;
     }
 
-    // Broadcast my score to everybody else.
-    void broadcastScore(boolean finalScore) {
-        if (!mMultiplayer)
-            return; // playing single-player mode
-
-        // First byte in message indicates whether it's a final score or not
-        mMsgBuf[0] = (byte) (finalScore ? 'F' : 'U');
-
-        // Second byte is the score.
-        mMsgBuf[1] = (byte) mScore;
-
-        // Send to every other participant.
-        for (Participant p : mParticipants) {
-            if (p.getParticipantId().equals(mMyId))
-                continue;
-            if (p.getStatus() != Participant.STATUS_JOINED)
-                continue;
-            if (finalScore) {
-                // final score notification must be sent via reliable message
-                Games.RealTimeMultiplayer.sendReliableMessage(mGoogleApiClient, null, mMsgBuf,
-                        mRoomId, p.getParticipantId());
-            } else {
-                // it's an interim score notification, so we can use unreliable
-                Games.RealTimeMultiplayer.sendUnreliableMessage(mGoogleApiClient, mMsgBuf, mRoomId,
-                        p.getParticipantId());
-            }
-        }
-    }
-
     /*
      * UI SECTION. Methods that implement the game's UI.
      */
@@ -6636,46 +6680,6 @@ public class MainActivity extends Activity
         } else {
             switchToScreen(R.id.screen_sign_in);
         }
-    }
-
-    // updates the label that shows my score
-    void updateScoreDisplay() {
-        // ((TextView) findViewById(R.id.my_score)).setText(formatScore(mScore));
-    }
-
-    // formats a score as a three-digit number
-    String formatScore(int i) {
-        if (i < 0)
-            i = 0;
-        String s = String.valueOf(i);
-        return s.length() == 1 ? "00" + s : s.length() == 2 ? "0" + s : s;
-    }
-
-    // updates the screen with the scores from our peers
-    void updatePeerScoresDisplay() {
-        /**((TextView) findViewById(R.id.score0)).setText(formatScore(mScore) + " - Me");
-         int[] arr = {
-         R.id.score1, R.id.score2, R.id.score3
-         };
-         int i = 0;
-
-         if (mRoomId != null) {
-         for (Participant p : mParticipants) {
-         String pid = p.getParticipantId();
-         if (pid.equals(mMyId))
-         continue;
-         if (p.getStatus() != Participant.STATUS_JOINED)
-         continue;
-         int score = mParticipantScore.containsKey(pid) ? mParticipantScore.get(pid) : 0;
-         ((TextView) findViewById(arr[i])).setText(formatScore(score) + " - " +
-         p.getDisplayName());
-         ++i;
-         }
-         }
-
-         for (; i < arr.length; ++i) {
-         ((TextView) findViewById(arr[i])).setText("");
-         }**/
     }
 
     /*
@@ -7094,7 +7098,30 @@ public class MainActivity extends Activity
             case "1copas":
                 view.setImageResource(R.drawable.unocopas);
                 break;
+            case "1tick":
+                view.setImageResource(R.drawable.ic_check);
+                break;
         }
+    }
+
+    public void quitarTick(ImageView view) {
+        view.setImageResource(0);
+    }
+
+
+    public void seleccionaUnaSenya(View view) {
+        numeroSenyas++;
+        if(numeroSenyas >2){
+            quitarTick((ImageView)senyas.get(0));
+            senyas.remove(0);
+            senyas.add(view);
+            asignarImagenCarta(new Carta("1", "tick", "0"), (ImageView) view);
+            //señas.add(0, señas.get(1));
+            //señas.add(1, view.getId());
+        }else senyas.add(view);
+        asignarImagenCarta(new Carta("1", "tick", "0"), (ImageView)view);
+
+
     }
 
     private class LoadProfileImage extends AsyncTask<String, Void, Bitmap> {
