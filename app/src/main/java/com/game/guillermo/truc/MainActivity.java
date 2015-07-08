@@ -3605,24 +3605,10 @@ public class MainActivity extends Activity
                 asignarImagenCarta(carta1, tvJugador1_4J);
                 asignarImagenCarta(carta2, tvJugador2_4J);
                 asignarImagenCarta(carta3, tvJugador3_4J);
+                aparecerCartas();
 
-                tvJugador1_4J.setOnTouchListener(new MyTouchListener4J());
-                tvJugador2_4J.setOnTouchListener(new MyTouchListener4J());
-                tvJugador3_4J.setOnTouchListener(new MyTouchListener4J());
-
-                truc_4J.setOnClickListener(menuListener);
-                retruque_4J.setOnClickListener(menuListener);
-                quatreVal_4J.setOnClickListener(menuListener);
-                jocFora_4J.setOnClickListener(menuListener);
-                envid_4J.setOnClickListener(menuListener);
-                laFalta_4J.setOnClickListener(menuListener);
-                salir_4J.setOnClickListener(menuListener);
-                meVoy_4J.setOnClickListener(menuListener);
-                abandonar_4J.setOnClickListener(menuListener);
-                tapar_4J.setOnClickListener(menuListener);
-
-                Handler handler2 = new Handler();
-                handler2.postDelayed(new Runnable() {
+                Handler handlerIconos = new Handler();
+                handlerIconos.postDelayed(new Runnable() {
                     public void run() {
                         // acciones que se ejecutan tras los milisegundos
                         showIconosAlert();
@@ -3635,9 +3621,23 @@ public class MainActivity extends Activity
                         // acciones que se ejecutan tras los milisegundos
                         if(dialogIconos.isShowing()) dialogIconos.dismiss();
 
+                        tvJugador1_4J.setOnTouchListener(new MyTouchListener4J());
+                        tvJugador2_4J.setOnTouchListener(new MyTouchListener4J());
+                        tvJugador3_4J.setOnTouchListener(new MyTouchListener4J());
+
+                        truc_4J.setOnClickListener(menuListener);
+                        retruque_4J.setOnClickListener(menuListener);
+                        quatreVal_4J.setOnClickListener(menuListener);
+                        jocFora_4J.setOnClickListener(menuListener);
+                        envid_4J.setOnClickListener(menuListener);
+                        laFalta_4J.setOnClickListener(menuListener);
+                        salir_4J.setOnClickListener(menuListener);
+                        meVoy_4J.setOnClickListener(menuListener);
+                        abandonar_4J.setOnClickListener(menuListener);
+                        tapar_4J.setOnClickListener(menuListener);
+
                         if (mMyId.equals(turno) && ronda == 1) {
                             Toast.makeText(getApplicationContext(), "Es tu turno", Toast.LENGTH_SHORT).show();
-                            aparecerCartas();
                             animarAparecerMenu();
                             envid_4J.setVisibility(View.GONE);
                             laFalta_4J.setVisibility(View.GONE);
@@ -3646,7 +3646,6 @@ public class MainActivity extends Activity
                         }
 
                         if (!mMyId.equals(turno) && ronda == 1) {
-                            aparecerCartas();
                             animarDesaparecerMenu();
                             Toast.makeText(getApplicationContext(), "Esperando al Jugador", Toast.LENGTH_SHORT).show();
 
