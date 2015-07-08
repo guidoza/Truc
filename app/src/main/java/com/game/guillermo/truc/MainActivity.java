@@ -335,7 +335,7 @@ public class MainActivity extends Activity
     String[] equipo1 = new String[2];
     String[] equipo2 = new String[2];
     String[] arrayCartasJugadores;
-    ArrayList<View> senyas = new ArrayList<>(2);
+    ArrayList<View> senyas = new ArrayList<>();
 
     //ImageViews
     ImageView tvJugador1_4J; //Cartas de la mano del jugador 1
@@ -369,6 +369,10 @@ public class MainActivity extends Activity
     ImageView mano_4J;
     ImageView dedo_4J;
     ImageButton tapar_4J;
+    ImageView senyaArriba;
+    ImageView senyaArriba2;
+    ImageView senyaDerecha;
+    ImageView senyaIzq;
 
     //TextViews
     TextView txtNumeroJugador;
@@ -707,6 +711,11 @@ public class MainActivity extends Activity
         tvMesaJ4_C1.animate().rotationXBy(30).setDuration(0);
         tvMesaJ4_C2.animate().rotationXBy(30).setDuration(0);
         tvMesaJ4_C3.animate().rotationXBy(30).setDuration(0);
+
+        senyaArriba = (ImageView)findViewById(R.id.senyaArriba);
+        senyaArriba2 = (ImageView)findViewById(R.id.senyaArriba2);
+        senyaDerecha = (ImageView)findViewById(R.id.senyaDerecha);
+        senyaIzq = (ImageView)findViewById(R.id.senyaIzq);
 
         // Creamos el nuevo cliente de Google con acceso a Plus y Games
         mGoogleApiClient = new GoogleApiClient.Builder(this)
@@ -1761,7 +1770,7 @@ public class MainActivity extends Activity
         }*/
         if (keyCode == KeyEvent.KEYCODE_BACK){
 
-            Log.d("FFFFF","Entra en tecla atras");
+            Log.d("FFFFF", "Entra en tecla atras");
             if(mCurScreen == R.id.screen_lost){
                 Log.d("FFFFF", "Caso screen lost");
                 leaveRoom();
@@ -2352,6 +2361,16 @@ public class MainActivity extends Activity
             tapo = false;
             tapoPrimera = false;
             tapar_4J.setVisibility(View.VISIBLE);
+            numeroSenyas = 0;
+            senyaCompi1 = "";
+            senyaCompi2 = "";
+            senyaRivalDerecha = "";
+            senyaRivalIzq = "";
+            if(senyas.size() == 1) senyas.remove(0);
+            else if(senyas.size() == 2){
+                senyas.remove(0);
+                senyas.remove(1);
+            }
 
             if (mCountDownTimerAbajo != null || mCountDownTimerArriba != null
                     || mCountDownTimerDerecha != null || mCountDownTimerIzq != null) cancelarBarraProgreso();
@@ -2380,6 +2399,11 @@ public class MainActivity extends Activity
             bocadilloDerecha.setVisibility(View.INVISIBLE);
             bocadilloIzq.setVisibility(View.INVISIBLE);
             bocadilloArriba.setVisibility(View.INVISIBLE);
+
+            senyaArriba.setVisibility(View.INVISIBLE);
+            senyaArriba2.setVisibility(View.INVISIBLE);
+            senyaDerecha.setVisibility(View.INVISIBLE);
+            senyaIzq.setVisibility(View.INVISIBLE);
 
             if (hayAnimaciones) {
                 deshacerAnimaciones(tvJugador1_4J);
@@ -3620,6 +3644,8 @@ public class MainActivity extends Activity
                     public void run() {
                         // acciones que se ejecutan tras los milisegundos
                         if(dialogIconos.isShowing()) dialogIconos.dismiss();
+
+                        mostrarSenyas();
 
                         tvJugador1_4J.setOnTouchListener(new MyTouchListener4J());
                         tvJugador2_4J.setOnTouchListener(new MyTouchListener4J());
@@ -6425,14 +6451,198 @@ public class MainActivity extends Activity
                     if(esDeMiEquipo(sender)){
                         senyaCompi1 = otro9[1];
                         senyaCompi2 = otro9[2];
-                        Toast.makeText(getApplicationContext(), senyaCompi1+" "+senyaCompi2, Toast.LENGTH_SHORT).show();
                     }else{
                         if(esRivalDerecha(sender)) {
                             senyaRivalDerecha = otro9[1];
-                            Toast.makeText(getApplicationContext(), senyaRivalDerecha, Toast.LENGTH_SHORT).show();
+                            Handler handlerDerecha = new Handler();
+                            switch (senyaRivalDerecha){
+                                case "ESPADA":
+                                    senyaDerecha.setImageResource(R.drawable.adg);
+                                    senyaDerecha.setVisibility(View.VISIBLE);
+                                    handlerDerecha.postDelayed(new Runnable() {
+                                        public void run() {
+                                            // acciones que se ejecutan tras los milisegundos
+                                            senyaDerecha.setVisibility(View.INVISIBLE);
+                                        }
+                                    }, 500);
+                                    break;
+                                case "BASTO":
+                                    senyaDerecha.setImageResource(R.drawable.bocaabierta);
+                                    senyaDerecha.setVisibility(View.VISIBLE);
+                                    handlerDerecha.postDelayed(new Runnable() {
+                                        public void run() {
+                                            // acciones que se ejecutan tras los milisegundos
+                                            senyaDerecha.setVisibility(View.INVISIBLE);
+                                        }
+                                    }, 500);
+                                    break;
+                                case "7ESPADAS":
+                                    senyaDerecha.setImageResource(R.drawable.cascos);
+                                    senyaDerecha.setVisibility(View.VISIBLE);
+                                    handlerDerecha.postDelayed(new Runnable() {
+                                        public void run() {
+                                            // acciones que se ejecutan tras los milisegundos
+                                            senyaDerecha.setVisibility(View.INVISIBLE);
+                                        }
+                                    }, 500);
+                                    break;
+                                case "7OROS":
+                                    senyaDerecha.setImageResource(R.drawable.gafas);
+                                    senyaDerecha.setVisibility(View.VISIBLE);
+                                    handlerDerecha.postDelayed(new Runnable() {
+                                        public void run() {
+                                            // acciones que se ejecutan tras los milisegundos
+                                            senyaDerecha.setVisibility(View.INVISIBLE);
+                                        }
+                                    }, 500);
+                                    break;
+                                case "TRES":
+                                    senyaDerecha.setImageResource(R.drawable.cejas);
+                                    senyaDerecha.setVisibility(View.VISIBLE);
+                                    handlerDerecha.postDelayed(new Runnable() {
+                                        public void run() {
+                                            // acciones que se ejecutan tras los milisegundos
+                                            senyaDerecha.setVisibility(View.INVISIBLE);
+                                        }
+                                    }, 500);
+                                    break;
+                                case "CIEGO":
+                                    senyaDerecha.setImageResource(R.drawable.lenguafuera);
+                                    senyaDerecha.setVisibility(View.VISIBLE);
+                                    handlerDerecha.postDelayed(new Runnable() {
+                                        public void run() {
+                                            // acciones que se ejecutan tras los milisegundos
+                                            senyaDerecha.setVisibility(View.INVISIBLE);
+                                        }
+                                    }, 500);
+                                    break;
+                                case "33":
+                                    senyaDerecha.setImageResource(R.drawable.mofletes);
+                                    senyaDerecha.setVisibility(View.VISIBLE);
+                                    handlerDerecha.postDelayed(new Runnable() {
+                                        public void run() {
+                                            // acciones que se ejecutan tras los milisegundos
+                                            senyaDerecha.setVisibility(View.INVISIBLE);
+                                        }
+                                    }, 500);
+                                    break;
+                                case "32":
+                                    senyaDerecha.setImageResource(R.drawable.raro);
+                                    senyaDerecha.setVisibility(View.VISIBLE);
+                                    handlerDerecha.postDelayed(new Runnable() {
+                                        public void run() {
+                                            // acciones que se ejecutan tras los milisegundos
+                                            senyaDerecha.setVisibility(View.INVISIBLE);
+                                        }
+                                    }, 500);
+                                    break;
+                                case "31":
+                                    senyaDerecha.setImageResource(R.drawable.rojo);
+                                    senyaDerecha.setVisibility(View.VISIBLE);
+                                    handlerDerecha.postDelayed(new Runnable() {
+                                        public void run() {
+                                            // acciones que se ejecutan tras los milisegundos
+                                            senyaDerecha.setVisibility(View.INVISIBLE);
+                                        }
+                                    }, 500);
+                                    break;
+                            }
+
                         }else{
                             senyaRivalIzq = otro9[1];
-                            Toast.makeText(getApplicationContext(), senyaRivalIzq, Toast.LENGTH_SHORT).show();
+                            Handler handlerIzq = new Handler();
+                            switch (senyaRivalIzq){
+                                case "ESPADA":
+                                    senyaIzq.setImageResource(R.drawable.adg);
+                                    senyaIzq.setVisibility(View.VISIBLE);
+                                    handlerIzq.postDelayed(new Runnable() {
+                                        public void run() {
+                                            // acciones que se ejecutan tras los milisegundos
+                                            senyaIzq.setVisibility(View.INVISIBLE);
+                                        }
+                                    }, 500);
+                                    break;
+                                case "BASTO":
+                                    senyaIzq.setImageResource(R.drawable.bocaabierta);
+                                    senyaIzq.setVisibility(View.VISIBLE);
+                                    handlerIzq.postDelayed(new Runnable() {
+                                        public void run() {
+                                            // acciones que se ejecutan tras los milisegundos
+                                            senyaIzq.setVisibility(View.INVISIBLE);
+                                        }
+                                    }, 500);
+                                    break;
+                                case "7ESPADAS":
+                                    senyaIzq.setImageResource(R.drawable.cascos);
+                                    senyaIzq.setVisibility(View.VISIBLE);
+                                    handlerIzq.postDelayed(new Runnable() {
+                                        public void run() {
+                                            // acciones que se ejecutan tras los milisegundos
+                                            senyaIzq.setVisibility(View.INVISIBLE);
+                                        }
+                                    }, 500);
+                                    break;
+                                case "7OROS":
+                                    senyaIzq.setImageResource(R.drawable.gafas);
+                                    senyaIzq.setVisibility(View.VISIBLE);
+                                    handlerIzq.postDelayed(new Runnable() {
+                                        public void run() {
+                                            // acciones que se ejecutan tras los milisegundos
+                                            senyaIzq.setVisibility(View.INVISIBLE);
+                                        }
+                                    }, 500);
+                                    break;
+                                case "TRES":
+                                    senyaIzq.setImageResource(R.drawable.cejas);
+                                    senyaIzq.setVisibility(View.VISIBLE);
+                                    handlerIzq.postDelayed(new Runnable() {
+                                        public void run() {
+                                            // acciones que se ejecutan tras los milisegundos
+                                            senyaIzq.setVisibility(View.INVISIBLE);
+                                        }
+                                    }, 500);
+                                    break;
+                                case "CIEGO":
+                                    senyaIzq.setImageResource(R.drawable.lenguafuera);
+                                    senyaIzq.setVisibility(View.VISIBLE);
+                                    handlerIzq.postDelayed(new Runnable() {
+                                        public void run() {
+                                            // acciones que se ejecutan tras los milisegundos
+                                            senyaIzq.setVisibility(View.INVISIBLE);
+                                        }
+                                    }, 500);
+                                    break;
+                                case "33":
+                                    senyaIzq.setImageResource(R.drawable.mofletes);
+                                    senyaIzq.setVisibility(View.VISIBLE);
+                                    handlerIzq.postDelayed(new Runnable() {
+                                        public void run() {
+                                            // acciones que se ejecutan tras los milisegundos
+                                            senyaIzq.setVisibility(View.INVISIBLE);
+                                        }
+                                    }, 500);
+                                    break;
+                                case "32":
+                                    senyaIzq.setImageResource(R.drawable.raro);
+                                    senyaIzq.setVisibility(View.VISIBLE);
+                                    handlerIzq.postDelayed(new Runnable() {
+                                        public void run() {
+                                            // acciones que se ejecutan tras los milisegundos
+                                            senyaIzq.setVisibility(View.INVISIBLE);
+                                        }
+                                    }, 500);
+                                    break;
+                                case "31":
+                                    senyaIzq.setImageResource(R.drawable.rojo);
+                                    senyaIzq.setVisibility(View.VISIBLE);
+                                    handlerIzq.postDelayed(new Runnable() {
+                                        public void run() {
+                                            // acciones que se ejecutan tras los milisegundos
+                                            senyaIzq.setVisibility(View.INVISIBLE);
+                                        }
+                                    }, 500);
+                                    break;
+                            }
                         }
 
                     }
@@ -6503,6 +6713,201 @@ public class MainActivity extends Activity
             e.printStackTrace();
         }
 
+    }
+
+    void mostrarSenyas(){
+        Handler handlerArriba = new Handler();
+        Handler handlerArriba2 = new Handler();
+
+        if(!senyaCompi1.equals("nada")){
+            switch (senyaCompi1){
+                case "ESPADA":
+                    senyaArriba.setImageResource(R.drawable.adg);
+                    senyaArriba.setVisibility(View.VISIBLE);
+                    handlerArriba.postDelayed(new Runnable() {
+                        public void run() {
+                            // acciones que se ejecutan tras los milisegundos
+                            senyaArriba.setVisibility(View.INVISIBLE);
+                        }
+                    }, 1500);
+                    break;
+                case "BASTO":
+                    senyaArriba.setImageResource(R.drawable.bocaabierta);
+                    senyaArriba.setVisibility(View.VISIBLE);
+                    handlerArriba.postDelayed(new Runnable() {
+                        public void run() {
+                            // acciones que se ejecutan tras los milisegundos
+                            senyaArriba.setVisibility(View.INVISIBLE);
+                        }
+                    }, 1500);
+                    break;
+                case "7ESPADAS":
+                    senyaArriba.setImageResource(R.drawable.cascos);
+                    senyaArriba.setVisibility(View.VISIBLE);
+                    handlerArriba.postDelayed(new Runnable() {
+                        public void run() {
+                            // acciones que se ejecutan tras los milisegundos
+                            senyaDerecha.setVisibility(View.INVISIBLE);
+                        }
+                    }, 1500);
+                    break;
+                case "7OROS":
+                    senyaArriba.setImageResource(R.drawable.gafas);
+                    senyaArriba.setVisibility(View.VISIBLE);
+                    handlerArriba.postDelayed(new Runnable() {
+                        public void run() {
+                            // acciones que se ejecutan tras los milisegundos
+                            senyaArriba.setVisibility(View.INVISIBLE);
+                        }
+                    }, 1500);
+                    break;
+                case "TRES":
+                    senyaArriba.setImageResource(R.drawable.cejas);
+                    senyaArriba.setVisibility(View.VISIBLE);
+                    handlerArriba.postDelayed(new Runnable() {
+                        public void run() {
+                            // acciones que se ejecutan tras los milisegundos
+                            senyaArriba.setVisibility(View.INVISIBLE);
+                        }
+                    }, 1500);
+                    break;
+                case "CIEGO":
+                    senyaArriba.setImageResource(R.drawable.lenguafuera);
+                    senyaArriba.setVisibility(View.VISIBLE);
+                    handlerArriba.postDelayed(new Runnable() {
+                        public void run() {
+                            // acciones que se ejecutan tras los milisegundos
+                            senyaArriba.setVisibility(View.INVISIBLE);
+                        }
+                    }, 1500);
+                    break;
+                case "33":
+                    senyaArriba.setImageResource(R.drawable.mofletes);
+                    senyaArriba.setVisibility(View.VISIBLE);
+                    handlerArriba.postDelayed(new Runnable() {
+                        public void run() {
+                            // acciones que se ejecutan tras los milisegundos
+                            senyaArriba.setVisibility(View.INVISIBLE);
+                        }
+                    }, 1500);
+                    break;
+                case "32":
+                    senyaArriba.setImageResource(R.drawable.raro);
+                    senyaArriba.setVisibility(View.VISIBLE);
+                    handlerArriba.postDelayed(new Runnable() {
+                        public void run() {
+                            // acciones que se ejecutan tras los milisegundos
+                            senyaArriba.setVisibility(View.INVISIBLE);
+                        }
+                    }, 1500);
+                    break;
+                case "31":
+                    senyaArriba.setImageResource(R.drawable.rojo);
+                    senyaArriba.setVisibility(View.VISIBLE);
+                    handlerArriba.postDelayed(new Runnable() {
+                        public void run() {
+                            // acciones que se ejecutan tras los milisegundos
+                            senyaArriba.setVisibility(View.INVISIBLE);
+                        }
+                    }, 1500);
+                    break;
+            }
+        }
+
+        if(!senyaCompi2.equals("nada")){
+            switch (senyaCompi2){
+                case "ESPADA":
+                    senyaArriba2.setImageResource(R.drawable.adg);
+                    senyaArriba2.setVisibility(View.VISIBLE);
+                    handlerArriba2.postDelayed(new Runnable() {
+                        public void run() {
+                            // acciones que se ejecutan tras los milisegundos
+                            senyaArriba2.setVisibility(View.INVISIBLE);
+                        }
+                    }, 1500);
+                    break;
+                case "BASTO":
+                    senyaArriba2.setImageResource(R.drawable.bocaabierta);
+                    senyaArriba2.setVisibility(View.VISIBLE);
+                    handlerArriba2.postDelayed(new Runnable() {
+                        public void run() {
+                            // acciones que se ejecutan tras los milisegundos
+                            senyaArriba2.setVisibility(View.INVISIBLE);
+                        }
+                    }, 1500);
+                    break;
+                case "7ESPADAS":
+                    senyaArriba2.setImageResource(R.drawable.cascos);
+                    senyaArriba2.setVisibility(View.VISIBLE);
+                    handlerArriba2.postDelayed(new Runnable() {
+                        public void run() {
+                            // acciones que se ejecutan tras los milisegundos
+                            senyaArriba2.setVisibility(View.INVISIBLE);
+                        }
+                    }, 1500);
+                    break;
+                case "7OROS":
+                    senyaArriba2.setImageResource(R.drawable.gafas);
+                    senyaArriba2.setVisibility(View.VISIBLE);
+                    handlerArriba2.postDelayed(new Runnable() {
+                        public void run() {
+                            // acciones que se ejecutan tras los milisegundos
+                            senyaArriba2.setVisibility(View.INVISIBLE);
+                        }
+                    }, 1500);
+                    break;
+                case "TRES":
+                    senyaArriba2.setImageResource(R.drawable.cejas);
+                    senyaArriba2.setVisibility(View.VISIBLE);
+                    handlerArriba2.postDelayed(new Runnable() {
+                        public void run() {
+                            // acciones que se ejecutan tras los milisegundos
+                            senyaArriba2.setVisibility(View.INVISIBLE);
+                        }
+                    }, 1500);
+                    break;
+                case "CIEGO":
+                    senyaArriba2.setImageResource(R.drawable.lenguafuera);
+                    senyaArriba2.setVisibility(View.VISIBLE);
+                    handlerArriba2.postDelayed(new Runnable() {
+                        public void run() {
+                            // acciones que se ejecutan tras los milisegundos
+                            senyaArriba2.setVisibility(View.INVISIBLE);
+                        }
+                    }, 1500);
+                    break;
+                case "33":
+                    senyaArriba2.setImageResource(R.drawable.mofletes);
+                    senyaArriba2.setVisibility(View.VISIBLE);
+                    handlerArriba2.postDelayed(new Runnable() {
+                        public void run() {
+                            // acciones que se ejecutan tras los milisegundos
+                            senyaArriba2.setVisibility(View.INVISIBLE);
+                        }
+                    }, 1500);
+                    break;
+                case "32":
+                    senyaArriba2.setImageResource(R.drawable.raro);
+                    senyaArriba2.setVisibility(View.VISIBLE);
+                    handlerArriba2.postDelayed(new Runnable() {
+                        public void run() {
+                            // acciones que se ejecutan tras los milisegundos
+                            senyaArriba2.setVisibility(View.INVISIBLE);
+                        }
+                    }, 1500);
+                    break;
+                case "31":
+                    senyaArriba2.setImageResource(R.drawable.rojo);
+                    senyaArriba2.setVisibility(View.VISIBLE);
+                    handlerArriba2.postDelayed(new Runnable() {
+                        public void run() {
+                            // acciones que se ejecutan tras los milisegundos
+                            senyaArriba2.setVisibility(View.INVISIBLE);
+                        }
+                    }, 1500);
+                    break;
+            }
+        }
     }
 
     String comprobarSiguienteMano(){

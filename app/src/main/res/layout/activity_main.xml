@@ -765,6 +765,47 @@
                     android:layout_marginLeft="10dp"
                     fab:cpb_cornerRadius="8dp"
                     fab:cpb_selectorComplete="@color/cpb_blue"/>
+
+                <ImageView
+                    android:id="@+id/senyaArriba"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_toLeftOf="@+id/layArriba"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="10dp"
+                    android:padding="5dp"
+                    android:background="@drawable/bocadillo"/>
+
+                <ImageView
+                    android:id="@+id/senyaArriba2"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_toLeftOf="@+id/senyaArriba"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="10dp"
+                    android:padding="5dp"
+                    android:background="@drawable/bocadillo"/>
+
+                <ImageView
+                    android:id="@+id/senyaDerecha"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_toLeftOf="@+id/layDer"
+                    android:layout_marginRight="10dp"
+                    android:layout_centerVertical="true"
+                    android:padding="5dp"
+                    android:background="@drawable/bocadillo"/>
+
+                <ImageView
+                    android:id="@+id/senyaIzq"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_toRightOf="@+id/layIzq"
+                    android:layout_marginLeft="10dp"
+                    android:layout_centerVertical="true"
+                    android:padding="5dp"
+                    android:background="@drawable/bocadillo"/>
+
                 <LinearLayout
                     android:id="@+id/layArriba"
                     android:layout_width="wrap_content"
