@@ -1069,65 +1069,71 @@ public class MainActivity extends Activity
                     @Override
                     public void onPositive(MaterialDialog dialog) {
                         super.onPositive(dialog);
-                        String senyaPrimera = "";
-                        String senyaSegunda = "";
-                        switch (senyas.get(0).getId()){
-                            case R.id.espada:
-                                senyaPrimera = "ESPADA";
-                                break;
-                            case R.id.basto:
-                                senyaPrimera = "BASTO";
-                                break;
-                            case R.id.manillaEspadas:
-                                senyaPrimera = "7ESPADAS";
-                                break;
-                            case R.id.manillaOros:
-                                senyaPrimera = "7OROS";
-                                break;
-                            case R.id.tres:
-                                senyaPrimera = "TRES";
-                                break;
-                            case R.id.ciego:
-                                senyaPrimera = "CIEGO";
-                                break;
-                            case R.id.envid33:
-                                senyaPrimera = "33";
-                                break;
-                            case R.id.envid32:
-                                senyaPrimera = "32";
-                                break;
-                            case R.id.envid31:
-                                senyaPrimera = "31";
-                                break;
+                        String senyaPrimera = "nada";
+                        String senyaSegunda = "nada";
+
+                        if (numeroSenyas > 0) {
+                            switch (senyas.get(0).getId()) {
+                                case R.id.espada:
+                                    senyaPrimera = "ESPADA";
+                                    break;
+                                case R.id.basto:
+                                    senyaPrimera = "BASTO";
+                                    break;
+                                case R.id.manillaEspadas:
+                                    senyaPrimera = "7ESPADAS";
+                                    break;
+                                case R.id.manillaOros:
+                                    senyaPrimera = "7OROS";
+                                    break;
+                                case R.id.tres:
+                                    senyaPrimera = "TRES";
+                                    break;
+                                case R.id.ciego:
+                                    senyaPrimera = "CIEGO";
+                                    break;
+                                case R.id.envid33:
+                                    senyaPrimera = "33";
+                                    break;
+                                case R.id.envid32:
+                                    senyaPrimera = "32";
+                                    break;
+                                case R.id.envid31:
+                                    senyaPrimera = "31";
+                                    break;
+                            }
                         }
-                        switch (senyas.get(1).getId()){
-                            case R.id.espada:
-                                senyaSegunda = "ESPADA";
-                                break;
-                            case R.id.basto:
-                                senyaSegunda = "BASTO";
-                                break;
-                            case R.id.manillaEspadas:
-                                senyaSegunda = "7ESPADAS";
-                                break;
-                            case R.id.manillaOros:
-                                senyaSegunda = "7OROS";
-                                break;
-                            case R.id.tres:
-                                senyaSegunda = "TRES";
-                                break;
-                            case R.id.ciego:
-                                senyaSegunda = "CIEGO";
-                                break;
-                            case R.id.envid33:
-                                senyaSegunda = "33";
-                                break;
-                            case R.id.envid32:
-                                senyaSegunda = "32";
-                                break;
-                            case R.id.envid31:
-                                senyaSegunda = "31";
-                                break;
+
+                        if (numeroSenyas > 1) {
+                            switch (senyas.get(1).getId()) {
+                                case R.id.espada:
+                                    senyaSegunda = "ESPADA";
+                                    break;
+                                case R.id.basto:
+                                    senyaSegunda = "BASTO";
+                                    break;
+                                case R.id.manillaEspadas:
+                                    senyaSegunda = "7ESPADAS";
+                                    break;
+                                case R.id.manillaOros:
+                                    senyaSegunda = "7OROS";
+                                    break;
+                                case R.id.tres:
+                                    senyaSegunda = "TRES";
+                                    break;
+                                case R.id.ciego:
+                                    senyaSegunda = "CIEGO";
+                                    break;
+                                case R.id.envid33:
+                                    senyaSegunda = "33";
+                                    break;
+                                case R.id.envid32:
+                                    senyaSegunda = "32";
+                                    break;
+                                case R.id.envid31:
+                                    senyaSegunda = "31";
+                                    break;
+                            }
                         }
                         //DESCOMENTAR EL MENSAJE CUANDO LOS PONGAS DENTRO DEL JUEGO PARA COMPROBAR QUE FUNCIONA ANTES DE SEGUIR
                         enviarMensajeSenyas(senyaPrimera, senyaSegunda);
@@ -3615,7 +3621,14 @@ public class MainActivity extends Activity
                 abandonar_4J.setOnClickListener(menuListener);
                 tapar_4J.setOnClickListener(menuListener);
 
-                showIconosAlert();
+                Handler handler2 = new Handler();
+                handler2.postDelayed(new Runnable() {
+                    public void run() {
+                        // acciones que se ejecutan tras los milisegundos
+                        showIconosAlert();
+                    }
+                }, 3000);
+
                 Handler handler = new Handler();
                 handler.postDelayed(new Runnable() {
                     public void run() {
@@ -3658,7 +3671,7 @@ public class MainActivity extends Activity
                         else if (mMyId.equals(idJugador4)) txtNumeroJugador.setText("Soy el jugador 4");
 
                     }
-                }, 20000);
+                }, 23000);
 
                 break;
         }
