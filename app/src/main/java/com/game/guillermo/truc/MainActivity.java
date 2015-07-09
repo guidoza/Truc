@@ -6475,8 +6475,14 @@ public class MainActivity extends Activity
                             Handler handlerDerecha = new Handler();
                             switch (senyaRivalDerecha){
                                 case "ESPADA":
-                                    senyaDerecha.setImageResource(R.drawable.adg);
+                                    senyaDerecha.setImageResource(R.drawable.interrogacion);
                                     senyaDerecha.setVisibility(View.VISIBLE);
+                                    senyaDerecha.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            senyaDerecha.setImageResource(R.drawable.adg);
+                                        }
+                                    });
                                     handlerDerecha.postDelayed(new Runnable() {
                                         public void run() {
                                             // acciones que se ejecutan tras los milisegundos
@@ -6485,8 +6491,14 @@ public class MainActivity extends Activity
                                     }, 500);
                                     break;
                                 case "BASTO":
-                                    senyaDerecha.setImageResource(R.drawable.bocaabierta);
+                                    senyaDerecha.setImageResource(R.drawable.interrogacion);
                                     senyaDerecha.setVisibility(View.VISIBLE);
+                                    senyaDerecha.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            senyaDerecha.setImageResource(R.drawable.bocaabierta);
+                                        }
+                                    });
                                     handlerDerecha.postDelayed(new Runnable() {
                                         public void run() {
                                             // acciones que se ejecutan tras los milisegundos
@@ -6495,8 +6507,14 @@ public class MainActivity extends Activity
                                     }, 500);
                                     break;
                                 case "7ESPADAS":
-                                    senyaDerecha.setImageResource(R.drawable.cascos);
+                                    senyaDerecha.setImageResource(R.drawable.interrogacion);
                                     senyaDerecha.setVisibility(View.VISIBLE);
+                                    senyaDerecha.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            senyaDerecha.setImageResource(R.drawable.cascos);
+                                        }
+                                    });
                                     handlerDerecha.postDelayed(new Runnable() {
                                         public void run() {
                                             // acciones que se ejecutan tras los milisegundos
@@ -6505,8 +6523,14 @@ public class MainActivity extends Activity
                                     }, 500);
                                     break;
                                 case "7OROS":
-                                    senyaDerecha.setImageResource(R.drawable.gafas);
+                                    senyaDerecha.setImageResource(R.drawable.interrogacion);
                                     senyaDerecha.setVisibility(View.VISIBLE);
+                                    senyaDerecha.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            senyaDerecha.setImageResource(R.drawable.gafas);
+                                        }
+                                    });
                                     handlerDerecha.postDelayed(new Runnable() {
                                         public void run() {
                                             // acciones que se ejecutan tras los milisegundos
@@ -6515,8 +6539,14 @@ public class MainActivity extends Activity
                                     }, 500);
                                     break;
                                 case "TRES":
-                                    senyaDerecha.setImageResource(R.drawable.cejas);
+                                    senyaDerecha.setImageResource(R.drawable.interrogacion);
                                     senyaDerecha.setVisibility(View.VISIBLE);
+                                    senyaDerecha.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            senyaDerecha.setImageResource(R.drawable.cejas);
+                                        }
+                                    });
                                     handlerDerecha.postDelayed(new Runnable() {
                                         public void run() {
                                             // acciones que se ejecutan tras los milisegundos
@@ -6525,8 +6555,14 @@ public class MainActivity extends Activity
                                     }, 500);
                                     break;
                                 case "CIEGO":
-                                    senyaDerecha.setImageResource(R.drawable.lenguafuera);
+                                    senyaDerecha.setImageResource(R.drawable.interrogacion);
                                     senyaDerecha.setVisibility(View.VISIBLE);
+                                    senyaDerecha.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            senyaDerecha.setImageResource(R.drawable.lenguafuera);
+                                        }
+                                    });
                                     handlerDerecha.postDelayed(new Runnable() {
                                         public void run() {
                                             // acciones que se ejecutan tras los milisegundos
@@ -6535,8 +6571,14 @@ public class MainActivity extends Activity
                                     }, 500);
                                     break;
                                 case "33":
-                                    senyaDerecha.setImageResource(R.drawable.mofletes);
+                                    senyaDerecha.setImageResource(R.drawable.interrogacion);
                                     senyaDerecha.setVisibility(View.VISIBLE);
+                                    senyaDerecha.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            senyaDerecha.setImageResource(R.drawable.mofletes);
+                                        }
+                                    });
                                     handlerDerecha.postDelayed(new Runnable() {
                                         public void run() {
                                             // acciones que se ejecutan tras los milisegundos
@@ -6545,8 +6587,14 @@ public class MainActivity extends Activity
                                     }, 500);
                                     break;
                                 case "32":
-                                    senyaDerecha.setImageResource(R.drawable.raro);
+                                    senyaDerecha.setImageResource(R.drawable.interrogacion);
                                     senyaDerecha.setVisibility(View.VISIBLE);
+                                    senyaDerecha.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            senyaDerecha.setImageResource(R.drawable.raro);
+                                        }
+                                    });
                                     handlerDerecha.postDelayed(new Runnable() {
                                         public void run() {
                                             // acciones que se ejecutan tras los milisegundos
@@ -6555,8 +6603,14 @@ public class MainActivity extends Activity
                                     }, 500);
                                     break;
                                 case "31":
-                                    senyaDerecha.setImageResource(R.drawable.rojo);
+                                    senyaDerecha.setImageResource(R.drawable.interrogacion);
                                     senyaDerecha.setVisibility(View.VISIBLE);
+                                    senyaDerecha.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            senyaDerecha.setImageResource(R.drawable.rojo);
+                                        }
+                                    });
                                     handlerDerecha.postDelayed(new Runnable() {
                                         public void run() {
                                             // acciones que se ejecutan tras los milisegundos
@@ -6571,8 +6625,14 @@ public class MainActivity extends Activity
                             Handler handlerIzq = new Handler();
                             switch (senyaRivalIzq){
                                 case "ESPADA":
-                                    senyaIzq.setImageResource(R.drawable.adg);
+                                    senyaIzq.setImageResource(R.drawable.interrogacion);
                                     senyaIzq.setVisibility(View.VISIBLE);
+                                    senyaIzq.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            senyaIzq.setImageResource(R.drawable.adg);
+                                        }
+                                    });
                                     handlerIzq.postDelayed(new Runnable() {
                                         public void run() {
                                             // acciones que se ejecutan tras los milisegundos
@@ -6581,8 +6641,14 @@ public class MainActivity extends Activity
                                     }, 500);
                                     break;
                                 case "BASTO":
-                                    senyaIzq.setImageResource(R.drawable.bocaabierta);
+                                    senyaIzq.setImageResource(R.drawable.interrogacion);
                                     senyaIzq.setVisibility(View.VISIBLE);
+                                    senyaIzq.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            senyaIzq.setImageResource(R.drawable.bocaabierta);
+                                        }
+                                    });
                                     handlerIzq.postDelayed(new Runnable() {
                                         public void run() {
                                             // acciones que se ejecutan tras los milisegundos
@@ -6591,8 +6657,14 @@ public class MainActivity extends Activity
                                     }, 500);
                                     break;
                                 case "7ESPADAS":
-                                    senyaIzq.setImageResource(R.drawable.cascos);
+                                    senyaIzq.setImageResource(R.drawable.interrogacion);
                                     senyaIzq.setVisibility(View.VISIBLE);
+                                    senyaIzq.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            senyaIzq.setImageResource(R.drawable.cascos);
+                                        }
+                                    });
                                     handlerIzq.postDelayed(new Runnable() {
                                         public void run() {
                                             // acciones que se ejecutan tras los milisegundos
@@ -6601,8 +6673,14 @@ public class MainActivity extends Activity
                                     }, 500);
                                     break;
                                 case "7OROS":
-                                    senyaIzq.setImageResource(R.drawable.gafas);
+                                    senyaIzq.setImageResource(R.drawable.interrogacion);
                                     senyaIzq.setVisibility(View.VISIBLE);
+                                    senyaIzq.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            senyaIzq.setImageResource(R.drawable.gafas);
+                                        }
+                                    });
                                     handlerIzq.postDelayed(new Runnable() {
                                         public void run() {
                                             // acciones que se ejecutan tras los milisegundos
@@ -6611,8 +6689,14 @@ public class MainActivity extends Activity
                                     }, 500);
                                     break;
                                 case "TRES":
-                                    senyaIzq.setImageResource(R.drawable.cejas);
+                                    senyaIzq.setImageResource(R.drawable.interrogacion);
                                     senyaIzq.setVisibility(View.VISIBLE);
+                                    senyaIzq.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            senyaIzq.setImageResource(R.drawable.cejas);
+                                        }
+                                    });
                                     handlerIzq.postDelayed(new Runnable() {
                                         public void run() {
                                             // acciones que se ejecutan tras los milisegundos
@@ -6621,8 +6705,14 @@ public class MainActivity extends Activity
                                     }, 500);
                                     break;
                                 case "CIEGO":
-                                    senyaIzq.setImageResource(R.drawable.lenguafuera);
+                                    senyaIzq.setImageResource(R.drawable.interrogacion);
                                     senyaIzq.setVisibility(View.VISIBLE);
+                                    senyaIzq.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            senyaIzq.setImageResource(R.drawable.lenguafuera);
+                                        }
+                                    });
                                     handlerIzq.postDelayed(new Runnable() {
                                         public void run() {
                                             // acciones que se ejecutan tras los milisegundos
@@ -6631,8 +6721,14 @@ public class MainActivity extends Activity
                                     }, 500);
                                     break;
                                 case "33":
-                                    senyaIzq.setImageResource(R.drawable.mofletes);
+                                    senyaIzq.setImageResource(R.drawable.interrogacion);
                                     senyaIzq.setVisibility(View.VISIBLE);
+                                    senyaIzq.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            senyaIzq.setImageResource(R.drawable.mofletes);
+                                        }
+                                    });
                                     handlerIzq.postDelayed(new Runnable() {
                                         public void run() {
                                             // acciones que se ejecutan tras los milisegundos
@@ -6641,8 +6737,14 @@ public class MainActivity extends Activity
                                     }, 500);
                                     break;
                                 case "32":
-                                    senyaIzq.setImageResource(R.drawable.raro);
+                                    senyaIzq.setImageResource(R.drawable.interrogacion);
                                     senyaIzq.setVisibility(View.VISIBLE);
+                                    senyaIzq.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            senyaIzq.setImageResource(R.drawable.raro);
+                                        }
+                                    });
                                     handlerIzq.postDelayed(new Runnable() {
                                         public void run() {
                                             // acciones que se ejecutan tras los milisegundos
@@ -6651,8 +6753,14 @@ public class MainActivity extends Activity
                                     }, 500);
                                     break;
                                 case "31":
-                                    senyaIzq.setImageResource(R.drawable.rojo);
+                                    senyaIzq.setImageResource(R.drawable.interrogacion);
                                     senyaIzq.setVisibility(View.VISIBLE);
+                                    senyaIzq.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            senyaIzq.setImageResource(R.drawable.rojo);
+                                        }
+                                    });
                                     handlerIzq.postDelayed(new Runnable() {
                                         public void run() {
                                             // acciones que se ejecutan tras los milisegundos
