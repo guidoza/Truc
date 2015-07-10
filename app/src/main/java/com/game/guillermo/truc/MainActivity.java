@@ -6472,7 +6472,13 @@ public class MainActivity extends Activity
                     }else{
                         if(esRivalDerecha(sender)) {
                             senyaRivalDerecha = otro9[1];
-                            Handler handlerDerecha = new Handler();
+                            final Handler handlerDerecha = new Handler();
+                            final Runnable runi = new Runnable() {
+                                public void run() {
+                                    // acciones que se ejecutan tras los milisegundos
+                                    senyaDerecha.setVisibility(View.INVISIBLE);
+                                }
+                            };
                             switch (senyaRivalDerecha){
                                 case "ESPADA":
                                     senyaDerecha.setImageResource(R.drawable.interrogacion);
@@ -6481,14 +6487,17 @@ public class MainActivity extends Activity
                                         @Override
                                         public void onClick(View v) {
                                             senyaDerecha.setImageResource(R.drawable.adg);
+                                            handlerDerecha.removeCallbacks(runi);
+                                            handlerDerecha.postDelayed(new Runnable() {
+                                                public void run() {
+                                                    // acciones que se ejecutan tras los milisegundos
+                                                    senyaDerecha.setVisibility(View.INVISIBLE);
+                                                }
+                                            }, 3000);
                                         }
                                     });
-                                    handlerDerecha.postDelayed(new Runnable() {
-                                        public void run() {
-                                            // acciones que se ejecutan tras los milisegundos
-                                            senyaDerecha.setVisibility(View.INVISIBLE);
-                                        }
-                                    }, 500);
+                                    handlerDerecha.postDelayed(runi, 600);
+
                                     break;
                                 case "BASTO":
                                     senyaDerecha.setImageResource(R.drawable.interrogacion);
@@ -6497,14 +6506,16 @@ public class MainActivity extends Activity
                                         @Override
                                         public void onClick(View v) {
                                             senyaDerecha.setImageResource(R.drawable.bocaabierta);
+                                            handlerDerecha.removeCallbacks(runi);
+                                            handlerDerecha.postDelayed(new Runnable() {
+                                                public void run() {
+                                                    // acciones que se ejecutan tras los milisegundos
+                                                    senyaDerecha.setVisibility(View.INVISIBLE);
+                                                }
+                                            }, 3000);
                                         }
                                     });
-                                    handlerDerecha.postDelayed(new Runnable() {
-                                        public void run() {
-                                            // acciones que se ejecutan tras los milisegundos
-                                            senyaDerecha.setVisibility(View.INVISIBLE);
-                                        }
-                                    }, 500);
+                                    handlerDerecha.postDelayed(runi, 600);
                                     break;
                                 case "7ESPADAS":
                                     senyaDerecha.setImageResource(R.drawable.interrogacion);
@@ -6513,14 +6524,16 @@ public class MainActivity extends Activity
                                         @Override
                                         public void onClick(View v) {
                                             senyaDerecha.setImageResource(R.drawable.cascos);
+                                            handlerDerecha.removeCallbacks(runi);
+                                            handlerDerecha.postDelayed(new Runnable() {
+                                                public void run() {
+                                                    // acciones que se ejecutan tras los milisegundos
+                                                    senyaDerecha.setVisibility(View.INVISIBLE);
+                                                }
+                                            }, 3000);
                                         }
                                     });
-                                    handlerDerecha.postDelayed(new Runnable() {
-                                        public void run() {
-                                            // acciones que se ejecutan tras los milisegundos
-                                            senyaDerecha.setVisibility(View.INVISIBLE);
-                                        }
-                                    }, 500);
+                                    handlerDerecha.postDelayed(runi, 600);
                                     break;
                                 case "7OROS":
                                     senyaDerecha.setImageResource(R.drawable.interrogacion);
@@ -6529,14 +6542,16 @@ public class MainActivity extends Activity
                                         @Override
                                         public void onClick(View v) {
                                             senyaDerecha.setImageResource(R.drawable.gafas);
+                                            handlerDerecha.removeCallbacks(runi);
+                                            handlerDerecha.postDelayed(new Runnable() {
+                                                public void run() {
+                                                    // acciones que se ejecutan tras los milisegundos
+                                                    senyaDerecha.setVisibility(View.INVISIBLE);
+                                                }
+                                            }, 3000);
                                         }
                                     });
-                                    handlerDerecha.postDelayed(new Runnable() {
-                                        public void run() {
-                                            // acciones que se ejecutan tras los milisegundos
-                                            senyaDerecha.setVisibility(View.INVISIBLE);
-                                        }
-                                    }, 500);
+                                    handlerDerecha.postDelayed(runi, 600);
                                     break;
                                 case "TRES":
                                     senyaDerecha.setImageResource(R.drawable.interrogacion);
@@ -6545,14 +6560,16 @@ public class MainActivity extends Activity
                                         @Override
                                         public void onClick(View v) {
                                             senyaDerecha.setImageResource(R.drawable.cejas);
+                                            handlerDerecha.removeCallbacks(runi);
+                                            handlerDerecha.postDelayed(new Runnable() {
+                                                public void run() {
+                                                    // acciones que se ejecutan tras los milisegundos
+                                                    senyaDerecha.setVisibility(View.INVISIBLE);
+                                                }
+                                            }, 3000);
                                         }
                                     });
-                                    handlerDerecha.postDelayed(new Runnable() {
-                                        public void run() {
-                                            // acciones que se ejecutan tras los milisegundos
-                                            senyaDerecha.setVisibility(View.INVISIBLE);
-                                        }
-                                    }, 500);
+                                    handlerDerecha.postDelayed(runi, 600);
                                     break;
                                 case "CIEGO":
                                     senyaDerecha.setImageResource(R.drawable.interrogacion);
@@ -6561,14 +6578,16 @@ public class MainActivity extends Activity
                                         @Override
                                         public void onClick(View v) {
                                             senyaDerecha.setImageResource(R.drawable.lenguafuera);
+                                            handlerDerecha.removeCallbacks(runi);
+                                            handlerDerecha.postDelayed(new Runnable() {
+                                                public void run() {
+                                                    // acciones que se ejecutan tras los milisegundos
+                                                    senyaDerecha.setVisibility(View.INVISIBLE);
+                                                }
+                                            }, 3000);
                                         }
                                     });
-                                    handlerDerecha.postDelayed(new Runnable() {
-                                        public void run() {
-                                            // acciones que se ejecutan tras los milisegundos
-                                            senyaDerecha.setVisibility(View.INVISIBLE);
-                                        }
-                                    }, 500);
+                                    handlerDerecha.postDelayed(runi, 600);
                                     break;
                                 case "33":
                                     senyaDerecha.setImageResource(R.drawable.interrogacion);
@@ -6577,14 +6596,16 @@ public class MainActivity extends Activity
                                         @Override
                                         public void onClick(View v) {
                                             senyaDerecha.setImageResource(R.drawable.mofletes);
+                                            handlerDerecha.removeCallbacks(runi);
+                                            handlerDerecha.postDelayed(new Runnable() {
+                                                public void run() {
+                                                    // acciones que se ejecutan tras los milisegundos
+                                                    senyaDerecha.setVisibility(View.INVISIBLE);
+                                                }
+                                            }, 3000);
                                         }
                                     });
-                                    handlerDerecha.postDelayed(new Runnable() {
-                                        public void run() {
-                                            // acciones que se ejecutan tras los milisegundos
-                                            senyaDerecha.setVisibility(View.INVISIBLE);
-                                        }
-                                    }, 500);
+                                    handlerDerecha.postDelayed(runi, 600);
                                     break;
                                 case "32":
                                     senyaDerecha.setImageResource(R.drawable.interrogacion);
@@ -6593,14 +6614,16 @@ public class MainActivity extends Activity
                                         @Override
                                         public void onClick(View v) {
                                             senyaDerecha.setImageResource(R.drawable.raro);
+                                            handlerDerecha.removeCallbacks(runi);
+                                            handlerDerecha.postDelayed(new Runnable() {
+                                                public void run() {
+                                                    // acciones que se ejecutan tras los milisegundos
+                                                    senyaDerecha.setVisibility(View.INVISIBLE);
+                                                }
+                                            }, 3000);
                                         }
                                     });
-                                    handlerDerecha.postDelayed(new Runnable() {
-                                        public void run() {
-                                            // acciones que se ejecutan tras los milisegundos
-                                            senyaDerecha.setVisibility(View.INVISIBLE);
-                                        }
-                                    }, 500);
+                                    handlerDerecha.postDelayed(runi, 600);
                                     break;
                                 case "31":
                                     senyaDerecha.setImageResource(R.drawable.interrogacion);
@@ -6609,20 +6632,28 @@ public class MainActivity extends Activity
                                         @Override
                                         public void onClick(View v) {
                                             senyaDerecha.setImageResource(R.drawable.rojo);
+                                            handlerDerecha.removeCallbacks(runi);
+                                            handlerDerecha.postDelayed(new Runnable() {
+                                                public void run() {
+                                                    // acciones que se ejecutan tras los milisegundos
+                                                    senyaDerecha.setVisibility(View.INVISIBLE);
+                                                }
+                                            }, 3000);
                                         }
                                     });
-                                    handlerDerecha.postDelayed(new Runnable() {
-                                        public void run() {
-                                            // acciones que se ejecutan tras los milisegundos
-                                            senyaDerecha.setVisibility(View.INVISIBLE);
-                                        }
-                                    }, 500);
+                                    handlerDerecha.postDelayed(runi, 600);
                                     break;
                             }
 
                         }else{
                             senyaRivalIzq = otro9[1];
-                            Handler handlerIzq = new Handler();
+                            final Handler handlerIzq = new Handler();
+                            final Runnable runi2 = new Runnable() {
+                                public void run() {
+                                    // acciones que se ejecutan tras los milisegundos
+                                    senyaDerecha.setVisibility(View.INVISIBLE);
+                                }
+                            };
                             switch (senyaRivalIzq){
                                 case "ESPADA":
                                     senyaIzq.setImageResource(R.drawable.interrogacion);
@@ -6631,14 +6662,16 @@ public class MainActivity extends Activity
                                         @Override
                                         public void onClick(View v) {
                                             senyaIzq.setImageResource(R.drawable.adg);
+                                            handlerIzq.removeCallbacks(runi2);
+                                            handlerIzq.postDelayed(new Runnable() {
+                                                public void run() {
+                                                    // acciones que se ejecutan tras los milisegundos
+                                                    senyaDerecha.setVisibility(View.INVISIBLE);
+                                                }
+                                            }, 3000);
                                         }
                                     });
-                                    handlerIzq.postDelayed(new Runnable() {
-                                        public void run() {
-                                            // acciones que se ejecutan tras los milisegundos
-                                            senyaIzq.setVisibility(View.INVISIBLE);
-                                        }
-                                    }, 500);
+                                    handlerIzq.postDelayed(runi2, 600);
                                     break;
                                 case "BASTO":
                                     senyaIzq.setImageResource(R.drawable.interrogacion);
@@ -6647,14 +6680,16 @@ public class MainActivity extends Activity
                                         @Override
                                         public void onClick(View v) {
                                             senyaIzq.setImageResource(R.drawable.bocaabierta);
+                                            handlerIzq.removeCallbacks(runi2);
+                                            handlerIzq.postDelayed(new Runnable() {
+                                                public void run() {
+                                                    // acciones que se ejecutan tras los milisegundos
+                                                    senyaDerecha.setVisibility(View.INVISIBLE);
+                                                }
+                                            }, 3000);
                                         }
                                     });
-                                    handlerIzq.postDelayed(new Runnable() {
-                                        public void run() {
-                                            // acciones que se ejecutan tras los milisegundos
-                                            senyaIzq.setVisibility(View.INVISIBLE);
-                                        }
-                                    }, 500);
+                                    handlerIzq.postDelayed(runi2, 600);
                                     break;
                                 case "7ESPADAS":
                                     senyaIzq.setImageResource(R.drawable.interrogacion);
@@ -6663,14 +6698,16 @@ public class MainActivity extends Activity
                                         @Override
                                         public void onClick(View v) {
                                             senyaIzq.setImageResource(R.drawable.cascos);
+                                            handlerIzq.removeCallbacks(runi2);
+                                            handlerIzq.postDelayed(new Runnable() {
+                                                public void run() {
+                                                    // acciones que se ejecutan tras los milisegundos
+                                                    senyaDerecha.setVisibility(View.INVISIBLE);
+                                                }
+                                            }, 3000);
                                         }
                                     });
-                                    handlerIzq.postDelayed(new Runnable() {
-                                        public void run() {
-                                            // acciones que se ejecutan tras los milisegundos
-                                            senyaIzq.setVisibility(View.INVISIBLE);
-                                        }
-                                    }, 500);
+                                    handlerIzq.postDelayed(runi2, 600);
                                     break;
                                 case "7OROS":
                                     senyaIzq.setImageResource(R.drawable.interrogacion);
@@ -6679,14 +6716,16 @@ public class MainActivity extends Activity
                                         @Override
                                         public void onClick(View v) {
                                             senyaIzq.setImageResource(R.drawable.gafas);
+                                            handlerIzq.removeCallbacks(runi2);
+                                            handlerIzq.postDelayed(new Runnable() {
+                                                public void run() {
+                                                    // acciones que se ejecutan tras los milisegundos
+                                                    senyaDerecha.setVisibility(View.INVISIBLE);
+                                                }
+                                            }, 3000);
                                         }
                                     });
-                                    handlerIzq.postDelayed(new Runnable() {
-                                        public void run() {
-                                            // acciones que se ejecutan tras los milisegundos
-                                            senyaIzq.setVisibility(View.INVISIBLE);
-                                        }
-                                    }, 500);
+                                    handlerIzq.postDelayed(runi2, 600);
                                     break;
                                 case "TRES":
                                     senyaIzq.setImageResource(R.drawable.interrogacion);
@@ -6695,14 +6734,16 @@ public class MainActivity extends Activity
                                         @Override
                                         public void onClick(View v) {
                                             senyaIzq.setImageResource(R.drawable.cejas);
+                                            handlerIzq.removeCallbacks(runi2);
+                                            handlerIzq.postDelayed(new Runnable() {
+                                                public void run() {
+                                                    // acciones que se ejecutan tras los milisegundos
+                                                    senyaDerecha.setVisibility(View.INVISIBLE);
+                                                }
+                                            }, 3000);
                                         }
                                     });
-                                    handlerIzq.postDelayed(new Runnable() {
-                                        public void run() {
-                                            // acciones que se ejecutan tras los milisegundos
-                                            senyaIzq.setVisibility(View.INVISIBLE);
-                                        }
-                                    }, 500);
+                                    handlerIzq.postDelayed(runi2, 600);
                                     break;
                                 case "CIEGO":
                                     senyaIzq.setImageResource(R.drawable.interrogacion);
@@ -6711,14 +6752,16 @@ public class MainActivity extends Activity
                                         @Override
                                         public void onClick(View v) {
                                             senyaIzq.setImageResource(R.drawable.lenguafuera);
+                                            handlerIzq.removeCallbacks(runi2);
+                                            handlerIzq.postDelayed(new Runnable() {
+                                                public void run() {
+                                                    // acciones que se ejecutan tras los milisegundos
+                                                    senyaDerecha.setVisibility(View.INVISIBLE);
+                                                }
+                                            }, 3000);
                                         }
                                     });
-                                    handlerIzq.postDelayed(new Runnable() {
-                                        public void run() {
-                                            // acciones que se ejecutan tras los milisegundos
-                                            senyaIzq.setVisibility(View.INVISIBLE);
-                                        }
-                                    }, 500);
+                                    handlerIzq.postDelayed(runi2, 600);
                                     break;
                                 case "33":
                                     senyaIzq.setImageResource(R.drawable.interrogacion);
@@ -6727,14 +6770,16 @@ public class MainActivity extends Activity
                                         @Override
                                         public void onClick(View v) {
                                             senyaIzq.setImageResource(R.drawable.mofletes);
+                                            handlerIzq.removeCallbacks(runi2);
+                                            handlerIzq.postDelayed(new Runnable() {
+                                                public void run() {
+                                                    // acciones que se ejecutan tras los milisegundos
+                                                    senyaDerecha.setVisibility(View.INVISIBLE);
+                                                }
+                                            }, 3000);
                                         }
                                     });
-                                    handlerIzq.postDelayed(new Runnable() {
-                                        public void run() {
-                                            // acciones que se ejecutan tras los milisegundos
-                                            senyaIzq.setVisibility(View.INVISIBLE);
-                                        }
-                                    }, 500);
+                                    handlerIzq.postDelayed(runi2, 600);
                                     break;
                                 case "32":
                                     senyaIzq.setImageResource(R.drawable.interrogacion);
@@ -6743,14 +6788,16 @@ public class MainActivity extends Activity
                                         @Override
                                         public void onClick(View v) {
                                             senyaIzq.setImageResource(R.drawable.raro);
+                                            handlerIzq.removeCallbacks(runi2);
+                                            handlerIzq.postDelayed(new Runnable() {
+                                                public void run() {
+                                                    // acciones que se ejecutan tras los milisegundos
+                                                    senyaDerecha.setVisibility(View.INVISIBLE);
+                                                }
+                                            }, 3000);
                                         }
                                     });
-                                    handlerIzq.postDelayed(new Runnable() {
-                                        public void run() {
-                                            // acciones que se ejecutan tras los milisegundos
-                                            senyaIzq.setVisibility(View.INVISIBLE);
-                                        }
-                                    }, 500);
+                                    handlerIzq.postDelayed(runi2, 600);
                                     break;
                                 case "31":
                                     senyaIzq.setImageResource(R.drawable.interrogacion);
@@ -6759,14 +6806,16 @@ public class MainActivity extends Activity
                                         @Override
                                         public void onClick(View v) {
                                             senyaIzq.setImageResource(R.drawable.rojo);
+                                            handlerIzq.removeCallbacks(runi2);
+                                            handlerIzq.postDelayed(new Runnable() {
+                                                public void run() {
+                                                    // acciones que se ejecutan tras los milisegundos
+                                                    senyaDerecha.setVisibility(View.INVISIBLE);
+                                                }
+                                            }, 3000);
                                         }
                                     });
-                                    handlerIzq.postDelayed(new Runnable() {
-                                        public void run() {
-                                            // acciones que se ejecutan tras los milisegundos
-                                            senyaIzq.setVisibility(View.INVISIBLE);
-                                        }
-                                    }, 500);
+                                    handlerIzq.postDelayed(runi2, 600);
                                     break;
                             }
                         }
