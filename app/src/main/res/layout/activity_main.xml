@@ -1134,7 +1134,7 @@
     <!-- PANTALLA HAS GANADO LA PARTIDA -->
     <LinearLayout android:id="@+id/screen_win" style="@style/LLScreen">
         <TextView style="@style/Blurb" android:text="Enhorabuena, ganaste la partida" />
-        <Button
+        <ImageButton
             android:layout_width="250dp"
             android:layout_height="wrap_content"
             android:id="@+id/botonMenuPrincipal1"
@@ -1144,7 +1144,7 @@
     <!-- PANTALLA HAS PERDIDO LA PARTIDA -->
     <LinearLayout android:id="@+id/screen_lost" style="@style/LLScreen">
         <TextView style="@style/Blurb" android:text="Lástima, perdiste la partida" />
-        <Button
+        <ImageButton
             android:layout_width="250dp"
             android:layout_height="wrap_content"
             android:id="@+id/botonMenuPrincipal2"
@@ -1154,7 +1154,7 @@
     <!-- PANTALLA TU COMPAÑERO SE HA DESCONECTADO -->
     <LinearLayout android:id="@+id/screen_lost_companyero_desconectado" style="@style/LLScreen">
         <TextView style="@style/Blurb" android:text="Tu compañero se ha desconectado. Pierdes la partida..." />
-        <Button
+        <ImageButton
             android:layout_width="250dp"
             android:layout_height="wrap_content"
             android:id="@+id/botonMenuPrincipal3"
@@ -1164,7 +1164,7 @@
     <!-- PANTALLA RIVAL SE HA DESCONECTADO -->
     <LinearLayout android:id="@+id/screen_win_rival_desconectado" style="@style/LLScreen">
         <TextView style="@style/Blurb" android:text="Tu rival se ha desconectado. Ganas la partida." />
-        <Button
+        <ImageButton
             android:layout_width="250dp"
             android:layout_height="wrap_content"
             android:id="@+id/botonMenuPrincipal4"

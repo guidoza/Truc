@@ -1737,16 +1737,16 @@ public class MainActivity extends Activity
     }
 
     // Activity is going to the background. We have to leave the current room.
+    //Mirar si es preferible hacerlo en onStop
     @Override
-    public void onStop() {
+    public void onPause() {
         Log.d(TAG, "**** got onStop");
-
         if(mCurScreen == R.id.screen_game || mCurScreen == R.id.screen_game_4_jugadores){
             desconectado = mMyId;
+            switchToScreen(R.id.screen_wait);
         }
         // if we're in a room, leave it.
         leaveRoom();
-
         // stop trying to keep the screen on
         stopKeepingScreenOn();
 
@@ -1755,7 +1755,7 @@ public class MainActivity extends Activity
         } else {
             switchToScreen(R.id.screen_wait);
         }
-        super.onStop();
+        super.onPause();
     }
 
     // Activity just got to the foreground. We switch to the wait screen because we will now
@@ -1763,7 +1763,7 @@ public class MainActivity extends Activity
     // foreground we go through the sign-in flow -- but if the user is already authenticated,
     // this flow simply succeeds and is imperceptible).
     @Override
-    public void onStart() {
+    public void onResume() {
         switchToScreen(R.id.screen_wait);
         if (mGoogleApiClient != null && mGoogleApiClient.isConnected()) {
             Log.w(TAG,
@@ -1773,7 +1773,7 @@ public class MainActivity extends Activity
             Log.d(TAG, "Connecting client.");
             mGoogleApiClient.connect();
         }
-        super.onStart();
+        super.onResume();
     }
 
     // Handle back key to make sure we cleanly leave a game if we are in the middle of one
@@ -1811,6 +1811,13 @@ public class MainActivity extends Activity
             else if(mCurScreen == R.id.screen_main){
                 finish();
             }
+            else if(mCurScreen == R.id.screen_lost_companyero_desconectado){
+
+            }
+            else if(mCurScreen == R.id.screen_win_rival_desconectado){
+
+        }
+
             return true;
         }
         return super.onKeyDown(keyCode, e);
@@ -1825,9 +1832,9 @@ public class MainActivity extends Activity
         if (mRoomId != null) {
             Games.RealTimeMultiplayer.leave(mGoogleApiClient, this, mRoomId);
             mRoomId = null;
-        } else {
-            switchToMainScreen();
-        }
+        } //else {
+            //switchToMainScreen();
+        //}
     }
 
     // Show the waiting room UI to track the progress of other players as they enter the
@@ -7249,7 +7256,8 @@ public class MainActivity extends Activity
     final static int[] SCREENS = {
             R.id.screen_game, R.id.screen_main, R.id.screen_sign_in,
             R.id.screen_wait, R.id.screen_lost, R.id.screen_win,
-            R.id.screen_game_4_jugadores
+            R.id.screen_game_4_jugadores, R.id.screen_lost_companyero_desconectado,
+            R.id.screen_win_rival_desconectado
     };
     int mCurScreen = -1;
 
