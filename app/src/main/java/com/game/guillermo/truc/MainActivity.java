@@ -27,6 +27,7 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -36,6 +37,7 @@ import android.view.WindowManager;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.BaseAdapter;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -69,6 +71,14 @@ import com.google.android.gms.games.multiplayer.realtime.RoomUpdateListener;
 import com.google.android.gms.plus.Plus;
 import com.google.example.games.basegameutils.BaseGameUtils;
 import com.google.android.gms.games.leaderboard.*;
+import com.orhanobut.dialogplus.DialogPlus;
+import com.orhanobut.dialogplus.Holder;
+import com.orhanobut.dialogplus.ListHolder;
+import com.orhanobut.dialogplus.OnBackPressListener;
+import com.orhanobut.dialogplus.OnCancelListener;
+import com.orhanobut.dialogplus.OnClickListener;
+import com.orhanobut.dialogplus.OnDismissListener;
+import com.orhanobut.dialogplus.OnItemClickListener;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
@@ -328,6 +338,7 @@ public class MainActivity extends Activity
     private boolean hayAnimacionIzqC1 = false;
     private boolean hayAnimacionIzqC2 = false;
     private boolean hayAnimacionIzqC3 = false;
+    private boolean showingFrases = false;
 
     //Listas y arrays1
     int[] list3 = new int[3];
@@ -369,6 +380,7 @@ public class MainActivity extends Activity
     ImageView mano_4J;
     ImageView dedo_4J;
     ImageButton tapar_4J;
+    ImageButton frases_4J;
     ImageView senyaArriba;
     ImageView senyaArriba2;
     ImageView senyaDerecha;
@@ -548,6 +560,13 @@ public class MainActivity extends Activity
                         }
                         else tapo = true;
                         break;
+
+                    case R.id.frases_4J:
+                        Holder holder = new ListHolder();
+                        SimpleAdapter adapter = new SimpleAdapter(MainActivity.this);
+                        showOnlyContentDialog(holder, Gravity.BOTTOM, adapter, true);
+                        actionButton_4J.hide();
+                        break;
                 }
             }
         };
@@ -597,6 +616,8 @@ public class MainActivity extends Activity
 
         tapar = (ImageButton) findViewById(R.id.tapar);
         tapar_4J = (ImageButton) findViewById(R.id.tapar_4J);
+
+        frases_4J = (ImageButton) findViewById(R.id.frases_4J);
 
         progressBar1 = (ProgressBar) findViewById(R.id.progres_segundos_1);
         progressBar2 = (ProgressBar) findViewById(R.id.progres_segundos_2);
@@ -1528,6 +1549,7 @@ public class MainActivity extends Activity
                 switchToScreen(R.id.screen_sign_in);
                 break;
             case R.id.button_invite_players:
+
                 /*
                 // show list of invitable players
                 intent = Games.RealTimeMultiplayer.getSelectOpponentsIntent(mGoogleApiClient, 1, 3);
@@ -1743,7 +1765,7 @@ public class MainActivity extends Activity
         Log.d(TAG, "**** got onStop");
         if(mCurScreen == R.id.screen_game || mCurScreen == R.id.screen_game_4_jugadores){
             desconectado = mMyId;
-            switchToScreen(R.id.screen_wait);
+            //switchToScreen(R.id.screen_wait);
         }
         // if we're in a room, leave it.
         leaveRoom();
@@ -1809,7 +1831,7 @@ public class MainActivity extends Activity
                 switchToMainScreen();
             }
             else if(mCurScreen == R.id.screen_main){
-                finish();
+                if(!showingFrases) finish();
             }
             else if(mCurScreen == R.id.screen_lost_companyero_desconectado){
 
@@ -3686,6 +3708,7 @@ public class MainActivity extends Activity
                         meVoy_4J.setOnClickListener(menuListener);
                         abandonar_4J.setOnClickListener(menuListener);
                         tapar_4J.setOnClickListener(menuListener);
+                        frases_4J.setOnClickListener(menuListener);
 
                         if (mMyId.equals(turno) && ronda == 1) {
                             Toast.makeText(getApplicationContext(), "Es tu turno", Toast.LENGTH_SHORT).show();
@@ -4891,6 +4914,16 @@ public class MainActivity extends Activity
         for (Participant p : mParticipants) {
             if (!p.getParticipantId().equals(mMyId)) {
                 Games.RealTimeMultiplayer.sendReliableMessage(mGoogleApiClient, null, messageSenyas,
+                        mRoomId, p.getParticipantId());
+            }
+        }
+    }
+
+    public void enviarMensajeFrase(String frase) {
+        byte[] messageFrase = ("4-"+frase).getBytes();
+        for (Participant p : mParticipants) {
+            if (!p.getParticipantId().equals(mMyId)) {
+                Games.RealTimeMultiplayer.sendReliableMessage(mGoogleApiClient, null, messageFrase,
                         mRoomId, p.getParticipantId());
             }
         }
@@ -6658,7 +6691,7 @@ public class MainActivity extends Activity
                             final Runnable runi2 = new Runnable() {
                                 public void run() {
                                     // acciones que se ejecutan tras los milisegundos
-                                    senyaDerecha.setVisibility(View.INVISIBLE);
+                                    senyaIzq.setVisibility(View.INVISIBLE);
                                 }
                             };
                             switch (senyaRivalIzq){
@@ -6827,6 +6860,23 @@ public class MainActivity extends Activity
                             }
                         }
 
+                    }
+
+                    break;
+
+                case '4':
+                    String aux13 = new String(buf, "UTF-8");
+                    String otro10[] = aux13.split("-");
+                    String frase = otro10[1];
+                    if(esDeMiEquipo(sender)){
+                        bocadilloArriba.setText(frase);
+                        animarTextoAccion(bocadilloArriba);
+                    }else if(esRivalDerecha(sender)){
+                        bocadilloDerecha.setText(frase);
+                        animarTextoAccion(bocadilloDerecha);
+                    }else if(esRivalIzquierda(sender)){
+                        bocadilloIzq.setText(frase);
+                        animarTextoAccion(bocadilloIzq);
                     }
 
                     break;
@@ -8843,6 +8893,46 @@ public class MainActivity extends Activity
     }
     private void reproducirSonidoTirarCarta() {
         soundPool.play(sonidoTirar, 1, 1, 0, 0, 1);
+    }
+
+    private void showOnlyContentDialog(Holder holder, int gravity, BaseAdapter adapter, boolean expanded) {
+
+        showingFrases = true;
+        final DialogPlus dialog = new DialogPlus.Builder(this)
+                .setContentHolder(holder)
+                .setGravity(gravity)
+                .setAdapter(adapter)
+                .setOnItemClickListener(new OnItemClickListener() {
+                    @Override
+                    public void onItemClick(DialogPlus dialogPlus, Object o, View view, int i) {
+                        String frase = "";
+                        switch (i){
+                            case 1:
+                                frase = '"'+"Voy a ti"+'"';
+                                break;
+                            case 2:
+                                frase = '"'+"Ven a mi"+'"';
+                                break;
+                            case 3:
+                                frase = '"'+"Dicen que al basto se le envida"+'"';
+                                break;
+                        }
+                        enviarMensajeFrase(frase);
+                        dialogPlus.dismiss();
+                    }
+                })
+                .setExpanded(expanded)
+                .setHeader(R.layout.header)
+                .setOnBackPressListener(new OnBackPressListener() {
+                    @Override
+                    public void onBackPressed(DialogPlus dialogPlus) {
+                        showingFrases = false;
+                        dialogPlus.dismiss();
+                    }
+                })
+                .setCancelable(true)
+                .create();
+        dialog.show();
     }
 
 }
