@@ -17,26 +17,17 @@
   ~ File created: 2015-01-17 10:26:09
   -->
 <set
-        xmlns:android="http://schemas.android.com/apk/res/android">
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <scale
-		android:duration="400"
-		android:fromXScale="0.0"
-		android:toXScale="1.1"
-		android:fromYScale="0.0"
-		android:toYScale="1.1"
-		android:pivotX="50%"
-		android:pivotY="50%"
-		/>
-    <scale
+    <translate
+        android:duration="400"
+        android:fromYDelta="30%p"
+        android:toYDelta="-20"
+        />
+    <translate
         android:duration="100"
         android:startOffset="400"
-        android:fromXScale="1.1"
-        android:toXScale="0.9"
-        android:fromYScale="1.1"
-        android:toYScale="0.9"
-        android:pivotX="50%"
-        android:pivotY="50%"
+        android:fromYDelta="0"
+        android:toYDelta="20"
         />
-
 </set>

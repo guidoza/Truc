@@ -1230,6 +1230,7 @@ public class MainActivity extends Activity
                 .progress(true, 0)
                 .cancelable(false);
         repartiendo = materialDialog.show();
+
     }
 
     private void showProgressCustomDialog(View content) {
@@ -1549,12 +1550,10 @@ public class MainActivity extends Activity
                 switchToScreen(R.id.screen_sign_in);
                 break;
             case R.id.button_invite_players:
-
-                /*
                 // show list of invitable players
                 intent = Games.RealTimeMultiplayer.getSelectOpponentsIntent(mGoogleApiClient, 1, 3);
                 switchToScreen(R.id.screen_wait);
-                startActivityForResult(intent, RC_SELECT_PLAYERS);*/
+                startActivityForResult(intent, RC_SELECT_PLAYERS);
                 break;
             case R.id.button_see_invitations:
                 // show list of pending invitations
@@ -1571,10 +1570,12 @@ public class MainActivity extends Activity
             case R.id.button_quick_game:
                 // user wants to play against a random opponent right now
                 startQuickGame2jugadores();
+                switchToScreen(R.id.screen_wait);
                 break;
             case R.id.button_quick_game_4:
                 // user wants to play against a random opponent right now
                 startQuickGame4jugadores();
+                switchToScreen(R.id.screen_wait);
                 break;
             case R.id.button_ranking:
                 startActivityForResult(Games.Leaderboards.getLeaderboardIntent(mGoogleApiClient,
@@ -1657,9 +1658,9 @@ public class MainActivity extends Activity
                     // ready to start playing
                     Log.d(TAG, "Starting game (waiting room returned OK).");
                     resetPuntos();
-                    showProgressDialog("?Empezamos!");
                     resetAnimaciones();
                     inicializarMano();
+                    showProgressDialog("?Empezamos!");
                 } else if (responseCode == GamesActivityResultCodes.RESULT_LEFT_ROOM) {
                     // player indicated that they want to leave the room
                     leaveRoom();
@@ -1700,7 +1701,15 @@ public class MainActivity extends Activity
         final ArrayList<String> invitees = data.getStringArrayListExtra(Games.EXTRA_PLAYER_IDS);
         Log.d(TAG, "Invitee count: " + invitees.size());
         if (invitees.size() != 0) {
-            idInvitado = invitees.get(0);
+            //idInvitado = invitees.get(0);
+            for(int i=0;i<invitees.size();i++){
+                Log.d("IIIIIII", "id de un invitado "+invitees.get(i));
+                if(invitees.get(i).equals(idJugador1)) Log.d("IIIIIII", "El J1 es invitado");
+                else if(invitees.get(i).equals(idJugador2)) Log.d("IIIIIII", "El J2 es invitado");
+                else if(invitees.get(i).equals(idJugador3)) Log.d("IIIIIII", "El J3 es invitado");
+                else if(invitees.get(i).equals(idJugador4)) Log.d("IIIIIII", "El J4 es invitado");
+            }
+
         }
 
         // get the automatch criteria
@@ -1785,7 +1794,7 @@ public class MainActivity extends Activity
     // foreground we go through the sign-in flow -- but if the user is already authenticated,
     // this flow simply succeeds and is imperceptible).
     @Override
-    public void onResume() {
+    public void onStart() {
         switchToScreen(R.id.screen_wait);
         if (mGoogleApiClient != null && mGoogleApiClient.isConnected()) {
             Log.w(TAG,
@@ -1795,7 +1804,7 @@ public class MainActivity extends Activity
             Log.d(TAG, "Connecting client.");
             mGoogleApiClient.connect();
         }
-        super.onResume();
+        super.onStart();
     }
 
     // Handle back key to make sure we cleanly leave a game if we are in the middle of one
@@ -1847,14 +1856,20 @@ public class MainActivity extends Activity
 
     // Leave the room.
     void leaveRoom() {
-       if(desconectado.equals(mMyId)){ enviarMensajeDesconectado();}
+       if(desconectado.equals(mMyId)){
+           enviarMensajeDesconectadoYSalir();
+           switchToMainScreen();
+           desconectado = "";
+       }else {
+           if (mRoomId != null) {
+               Games.RealTimeMultiplayer.leave(mGoogleApiClient, this, mRoomId);
+               mRoomId = null;
+           }
+       }
         Log.d(TAG, "Leaving room.");
         resetPuntos();
         stopKeepingScreenOn();
-        if (mRoomId != null) {
-            Games.RealTimeMultiplayer.leave(mGoogleApiClient, this, mRoomId);
-            mRoomId = null;
-        } //else {
+         //else {
             //switchToMainScreen();
         //}
     }
@@ -1975,7 +1990,7 @@ public class MainActivity extends Activity
     public void onLeftRoom(int statusCode, String roomId) {
         // we have left the room; return to main screen.
         Log.d(TAG, "onLeftRoom, code " + statusCode);
-        switchToMainScreen();
+        //switchToMainScreen();
 
     }
 
@@ -1983,7 +1998,7 @@ public class MainActivity extends Activity
     @Override
     public void onDisconnectedFromRoom(Room room) {
         mRoomId = null;
-        showGameError();
+        //showGameError();
     }
 
     // Show error message about game being cancelled and return to main screen.
@@ -2413,8 +2428,9 @@ public class MainActivity extends Activity
             senyaCompi2 = "";
             senyaRivalDerecha = "";
             senyaRivalIzq = "";
-            if(senyas.size() == 1) senyas.remove(0);
-            else if(senyas.size() == 2){
+            if(senyas.size() == 1){
+                senyas.remove(0);
+            }else if(senyas.size() == 2){
                 senyas.remove(0);
                 senyas.remove(1);
             }
@@ -3624,6 +3640,8 @@ public class MainActivity extends Activity
         switch (numeroJugadores) {
 
             case 2:
+                switchToScreen(R.id.screen_game);
+
                 asignarImagenCarta(carta1, tvJugador1);
                 asignarImagenCarta(carta2, tvJugador2);
                 asignarImagenCarta(carta3, tvJugador3);
@@ -3665,13 +3683,10 @@ public class MainActivity extends Activity
 
                 }
 
-                switchToScreen(R.id.screen_game);
-                mMultiplayer = multiplayer;
                 break;
 
             case 4:
                 switchToScreen(R.id.screen_game_4_jugadores);
-                mMultiplayer = multiplayer;
 
                 asignarImagenCarta(carta1, tvJugador1_4J);
                 asignarImagenCarta(carta2, tvJugador2_4J);
@@ -4899,13 +4914,17 @@ public class MainActivity extends Activity
         }
     }
 
-    public void enviarMensajeDesconectado() {
+    public void enviarMensajeDesconectadoYSalir() {
         byte[] messageDesconectado = ("2").getBytes();
         for (Participant p : mParticipants) {
             if (!p.getParticipantId().equals(mMyId)) {
                 Games.RealTimeMultiplayer.sendReliableMessage(mGoogleApiClient, null, messageDesconectado,
                         mRoomId, p.getParticipantId());
             }
+        }
+        if (mRoomId != null) {
+            Games.RealTimeMultiplayer.leave(mGoogleApiClient, this, mRoomId);
+            mRoomId = null;
         }
     }
 
@@ -6493,11 +6512,18 @@ public class MainActivity extends Activity
                     if(numeroJugadores == 2){
                         updateLeaderboards(mGoogleApiClient, LEADERBOARD_ID);
                         switchToScreen(R.id.screen_win_rival_desconectado);
+                        leaveRoom();
+
                     }else if(numeroJugadores == 4) {
-                        if(esDeMiEquipo(sender)){ switchToScreen(R.id.screen_lost_companyero_desconectado);}
+                        Log.d("HHHHHHH", "RECIBIDO");
+                        if(esDeMiEquipo(sender)){
+                            switchToScreen(R.id.screen_lost_companyero_desconectado);
+                            leaveRoom();
+                        }
                         else {
                             updateLeaderboards(mGoogleApiClient, LEADERBOARD_ID);
                             switchToScreen(R.id.screen_win_rival_desconectado);
+                            leaveRoom();
                         }
                     }
                     break;
@@ -7538,6 +7564,13 @@ public class MainActivity extends Activity
         //Preparando la partida
         Log.d("BBBBBBBBB", "cartas2: " + sCartasJ2 + " cartas3: " + sCartasJ3 + " cartas3: " + sCartasJ3);
         resetAll();
+
+        if(numeroJugadores == 2){
+            switchToScreen(R.id.screen_game);
+        }else if(numeroJugadores == 4){
+            switchToScreen(R.id.screen_game_4_jugadores);
+        }
+
         //Si soy mano reparto
         if (mMyId.equals(mano)) {
             repartir(crearAleatorio());
