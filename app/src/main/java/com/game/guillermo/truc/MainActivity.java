@@ -2085,8 +2085,8 @@ public class MainActivity extends Activity
             Collections.sort(ids4ordenadas);
             Log.d("ZZZ", "Lista de jugadores ordenada: " + ids4ordenadas);
             idJugador1 = ids4ordenadas.get(0);
-            idJugador2 = ids4ordenadas.get(1);
-            idJugador3 = ids4ordenadas.get(2);
+            idJugador3 = ids4ordenadas.get(1);
+            idJugador2 = ids4ordenadas.get(2);
             idJugador4 = ids4ordenadas.get(3);
 
             equipo1[0] = idJugador1;
@@ -7166,6 +7166,10 @@ public class MainActivity extends Activity
                     break;
             }
         }
+    }
+
+    private void casoDesconectado(){
+
     }
 
     String comprobarSiguienteMano(){
