@@ -553,10 +553,10 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:background="#088A4B">
+
         <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="0.15">
+            android:layout_height="match_parent">
 
         <TextView
             android:id="@+id/textoNumeroJugador"
@@ -1001,6 +1001,17 @@
                 android:background="@drawable/dedo"
                 android:layout_gravity="center_horizontal|bottom"
                 />
+
+            <TextView
+                android:id="@+id/titulos"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal|center_vertical"
+                android:textSize="30sp"
+                android:visibility="invisible"
+                />
+
+
         <com.github.alexkolpa.fabtoolbar.FabToolbar
             android:id="@+id/fab_toolbar_4J"
             android:layout_width="match_parent"
