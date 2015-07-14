@@ -26,6 +26,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
+import android.text.Layout;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -40,6 +41,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.BaseAdapter;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -304,7 +306,7 @@ public class MainActivity extends Activity
     int sonidoEspada = 0;
     int sonidoTirar = 0;
     int numeroSenyas = 0;
-
+    int segundosSenyas = 21;
     //Strings
     String idJugador3 = null;
     String idJugador4 = null;
@@ -427,6 +429,8 @@ public class MainActivity extends Activity
     PointF inicioManoDedo_4J;
     SoundPool soundPool;
     MaterialDialog dialogIconos;
+    ProgressBar progressSenyas;
+    CountDownTimer countSenyas = null;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -1091,10 +1095,10 @@ public class MainActivity extends Activity
 
     private void showIconosAlert() {
         dialogIconos = new MaterialDialog.Builder(this)
-                .title("ï¿½Tiempo de seï¿½as!")
+                .title("¡Tiempo de señas!")
                 .autoDismiss(false)
                 .positiveText("Enviar")
-                .negativeText("No hago seï¿½as")
+                .negativeText("No hago señas")
                 .callback(new MaterialDialog.ButtonCallback() {
                     @Override
                     public void onPositive(MaterialDialog dialog) {
@@ -1179,7 +1183,7 @@ public class MainActivity extends Activity
                 .customView(R.layout.iconos_dialog, false)
                 .build();
         dialogIconos.show();
-
+        iniciarBarraProgresoSenyas();
     }
 
     private void showBasicAlertDesconectarse(String title, String message) {
@@ -1858,7 +1862,8 @@ public class MainActivity extends Activity
     void leaveRoom() {
        if(desconectado.equals(mMyId)){
            enviarMensajeDesconectadoYSalir();
-           switchToMainScreen();
+           //switchToMainScreen();
+           switchToScreen(R.id.screen_lost);
            desconectado = "";
        }else {
            if (mRoomId != null) {
@@ -2468,6 +2473,8 @@ public class MainActivity extends Activity
             senyaDerecha.setVisibility(View.INVISIBLE);
             senyaIzq.setVisibility(View.INVISIBLE);
 
+            segundosSenyas = 21;
+
             if (hayAnimaciones) {
                 deshacerAnimaciones(tvJugador1_4J);
                 deshacerAnimaciones(tvJugador2_4J);
@@ -2952,6 +2959,26 @@ public class MainActivity extends Activity
                 //Do what you want
                 segundos--;
                 progressBar2.setProgress(segundos);
+            }
+        }.start();
+    }
+
+    void iniciarBarraProgresoSenyas() {
+        //Layout layout = (Layout) getResources().getLayout(R.layout.iconos_dialog);
+        dialogIconos.getCustomView().findViewById(R.id.progressSenyas);
+        progressSenyas = (ProgressBar) dialogIconos.getCustomView().findViewById(R.id.progressSenyas);
+        progressSenyas.setVisibility(View.VISIBLE);
+        countSenyas = new CountDownTimer(20000, 1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                segundosSenyas--;
+                progressSenyas.setProgress(segundosSenyas);
+            }
+            @Override
+            public void onFinish() {
+                //Do what you want
+                segundosSenyas--;
+                progressSenyas.setProgress(segundosSenyas);
             }
         }.start();
     }
