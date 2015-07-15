@@ -1102,10 +1102,11 @@ public class MainActivity extends Activity
 
     private void showIconosAlert() {
         dialogIconos = new MaterialDialog.Builder(this)
-                .title("�Tiempo de se�as!")
+                .title("¡Tiempo de señas!")
                 .autoDismiss(false)
                 .positiveText("Enviar")
-                .negativeText("No hago se�as")
+                .negativeText("No hago señas")
+                .cancelable(false)
                 .callback(new MaterialDialog.ButtonCallback() {
                     @Override
                     public void onPositive(MaterialDialog dialog) {
@@ -4610,9 +4611,21 @@ public class MainActivity extends Activity
     }
 
     String comprobarGanadorPartida() {
-        if (puntosTotalesMios >= 24) {
+       /* if (puntosTotalesMios >= 24) {
             return "YO";
         } else if (puntosTotalesJugador2 >= 24) {
+            return "RIVAL";
+        }
+        return "NADIE"; */
+        if (puntosTotalesMios >= 24 && puntosTotalesJugador2 >= 24) {
+            if(hayEnvid && ganadorEnvid.equals(mMyId) && numeroJugadores == 2) return "YO";
+            else if (hayEnvid && (ganadorEnvid.equals(mMyId) || esDeMiEquipo(ganadorEnvid)) && numeroJugadores == 4) return "YO";
+            else return "RIVAL";
+        }
+        else if (puntosTotalesMios >= 24) {
+            return "YO";
+        }
+        else if (puntosTotalesJugador2 >= 24) {
             return "RIVAL";
         }
         return "NADIE";
@@ -6347,21 +6360,9 @@ public class MainActivity extends Activity
                                     //Actualiza el ranking sumando una victoria
                                     updateLeaderboards(mGoogleApiClient, LEADERBOARD_ID);
                                     Games.Achievements.unlock(mGoogleApiClient, ACHIEVEMENTS_ID);
-
-                                /*
-                                if(quien.equals("GANADOR")){
-                                    if(contador.equals("PRIMERO"))mostrarResultadosPerdedorMano("SEGUNDO");
-                                }else if(quien.equals("PERDEDOR")){
-                                    if(contador.equals("PRIMERO"))mostrarResultadosGanadorMano("SEGUNDO");
-                                } */
                                     switchToScreen(R.id.screen_win);
 
                                 } else if (ganadorFinal.equals("RIVAL")) {
-                               /* if(quien.equals("GANADOR")){
-                                    if(contador.equals("PRIMERO"))mostrarResultadosPerdedorMano("SEGUNDO");
-                                }else if(quien.equals("PERDEDOR")){
-                                    if(contador.equals("PRIMERO"))mostrarResultadosGanadorMano("SEGUNDO");
-                                } */
                                     switchToScreen(R.id.screen_lost);
                                 }
                             } else {
@@ -6401,7 +6402,7 @@ public class MainActivity extends Activity
                                             showProgressCustomDialog(layout);
                                         }
                                     } else {
-                                        showProgressDialog("L�stima, pierdes la mano");
+                                        showProgressDialog("Lástima, pierdes la mano");
                                     }
                                     repartirTrasMano();
                                     Log.d("KKKKKKKK", "Repartiendo tras mano..." + mMyId);
@@ -6421,7 +6422,6 @@ public class MainActivity extends Activity
                             }
                             String quien_4J = otro5[2];
                             String contador_4J = otro5[3];
-                            //marcador2.setText("Rival: "+puntosTotalesJugador2);
 
                             boolean soyGanador = false;
                             //Soy del equipo
@@ -6446,15 +6446,13 @@ public class MainActivity extends Activity
                                         if (hayCuatreVal && !hayJocFora) puntosTruc = CUATRE_VAL;
                                         if (hayJocFora) puntosTruc = 24;
                                         puntosTotalesMios += (puntosTruc + puntosEnvid);
-                                        //marcador.setText("Yo: "+puntosTotalesMios);
-                                        //actualizarMarcador2(puntosTotalesMios, "GANADOR", contador);
 
                                         Log.d("KKKKK", "Puntos mi equipo: "+puntosTotalesMios);
                                         Log.d("KKKKK", "Puntos rquipo rival: "+puntosTotalesJugador2);
 
                                         if(equipo1[0].equals(mMyId) || equipo2[0].equals(mMyId)) {
                                             actualizarMarcador2_4J(puntosTotalesMios, "GANADOR", sender);
-                                            Log.d("ZZZZ", "Env�o el segundo mensaje");
+                                            Log.d("ZZZZ", "Envío el segundo mensaje");
                                         }
                                     }
 
@@ -6462,8 +6460,6 @@ public class MainActivity extends Activity
                                     soyGanador = false;
                                     if (contador_4J.equals("PRIMERO")){
                                         puntosTotalesMios += puntosEnvid;
-                                        //marcador.setText("Yo: "+puntosTotalesMios);
-                                        //actualizarMarcador2(puntosTotalesMios, "PERDEDOR", contador);
 
                                         Log.d("KKKKK", "Puntos mi equipo: "+puntosTotalesMios);
                                         Log.d("KKKKK", "Puntos rquipo rival: "+puntosTotalesJugador2);
