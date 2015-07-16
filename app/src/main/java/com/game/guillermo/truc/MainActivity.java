@@ -1810,18 +1810,6 @@ public class MainActivity extends Activity
         super.onStop();
     }
 
-    @Override
-    public void onPause() {
-        if(mCurScreen == R.id.screen_game || mCurScreen == R.id.screen_game_4_jugadores){
-            alguienHaSalido = true;
-            if(dialogIconos != null && dialogIconos.isShowing()) dialogIconos.dismiss();
-            handlerShowIconos.removeCallbacks(icons);
-            handlerIconos.removeCallbacks(trasIcon);
-        }
-        super.onPause();
-    }
-
-
     // Activity just got to the foreground. We switch to the wait screen because we will now
     // go through the sign-in flow (remember that, yes, every time the Activity comes back to the
     // foreground we go through the sign-in flow -- but if the user is already authenticated,
@@ -1891,7 +1879,11 @@ public class MainActivity extends Activity
     void leaveRoom() {
 
         if(desconectado.equals(mMyId)){
-
+            //if(mCurScreen == R.id.screen_game || mCurScreen == R.id.screen_game_4_jugadores){
+            alguienHaSalido = true;
+            if(dialogIconos != null && dialogIconos.isShowing()) dialogIconos.dismiss();
+            handlerShowIconos.removeCallbacks(icons);
+            handlerIconos.removeCallbacks(trasIcon);
             switchToScreen(R.id.screen_lost);
             desconectado = "";
         }
@@ -2320,7 +2312,7 @@ public class MainActivity extends Activity
             mParticipants.remove(aux);
             Log.d("<HHHHHHHHHHH>", "Tamaño de la sala tras remove: " + mParticipants.size());
             updateRoomAfterLeft(room);
-        }else updateRoom(room);
+        }
 
     }
 
