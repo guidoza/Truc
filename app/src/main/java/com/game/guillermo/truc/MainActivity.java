@@ -77,9 +77,6 @@ import com.orhanobut.dialogplus.DialogPlus;
 import com.orhanobut.dialogplus.Holder;
 import com.orhanobut.dialogplus.ListHolder;
 import com.orhanobut.dialogplus.OnBackPressListener;
-import com.orhanobut.dialogplus.OnCancelListener;
-import com.orhanobut.dialogplus.OnClickListener;
-import com.orhanobut.dialogplus.OnDismissListener;
 import com.orhanobut.dialogplus.OnItemClickListener;
 
 import org.xmlpull.v1.XmlPullParser;
@@ -206,6 +203,7 @@ public class MainActivity extends Activity
     boolean hayAnimacionRival3 = false;
     boolean tapoPrimera = false;
     boolean tapo = false;
+    boolean leaved = false;
 
     //Listas y arrays
     int[] list = new int[3];
@@ -343,6 +341,7 @@ public class MainActivity extends Activity
     private boolean hayAnimacionIzqC2 = false;
     private boolean hayAnimacionIzqC3 = false;
     private boolean showingFrases = false;
+    private boolean alguienHaSalido = false;
 
     //Listas y arrays1
     int[] list3 = new int[3];
@@ -435,7 +434,9 @@ public class MainActivity extends Activity
     ProgressBar progressSenyas;
     CountDownTimer countSenyas = null;
     Handler handlerIconos = new Handler();
+    Handler handlerShowIconos = new Handler();
     Runnable trasIcon;
+    Runnable icons;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -1793,12 +1794,9 @@ public class MainActivity extends Activity
     // Activity is going to the background. We have to leave the current room.
     //Mirar si es preferible hacerlo en onStop
     @Override
-    public void onPause() {
+    public void onStop() {
         Log.d(TAG, "**** got onStop");
-        if(mCurScreen == R.id.screen_game || mCurScreen == R.id.screen_game_4_jugadores){
-            desconectado = mMyId;
-            //switchToScreen(R.id.screen_wait);
-        }
+        //Log.d("<HHHHHHHHHHHHHHH>", "**** en onPause");
         // if we're in a room, leave it.
         leaveRoom();
         // stop trying to keep the screen on
@@ -1809,8 +1807,20 @@ public class MainActivity extends Activity
         } else {
             switchToScreen(R.id.screen_wait);
         }
+        super.onStop();
+    }
+
+    @Override
+    public void onPause() {
+        if(mCurScreen == R.id.screen_game || mCurScreen == R.id.screen_game_4_jugadores){
+            alguienHaSalido = true;
+            if(dialogIconos != null && dialogIconos.isShowing()) dialogIconos.dismiss();
+            handlerShowIconos.removeCallbacks(icons);
+            handlerIconos.removeCallbacks(trasIcon);
+        }
         super.onPause();
     }
+
 
     // Activity just got to the foreground. We switch to the wait screen because we will now
     // go through the sign-in flow (remember that, yes, every time the Activity comes back to the
@@ -1879,6 +1889,27 @@ public class MainActivity extends Activity
 
     // Leave the room.
     void leaveRoom() {
+
+        if(desconectado.equals(mMyId)){
+
+            switchToScreen(R.id.screen_lost);
+            desconectado = "";
+        }
+
+        if (mRoomId != null) {
+            Log.d("<HHHHHHHHHHH>", "Leaving room.");
+            Games.RealTimeMultiplayer.leave(mGoogleApiClient, this, mRoomId);
+            mRoomId = null;
+        }
+    resetPuntos();
+    stopKeepingScreenOn();
+
+    if(mCurScreen == R.id.screen_wait){
+        switchToMainScreen();
+    }
+
+
+ /*       leaved = true;
        if(desconectado.equals(mMyId)){
            enviarMensajeDesconectadoYSalir();
            //switchToMainScreen();
@@ -1886,16 +1917,21 @@ public class MainActivity extends Activity
            desconectado = "";
        }else {
            if (mRoomId != null) {
+               Log.d("<HHHHHHHHHHH>", "Leaving room.");
                Games.RealTimeMultiplayer.leave(mGoogleApiClient, this, mRoomId);
                mRoomId = null;
            }
        }
-        Log.d(TAG, "Leaving room.");
         resetPuntos();
         stopKeepingScreenOn();
+
+        if(mCurScreen == R.id.screen_wait){
+            switchToMainScreen();
+        }
+
          //else {
             //switchToMainScreen();
-        //}
+        //}*/
     }
 
     // Show the waiting room UI to track the progress of other players as they enter the
@@ -1906,7 +1942,7 @@ public class MainActivity extends Activity
         // (this is signaled by Integer.MAX_VALUE).
         final int MIN_PLAYERS = Integer.MAX_VALUE;
         Intent i = Games.RealTimeMultiplayer.getWaitingRoomIntent(mGoogleApiClient, room, MIN_PLAYERS);
-
+        mRoomId = room.getRoomId();
         // show waiting room UI
         startActivityForResult(i, RC_WAITING_ROOM);
     }
@@ -2269,7 +2305,23 @@ public class MainActivity extends Activity
 
     @Override
     public void onPeerLeft(Room room, List<String> peersWhoLeft) {
-        updateRoom(room);
+        Log.d("<HHHHHHHHHHH>", "onPeerLeft");
+        if (room != null) {
+            Log.d("<HHHHHHHHHHH>", "UPDATE ROOM");
+            Log.d("<HHHHHHHHHHH>", "Peers list: "+peersWhoLeft.toString());
+            mParticipants = room.getParticipants();
+            Log.d("<HHHHHHHHHHH>", "Tamaño de la sala: " + mParticipants.size());
+            Participant aux = null;
+            for (Participant p : mParticipants) {
+                if(p.getParticipantId().equals(peersWhoLeft.get(0))){
+                    aux = p;
+                }
+            }
+            mParticipants.remove(aux);
+            Log.d("<HHHHHHHHHHH>", "Tamaño de la sala tras remove: " + mParticipants.size());
+            updateRoomAfterLeft(room);
+        }else updateRoom(room);
+
     }
 
     @Override
@@ -2290,11 +2342,57 @@ public class MainActivity extends Activity
     @Override
     public void onPeersDisconnected(Room room, List<String> peers) {
         updateRoom(room);
+        Log.d("<HHHHHHHHHHH>", "onPeersDisconnected");
     }
 
     void updateRoom(Room room) {
+
         if (room != null) {
+            Log.d("<HHHHHHHHHHH>", "UPDATE ROOM");
             mParticipants = room.getParticipants();
+        }
+    }
+
+    void updateRoomAfterLeft(Room room) {
+
+        if (room != null) {
+            Log.d("<HHHHHHHHHHH>", "UPDATE ROOM AFTER LEFT");
+            Log.d("<HHHHHHHHHHH>", "Tamaño de la sala: "+mParticipants.size());
+
+            if(numeroJugadores == 2){
+                if(mParticipants.size()<2){
+                    updateLeaderboards(mGoogleApiClient, LEADERBOARD_ID);
+                    switchToScreen(R.id.screen_win_rival_desconectado);
+                    leaveRoom();
+                }
+            }else if(numeroJugadores == 4){
+                if(mParticipants.size()<4){
+                    alguienHaSalido = true;
+                    boolean estaMiCompi = false;
+                    for (Participant p : mParticipants) {
+                        Log.d("<HHHHHHHHHHH>", "Pariticipant id: "+p.getParticipantId());
+                        if(esDeMiEquipo(p.getParticipantId()) && !p.getParticipantId().equals(mMyId)){
+                            estaMiCompi = true;
+                        }
+                        Log.d("<HHHHHHHHHHH>", "Esta mi compi? "+estaMiCompi);
+                    }
+                    if(estaMiCompi){
+                        if(dialogIconos != null && dialogIconos.isShowing()) dialogIconos.dismiss();
+                        handlerShowIconos.removeCallbacks(icons);
+                        handlerIconos.removeCallbacks(trasIcon);
+                        updateLeaderboards(mGoogleApiClient, LEADERBOARD_ID);
+                        switchToScreen(R.id.screen_win_rival_desconectado);
+                        leaveRoom();
+
+                    }else{
+                        if(dialogIconos != null && dialogIconos.isShowing()) dialogIconos.dismiss();
+                        handlerShowIconos.removeCallbacks(icons);
+                        handlerIconos.removeCallbacks(trasIcon);
+                        switchToScreen(R.id.screen_lost_companyero_desconectado);
+                        leaveRoom();
+                    }
+                }
+            }
         }
     }
 
@@ -2461,6 +2559,7 @@ public class MainActivity extends Activity
                 senyas.remove(1);
             }
             contadorMensajeSenyas = 0;
+            alguienHaSalido = false;
 
             if (mCountDownTimerAbajo != null || mCountDownTimerArriba != null
                     || mCountDownTimerDerecha != null || mCountDownTimerIzq != null) cancelarBarraProgreso();
@@ -3630,12 +3729,12 @@ public class MainActivity extends Activity
     }
 
     void animarAparecerMenu() {
-        if(numeroJugadores == 2){
+        if (numeroJugadores == 2){
             actionButton.setVisibility(View.VISIBLE);
             Animation animation = AnimationUtils.loadAnimation(getApplicationContext(),
                     R.anim.fab_scale_up);
             actionButton.startAnimation(animation);
-        }else if(numeroJugadores == 4){
+        }else if (numeroJugadores == 4){
             actionButton_4J.setVisibility(View.VISIBLE);
             Animation animation = AnimationUtils.loadAnimation(getApplicationContext(),
                     R.anim.fab_scale_up);
@@ -3771,20 +3870,20 @@ public class MainActivity extends Activity
                 asignarImagenCarta(carta3, tvJugador3_4J);
                 aparecerCartas();
 
-                Handler handler = new Handler();
-                handler.postDelayed(new Runnable() {
+                icons = new Runnable() {
                     public void run() {
-                        // acciones que se ejecutan tras los milisegundos
                         showIconosAlert();
                     }
-                }, 4000);
-
+                };
                 trasIcon = new Runnable() {
                     public void run() {
                         startMethod();
                     }
                 };
-                handlerIconos.postDelayed(trasIcon, 24000);
+                if(!alguienHaSalido){
+                    handlerShowIconos.postDelayed(icons, 4000);
+                    handlerIconos.postDelayed(trasIcon, 24000);
+                }
 
                 break;
         }
@@ -5010,15 +5109,41 @@ public class MainActivity extends Activity
 
     public void enviarMensajeDesconectadoYSalir() {
         byte[] messageDesconectado = ("2").getBytes();
+
+        if(numeroJugadores == 2){
+            for (Participant p : mParticipants) {
+                if (!p.getParticipantId().equals(mMyId)) {
+                    Games.RealTimeMultiplayer.sendReliableMessage(mGoogleApiClient, null, messageDesconectado,
+                            mRoomId, p.getParticipantId());
+                }
+            }
+
+        }else if(numeroJugadores == 4){
+            String compi = "";
+            if(equipo1[0].equals(mMyId)) compi = equipo1[1];
+            else if(equipo1[1].equals(mMyId)) compi = equipo1[0];
+            else if(equipo2[0].equals(mMyId)) compi = equipo2[1];
+            else if(equipo2[1].equals(mMyId)) compi = equipo2[0];
+
+            Games.RealTimeMultiplayer.sendReliableMessage(mGoogleApiClient, null, messageDesconectado,
+                            mRoomId, compi);
+
+            if (mRoomId != null) {
+                Log.d("<HHHHHHHHHHH>", "Leaving room.");
+                Games.RealTimeMultiplayer.leave(mGoogleApiClient, this, mRoomId);
+                mRoomId = null;
+            }
+        }
+    }
+
+    public void enviarMensajeDesconectadoRival() {
+        byte[] messageDesconectado = ("5").getBytes();
         for (Participant p : mParticipants) {
-            if (!p.getParticipantId().equals(mMyId)) {
+            if (!esDeMiEquipo(p.getParticipantId())) {
+                Log.d("<HHHHHHHHHHH>", "Enviando mensaje al rival");
                 Games.RealTimeMultiplayer.sendReliableMessage(mGoogleApiClient, null, messageDesconectado,
                         mRoomId, p.getParticipantId());
             }
-        }
-        if (mRoomId != null) {
-            Games.RealTimeMultiplayer.leave(mGoogleApiClient, this, mRoomId);
-            mRoomId = null;
         }
     }
 
@@ -6593,16 +6718,24 @@ public class MainActivity extends Activity
 
                     }else if(numeroJugadores == 4) {
                         Log.d("HHHHHHH", "RECIBIDO");
-                        if(esDeMiEquipo(sender)){
-                            switchToScreen(R.id.screen_lost_companyero_desconectado);
-                            leaveRoom();
-                        }
-                        else {
+                        enviarMensajeDesconectadoRival();
+                        switchToScreen(R.id.screen_lost_companyero_desconectado);
+                        leaveRoom();
+
+                    /*    else {
                             updateLeaderboards(mGoogleApiClient, LEADERBOARD_ID);
                             switchToScreen(R.id.screen_win_rival_desconectado);
                             leaveRoom();
-                        }
+                        }*/
                     }
+                    break;
+
+                case '5':
+                    updateLeaderboards(mGoogleApiClient, LEADERBOARD_ID);
+                    switchToScreen(R.id.screen_win_rival_desconectado);
+                    leaveRoom();
+
+
                     break;
 
                 case '3':
@@ -6621,7 +6754,6 @@ public class MainActivity extends Activity
                             final Handler handlerDerecha = new Handler();
                             final Runnable runi = new Runnable() {
                                 public void run() {
-                                    // acciones que se ejecutan tras los milisegundos
                                     senyaDerecha.setVisibility(View.INVISIBLE);
                                 }
                             };
