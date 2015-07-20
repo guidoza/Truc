@@ -437,6 +437,12 @@ public class MainActivity extends Activity
     Handler handlerShowIconos = new Handler();
     Runnable trasIcon;
     Runnable icons;
+    LinearLayout layBajo;
+    LinearLayout layDerecha;
+    LinearLayout layIzq;
+    LinearLayout layArriba;
+    LinearLayout layJ1;
+    LinearLayout layJ2;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -757,6 +763,14 @@ public class MainActivity extends Activity
         senyaIzq = (ImageView)findViewById(R.id.senyaIzq);
 
         titulos = (TextView) findViewById(R.id.titulos);
+
+        layJ1 = (LinearLayout) findViewById(R.id.layJ1);
+        layJ2 = (LinearLayout) findViewById(R.id.layJ2);
+
+        layBajo = (LinearLayout) findViewById(R.id.layAbajo);
+        layDerecha = (LinearLayout) findViewById(R.id.layDer);
+        layArriba = (LinearLayout) findViewById(R.id.layArriba);
+        layIzq = (LinearLayout) findViewById(R.id.layIzq);
 
         //Listener para todos los elementos
         for (int id : CLICKABLES) {
@@ -3055,6 +3069,8 @@ public class MainActivity extends Activity
                 progressBar1.setProgress(segundos);
             }
         }.start();
+
+        resaltarMiIcono(R.id.layJ1);
     }
 
     void iniciarBarraProgresoJ2() {
@@ -3074,6 +3090,8 @@ public class MainActivity extends Activity
                 progressBar2.setProgress(segundos);
             }
         }.start();
+
+        resaltarMiIcono(R.id.layJ2);
     }
 
     void iniciarBarraProgresoSenyas() {
@@ -3118,6 +3136,9 @@ public class MainActivity extends Activity
             mCountDownTimerAbajo.cancel();
             mCountDownTimerAbajo.start();
         }
+
+        resaltarMiIcono(R.id.layAbajo);
+
     }
 
     void iniciarBarraProgresoDerecha() {
@@ -3143,6 +3164,8 @@ public class MainActivity extends Activity
             mCountDownTimerDerecha.cancel();
             mCountDownTimerDerecha.start();
         }
+
+        resaltarMiIcono(R.id.layDer);
     }
 
     void iniciarBarraProgresoArriba() {
@@ -3168,6 +3191,8 @@ public class MainActivity extends Activity
             mCountDownTimerArriba.cancel();
             mCountDownTimerArriba.start();
         }
+
+        resaltarMiIcono(R.id.layArriba);
     }
 
     void iniciarBarraProgresoIzq() {
@@ -3192,6 +3217,45 @@ public class MainActivity extends Activity
         }else {
             mCountDownTimerIzq.cancel();
             mCountDownTimerIzq.start();
+        }
+
+        resaltarMiIcono(R.id.layIzq);
+    }
+
+    private void resaltarMiIcono(int layout){
+        switch (layout){
+            case R.id.layJ1:
+                layJ1.setBackground(getResources().getDrawable(R.drawable.fondo_turno, getTheme()));
+                layJ2.setBackground(getResources().getDrawable(R.drawable.fondo_carta, getTheme()));
+                break;
+            case R.id.layJ2:
+                layJ2.setBackground(getResources().getDrawable(R.drawable.fondo_turno, getTheme()));
+                layJ1.setBackground(getResources().getDrawable(R.drawable.fondo_carta, getTheme()));
+                break;
+            case R.id.layAbajo:
+                layBajo.setBackground(getResources().getDrawable(R.drawable.fondo_turno, getTheme()));
+                layDerecha.setBackground(getResources().getDrawable(R.drawable.fondo_carta, getTheme()));
+                layIzq.setBackground(getResources().getDrawable(R.drawable.fondo_carta, getTheme()));
+                layArriba.setBackground(getResources().getDrawable(R.drawable.fondo_carta, getTheme()));
+                break;
+            case R.id.layDer:
+                layDerecha.setBackground(getResources().getDrawable(R.drawable.fondo_turno, getTheme()));
+                layBajo.setBackground(getResources().getDrawable(R.drawable.fondo_carta, getTheme()));
+                layIzq.setBackground(getResources().getDrawable(R.drawable.fondo_carta, getTheme()));
+                layArriba.setBackground(getResources().getDrawable(R.drawable.fondo_carta, getTheme()));
+                break;
+            case R.id.layArriba:
+                layArriba.setBackground(getResources().getDrawable(R.drawable.fondo_turno, getTheme()));
+                layBajo.setBackground(getResources().getDrawable(R.drawable.fondo_carta, getTheme()));
+                layDerecha.setBackground(getResources().getDrawable(R.drawable.fondo_carta, getTheme()));
+                layIzq.setBackground(getResources().getDrawable(R.drawable.fondo_carta, getTheme()));
+                break;
+            case R.id.layIzq:
+                layIzq.setBackground(getResources().getDrawable(R.drawable.fondo_turno, getTheme()));
+                layBajo.setBackground(getResources().getDrawable(R.drawable.fondo_carta, getTheme()));
+                layDerecha.setBackground(getResources().getDrawable(R.drawable.fondo_carta, getTheme()));
+                layArriba.setBackground(getResources().getDrawable(R.drawable.fondo_carta, getTheme()));
+                break;
         }
     }
 
@@ -3221,6 +3285,7 @@ public class MainActivity extends Activity
                     segundos2 = 40;
                     progressBarAbajo.setVisibility(View.VISIBLE);
                     reiniciarBarraProgreso();
+
                 }else{
                     if (progressBarAbajo.getVisibility() == View.VISIBLE) {
                         reiniciarBarraProgreso();
