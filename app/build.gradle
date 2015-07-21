@@ -24,6 +24,7 @@ dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.android.support:appcompat-v7:22.1.1'
     compile 'com.google.android.gms:play-services:7.3.0'
+    compile 'com.google.android.gms:play-services-ads:7.5.0'
     compile project(':BaseGameUtils')
     compile 'com.afollestad:material-dialogs:0.7.4.2'
     compile 'com.github.alexkolpa:floating-action-button-toolbar:0.5.1'
