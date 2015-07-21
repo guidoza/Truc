@@ -54,6 +54,8 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.afollestad.materialdialogs.Theme;
 import com.dd.CircularProgressButton;
 import com.github.alexkolpa.fabtoolbar.FabToolbar;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.InterstitialAd;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
@@ -444,6 +446,9 @@ public class MainActivity extends Activity
     LinearLayout layJ1;
     LinearLayout layJ2;
 
+    private InterstitialAd mInterstitialAd;
+
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -771,6 +776,13 @@ public class MainActivity extends Activity
         layDerecha = (LinearLayout) findViewById(R.id.layDer);
         layArriba = (LinearLayout) findViewById(R.id.layArriba);
         layIzq = (LinearLayout) findViewById(R.id.layIzq);
+
+        // Create the InterstitialAd and set the adUnitId.
+        mInterstitialAd = new InterstitialAd(this);
+        // Defined in values/strings.xml
+        mInterstitialAd.setAdUnitId(getString(R.string.ad_unit_id));
+        AdRequest adRequest = new AdRequest.Builder().addTestDevice(AdRequest.DEVICE_ID_EMULATOR).build();
+        mInterstitialAd.loadAd(adRequest);
 
         //Listener para todos los elementos
         for (int id : CLICKABLES) {
@@ -1624,7 +1636,13 @@ public class MainActivity extends Activity
                         REQUEST_ACHIEVEMENTS);
                 break;
             case R.id.boton_iconos:
-                showIconosAlert();
+                // Show the ad if it's ready. Otherwise toast and restart the game.
+                if (mInterstitialAd != null && mInterstitialAd.isLoaded()) {
+                    mInterstitialAd.show();
+                } else {
+                    Toast.makeText(this, "Ad did not load", Toast.LENGTH_SHORT).show();
+                    mInterstitialAd.show();
+                }
                 break;
             case R.id.botonMenuPrincipal1:
                 leaveRoom();

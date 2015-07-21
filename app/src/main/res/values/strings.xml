@@ -41,4 +41,6 @@
     <string name="LEADERBOARD_ID">CgkIpb6oxu8SEAIQCA</string>
     <string name="is_inviting_you">is challenging you to a game!</string>
     <string name="signin_other_error">There was an issue with sign in. Please try again later.</string>
+
+    <string name="ad_unit_id">ca-app-pub-4776780046370926/8556690699</string>
 </resources>
