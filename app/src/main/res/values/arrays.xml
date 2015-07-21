@@ -27,28 +27,28 @@
 
     <string-array name="truc1">
         <item>Quiero</item>
-        <item>Retruque!</item>
+        <item>¡Retruque!</item>
         <item>No quiero</item>
     </string-array>
     <string-array name="truc2">
         <item>Quiero</item>
-        <item>Cuatre val!</item>
+        <item>¡Quatre val!</item>
         <item>No quiero</item>
     </string-array>
     <string-array name="truc3">
         <item>Quiero</item>
-        <item>Joc fora!</item>
+        <item>¡Joc fora!</item>
         <item>No quiero</item>
     </string-array>
     <string-array name="envid">
         <item>Quiero</item>
-        <item>Vuelvo a envidar!</item>
-        <item>La falta!</item>
+        <item>¡Vuelvo a envidar!</item>
+        <item>¡La falta!</item>
         <item>No quiero</item>
     </string-array>
     <string-array name="envid2">
         <item>Quiero</item>
-        <item>La falta!</item>
+        <item>¡La falta!</item>
         <item>No quiero</item>
     </string-array>
     <string-array name="envid3">

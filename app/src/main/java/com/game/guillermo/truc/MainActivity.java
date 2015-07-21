@@ -21,6 +21,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.PointF;
+import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -91,6 +92,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -98,6 +100,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
 
 
 public class MainActivity extends Activity
@@ -517,7 +520,7 @@ public class MainActivity extends Activity
                         break;
 
                     case R.id.abandonar:
-                        showBasicAlertDesconectarse("Abandonar partida", "Si abandonas, perderï¿½s la partida. ï¿½Estï¿½s seguro?");
+                        showBasicAlertDesconectarse("Abandonar partida", "Si abandonas, perderás la partida. ¿Estás seguro?");
                         break;
 
                     case R.id.envido_4J:
@@ -572,7 +575,7 @@ public class MainActivity extends Activity
                         mostrarResultadosPerdedorMano("PRIMERO");
                         break;
                     case R.id.abandonar_4J:
-                        showBasicAlertDesconectarse("Abandonar partida", "Si abandonas, perderï¿½s la partida. ï¿½Estï¿½s seguro?");
+                        showBasicAlertDesconectarse("Abandonar partida", "Si abandonas, perderás la partida. ¿Estás seguro?");
                         break;
                     case R.id.tapar:
                         actionButton.hide();
@@ -1126,10 +1129,10 @@ public class MainActivity extends Activity
 
     private void showIconosAlert() {
         dialogIconos = new MaterialDialog.Builder(this)
-                .title("Â¡Tiempo de seÃ±as!")
+                .title("¡Tiempo de señas!")
                 .autoDismiss(false)
                 .positiveText("Enviar")
-                .negativeText("No hago seÃ±as")
+                .negativeText("No hago señas")
                 .cancelable(false)
                 .callback(new MaterialDialog.ButtonCallback() {
                     @Override
@@ -1253,22 +1256,7 @@ public class MainActivity extends Activity
                 .cancelable(false);
         materialDialog.show();
     }
-    /*
-    private void showBasicAlertWinLost(String title, String message) {
-        materialDialog = new MaterialDialog.Builder(this)
-                .title(title)
-                .content(message)
-                .positiveText("Aceptar")
-                .callback(new MaterialDialog.ButtonCallback() {
-                    @Override
-                    public void onPositive(MaterialDialog dialog) {
-                        super.onPositive(dialog);
-                        leaveRoom();
-                    }
-                })
-                .cancelable(false);
-        materialDialog.show();
-    }*/
+
 
     private void showProgressDialog(String content) {
         materialDialog = new MaterialDialog.Builder(this)
@@ -1405,7 +1393,6 @@ public class MainActivity extends Activity
             case 2:
                 actionButton.hide();
                 animarDesaparecerMenu();
-                Toast.makeText(getApplicationContext(), "Esperando al Jugador", Toast.LENGTH_SHORT).show();
                 bloquearCartas();
                 miEnvid = comprobarEnvid();
                 enviarMensajeEnvid(miEnvid);
@@ -1414,7 +1401,6 @@ public class MainActivity extends Activity
             case 4:
                 actionButton_4J.hide();
                 animarDesaparecerMenu();
-                Toast.makeText(getApplicationContext(), "Esperando al Jugador", Toast.LENGTH_SHORT).show();
                 bloquearCartas();
                 enviarMensajeEnvid(0);
                 activarDesactivarMiBarra("DESACTIVAR");
@@ -1427,7 +1413,6 @@ public class MainActivity extends Activity
         if(numeroJugadores == 2){
             actionButton.hide();
             animarDesaparecerMenu();
-            Toast.makeText(getApplicationContext(), "Esperando al Jugador", Toast.LENGTH_SHORT).show();
             bloquearCartas();
             miEnvid = comprobarEnvid();
             enviarMensajeLaFalta(2, "");
@@ -1435,7 +1420,6 @@ public class MainActivity extends Activity
         }else if(numeroJugadores == 4){
             actionButton_4J.hide();
             animarDesaparecerMenu();
-            Toast.makeText(getApplicationContext(), "Esperando al Jugador", Toast.LENGTH_SHORT).show();
             bloquearCartas();
             String calculaEnvid = "";
             if (mano.equals(idJugador1) && mMyId.equals(idJugador3)) {
@@ -1502,7 +1486,6 @@ public class MainActivity extends Activity
     }
 
     public void truco() {
-        Toast.makeText(getApplicationContext(), "Esperando al Jugador", Toast.LENGTH_SHORT).show();
         bloquearCartas();
         enviarMensajeTruc();
 
@@ -1519,7 +1502,6 @@ public class MainActivity extends Activity
     }
 
     public void retruco() {
-        Toast.makeText(getApplicationContext(), "Esperando al Jugador", Toast.LENGTH_SHORT).show();
         bloquearCartas();
         enviarMensajeRetruc();
         if(numeroJugadores == 2){
@@ -1535,7 +1517,6 @@ public class MainActivity extends Activity
     }
 
     public void quatreVal() {
-        Toast.makeText(getApplicationContext(), "Esperando al Jugador", Toast.LENGTH_SHORT).show();
         bloquearCartas();
         enviarMensajeCuatreVal();
         if(numeroJugadores == 2){
@@ -1551,7 +1532,6 @@ public class MainActivity extends Activity
     }
 
     public void jocFora() {
-        Toast.makeText(getApplicationContext(), "Esperando al Jugador", Toast.LENGTH_SHORT).show();
         bloquearCartas();
         enviarMensajeJocFora();
         if(numeroJugadores == 2){
@@ -1708,7 +1688,7 @@ public class MainActivity extends Activity
                     resetPuntos();
                     resetAnimaciones();
                     inicializarMano();
-                    showProgressDialog("?Empezamos!");
+                    showProgressDialog("¡Empezamos!");
                 } else if (responseCode == GamesActivityResultCodes.RESULT_LEFT_ROOM) {
                     // player indicated that they want to leave the room
                     leaveRoom();
@@ -1748,17 +1728,6 @@ public class MainActivity extends Activity
         // get the invitee list
         final ArrayList<String> invitees = data.getStringArrayListExtra(Games.EXTRA_PLAYER_IDS);
         Log.d(TAG, "Invitee count: " + invitees.size());
-        if (invitees.size() != 0) {
-            //idInvitado = invitees.get(0);
-            for(int i=0;i<invitees.size();i++){
-                Log.d("IIIIIII", "id de un invitado "+invitees.get(i));
-                if(invitees.get(i).equals(idJugador1)) Log.d("IIIIIII", "El J1 es invitado");
-                else if(invitees.get(i).equals(idJugador2)) Log.d("IIIIIII", "El J2 es invitado");
-                else if(invitees.get(i).equals(idJugador3)) Log.d("IIIIIII", "El J3 es invitado");
-                else if(invitees.get(i).equals(idJugador4)) Log.d("IIIIIII", "El J4 es invitado");
-            }
-
-        }
 
         // get the automatch criteria
         Bundle autoMatchCriteria = null;
@@ -1874,11 +1843,11 @@ public class MainActivity extends Activity
             }
             else if(mCurScreen == R.id.screen_game){
                 Log.d("FFFFF","Atras desde la pantalla de juego de 2 jugadores");
-                showBasicAlertDesconectarse("Abandonar partida", "Si abandonas, perderï¿½s la partida. ï¿½Estï¿½s seguro?");
+                showBasicAlertDesconectarse("Abandonar partida", "Si abandonas, perderás la partida. ¿Estás seguro?");
             }
             else if(mCurScreen == R.id.screen_game_4_jugadores){
                 Log.d("FFFFF","Atras desde la pantalla de juego de 4 jugadores");
-                showBasicAlertDesconectarse("Abandonar partida", "Si abandonas, perderï¿½s la partida. ï¿½Estï¿½s seguro?");
+                showBasicAlertDesconectarse("Abandonar partida", "Si abandonas, perderás la partida. ¿Estás seguro?");
             }
             else if(mCurScreen == R.id.screen_wait){
                 Log.d("FFFFF","Caso screen wait");
@@ -1925,30 +1894,6 @@ public class MainActivity extends Activity
         switchToMainScreen();
     }
 
-
- /*       leaved = true;
-       if(desconectado.equals(mMyId)){
-           enviarMensajeDesconectadoYSalir();
-           //switchToMainScreen();
-           switchToScreen(R.id.screen_lost);
-           desconectado = "";
-       }else {
-           if (mRoomId != null) {
-               Log.d("<HHHHHHHHHHH>", "Leaving room.");
-               Games.RealTimeMultiplayer.leave(mGoogleApiClient, this, mRoomId);
-               mRoomId = null;
-           }
-       }
-        resetPuntos();
-        stopKeepingScreenOn();
-
-        if(mCurScreen == R.id.screen_wait){
-            switchToMainScreen();
-        }
-
-         //else {
-            //switchToMainScreen();
-        //}*/
     }
 
     // Show the waiting room UI to track the progress of other players as they enter the
@@ -2909,12 +2854,12 @@ public class MainActivity extends Activity
                 break;
             case "RETRUQUE":
                 if(esRivalDerecha(sender)){
-                    bocadilloDerecha.setText("Retruque");
+                    bocadilloDerecha.setText("¡Retruque!");
                     animarTextoAccion(bocadilloDerecha);
                     progressBarDerecha.setVisibility(View.INVISIBLE);
                     mCountDownTimerDerecha.cancel();
                 }else if(esRivalIzquierda(sender)){
-                    bocadilloIzq.setText("Retruque");
+                    bocadilloIzq.setText("¡Retruque!");
                     animarTextoAccion(bocadilloIzq);
                     progressBarIzq.setVisibility(View.INVISIBLE);
                     mCountDownTimerIzq.cancel();
@@ -2922,12 +2867,12 @@ public class MainActivity extends Activity
                 break;
             case "QUATRE":
                 if(esRivalDerecha(sender)){
-                    bocadilloDerecha.setText("Quatre val");
+                    bocadilloDerecha.setText("¡Quatre val!");
                     animarTextoAccion(bocadilloDerecha);
                     progressBarDerecha.setVisibility(View.INVISIBLE);
                     mCountDownTimerDerecha.cancel();
                 }else if(esRivalIzquierda(sender)){
-                    bocadilloIzq.setText("Quatre val");
+                    bocadilloIzq.setText("¡Quatre val!");
                     animarTextoAccion(bocadilloIzq);
                     progressBarIzq.setVisibility(View.INVISIBLE);
                     mCountDownTimerIzq.cancel();
@@ -2935,12 +2880,12 @@ public class MainActivity extends Activity
                 break;
             case "JOC":
                 if(esRivalDerecha(sender)){
-                    bocadilloDerecha.setText("Joc fora");
+                    bocadilloDerecha.setText("¡Joc fora!");
                     animarTextoAccion(bocadilloDerecha);
                     progressBarDerecha.setVisibility(View.INVISIBLE);
                     mCountDownTimerDerecha.cancel();
                 }else if(esRivalIzquierda(sender)){
-                    bocadilloIzq.setText("Joc fora");
+                    bocadilloIzq.setText("¡Joc fora!");
                     animarTextoAccion(bocadilloIzq);
                     progressBarIzq.setVisibility(View.INVISIBLE);
                     mCountDownTimerIzq.cancel();
@@ -3423,40 +3368,7 @@ public class MainActivity extends Activity
                         }
                     }
                 }
-
             }
-
-
-
-
-
-
-/*
-            if (progressBarAbajo.getVisibility() == View.VISIBLE) {
-                progressBarAbajo.setVisibility(View.INVISIBLE);
-                mCountDownTimerAbajo.cancel();
-                segundos = 40;
-                progressBarDerecha.setVisibility(View.VISIBLE);
-                iniciarBarraProgresoDerecha();
-            } else if (progressBarDerecha.getVisibility() == View.VISIBLE) {
-                progressBarDerecha.setVisibility(View.INVISIBLE);
-                mCountDownTimerDerecha.cancel();
-                segundos = 40;
-                progressBarArriba.setVisibility(View.VISIBLE);
-                iniciarBarraProgresoArriba();
-            }else if (progressBarArriba.getVisibility() == View.VISIBLE) {
-                progressBarArriba.setVisibility(View.INVISIBLE);
-                mCountDownTimerArriba.cancel();
-                segundos = 40;
-                progressBarIzq.setVisibility(View.VISIBLE);
-                iniciarBarraProgresoIzq();
-            }else if (progressBarIzq.getVisibility() == View.VISIBLE) {
-                progressBarIzq.setVisibility(View.INVISIBLE);
-                mCountDownTimerIzq.cancel();
-                segundos = 40;
-                progressBarAbajo.setVisibility(View.VISIBLE);
-                iniciarBarraProgresoAbajo();
-            }*/
         }
     }
 
@@ -9174,6 +9086,7 @@ public class MainActivity extends Activity
     private void reproducirSonidoRepartir(){
         soundPool.play(sonidoRepartir, 1, 1, 0, 0, 1);
     }
+
     private void reproducirSonidoTirarCarta() {
         soundPool.play(sonidoTirar, 1, 1, 0, 0, 1);
     }
@@ -9219,9 +9132,9 @@ public class MainActivity extends Activity
     }
 
     public void cargarPublicidad(){
-        mInterstitialAd = new InterstitialAd(this);
+       /* mInterstitialAd = new InterstitialAd(this);
         mInterstitialAd.setAdUnitId(getString(R.string.ad_unit_id));
-        /*************************** QUITAR EL TEST DEVICE ********************************/
+        /*************************** QUITAR EL TEST DEVICE *******************************
         AdRequest adRequest = new AdRequest.Builder().addTestDevice(AdRequest.DEVICE_ID_EMULATOR).build();
         mInterstitialAd.loadAd(adRequest);
 
@@ -9230,18 +9143,20 @@ public class MainActivity extends Activity
             public void onAdClosed() {
                cargarPublicidad();
             }
-        });
+        }); */
 
     }
 
     public void mostrarPublicidad(){
         if (mInterstitialAd != null && mInterstitialAd.isLoaded()) {
-            mInterstitialAd.show();
+            //mInterstitialAd.show();
         }
         //Añadir código para mostrar el botón
     }
 
 }
+
+
 
 
 

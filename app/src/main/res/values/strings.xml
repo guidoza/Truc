@@ -16,31 +16,24 @@
 -->
 
 <resources>
-    <string name="signing_in">Signing in with Google</string>
+    <string name="signing_in">Entra con Google+</string>
     <string name="signing_out">Signing out</string>
-    <string name="app_name">Retruque!</string>
-    <string name="game_title">Retruque!</string>
-    <string name="single_player">Un jugador</string>
-    <string name="quick_game">Partida rapida 2 jugadores</string>
-    <string name="quick_game_4">Partida rapida 4 jugadores</string>
-    <string name="invite_players">Invita a amigos</string>
+    <string name="app_name">¡Retruque!</string>
+    <string name="game_title">¡Retruque!</string>
+    <string name="quick_game">Partida rápida 2 jugadores</string>
+    <string name="quick_game_4">Partida rápida 4 jugadores</string>
+    <string name="invite_players">Invita a tus amigos</string>
     <string name="see_invitations">Mira tus invitaciones</string>
-    <string name="quick_game_explanation">Desafia a un oponente aleatorio.</string>
-    <string name="invite_players_explanation">Invita a tus amigos a una partida.</string>
-    <string name="see_invitations_explanation">Mira tus invitaciones.</string>
-    <string name="inv_popup_text">Tienes una nueva invitacion!</string>
+    <string name="inv_popup_text">¡Tienes una nueva invitacion!</string>
     <string name="accept_popup_invite">Acepto!</string>
-    <string name="sign_out">Sign Out</string>
+    <string name="sign_out">Desconectarse</string>
     <string name="please_wait">Por favor espera...</string>
-    <string name="instructions">Click the button as fast as you can!</string>
     <string name="dismiss">Dismiss</string>
-    <string name="your_score">Your score:</string>
     <string name="error">Error</string>
-    <string name="game_problem">An error occurred while starting the game. Please try again.</string>
-    <string name="click_me">Click me!</string>
+    <string name="game_problem">Ha habido un error iniciando el juego. Prueba de nuevo.</string>
     <string name="LEADERBOARD_ID">CgkIpb6oxu8SEAIQCA</string>
-    <string name="is_inviting_you">is challenging you to a game!</string>
-    <string name="signin_other_error">There was an issue with sign in. Please try again later.</string>
+    <string name="is_inviting_you">te ha invitado a una partida</string>
+    <string name="signin_other_error">Ha habido un error con el login. Por favor, inténtalo de nuevo.</string>
 
     <string name="ad_unit_id">ca-app-pub-4776780046370926/8556690699</string>
 </resources>
