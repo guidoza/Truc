@@ -54,6 +54,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.afollestad.materialdialogs.Theme;
 import com.dd.CircularProgressButton;
 import com.github.alexkolpa.fabtoolbar.FabToolbar;
+import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.InterstitialAd;
 import com.google.android.gms.common.ConnectionResult;
@@ -777,12 +778,8 @@ public class MainActivity extends Activity
         layArriba = (LinearLayout) findViewById(R.id.layArriba);
         layIzq = (LinearLayout) findViewById(R.id.layIzq);
 
-        // Create the InterstitialAd and set the adUnitId.
-        mInterstitialAd = new InterstitialAd(this);
-        // Defined in values/strings.xml
-        mInterstitialAd.setAdUnitId(getString(R.string.ad_unit_id));
-        AdRequest adRequest = new AdRequest.Builder().addTestDevice(AdRequest.DEVICE_ID_EMULATOR).build();
-        mInterstitialAd.loadAd(adRequest);
+        //Carga el anuncio para que este listo para mostrarlo
+        cargarPublicidad();
 
         //Listener para todos los elementos
         for (int id : CLICKABLES) {
@@ -1637,12 +1634,7 @@ public class MainActivity extends Activity
                 break;
             case R.id.boton_iconos:
                 // Show the ad if it's ready. Otherwise toast and restart the game.
-                if (mInterstitialAd != null && mInterstitialAd.isLoaded()) {
-                    mInterstitialAd.show();
-                } else {
-                    Toast.makeText(this, "Ad did not load", Toast.LENGTH_SHORT).show();
-                    mInterstitialAd.show();
-                }
+
                 break;
             case R.id.botonMenuPrincipal1:
                 leaveRoom();
@@ -1918,6 +1910,7 @@ public class MainActivity extends Activity
             handlerIconos.removeCallbacks(trasIcon);
             switchToScreen(R.id.screen_lost);
             desconectado = "";
+
         }
 
         if (mRoomId != null) {
@@ -2414,6 +2407,7 @@ public class MainActivity extends Activity
                         handlerIconos.removeCallbacks(trasIcon);
                         switchToScreen(R.id.screen_lost_companyero_desconectado);
                         leaveRoom();
+
                     }
                 }
             }
@@ -7640,6 +7634,19 @@ public class MainActivity extends Activity
         }
         mCurScreen = screenId;
 
+        //Para la publicidad
+        if(mCurScreen == R.id.screen_lost || mCurScreen == R.id.screen_win
+                || mCurScreen == R.id.screen_lost_companyero_desconectado
+                || mCurScreen == R.id.screen_win_rival_desconectado){
+            Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                public void run() {
+                    // acciones que se ejecutan tras los milisegundos
+                    mostrarPublicidad();
+                }
+            }, 2200);
+        }
+
         // should we show the invitation popup?
         boolean showInvPopup;
         if (mIncomingInvitationId == null) {
@@ -9209,6 +9216,29 @@ public class MainActivity extends Activity
                 .setCancelable(true)
                 .create();
         dialog.show();
+    }
+
+    public void cargarPublicidad(){
+        mInterstitialAd = new InterstitialAd(this);
+        mInterstitialAd.setAdUnitId(getString(R.string.ad_unit_id));
+        /*************************** QUITAR EL TEST DEVICE ********************************/
+        AdRequest adRequest = new AdRequest.Builder().addTestDevice(AdRequest.DEVICE_ID_EMULATOR).build();
+        mInterstitialAd.loadAd(adRequest);
+
+        mInterstitialAd.setAdListener(new AdListener() {
+            @Override
+            public void onAdClosed() {
+               cargarPublicidad();
+            }
+        });
+
+    }
+
+    public void mostrarPublicidad(){
+        if (mInterstitialAd != null && mInterstitialAd.isLoaded()) {
+            mInterstitialAd.show();
+        }
+        //Añadir código para mostrar el botón
     }
 
 }
