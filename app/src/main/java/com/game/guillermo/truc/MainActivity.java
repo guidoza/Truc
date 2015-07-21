@@ -451,6 +451,9 @@ public class MainActivity extends Activity
     LinearLayout layJ2;
 
     private InterstitialAd mInterstitialAd;
+    ImageView carta;
+    int cartaEspera = 0;
+    int contador = 0;
 
 
     @Override
@@ -465,6 +468,8 @@ public class MainActivity extends Activity
                 .addApi(Plus.API).addScope(Plus.SCOPE_PLUS_LOGIN)
                 .addApi(Games.API).addScope(Games.SCOPE_GAMES)
                 .build();
+
+        carta = (ImageView) findViewById(R.id.carta_espera);
 
         menuListener = new View.OnClickListener() {
             @Override
@@ -1614,19 +1619,20 @@ public class MainActivity extends Activity
                 break;
             case R.id.boton_iconos:
                 // Show the ad if it's ready. Otherwise toast and restart the game.
+                switchToScreen(R.id.screen_wait);
 
                 break;
-            case R.id.botonMenuPrincipal1:
-                leaveRoom();
+            case R.id.button_return1:
+                switchToMainScreen();
                 break;
-            case R.id.botonMenuPrincipal2:
-                leaveRoom();
+            case R.id.button_return2:
+                switchToMainScreen();
                 break;
-            case R.id.botonMenuPrincipal3:
-                leaveRoom();
+            case R.id.button_return3:
+                switchToMainScreen();
                 break;
-            case R.id.botonMenuPrincipal4:
-                leaveRoom();
+            case R.id.button_return4:
+                switchToMainScreen();
                 break;
         }
     }
@@ -3765,6 +3771,79 @@ public class MainActivity extends Activity
             });
             actionButton_4J.startAnimation(animation);
         }
+    }
+
+    void animarEspera(){
+        final Animation flip = AnimationUtils.loadAnimation(this, R.anim.to_middle);
+        final Animation flipBack = AnimationUtils.loadAnimation(this, R.anim.from_middle);
+        carta.setImageResource(R.drawable.cartagirada);
+
+        flip.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                if(contador == 0){
+                    contador = 1;
+
+                    switch (cartaEspera){
+                        case 0:
+                            carta.setImageResource(R.drawable.uno_espadas);
+                            break;
+                        case 1:
+                            carta.setImageResource(R.drawable.uno_bastos);
+                            break;
+                        case 2:
+                            carta.setImageResource(R.drawable.unocopas);
+                            break;
+                        case 3:
+                            carta.setImageResource(R.drawable.unooros);
+                            break;
+                    }
+                    if(cartaEspera<3){
+                        cartaEspera++;
+                    }else{
+                        cartaEspera = 0;
+                    }
+                }else{
+                    carta.setImageResource(R.drawable.cartagirada);
+                    contador = 0;
+                }
+
+
+                carta.startAnimation(flipBack);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+
+        flipBack.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+
+
+                if(mCurScreen == R.id.screen_wait) carta.startAnimation(flip);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+
+        carta.startAnimation(flip);
+
     }
 
     void animarTitulos(){
@@ -7526,8 +7605,8 @@ public class MainActivity extends Activity
             R.id.button_accept_popup_invitation, R.id.button_invite_players,
             R.id.button_quick_game, R.id.button_see_invitations, R.id.button_sign_in,
             R.id.button_sign_out, R.id.button_quick_game_4,R.id.button_ranking,
-            R.id.button_logros, R.id.boton_iconos, R.id.botonMenuPrincipal1,
-            R.id.botonMenuPrincipal2, R.id.botonMenuPrincipal3, R.id.botonMenuPrincipal4
+            R.id.button_logros, R.id.boton_iconos, R.id.button_return1,
+            R.id.button_return2, R.id.button_return3, R.id.button_return4
     };
 
     // This array lists all the individual screens our game has.
@@ -7545,6 +7624,8 @@ public class MainActivity extends Activity
             findViewById(id).setVisibility(screenId == id ? View.VISIBLE : View.GONE);
         }
         mCurScreen = screenId;
+
+        if(mCurScreen == R.id.screen_wait) animarEspera();
 
         //Para la publicidad
         if(mCurScreen == R.id.screen_lost || mCurScreen == R.id.screen_win
@@ -9151,7 +9232,7 @@ public class MainActivity extends Activity
         if (mInterstitialAd != null && mInterstitialAd.isLoaded()) {
             //mInterstitialAd.show();
         }
-        //Añadir código para mostrar el botón
+        //Aï¿½adir cï¿½digo para mostrar el botï¿½n
     }
 
 }

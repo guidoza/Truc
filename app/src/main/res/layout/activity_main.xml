@@ -119,14 +119,33 @@
     <!-- INVITATION POPUP -->
     <LinearLayout android:id="@+id/invitation_popup" style="@style/InvPopup">
         <TextView android:id="@+id/incoming_invitation_text" style="@style/InvPopupText" />
-        <Button android:id="@+id/button_accept_popup_invitation"
-            style="@style/InvPopupButton"
-            android:text="@string/accept_popup_invite" />
+        <info.hoang8f.widget.FButton
+            android:id="@+id/button_accept_popup_invitation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="6dp"
+            android:text="@string/accept_popup_invite"
+            android:textColor="#1ABC9C"
+            fbutton:buttonColor="@color/cpb_white"
+            fbutton:shadowColor="@color/cpb_grey"
+            fbutton:shadowEnabled="true"
+            fbutton:shadowHeight="5dp"
+            fbutton:cornerRadius="5dp"/>
     </LinearLayout>
 
     <!-- "PLEASE WAIT" SCREEN -->
-    <LinearLayout android:id="@+id/screen_wait" style="@style/LLScreen">
-        <TextView style="@style/Blurb" android:text="@string/please_wait" />
+    <LinearLayout
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:id="@+id/screen_wait"
+        android:background="#1ABC9C">
+        <!-- <TextView style="@style/Blurb" android:text="@string/please_wait" />-->
+        <ImageView
+            android:id="@+id/carta_espera"
+            android:layout_width="70dp"
+            android:layout_height="100dp"
+            android:background="@drawable/fondo_carta"
+            android:padding="2dp"/>
     </LinearLayout>
 
 
@@ -1154,42 +1173,82 @@
 
     <!-- PANTALLA HAS GANADO LA PARTIDA -->
     <LinearLayout android:id="@+id/screen_win" style="@style/LLScreen">
-        <TextView style="@style/Blurb" android:text="Enhorabuena, ganaste la partida" />
-        <ImageButton
-            android:layout_width="250dp"
+        <TextView style="@style/Blurb"
+            android:text="@string/win" />
+        <info.hoang8f.widget.FButton
+            android:id="@+id/button_return1"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/botonMenuPrincipal1"
-            android:text="Menú principal"/>
+            android:layout_marginBottom="6dp"
+            android:text="@string/volver"
+            android:textColor="@color/cpb_white"
+            fbutton:buttonColor="#1ABC9C"
+            fbutton:shadowColor="#16A085"
+            fbutton:shadowEnabled="true"
+            fbutton:shadowHeight="5dp"
+            fbutton:cornerRadius="5dp"
+            android:layout_margin="10dp"/>
     </LinearLayout>
 
     <!-- PANTALLA HAS PERDIDO LA PARTIDA -->
     <LinearLayout android:id="@+id/screen_lost" style="@style/LLScreen">
-        <TextView style="@style/Blurb" android:text="Lástima, perdiste la partida" />
-        <ImageButton
-            android:layout_width="250dp"
+        <TextView style="@style/Blurb"
+            android:text="@string/loose" />
+        <info.hoang8f.widget.FButton
+            android:id="@+id/button_return2"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/botonMenuPrincipal2"
-            android:text="Menú principal"/>
+            android:layout_marginBottom="6dp"
+            android:text="@string/volver"
+            android:textColor="@color/cpb_white"
+            fbutton:buttonColor="#1ABC9C"
+            fbutton:shadowColor="#16A085"
+            fbutton:shadowEnabled="true"
+            fbutton:shadowHeight="5dp"
+            fbutton:cornerRadius="5dp"
+            android:layout_margin="10dp"/>
     </LinearLayout>
 
     <!-- PANTALLA TU COMPAÑERO SE HA DESCONECTADO -->
     <LinearLayout android:id="@+id/screen_lost_companyero_desconectado" style="@style/LLScreen">
-        <TextView style="@style/Blurb" android:text="Tu compañero se ha desconectado. Pierdes la partida..." />
-        <ImageButton
-            android:layout_width="250dp"
+        <TextView style="@style/Blurb"
+            android:text="@string/loose" />
+        <TextView style="@style/Blurb"
+            android:text="@string/friend_disconnected" />
+        <info.hoang8f.widget.FButton
+            android:id="@+id/button_return3"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/botonMenuPrincipal3"
-            android:text="Menú principal"/>
+            android:layout_marginBottom="6dp"
+            android:text="@string/volver"
+            android:textColor="@color/cpb_white"
+            fbutton:buttonColor="#1ABC9C"
+            fbutton:shadowColor="#16A085"
+            fbutton:shadowEnabled="true"
+            fbutton:shadowHeight="5dp"
+            fbutton:cornerRadius="5dp"
+            android:layout_margin="10dp"/>
     </LinearLayout>
 
     <!-- PANTALLA RIVAL SE HA DESCONECTADO -->
     <LinearLayout android:id="@+id/screen_win_rival_desconectado" style="@style/LLScreen">
-        <TextView style="@style/Blurb" android:text="Tu rival se ha desconectado. Ganas la partida." />
-        <ImageButton
-            android:layout_width="250dp"
+        <TextView style="@style/Blurb"
+        android:text="@string/win" />
+        <TextView style="@style/Blurb"
+            android:text="@string/rival_disconnected" />
+        <info.hoang8f.widget.FButton
+            android:id="@+id/button_return4"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/botonMenuPrincipal4"
-            android:text="Menú principal"/>
+            android:layout_marginBottom="6dp"
+            android:text="@string/volver"
+            android:textColor="@color/cpb_white"
+            fbutton:buttonColor="#1ABC9C"
+            fbutton:shadowColor="#16A085"
+            fbutton:shadowEnabled="true"
+            fbutton:shadowHeight="5dp"
+            fbutton:cornerRadius="5dp"
+            android:layout_margin="10dp"/>
     </LinearLayout>
 
 </FrameLayout>
