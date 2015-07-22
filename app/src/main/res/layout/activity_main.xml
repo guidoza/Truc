@@ -28,7 +28,8 @@
             fbutton:shadowColor="#16A085"
             fbutton:shadowEnabled="true"
             fbutton:shadowHeight="5dp"
-            fbutton:cornerRadius="5dp" />
+            fbutton:cornerRadius="5dp"
+            android:textSize="15sp"/>
         <info.hoang8f.widget.FButton
             android:id="@+id/button_quick_game_4"
             android:layout_width="250dp"
@@ -40,7 +41,8 @@
             fbutton:shadowColor="#16A085"
             fbutton:shadowEnabled="true"
             fbutton:shadowHeight="5dp"
-            fbutton:cornerRadius="5dp"/>
+            fbutton:cornerRadius="5dp"
+            android:textSize="15sp"/>
         <info.hoang8f.widget.FButton
             android:id="@+id/button_invite_players"
             android:layout_width="250dp"
@@ -52,7 +54,8 @@
             fbutton:shadowEnabled="true"
             fbutton:shadowHeight="5dp"
             fbutton:cornerRadius="5dp"
-            android:text="@string/invite_players" />
+            android:text="@string/invite_players"
+            android:textSize="15sp" />
         <info.hoang8f.widget.FButton
             android:id="@+id/button_see_invitations"
             android:layout_width="250dp"
@@ -64,7 +67,8 @@
             fbutton:shadowColor="#16A085"
             fbutton:shadowEnabled="true"
             fbutton:shadowHeight="5dp"
-            fbutton:cornerRadius="5dp"/>
+            fbutton:cornerRadius="5dp"
+            android:textSize="15sp"/>
         <LinearLayout
             android:layout_width="250dp"
             android:layout_height="wrap_content">
@@ -108,7 +112,7 @@
             fbutton:shadowColor="#16A085"
             fbutton:shadowEnabled="true"
             fbutton:shadowHeight="5dp"
-            fbutton:cornerRadius="5dp"/>
+            fbutton:cornerRadius="5dp" />
         <Button
             android:layout_width="250dp"
             android:layout_height="match_parent"
@@ -1203,7 +1207,7 @@
 
     <!-- PANTALLA HAS GANADO LA PARTIDA -->
     <LinearLayout android:id="@+id/screen_win" style="@style/LLScreen">
-        <TextView style="@style/Blurb"
+        <TextView android:id="@+id/txtGanasPartida" style="@style/Blurb"
             android:text="@string/win" />
         <info.hoang8f.widget.FButton
             android:id="@+id/button_return1"
@@ -1222,7 +1226,7 @@
 
     <!-- PANTALLA HAS PERDIDO LA PARTIDA -->
     <LinearLayout android:id="@+id/screen_lost" style="@style/LLScreen">
-        <TextView style="@style/Blurb"
+        <TextView android:id="@+id/txtPierdesPartida" style="@style/Blurb"
             android:text="@string/loose" />
         <info.hoang8f.widget.FButton
             android:id="@+id/button_return2"
@@ -1241,9 +1245,9 @@
 
     <!-- PANTALLA TU COMPAÑERO SE HA DESCONECTADO -->
     <LinearLayout android:id="@+id/screen_lost_companyero_desconectado" style="@style/LLScreen">
-        <TextView style="@style/Blurb"
+        <TextView style="@style/Blurb" android:id="@+id/txtPierdesPartidaCompDesc1"
             android:text="@string/loose" />
-        <TextView style="@style/Blurb"
+        <TextView style="@style/Blurb" android:id="@+id/txtPierdesPartidaCompDesc2"
             android:text="@string/friend_disconnected" />
         <info.hoang8f.widget.FButton
             android:id="@+id/button_return3"
@@ -1262,9 +1266,9 @@
 
     <!-- PANTALLA RIVAL SE HA DESCONECTADO -->
     <LinearLayout android:id="@+id/screen_win_rival_desconectado" style="@style/LLScreen">
-        <TextView style="@style/Blurb"
+        <TextView style="@style/Blurb" android:id="@+id/txtGanasPartidaRivalDesc1"
         android:text="@string/win" />
-        <TextView style="@style/Blurb"
+        <TextView style="@style/Blurb" android:id="@+id/txtGanasPartidaRivalDesc2"
             android:text="@string/rival_disconnected" />
         <info.hoang8f.widget.FButton
             android:id="@+id/button_return4"

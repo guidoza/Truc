@@ -40,6 +40,7 @@ import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -101,6 +102,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import info.hoang8f.widget.FButton;
 import pl.tajchert.sample.DotsTextView;
 
 
@@ -450,6 +452,7 @@ public class MainActivity extends Activity
     LinearLayout layArriba;
     LinearLayout layJ1;
     LinearLayout layJ2;
+    Typeface custom_font;
 
     private InterstitialAd mInterstitialAd;
     ImageView carta;
@@ -457,6 +460,25 @@ public class MainActivity extends Activity
     TextView loading;
     int cartaEspera = 0;
     int contador = 0;
+
+    private FButton bQuickGame2;
+    private FButton bQuickGame4;
+    private FButton bInvitar;
+    private FButton bVerInvitaciones;
+    private FButton bQuickGame;
+    private FButton button_return1;
+    private FButton button_return2;
+    private FButton button_return3;
+    private FButton button_return4;
+    TextView textoInvitacion;
+    FButton bAceptarInv;
+    TextView txtGanasPartida;
+    TextView txtPierdesPartida;
+    TextView txtGanasPartidaRivalDesc1;
+    TextView txtGanasPartidaRivalDesc2;
+    TextView txtPierdesPartidaCompDesc1;
+    TextView txtPierdesPartidaCompDesc2;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -531,7 +553,7 @@ public class MainActivity extends Activity
                         break;
 
                     case R.id.abandonar:
-                        showBasicAlertDesconectarse("Abandonar partida", "Si abandonas, perderï¿½s la partida. ï¿½Estï¿½s seguro?");
+                        showBasicAlertDesconectarse("Abandonar partida", "Si abandonas, perder?s la partida. ?Est?s seguro?");
                         break;
 
                     case R.id.envido_4J:
@@ -586,7 +608,7 @@ public class MainActivity extends Activity
                         mostrarResultadosPerdedorMano("PRIMERO");
                         break;
                     case R.id.abandonar_4J:
-                        showBasicAlertDesconectarse("Abandonar partida", "Si abandonas, perderï¿½s la partida. ï¿½Estï¿½s seguro?");
+                        showBasicAlertDesconectarse("Abandonar partida", "Si abandonas, perder?s la partida. ?Est?s seguro?");
                         break;
                     case R.id.tapar:
                         actionButton.hide();
@@ -644,6 +666,8 @@ public class MainActivity extends Activity
 
         textoAccion1 = (TextView) findViewById(R.id.textoJugador1);
         textoAccion2 = (TextView) findViewById(R.id.textoJugador2);
+        textoAccion1.setTypeface(Typefaces.get(this, "Signika-Regular.ttf"));
+        textoAccion2.setTypeface(Typefaces.get(this, "Signika-Regular.ttf"));
         imgPerfilRival = (ImageView) findViewById(R.id.imgPerfilRival);
         imgPerfil = (ImageView) findViewById(R.id.imgPerfil);
 
@@ -756,16 +780,25 @@ public class MainActivity extends Activity
         bocadilloDerecha = (TextView) findViewById(R.id.bocadilloJ2);
         bocadilloArriba = (TextView) findViewById(R.id.bocadilloJ3);
         bocadilloIzq = (TextView) findViewById(R.id.bocadilloJ4);
+        bocadilloDerecha.setTypeface(Typefaces.get(this, "Signika-Regular.ttf"));
+        bocadilloArriba.setTypeface(Typefaces.get(this, "Signika-Regular.ttf"));
+        bocadilloIzq.setTypeface(Typefaces.get(this, "Signika-Regular.ttf"));
 
         //TextViews para los nombres de los jugadores (4J)
         nombreJugAbajo = (TextView) findViewById(R.id.nombreJugadorAbajo);
         nombreJugArriba = (TextView) findViewById(R.id.nombreJugadorArriba);
         nombreJugIzq = (TextView) findViewById(R.id.nombreJugadorIzq);
         nombreJugDerecha = (TextView) findViewById(R.id.nombreJugadorDerecha);
+        nombreJugAbajo.setTypeface(Typefaces.get(this, "Signika-Regular.ttf"));
+        nombreJugArriba.setTypeface(Typefaces.get(this, "Signika-Regular.ttf"));
+        nombreJugIzq.setTypeface(Typefaces.get(this, "Signika-Regular.ttf"));
+        nombreJugAbajo.setTypeface(Typefaces.get(this, "Signika-Regular.ttf"));
 
         //TextViews para los nombres de los jugadores (2J)
         nombreJugador1 = (TextView) findViewById(R.id.nombreJugador1);
         nombreJugador2 = (TextView) findViewById(R.id.nombreJugador2);
+        nombreJugador1.setTypeface(Typefaces.get(this, "Signika-Regular.ttf"));
+        nombreJugador2.setTypeface(Typefaces.get(this, "Signika-Regular.ttf"));
 
         tvMesaJ2_C1.animate().rotationXBy(30).setDuration(0);
         tvMesaJ2_C2.animate().rotationXBy(30).setDuration(0);
@@ -783,6 +816,7 @@ public class MainActivity extends Activity
         senyaIzq = (ImageView)findViewById(R.id.senyaIzq);
 
         titulos = (TextView) findViewById(R.id.titulos);
+        titulos.setTypeface(Typefaces.get(this, "Signika-Regular.ttf"));
 
         layJ1 = (LinearLayout) findViewById(R.id.layJ1);
         layJ2 = (LinearLayout) findViewById(R.id.layJ2);
@@ -794,6 +828,39 @@ public class MainActivity extends Activity
 
         //Carga el anuncio para que este listo para mostrarlo
         cargarPublicidad();
+
+        //Cambio de la fuente de los elementos del juego
+        bQuickGame2 = (FButton) findViewById(R.id.button_quick_game);
+        bQuickGame4 = (FButton) findViewById(R.id.button_quick_game_4);
+        bInvitar = (FButton) findViewById(R.id.button_invite_players);
+        bVerInvitaciones = (FButton) findViewById(R.id.button_see_invitations);
+        textoInvitacion = (TextView) findViewById(R.id.incoming_invitation_text);
+        bAceptarInv = (FButton) findViewById(R.id.button_accept_popup_invitation);
+        txtGanasPartida = (TextView) findViewById(R.id.txtGanasPartida);
+        txtPierdesPartida = (TextView) findViewById(R.id.txtPierdesPartida);
+        txtGanasPartidaRivalDesc1 = (TextView) findViewById(R.id.txtGanasPartidaRivalDesc1);
+        txtGanasPartidaRivalDesc2 = (TextView) findViewById(R.id.txtGanasPartidaRivalDesc2);
+        txtPierdesPartidaCompDesc1 = (TextView) findViewById(R.id.txtPierdesPartidaCompDesc1);
+        txtPierdesPartidaCompDesc2 = (TextView) findViewById(R.id.txtPierdesPartidaCompDesc2);
+        button_return1 = (FButton) findViewById(R.id.button_return1);
+        button_return2 = (FButton) findViewById(R.id.button_return2);
+        button_return3 = (FButton) findViewById(R.id.button_return3);
+        button_return4 = (FButton) findViewById(R.id.button_return4);
+
+
+        textoInvitacion.setTypeface(Typefaces.get(this, "Signika-Regular.ttf"));
+        bAceptarInv.setTypeface(Typefaces.get(this, "Signika-Regular.ttf"));
+        txtGanasPartida.setTypeface(Typefaces.get(this, "Signika-Regular.ttf"));
+        txtPierdesPartida.setTypeface(Typefaces.get(this, "Signika-Regular.ttf"));
+        txtGanasPartidaRivalDesc1.setTypeface(Typefaces.get(this, "Signika-Regular.ttf"));
+        txtGanasPartidaRivalDesc2.setTypeface(Typefaces.get(this, "Signika-Regular.ttf"));
+        txtPierdesPartidaCompDesc1.setTypeface(Typefaces.get(this, "Signika-Regular.ttf"));
+        txtPierdesPartidaCompDesc2.setTypeface(Typefaces.get(this, "Signika-Regular.ttf"));
+        button_return1.setTypeface(Typefaces.get(this, "Signika-Regular.ttf"));
+        button_return2.setTypeface(Typefaces.get(this, "Signika-Regular.ttf"));
+        button_return3.setTypeface(Typefaces.get(this, "Signika-Regular.ttf"));
+        button_return4.setTypeface(Typefaces.get(this, "Signika-Regular.ttf"));
+
 
         //Listener para todos los elementos
         for (int id : CLICKABLES) {
@@ -1140,10 +1207,10 @@ public class MainActivity extends Activity
 
     private void showIconosAlert() {
         dialogIconos = new MaterialDialog.Builder(this)
-                .title("ï¿½Tiempo de seï¿½as!")
+                .title("?Tiempo de se?as!")
                 .autoDismiss(false)
                 .positiveText("Enviar")
-                .negativeText("No hago seï¿½as")
+                .negativeText("No hago se?as")
                 .cancelable(false)
                 .callback(new MaterialDialog.ButtonCallback() {
                     @Override
@@ -1700,7 +1767,7 @@ public class MainActivity extends Activity
                     resetPuntos();
                     resetAnimaciones();
                     inicializarMano();
-                    showProgressDialog("ï¿½Empezamos!");
+                    showProgressDialog("?Empezamos!");
                 } else if (responseCode == GamesActivityResultCodes.RESULT_LEFT_ROOM) {
                     // player indicated that they want to leave the room
                     leaveRoom();
@@ -1855,11 +1922,11 @@ public class MainActivity extends Activity
             }
             else if(mCurScreen == R.id.screen_game){
                 Log.d("FFFFF","Atras desde la pantalla de juego de 2 jugadores");
-                showBasicAlertDesconectarse("Abandonar partida", "Si abandonas, perderï¿½s la partida. ï¿½Estï¿½s seguro?");
+                showBasicAlertDesconectarse("Abandonar partida", "Si abandonas, perder?s la partida. ?Est?s seguro?");
             }
             else if(mCurScreen == R.id.screen_game_4_jugadores){
                 Log.d("FFFFF","Atras desde la pantalla de juego de 4 jugadores");
-                showBasicAlertDesconectarse("Abandonar partida", "Si abandonas, perderï¿½s la partida. ï¿½Estï¿½s seguro?");
+                showBasicAlertDesconectarse("Abandonar partida", "Si abandonas, perder?s la partida. ?Est?s seguro?");
             }
             else if(mCurScreen == R.id.screen_wait){
                 Log.d("FFFFF","Caso screen wait");
@@ -2284,7 +2351,7 @@ public class MainActivity extends Activity
             Log.d("<HHHHHHHHHHH>", "UPDATE ROOM");
             Log.d("<HHHHHHHHHHH>", "Peers list: "+peersWhoLeft.toString());
             mParticipants = room.getParticipants();
-            Log.d("<HHHHHHHHHHH>", "TamaÃ±o de la sala: " + mParticipants.size());
+            Log.d("<HHHHHHHHHHH>", "Tamaño de la sala: " + mParticipants.size());
             Participant aux = null;
             for (Participant p : mParticipants) {
                 if(p.getParticipantId().equals(peersWhoLeft.get(0))){
@@ -2292,7 +2359,7 @@ public class MainActivity extends Activity
                 }
             }
             mParticipants.remove(aux);
-            Log.d("<HHHHHHHHHHH>", "TamaÃ±o de la sala tras remove: " + mParticipants.size());
+            Log.d("<HHHHHHHHHHH>", "Tamaño de la sala tras remove: " + mParticipants.size());
             updateRoomAfterLeft(room);
         }
 
@@ -2331,7 +2398,7 @@ public class MainActivity extends Activity
 
         if (room != null) {
             Log.d("<HHHHHHHHHHH>", "UPDATE ROOM AFTER LEFT");
-            Log.d("<HHHHHHHHHHH>", "TamaÃ±o de la sala: "+mParticipants.size());
+            Log.d("<HHHHHHHHHHH>", "Tamaño de la sala: "+mParticipants.size());
 
             if(numeroJugadores == 2){
                 if(mParticipants.size()<2){
@@ -2866,12 +2933,12 @@ public class MainActivity extends Activity
                 break;
             case "RETRUQUE":
                 if(esRivalDerecha(sender)){
-                    bocadilloDerecha.setText("ï¿½Retruque!");
+                    bocadilloDerecha.setText("?Retruque!");
                     animarTextoAccion(bocadilloDerecha);
                     progressBarDerecha.setVisibility(View.INVISIBLE);
                     mCountDownTimerDerecha.cancel();
                 }else if(esRivalIzquierda(sender)){
-                    bocadilloIzq.setText("ï¿½Retruque!");
+                    bocadilloIzq.setText("?Retruque!");
                     animarTextoAccion(bocadilloIzq);
                     progressBarIzq.setVisibility(View.INVISIBLE);
                     mCountDownTimerIzq.cancel();
@@ -2879,12 +2946,12 @@ public class MainActivity extends Activity
                 break;
             case "QUATRE":
                 if(esRivalDerecha(sender)){
-                    bocadilloDerecha.setText("ï¿½Quatre val!");
+                    bocadilloDerecha.setText("?Quatre val!");
                     animarTextoAccion(bocadilloDerecha);
                     progressBarDerecha.setVisibility(View.INVISIBLE);
                     mCountDownTimerDerecha.cancel();
                 }else if(esRivalIzquierda(sender)){
-                    bocadilloIzq.setText("ï¿½Quatre val!");
+                    bocadilloIzq.setText("?Quatre val!");
                     animarTextoAccion(bocadilloIzq);
                     progressBarIzq.setVisibility(View.INVISIBLE);
                     mCountDownTimerIzq.cancel();
@@ -2892,12 +2959,12 @@ public class MainActivity extends Activity
                 break;
             case "JOC":
                 if(esRivalDerecha(sender)){
-                    bocadilloDerecha.setText("ï¿½Joc fora!");
+                    bocadilloDerecha.setText("?Joc fora!");
                     animarTextoAccion(bocadilloDerecha);
                     progressBarDerecha.setVisibility(View.INVISIBLE);
                     mCountDownTimerDerecha.cancel();
                 }else if(esRivalIzquierda(sender)){
-                    bocadilloIzq.setText("ï¿½Joc fora!");
+                    bocadilloIzq.setText("?Joc fora!");
                     animarTextoAccion(bocadilloIzq);
                     progressBarIzq.setVisibility(View.INVISIBLE);
                     mCountDownTimerIzq.cancel();
@@ -3562,7 +3629,7 @@ public class MainActivity extends Activity
                 animacionAbrirCartas();
                 if (mMyId.equals(turno)) desbloquearCartas();
 
-                //Animacion titulo tiempo de seÃ±as
+                //Animacion titulo tiempo de señas
                 titulos.setText("Tiempo de senyikas");
                 animarTextoAccion(titulos);
 
@@ -4163,7 +4230,7 @@ public class MainActivity extends Activity
                                     enviarMensajeTurno4J(turno);
                                     reiniciarBarraProgreso();
                                 }
-                                //Ha ganado mi compaï¿½ero
+                                //Ha ganado mi compa?ero
                             } else {
                                 if (rondasGanadasMiEquipo == 2) {
                                     //enviarMensajeHasPerdido();
@@ -5661,7 +5728,7 @@ public class MainActivity extends Activity
                 case 'E':
                     //Mensaje que actualiza si hay empate en la primera ronda
                     if (ronda == 1)
-                        showBasicAlert("Empate en la primera ronda!", "La carta que eljas serï¿½ mostrada arriba");
+                        showBasicAlert("Empate en la primera ronda!", "La carta que eljas ser? mostrada arriba");
                     hayEmpate = true;
                     hayEmpate4J = true;
                     break;
@@ -6195,7 +6262,7 @@ public class MainActivity extends Activity
 
                 case 'C':
                     if(numeroJugadores == 2) {
-                        showSingleChoiceAlertCuatreVal("ï¿½Quatre val!", R.array.truc3);
+                        showSingleChoiceAlertCuatreVal("?Quatre val!", R.array.truc3);
                         cambiarBarraProgreso();
 
                     }else if(numeroJugadores == 4){
@@ -6212,7 +6279,7 @@ public class MainActivity extends Activity
                             barrasInvisibles();
                             activarDesactivarMiBarra("ACTIVAR");
                             activarDesactivarBarraCompi("ACTIVAR");
-                            showSingleChoiceAlertCuatreVal_4J("ï¿½Quatre val!", R.array.truc3, sender);
+                            showSingleChoiceAlertCuatreVal_4J("?Quatre val!", R.array.truc3, sender);
                         }
                     }
 
@@ -6232,7 +6299,7 @@ public class MainActivity extends Activity
 
                 case 'J':
                     if(numeroJugadores == 2) {
-                        showSingleChoiceAlertJocFora("ï¿½Joc fora!", R.array.envid3);
+                        showSingleChoiceAlertJocFora("?Joc fora!", R.array.envid3);
                         cambiarBarraProgreso();
 
                     }else if(numeroJugadores == 4){
@@ -6249,7 +6316,7 @@ public class MainActivity extends Activity
                             barrasInvisibles();
                             activarDesactivarMiBarra("ACTIVAR");
                             activarDesactivarBarraCompi("ACTIVAR");
-                            showSingleChoiceAlertJocFora_4J("ï¿½Joc fora!", R.array.envid3, sender);
+                            showSingleChoiceAlertJocFora_4J("?Joc fora!", R.array.envid3, sender);
                         }
                     }
                     break;
@@ -6447,7 +6514,7 @@ public class MainActivity extends Activity
                             //Animar los bocadillos
                             //cambiarBarraProgreso();
                             enviarMensajeBarraProgreso("QUATRE");
-                            showSingleChoiceAlertCuatreVal_4J("ï¿½Quatre val!", R.array.truc3, "");
+                            showSingleChoiceAlertCuatreVal_4J("?Quatre val!", R.array.truc3, "");
                             mensajesRecibidosTruc = 0;
                             sQuieroTruc = "NOQUIERO";
 
@@ -6460,7 +6527,7 @@ public class MainActivity extends Activity
                             //Animar los bocadillos
                             //cambiarBarraProgreso();
                             enviarMensajeBarraProgreso("JOC");
-                            showSingleChoiceAlertJocFora_4J("ï¿½Joc fora!", R.array.envid3, "");
+                            showSingleChoiceAlertJocFora_4J("?Joc fora!", R.array.envid3, "");
                             mensajesRecibidosTruc = 0;
                             sQuieroTruc = "NOQUIERO";
 
@@ -6592,7 +6659,7 @@ public class MainActivity extends Activity
                                             showProgressCustomDialog(layout);
                                         }
                                     } else {
-                                        showProgressDialog("LÃ¡stima, pierdes la mano");
+                                        showProgressDialog("Lástima, pierdes la mano");
                                     }
                                     repartirTrasMano();
                                     Log.d("KKKKKKKK", "Repartiendo tras mano..." + mMyId);
@@ -6642,7 +6709,7 @@ public class MainActivity extends Activity
 
                                         if(equipo1[0].equals(mMyId) || equipo2[0].equals(mMyId)) {
                                             actualizarMarcador2_4J(puntosTotalesMios, "GANADOR", sender);
-                                            Log.d("ZZZZ", "EnvÃ­o el segundo mensaje");
+                                            Log.d("ZZZZ", "Envío el segundo mensaje");
                                         }
                                     }
 
@@ -6655,7 +6722,7 @@ public class MainActivity extends Activity
                                         Log.d("KKKKK", "Puntos rquipo rival: "+puntosTotalesJugador2);
 
                                         if(equipo1[0].equals(mMyId) || equipo2[0].equals(mMyId)) {
-                                            Log.d("ZZZZ", "Envï¿½o el segundo mensaje");
+                                            Log.d("ZZZZ", "Env?o el segundo mensaje");
                                             actualizarMarcador2_4J(puntosTotalesMios, "PERDEDOR", sender);
                                         }
                                     }
@@ -6706,7 +6773,7 @@ public class MainActivity extends Activity
                                             Log.d("KKKKKKKK", "Pierdo todo");
                                         }
                                     } else {
-                                        showProgressDialog("Lï¿½stima, pierdes la mano");
+                                        showProgressDialog("L?stima, pierdes la mano");
                                         Log.d("KKKKKKKK", "No hay envid");
                                     }
                                 repartirTrasMano();
@@ -8058,8 +8125,8 @@ public class MainActivity extends Activity
             senyas.remove(0);
             senyas.add(view);
             ponerTick((ImageView) view);
-            //seÃ±as.add(0, seÃ±as.get(1));
-            //seÃ±as.add(1, view.getId());
+            //señas.add(0, señas.get(1));
+            //señas.add(1, view.getId());
         }else senyas.add(view);
         ponerTick((ImageView)view);
     }
@@ -9237,7 +9304,7 @@ public class MainActivity extends Activity
         if (mInterstitialAd != null && mInterstitialAd.isLoaded()) {
             //mInterstitialAd.show();
         }
-        //Aï¿½adir cï¿½digo para mostrar el botï¿½n
+        //A?adir c?digo para mostrar el bot?n
     }
 
 }
