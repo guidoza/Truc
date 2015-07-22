@@ -138,14 +138,25 @@
         android:layout_height="match_parent"
         android:layout_width="match_parent"
         android:id="@+id/screen_wait"
-        android:background="#1ABC9C">
+        android:background="#1ABC9C"
+        android:orientation="vertical">
         <!-- <TextView style="@style/Blurb" android:text="@string/please_wait" />-->
         <ImageView
             android:id="@+id/carta_espera"
-            android:layout_width="70dp"
-            android:layout_height="100dp"
+            android:layout_width="50dp"
+            android:layout_height="80dp"
+            android:layout_gravity="center"
             android:background="@drawable/fondo_carta"
             android:padding="2dp"/>
+
+        <com.game.guillermo.truc.library.TitanicTextView
+            android:id="@+id/loading"
+            android:text="@string/loading"
+            android:layout_width="150dp"
+            android:layout_height="70dp"
+            android:layout_gravity="center"
+            android:textColor="#212121"
+            android:textSize="25sp"/>
     </LinearLayout>
 
 

@@ -54,6 +54,8 @@ import com.afollestad.materialdialogs.GravityEnum;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.afollestad.materialdialogs.Theme;
 import com.dd.CircularProgressButton;
+import com.game.guillermo.truc.library.Titanic;
+import com.game.guillermo.truc.library.TitanicTextView;
 import com.github.alexkolpa.fabtoolbar.FabToolbar;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
@@ -452,8 +454,10 @@ public class MainActivity extends Activity
 
     private InterstitialAd mInterstitialAd;
     ImageView carta;
+    TitanicTextView loading;
     int cartaEspera = 0;
     int contador = 0;
+    Titanic titanic = null;
 
 
     @Override
@@ -470,6 +474,7 @@ public class MainActivity extends Activity
                 .build();
 
         carta = (ImageView) findViewById(R.id.carta_espera);
+        loading = (TitanicTextView) findViewById(R.id.loading);
 
         menuListener = new View.OnClickListener() {
             @Override
@@ -525,7 +530,7 @@ public class MainActivity extends Activity
                         break;
 
                     case R.id.abandonar:
-                        showBasicAlertDesconectarse("Abandonar partida", "Si abandonas, perderás la partida. ¿Estás seguro?");
+                        showBasicAlertDesconectarse("Abandonar partida", "Si abandonas, perderï¿½s la partida. ï¿½Estï¿½s seguro?");
                         break;
 
                     case R.id.envido_4J:
@@ -580,7 +585,7 @@ public class MainActivity extends Activity
                         mostrarResultadosPerdedorMano("PRIMERO");
                         break;
                     case R.id.abandonar_4J:
-                        showBasicAlertDesconectarse("Abandonar partida", "Si abandonas, perderás la partida. ¿Estás seguro?");
+                        showBasicAlertDesconectarse("Abandonar partida", "Si abandonas, perderï¿½s la partida. ï¿½Estï¿½s seguro?");
                         break;
                     case R.id.tapar:
                         actionButton.hide();
@@ -1134,10 +1139,10 @@ public class MainActivity extends Activity
 
     private void showIconosAlert() {
         dialogIconos = new MaterialDialog.Builder(this)
-                .title("¡Tiempo de señas!")
+                .title("ï¿½Tiempo de seï¿½as!")
                 .autoDismiss(false)
                 .positiveText("Enviar")
-                .negativeText("No hago señas")
+                .negativeText("No hago seï¿½as")
                 .cancelable(false)
                 .callback(new MaterialDialog.ButtonCallback() {
                     @Override
@@ -1694,7 +1699,7 @@ public class MainActivity extends Activity
                     resetPuntos();
                     resetAnimaciones();
                     inicializarMano();
-                    showProgressDialog("¡Empezamos!");
+                    showProgressDialog("ï¿½Empezamos!");
                 } else if (responseCode == GamesActivityResultCodes.RESULT_LEFT_ROOM) {
                     // player indicated that they want to leave the room
                     leaveRoom();
@@ -1849,11 +1854,11 @@ public class MainActivity extends Activity
             }
             else if(mCurScreen == R.id.screen_game){
                 Log.d("FFFFF","Atras desde la pantalla de juego de 2 jugadores");
-                showBasicAlertDesconectarse("Abandonar partida", "Si abandonas, perderás la partida. ¿Estás seguro?");
+                showBasicAlertDesconectarse("Abandonar partida", "Si abandonas, perderï¿½s la partida. ï¿½Estï¿½s seguro?");
             }
             else if(mCurScreen == R.id.screen_game_4_jugadores){
                 Log.d("FFFFF","Atras desde la pantalla de juego de 4 jugadores");
-                showBasicAlertDesconectarse("Abandonar partida", "Si abandonas, perderás la partida. ¿Estás seguro?");
+                showBasicAlertDesconectarse("Abandonar partida", "Si abandonas, perderï¿½s la partida. ï¿½Estï¿½s seguro?");
             }
             else if(mCurScreen == R.id.screen_wait){
                 Log.d("FFFFF","Caso screen wait");
@@ -2860,12 +2865,12 @@ public class MainActivity extends Activity
                 break;
             case "RETRUQUE":
                 if(esRivalDerecha(sender)){
-                    bocadilloDerecha.setText("¡Retruque!");
+                    bocadilloDerecha.setText("ï¿½Retruque!");
                     animarTextoAccion(bocadilloDerecha);
                     progressBarDerecha.setVisibility(View.INVISIBLE);
                     mCountDownTimerDerecha.cancel();
                 }else if(esRivalIzquierda(sender)){
-                    bocadilloIzq.setText("¡Retruque!");
+                    bocadilloIzq.setText("ï¿½Retruque!");
                     animarTextoAccion(bocadilloIzq);
                     progressBarIzq.setVisibility(View.INVISIBLE);
                     mCountDownTimerIzq.cancel();
@@ -2873,12 +2878,12 @@ public class MainActivity extends Activity
                 break;
             case "QUATRE":
                 if(esRivalDerecha(sender)){
-                    bocadilloDerecha.setText("¡Quatre val!");
+                    bocadilloDerecha.setText("ï¿½Quatre val!");
                     animarTextoAccion(bocadilloDerecha);
                     progressBarDerecha.setVisibility(View.INVISIBLE);
                     mCountDownTimerDerecha.cancel();
                 }else if(esRivalIzquierda(sender)){
-                    bocadilloIzq.setText("¡Quatre val!");
+                    bocadilloIzq.setText("ï¿½Quatre val!");
                     animarTextoAccion(bocadilloIzq);
                     progressBarIzq.setVisibility(View.INVISIBLE);
                     mCountDownTimerIzq.cancel();
@@ -2886,12 +2891,12 @@ public class MainActivity extends Activity
                 break;
             case "JOC":
                 if(esRivalDerecha(sender)){
-                    bocadilloDerecha.setText("¡Joc fora!");
+                    bocadilloDerecha.setText("ï¿½Joc fora!");
                     animarTextoAccion(bocadilloDerecha);
                     progressBarDerecha.setVisibility(View.INVISIBLE);
                     mCountDownTimerDerecha.cancel();
                 }else if(esRivalIzquierda(sender)){
-                    bocadilloIzq.setText("¡Joc fora!");
+                    bocadilloIzq.setText("ï¿½Joc fora!");
                     animarTextoAccion(bocadilloIzq);
                     progressBarIzq.setVisibility(View.INVISIBLE);
                     mCountDownTimerIzq.cancel();
@@ -3774,6 +3779,10 @@ public class MainActivity extends Activity
     }
 
     void animarEspera(){
+        if(titanic == null) titanic = new Titanic();
+        titanic.start(loading);
+        loading.setTypeface(Typefaces.get(this, "Satisfy-Regular.ttf"));
+
         final Animation flip = AnimationUtils.loadAnimation(this, R.anim.to_middle);
         final Animation flipBack = AnimationUtils.loadAnimation(this, R.anim.from_middle);
         carta.setImageResource(R.drawable.cartagirada);
@@ -3831,9 +3840,9 @@ public class MainActivity extends Activity
 
             @Override
             public void onAnimationEnd(Animation animation) {
+                if (mCurScreen == R.id.screen_wait) carta.startAnimation(flip);
+                //else titanic.cancel();
 
-
-                if(mCurScreen == R.id.screen_wait) carta.startAnimation(flip);
             }
 
             @Override
