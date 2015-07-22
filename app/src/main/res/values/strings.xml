@@ -39,7 +39,7 @@
     <string name="loose">¡Oh, perdiste la partida!</string>
     <string name="friend_disconnected">Tu compañero se ha desconectado</string>
     <string name="rival_disconnected">Tu rival se ha desconectado</string>
-    <string name="loading">Cargando...</string>
+    <string name="loading">Cargando</string>
 
     <string name="ad_unit_id">ca-app-pub-4776780046370926/8556690699</string>
 </resources>

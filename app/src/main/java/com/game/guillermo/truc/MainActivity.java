@@ -54,8 +54,6 @@ import com.afollestad.materialdialogs.GravityEnum;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.afollestad.materialdialogs.Theme;
 import com.dd.CircularProgressButton;
-import com.game.guillermo.truc.library.Titanic;
-import com.game.guillermo.truc.library.TitanicTextView;
 import com.github.alexkolpa.fabtoolbar.FabToolbar;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
@@ -103,6 +101,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import pl.tajchert.sample.DotsTextView;
 
 
 public class MainActivity extends Activity
@@ -454,11 +453,10 @@ public class MainActivity extends Activity
 
     private InterstitialAd mInterstitialAd;
     ImageView carta;
-    TitanicTextView loading;
+    DotsTextView dots;
+    TextView loading;
     int cartaEspera = 0;
     int contador = 0;
-    Titanic titanic = null;
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -474,7 +472,10 @@ public class MainActivity extends Activity
                 .build();
 
         carta = (ImageView) findViewById(R.id.carta_espera);
-        loading = (TitanicTextView) findViewById(R.id.loading);
+        dots = (DotsTextView) findViewById(R.id.dots);
+        dots.setTypeface(Typefaces.get(this, "Satisfy-Regular.ttf"));
+        loading = (TextView) findViewById(R.id.text_loading);
+        loading.setTypeface(Typefaces.get(this, "Satisfy-Regular.ttf"));
 
         menuListener = new View.OnClickListener() {
             @Override
@@ -3779,9 +3780,6 @@ public class MainActivity extends Activity
     }
 
     void animarEspera(){
-        if(titanic == null) titanic = new Titanic();
-        titanic.start(loading);
-        loading.setTypeface(Typefaces.get(this, "Satisfy-Regular.ttf"));
 
         final Animation flip = AnimationUtils.loadAnimation(this, R.anim.to_middle);
         final Animation flipBack = AnimationUtils.loadAnimation(this, R.anim.from_middle);
@@ -3841,8 +3839,6 @@ public class MainActivity extends Activity
             @Override
             public void onAnimationEnd(Animation animation) {
                 if (mCurScreen == R.id.screen_wait) carta.startAnimation(flip);
-                //else titanic.cancel();
-
             }
 
             @Override
