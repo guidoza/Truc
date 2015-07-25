@@ -27,7 +27,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
-import android.text.Layout;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -40,7 +39,6 @@ import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -56,8 +54,6 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.afollestad.materialdialogs.Theme;
 import com.dd.CircularProgressButton;
 import com.github.alexkolpa.fabtoolbar.FabToolbar;
-import com.google.android.gms.ads.AdListener;
-import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.InterstitialAd;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -93,7 +89,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -125,7 +120,26 @@ public class MainActivity extends Activity
     final static int REQUEST_LEADERBOARD = 10100;
     final static int REQUEST_ACHIEVEMENTS = 10110;
     final static String LEADERBOARD_ID = "CgkIpb6oxu8SEAIQCA";
-    final static String ACHIEVEMENTS_ID = "CgkIpb6oxu8SEAIQCQ";
+
+    /*********** LOGROS ***********/
+    final static String PRIMERA_PARTIDA = "CgkIpb6oxu8SEAIQCQ"; //AÑADIDO
+    final static String MAREA_AZUL = "CgkIpb6oxu8SEAIQCg"; //AÑADIDO (COMPROBAR NUMEROS DE CARTAS)
+    final static String MIRON_PRINCIPIANTE = "CgkIpb6oxu8SEAIQCw"; //AÑADIDO
+    final static String MIRON_PROFESIONAL = "CgkIpb6oxu8SEAIQDA";
+    final static String MIRON_EXPERTO = "CgkIpb6oxu8SEAIQDQ";
+    final static String ENVID_33 = "CgkIpb6oxu8SEAIQDg";
+    final static String CASA_POR_LA_VENTANA = "CgkIpb6oxu8SEAIQDw";
+    final static String TRIUNFADOR_PRINCIPIANTE = "CgkIpb6oxu8SEAIQEA";
+    final static String TRIUNFADOR_AVANZADO = "CgkIpb6oxu8SEAIQEQ";
+    final static String TRIUNFADOR_EXPERTO = "CgkIpb6oxu8SEAIQEg";
+    final static String LEYENDA = "CgkIpb6oxu8SEAIQEw";
+    final static String SOBRADO = "CgkIpb6oxu8SEAIQFA";
+    final static String FAROLERO = "CgkIpb6oxu8SEAIQFQ";
+    final static String AL_LIMITE = "CgkIpb6oxu8SEAIQFg";
+    final static String SOCIAL = "CgkIpb6oxu8SEAIQFw";
+    final static String MULTIFACETICO = "CgkIpb6oxu8SEAIQGA";
+
+    //Games.Achievements.unlock(mGoogleApiClient, PRIMERA_PARTIDA);
 
     // Request code used to invoke sign in user interactions.
     private static final int RC_SIGN_IN = 9001;
@@ -5741,6 +5755,7 @@ public class MainActivity extends Activity
                         numCarta[0] = Integer.parseInt(arrayCartasJ2[1]);
                         numCarta[1] = Integer.parseInt(arrayCartasJ2[2]);
                         numCarta[2] = Integer.parseInt(arrayCartasJ2[3]);
+                        comprobarMareaAzul(numCarta[0],numCarta[1],numCarta[2]);
                         repartir(numCarta);
                         reproducirSonidoRepartir();
                         carta1 = new Carta(manoJugador.get(0).getNumero(), manoJugador.get(0).getPalo(), manoJugador.get(0).getValor());
@@ -5770,14 +5785,17 @@ public class MainActivity extends Activity
                             numCarta[0] = Integer.parseInt(arrayCartasJugadores[1]);
                             numCarta[1] = Integer.parseInt(arrayCartasJugadores[2]);
                             numCarta[2] = Integer.parseInt(arrayCartasJugadores[3]);
+                            comprobarMareaAzul(numCarta[0],numCarta[1],numCarta[2]);
                         } else if (mMyId.equals(ids.get(1))) {
                             numCarta[0] = Integer.parseInt(arrayCartasJugadores[4]);
                             numCarta[1] = Integer.parseInt(arrayCartasJugadores[5]);
                             numCarta[2] = Integer.parseInt(arrayCartasJugadores[6]);
+                            comprobarMareaAzul(numCarta[0],numCarta[1],numCarta[2]);
                         } else if (mMyId.equals(ids.get(2))) {
                             numCarta[0] = Integer.parseInt(arrayCartasJugadores[7]);
                             numCarta[1] = Integer.parseInt(arrayCartasJugadores[8]);
                             numCarta[2] = Integer.parseInt(arrayCartasJugadores[9]);
+                            comprobarMareaAzul(numCarta[0],numCarta[1],numCarta[2]);
                         }
                         reproducirSonidoRepartir();
                         repartir(numCarta);
@@ -6616,7 +6634,7 @@ public class MainActivity extends Activity
 
                                     //Actualiza el ranking sumando una victoria
                                     updateLeaderboards(mGoogleApiClient, LEADERBOARD_ID);
-                                    Games.Achievements.unlock(mGoogleApiClient, ACHIEVEMENTS_ID);
+                                    Games.Achievements.unlock(mGoogleApiClient, PRIMERA_PARTIDA);
                                     switchToScreen(R.id.screen_win);
 
                                 } else if (ganadorFinal.equals("RIVAL")) {
@@ -6897,6 +6915,7 @@ public class MainActivity extends Activity
                                         @Override
                                         public void onClick(View v) {
                                             senyaDerecha.setImageResource(R.drawable.adg);
+                                            Games.Achievements.unlock(mGoogleApiClient, MIRON_PRINCIPIANTE);
                                             handlerDerecha.removeCallbacks(runi);
                                             handlerDerecha.postDelayed(new Runnable() {
                                                 public void run() {
@@ -6916,6 +6935,7 @@ public class MainActivity extends Activity
                                         @Override
                                         public void onClick(View v) {
                                             senyaDerecha.setImageResource(R.drawable.bocaabierta);
+                                            Games.Achievements.unlock(mGoogleApiClient, MIRON_PRINCIPIANTE);
                                             handlerDerecha.removeCallbacks(runi);
                                             handlerDerecha.postDelayed(new Runnable() {
                                                 public void run() {
@@ -6934,6 +6954,7 @@ public class MainActivity extends Activity
                                         @Override
                                         public void onClick(View v) {
                                             senyaDerecha.setImageResource(R.drawable.cascos);
+                                            Games.Achievements.unlock(mGoogleApiClient, MIRON_PRINCIPIANTE);
                                             handlerDerecha.removeCallbacks(runi);
                                             handlerDerecha.postDelayed(new Runnable() {
                                                 public void run() {
@@ -6952,6 +6973,7 @@ public class MainActivity extends Activity
                                         @Override
                                         public void onClick(View v) {
                                             senyaDerecha.setImageResource(R.drawable.gafas);
+                                            Games.Achievements.unlock(mGoogleApiClient, MIRON_PRINCIPIANTE);
                                             handlerDerecha.removeCallbacks(runi);
                                             handlerDerecha.postDelayed(new Runnable() {
                                                 public void run() {
@@ -6970,6 +6992,7 @@ public class MainActivity extends Activity
                                         @Override
                                         public void onClick(View v) {
                                             senyaDerecha.setImageResource(R.drawable.cejas);
+                                            Games.Achievements.unlock(mGoogleApiClient, MIRON_PRINCIPIANTE);
                                             handlerDerecha.removeCallbacks(runi);
                                             handlerDerecha.postDelayed(new Runnable() {
                                                 public void run() {
@@ -6988,6 +7011,7 @@ public class MainActivity extends Activity
                                         @Override
                                         public void onClick(View v) {
                                             senyaDerecha.setImageResource(R.drawable.lenguafuera);
+                                            Games.Achievements.unlock(mGoogleApiClient, MIRON_PRINCIPIANTE);
                                             handlerDerecha.removeCallbacks(runi);
                                             handlerDerecha.postDelayed(new Runnable() {
                                                 public void run() {
@@ -7006,6 +7030,7 @@ public class MainActivity extends Activity
                                         @Override
                                         public void onClick(View v) {
                                             senyaDerecha.setImageResource(R.drawable.mofletes);
+                                            Games.Achievements.unlock(mGoogleApiClient, MIRON_PRINCIPIANTE);
                                             handlerDerecha.removeCallbacks(runi);
                                             handlerDerecha.postDelayed(new Runnable() {
                                                 public void run() {
@@ -7024,6 +7049,7 @@ public class MainActivity extends Activity
                                         @Override
                                         public void onClick(View v) {
                                             senyaDerecha.setImageResource(R.drawable.raro);
+                                            Games.Achievements.unlock(mGoogleApiClient, MIRON_PRINCIPIANTE);
                                             handlerDerecha.removeCallbacks(runi);
                                             handlerDerecha.postDelayed(new Runnable() {
                                                 public void run() {
@@ -7042,6 +7068,7 @@ public class MainActivity extends Activity
                                         @Override
                                         public void onClick(View v) {
                                             senyaDerecha.setImageResource(R.drawable.rojo);
+                                            Games.Achievements.unlock(mGoogleApiClient, MIRON_PRINCIPIANTE);
                                             handlerDerecha.removeCallbacks(runi);
                                             handlerDerecha.postDelayed(new Runnable() {
                                                 public void run() {
@@ -7072,6 +7099,7 @@ public class MainActivity extends Activity
                                         @Override
                                         public void onClick(View v) {
                                             senyaIzq.setImageResource(R.drawable.adg);
+                                            Games.Achievements.unlock(mGoogleApiClient, MIRON_PRINCIPIANTE);
                                             handlerIzq.removeCallbacks(runi2);
                                             handlerIzq.postDelayed(new Runnable() {
                                                 public void run() {
@@ -7090,6 +7118,7 @@ public class MainActivity extends Activity
                                         @Override
                                         public void onClick(View v) {
                                             senyaIzq.setImageResource(R.drawable.bocaabierta);
+                                            Games.Achievements.unlock(mGoogleApiClient, MIRON_PRINCIPIANTE);
                                             handlerIzq.removeCallbacks(runi2);
                                             handlerIzq.postDelayed(new Runnable() {
                                                 public void run() {
@@ -7108,6 +7137,7 @@ public class MainActivity extends Activity
                                         @Override
                                         public void onClick(View v) {
                                             senyaIzq.setImageResource(R.drawable.cascos);
+                                            Games.Achievements.unlock(mGoogleApiClient, MIRON_PRINCIPIANTE);
                                             handlerIzq.removeCallbacks(runi2);
                                             handlerIzq.postDelayed(new Runnable() {
                                                 public void run() {
@@ -7126,6 +7156,7 @@ public class MainActivity extends Activity
                                         @Override
                                         public void onClick(View v) {
                                             senyaIzq.setImageResource(R.drawable.gafas);
+                                            Games.Achievements.unlock(mGoogleApiClient, MIRON_PRINCIPIANTE);
                                             handlerIzq.removeCallbacks(runi2);
                                             handlerIzq.postDelayed(new Runnable() {
                                                 public void run() {
@@ -7144,6 +7175,7 @@ public class MainActivity extends Activity
                                         @Override
                                         public void onClick(View v) {
                                             senyaIzq.setImageResource(R.drawable.cejas);
+                                            Games.Achievements.unlock(mGoogleApiClient, MIRON_PRINCIPIANTE);
                                             handlerIzq.removeCallbacks(runi2);
                                             handlerIzq.postDelayed(new Runnable() {
                                                 public void run() {
@@ -7162,6 +7194,7 @@ public class MainActivity extends Activity
                                         @Override
                                         public void onClick(View v) {
                                             senyaIzq.setImageResource(R.drawable.lenguafuera);
+                                            Games.Achievements.unlock(mGoogleApiClient, MIRON_PRINCIPIANTE);
                                             handlerIzq.removeCallbacks(runi2);
                                             handlerIzq.postDelayed(new Runnable() {
                                                 public void run() {
@@ -7180,6 +7213,7 @@ public class MainActivity extends Activity
                                         @Override
                                         public void onClick(View v) {
                                             senyaIzq.setImageResource(R.drawable.mofletes);
+                                            Games.Achievements.unlock(mGoogleApiClient, MIRON_PRINCIPIANTE);
                                             handlerIzq.removeCallbacks(runi2);
                                             handlerIzq.postDelayed(new Runnable() {
                                                 public void run() {
@@ -7198,6 +7232,7 @@ public class MainActivity extends Activity
                                         @Override
                                         public void onClick(View v) {
                                             senyaIzq.setImageResource(R.drawable.raro);
+                                            Games.Achievements.unlock(mGoogleApiClient, MIRON_PRINCIPIANTE);
                                             handlerIzq.removeCallbacks(runi2);
                                             handlerIzq.postDelayed(new Runnable() {
                                                 public void run() {
@@ -7216,6 +7251,7 @@ public class MainActivity extends Activity
                                         @Override
                                         public void onClick(View v) {
                                             senyaIzq.setImageResource(R.drawable.rojo);
+                                            Games.Achievements.unlock(mGoogleApiClient, MIRON_PRINCIPIANTE);
                                             handlerIzq.removeCallbacks(runi2);
                                             handlerIzq.postDelayed(new Runnable() {
                                                 public void run() {
@@ -7802,17 +7838,17 @@ public class MainActivity extends Activity
                     list[1] = aux;
                     int aux2 = (int) (Math.random() * 22);
                     while (list[0] == aux2 || list[1] == aux2) {
-                        aux2 = (int) Math.floor(Math.random() * 21);
+                        aux2 = (int) Math.floor(Math.random() * 22);
                     }
                     list[2] = aux2;
                     int aux3 = (int) (Math.random() * 22);
                     while (list[0] == aux3 || list[1] == aux3 || list[2] == aux3) {
-                        aux3 = (int) Math.floor(Math.random() * 21);
+                        aux3 = (int) Math.floor(Math.random() * 22);
                     }
                     list2[0] = aux3;
                     int aux4 = (int) (Math.random() * 22);
                     while (list[0] == aux4 || list[1] == aux4 || list[2] == aux4 || list2[0] == aux4) {
-                        aux4 = (int) Math.floor(Math.random() * 21);
+                        aux4 = (int) Math.floor(Math.random() * 22);
                     }
                     list2[1] = aux4;
                     int aux5 = (int) (Math.random() * 22);
@@ -7839,19 +7875,19 @@ public class MainActivity extends Activity
 
                     int aux2 = (int) (Math.random() * 22);
                     while (list[0] == aux2 || list[1] == aux2) {
-                        aux2 = (int) Math.floor(Math.random() * 21);
+                        aux2 = (int) Math.floor(Math.random() * 22);
                     }
                     list[2] = aux2;
 
                     int aux3 = (int) (Math.random() * 22);
                     while (list[0] == aux3 || list[1] == aux3 || list[2] == aux3) {
-                        aux3 = (int) Math.floor(Math.random() * 21);
+                        aux3 = (int) Math.floor(Math.random() * 22);
                     }
                     list2[0] = aux3;
 
                     int aux4 = (int) (Math.random() * 22);
                     while (list[0] == aux4 || list[1] == aux4 || list[2] == aux4 || list2[0] == aux4) {
-                        aux4 = (int) Math.floor(Math.random() * 21);
+                        aux4 = (int) Math.floor(Math.random() * 22);
                     }
                     list2[1] = aux4;
 
@@ -9305,6 +9341,14 @@ public class MainActivity extends Activity
             //mInterstitialAd.show();
         }
         //A?adir c?digo para mostrar el bot?n
+    }
+
+    public void comprobarMareaAzul(int numCarta1, int numCarta2, int numCarta3){
+        if((numCarta1==22 || numCarta2==22 || numCarta3==22) &&
+                (numCarta1==10 || numCarta2==10 || numCarta3==10) &&
+                (numCarta1==18 || numCarta2==18 || numCarta3==18)){
+            Games.Achievements.unlock(mGoogleApiClient, MAREA_AZUL);
+        }
     }
 
 }
