@@ -570,7 +570,7 @@ public class MainActivity extends Activity
                         break;
 
                     case R.id.abandonar:
-                        showBasicAlertDesconectarse("Abandonar partida", "Si abandonas, perder?s la partida. ?Est?s seguro?");
+                        showBasicAlertDesconectarse("Abandonar partida", getResources().getString(R.string.pregunta_abandonar));
                         break;
 
                     case R.id.envido_4J:
@@ -627,7 +627,7 @@ public class MainActivity extends Activity
                         mostrarResultadosPerdedorMano("PRIMERO");
                         break;
                     case R.id.abandonar_4J:
-                        showBasicAlertDesconectarse("Abandonar partida", "Si abandonas, perder?s la partida. ?Est?s seguro?");
+                        showBasicAlertDesconectarse("Abandonar partida", getResources().getString(R.string.pregunta_abandonar));
                         break;
                     case R.id.tapar:
                         actionButton.hide();
@@ -1235,10 +1235,10 @@ public class MainActivity extends Activity
 
     private void showIconosAlert() {
         dialogIconos = new MaterialDialog.Builder(this)
-                .title("?Tiempo de se?as!")
+                .title(getResources().getString(R.string.tiempo_señas))
                 .autoDismiss(false)
                 .positiveText("Enviar")
-                .negativeText("No hago se?as")
+                .negativeText(getResources().getString(R.string.no_hago_señas))
                 .cancelable(false)
                 .callback(new MaterialDialog.ButtonCallback() {
                     @Override
@@ -1348,7 +1348,6 @@ public class MainActivity extends Activity
                     @Override
                     public void onPositive(MaterialDialog dialog) {
                         super.onPositive(dialog);
-                        Log.d("FFFFF", "Aceptar en dialogo de desconectarse");
                         desconectado = mMyId;
                         leaveRoom();
                     }
@@ -1366,7 +1365,7 @@ public class MainActivity extends Activity
 
     private void showProgressDialog(String content) {
         materialDialog = new MaterialDialog.Builder(this)
-                .title("Repartiendo...")
+                .title(getResources().getString(R.string.repartiendo))
                 .content(content)
                 .progress(true, 0)
                 .cancelable(false);
@@ -1376,7 +1375,7 @@ public class MainActivity extends Activity
 
     private void showProgressCustomDialog(View content) {
         materialDialog = new MaterialDialog.Builder(this)
-                .title("Repartiendo...")
+                .title(getResources().getString(R.string.repartiendo))
                 .titleGravity(GravityEnum.CENTER)
                 .customView(content, false)
                 .cancelable(false)
@@ -1798,7 +1797,7 @@ public class MainActivity extends Activity
                     resetPuntos();
                     resetAnimaciones();
                     inicializarMano();
-                    showProgressDialog("?Empezamos!");
+                    showProgressDialog(getResources().getString(R.string.empezamos));
                 } else if (responseCode == GamesActivityResultCodes.RESULT_LEFT_ROOM) {
                     // player indicated that they want to leave the room
                     leaveRoom();
@@ -1940,27 +1939,19 @@ public class MainActivity extends Activity
         }*/
         if (keyCode == KeyEvent.KEYCODE_BACK){
 
-            Log.d("FFFFF", "Entra en tecla atras");
             if(mCurScreen == R.id.screen_lost){
-                Log.d("FFFFF", "Caso screen lost");
                 leaveRoom();
-                //switchToMainScreen();
             }
             else if(mCurScreen == R.id.screen_win){
-                Log.d("FFFFF", "Caso screen win");
                 leaveRoom();
-                //switchToMainScreen();
             }
             else if(mCurScreen == R.id.screen_game){
-                Log.d("FFFFF","Atras desde la pantalla de juego de 2 jugadores");
-                showBasicAlertDesconectarse("Abandonar partida", "Si abandonas, perder?s la partida. ?Est?s seguro?");
+                showBasicAlertDesconectarse("Abandonar partida", getResources().getString(R.string.pregunta_abandonar));
             }
             else if(mCurScreen == R.id.screen_game_4_jugadores){
-                Log.d("FFFFF","Atras desde la pantalla de juego de 4 jugadores");
-                showBasicAlertDesconectarse("Abandonar partida", "Si abandonas, perder?s la partida. ?Est?s seguro?");
+                showBasicAlertDesconectarse("Abandonar partida", getResources().getString(R.string.pregunta_abandonar));
             }
             else if(mCurScreen == R.id.screen_wait){
-                Log.d("FFFFF","Caso screen wait");
                 switchToMainScreen();
             }
             else if(mCurScreen == R.id.screen_main){
@@ -2875,21 +2866,21 @@ public class MainActivity extends Activity
             case 1:
                 if (esDeMiEquipo(sender)) {
                     if(quiero.equals("QUIERO")){
-                        bocadilloArriba.setText("Quiero el envid");
-                    }else bocadilloArriba.setText("No quiero el envid");
+                        bocadilloArriba.setText(getResources().getString(R.string.quiero_envid));
+                    }else bocadilloArriba.setText(getResources().getString(R.string.no_quiero_envid));
                     animarTextoAccion(bocadilloArriba);
 
                 } else {
 
                     if(esRivalDerecha(sender)){
                         if(quiero.equals("QUIERO")){
-                            bocadilloDerecha.setText("Quiero el envid");
-                        }else bocadilloDerecha.setText("No quiero el envid");
+                            bocadilloDerecha.setText(getResources().getString(R.string.quiero_envid));
+                        }else bocadilloDerecha.setText(getResources().getString(R.string.no_quiero_envid));
                         animarTextoAccion(bocadilloDerecha);
                     }else if(esRivalIzquierda(sender)){
                         if(quiero.equals("QUIERO")){
-                            bocadilloIzq.setText("Quiero el envid");
-                        } else bocadilloIzq.setText("No quiero el envid");
+                            bocadilloIzq.setText(getResources().getString(R.string.quiero_envid));
+                        } else bocadilloIzq.setText(getResources().getString(R.string.no_quiero_envid));
                         animarTextoAccion(bocadilloIzq);
                     }
                 }
@@ -2899,19 +2890,19 @@ public class MainActivity extends Activity
             case 2:
                 if (esDeMiEquipo(sender)) {
                     if(quiero.equals("QUIERO")){
-                        bocadilloArriba.setText("Quiero el vuelvo");
-                    }else bocadilloArriba.setText("No quiero el vuelvo");
+                        bocadilloArriba.setText(getResources().getString(R.string.quiero_vuelvo));
+                    }else bocadilloArriba.setText(getResources().getString(R.string.no_quiero_vuelvo));
                     animarTextoAccion(bocadilloArriba);
                 } else {
                     if(esRivalDerecha(sender)){
                         if(quiero.equals("QUIERO")){
-                            bocadilloDerecha.setText("Quiero el vuelvo");
-                        }else bocadilloDerecha.setText("No quiero el vuelvo");
+                            bocadilloDerecha.setText(getResources().getString(R.string.quiero_vuelvo));
+                        }else bocadilloDerecha.setText(getResources().getString(R.string.no_quiero_vuelvo));
                         animarTextoAccion(bocadilloDerecha);
                     }else if(esRivalIzquierda(sender)){
                         if(quiero.equals("QUIERO")){
-                            bocadilloIzq.setText("Quiero el vuelvo");
-                        } else bocadilloIzq.setText("No quiero el vuelvo");
+                            bocadilloIzq.setText(getResources().getString(R.string.quiero_vuelvo));
+                        } else bocadilloIzq.setText(getResources().getString(R.string.no_quiero_vuelvo));
                         animarTextoAccion(bocadilloIzq);
                     }
                 }
@@ -2920,19 +2911,19 @@ public class MainActivity extends Activity
             case 3:
                 if (esDeMiEquipo(sender)) {
                     if(quiero.equals("QUIERO")){
-                        bocadilloArriba.setText("Quiero la falta");
-                    } else bocadilloArriba.setText("No quiero la falta");
+                        bocadilloArriba.setText(getResources().getString(R.string.quiero_falta));
+                    } else bocadilloArriba.setText(getResources().getString(R.string.no_quiero_falta));
                     animarTextoAccion(bocadilloArriba);
                 } else {
                     if(esRivalDerecha(sender)){
                         if(quiero.equals("QUIERO")){
-                            bocadilloDerecha.setText("Quiero la falta");
-                        }else bocadilloDerecha.setText("No quiero la falta");
+                            bocadilloDerecha.setText(getResources().getString(R.string.quiero_falta));
+                        }else bocadilloDerecha.setText(getResources().getString(R.string.no_quiero_falta));
                         animarTextoAccion(bocadilloDerecha);
                     }else if(esRivalIzquierda(sender)){
                         if(quiero.equals("QUIERO")){
-                            bocadilloIzq.setText("Quiero la falta");
-                        } else bocadilloIzq.setText("No quiero la falta");
+                            bocadilloIzq.setText(getResources().getString(R.string.quiero_falta));
+                        } else bocadilloIzq.setText(getResources().getString(R.string.no_quiero_falta));
                         animarTextoAccion(bocadilloIzq);
                     }
                 }
@@ -2945,25 +2936,25 @@ public class MainActivity extends Activity
                 if(esRivalDerecha(sender)){
                     switch (caso){
                         case 1:
-                            bocadilloDerecha.setText("Quiero el truc");
+                            bocadilloDerecha.setText(getResources().getString(R.string.quiero_truc));
                             animarTextoAccion(bocadilloDerecha);
                             progressBarDerecha.setVisibility(View.INVISIBLE);
                             mCountDownTimerDerecha.cancel();
                             break;
                         case 2:
-                            bocadilloDerecha.setText("Quiero el retruc");
+                            bocadilloDerecha.setText(getResources().getString(R.string.quiero_retruc));
                             animarTextoAccion(bocadilloDerecha);
                             progressBarDerecha.setVisibility(View.INVISIBLE);
                             mCountDownTimerDerecha.cancel();
                             break;
                         case 3:
-                            bocadilloDerecha.setText("Quiero el quatre val");
+                            bocadilloDerecha.setText(getResources().getString(R.string.quiero_quatre));
                             animarTextoAccion(bocadilloDerecha);
                             progressBarDerecha.setVisibility(View.INVISIBLE);
                             mCountDownTimerDerecha.cancel();
                             break;
                         case 4:
-                            bocadilloDerecha.setText("Quiero el joc fora");
+                            bocadilloDerecha.setText(getResources().getString(R.string.quiero_joc));
                             animarTextoAccion(bocadilloDerecha);
                             progressBarDerecha.setVisibility(View.INVISIBLE);
                             mCountDownTimerDerecha.cancel();
@@ -2972,25 +2963,25 @@ public class MainActivity extends Activity
                 }else if(esRivalIzquierda(sender)){
                     switch (caso){
                         case 1:
-                            bocadilloIzq.setText("Quiero el truc");
+                            bocadilloIzq.setText(getResources().getString(R.string.quiero_truc));
                             animarTextoAccion(bocadilloIzq);
                             progressBarIzq.setVisibility(View.INVISIBLE);
                             mCountDownTimerIzq.cancel();
                             break;
                         case 2:
-                            bocadilloIzq.setText("Quiero el retruc");
+                            bocadilloIzq.setText(getResources().getString(R.string.quiero_retruc));
                             animarTextoAccion(bocadilloIzq);
                             progressBarIzq.setVisibility(View.INVISIBLE);
                             mCountDownTimerIzq.cancel();
                             break;
                         case 3:
-                            bocadilloIzq.setText("Quiero el quatre val");
+                            bocadilloIzq.setText(getResources().getString(R.string.quiero_quatre));
                             animarTextoAccion(bocadilloIzq);
                             progressBarIzq.setVisibility(View.INVISIBLE);
                             mCountDownTimerIzq.cancel();
                             break;
                         case 4:
-                            bocadilloIzq.setText("Quiero el joc fora");
+                            bocadilloIzq.setText(getResources().getString(R.string.quiero_joc));
                             animarTextoAccion(bocadilloIzq);
                             progressBarIzq.setVisibility(View.INVISIBLE);
                             mCountDownTimerIzq.cancel();
@@ -3000,12 +2991,12 @@ public class MainActivity extends Activity
                 break;
             case "RETRUQUE":
                 if(esRivalDerecha(sender)){
-                    bocadilloDerecha.setText("?Retruque!");
+                    bocadilloDerecha.setText("¡Retruque!");
                     animarTextoAccion(bocadilloDerecha);
                     progressBarDerecha.setVisibility(View.INVISIBLE);
                     mCountDownTimerDerecha.cancel();
                 }else if(esRivalIzquierda(sender)){
-                    bocadilloIzq.setText("?Retruque!");
+                    bocadilloIzq.setText("¡Retruque!");
                     animarTextoAccion(bocadilloIzq);
                     progressBarIzq.setVisibility(View.INVISIBLE);
                     mCountDownTimerIzq.cancel();
@@ -3013,12 +3004,12 @@ public class MainActivity extends Activity
                 break;
             case "QUATRE":
                 if(esRivalDerecha(sender)){
-                    bocadilloDerecha.setText("?Quatre val!");
+                    bocadilloDerecha.setText("¡Quatre val!");
                     animarTextoAccion(bocadilloDerecha);
                     progressBarDerecha.setVisibility(View.INVISIBLE);
                     mCountDownTimerDerecha.cancel();
                 }else if(esRivalIzquierda(sender)){
-                    bocadilloIzq.setText("?Quatre val!");
+                    bocadilloIzq.setText("¡Quatre val!");
                     animarTextoAccion(bocadilloIzq);
                     progressBarIzq.setVisibility(View.INVISIBLE);
                     mCountDownTimerIzq.cancel();
@@ -3026,12 +3017,12 @@ public class MainActivity extends Activity
                 break;
             case "JOC":
                 if(esRivalDerecha(sender)){
-                    bocadilloDerecha.setText("?Joc fora!");
+                    bocadilloDerecha.setText("¡Joc fora!");
                     animarTextoAccion(bocadilloDerecha);
                     progressBarDerecha.setVisibility(View.INVISIBLE);
                     mCountDownTimerDerecha.cancel();
                 }else if(esRivalIzquierda(sender)){
-                    bocadilloIzq.setText("?Joc fora!");
+                    bocadilloIzq.setText("¡Joc fora!");
                     animarTextoAccion(bocadilloIzq);
                     progressBarIzq.setVisibility(View.INVISIBLE);
                     mCountDownTimerIzq.cancel();
@@ -3041,26 +3032,26 @@ public class MainActivity extends Activity
                 if(esRivalDerecha(sender)){
                     switch (caso){
                         case 1:
-                            bocadilloDerecha.setText("No quiero el truc");
+                            bocadilloDerecha.setText(getResources().getString(R.string.no_quiero_truc));
                             animarTextoAccion(bocadilloDerecha);
                             progressBarDerecha.setVisibility(View.INVISIBLE);
                             mCountDownTimerDerecha.cancel();
                             break;
                         case 2:
-                            bocadilloDerecha.setText("No quiero el retruc");
+                            bocadilloDerecha.setText(getResources().getString(R.string.no_quiero_retruc));
                             animarTextoAccion(bocadilloDerecha);
                             progressBarDerecha.setVisibility(View.INVISIBLE);
                             mCountDownTimerDerecha.cancel();
                             break;
                         case 3:
-                            bocadilloDerecha.setText("No quiero el quatre val");
+                            bocadilloDerecha.setText(getResources().getString(R.string.no_quiero_quatre));
                             animarTextoAccion(bocadilloDerecha);
                             progressBarDerecha.setVisibility(View.INVISIBLE);
                             mCountDownTimerDerecha.cancel();
                             break;
                         case 4:
-                            bocadilloDerecha.setText("No quiero el joc fora");
-                            animarTextoAccion(bocadilloDerecha);
+                            bocadilloDerecha.setText(getResources().getString(R.string.no_quiero_joc));
+                                    animarTextoAccion(bocadilloDerecha);
                             progressBarDerecha.setVisibility(View.INVISIBLE);
                             mCountDownTimerDerecha.cancel();
                             break;
@@ -3068,25 +3059,25 @@ public class MainActivity extends Activity
                 }else if(esRivalIzquierda(sender)){
                     switch (caso){
                         case 1:
-                            bocadilloIzq.setText("No quiero el truc");
+                            bocadilloIzq.setText(getResources().getString(R.string.no_quiero_truc));
                             animarTextoAccion(bocadilloIzq);
                             progressBarIzq.setVisibility(View.INVISIBLE);
                             mCountDownTimerIzq.cancel();
                             break;
                         case 2:
-                            bocadilloIzq.setText("No quiero el retruc");
+                            bocadilloIzq.setText(getResources().getString(R.string.no_quiero_retruc));
                             animarTextoAccion(bocadilloIzq);
                             progressBarIzq.setVisibility(View.INVISIBLE);
                             mCountDownTimerIzq.cancel();
                             break;
                         case 3:
-                            bocadilloIzq.setText("No quiero el quatre val");
+                            bocadilloIzq.setText(getResources().getString(R.string.no_quiero_quatre));
                             animarTextoAccion(bocadilloIzq);
                             progressBarIzq.setVisibility(View.INVISIBLE);
                             mCountDownTimerIzq.cancel();
                             break;
                         case 4:
-                            bocadilloIzq.setText("No quiero el joc fora");
+                            bocadilloIzq.setText(getResources().getString(R.string.no_quiero_joc));
                             animarTextoAccion(bocadilloIzq);
                             progressBarIzq.setVisibility(View.INVISIBLE);
                             mCountDownTimerIzq.cancel();
@@ -3697,7 +3688,7 @@ public class MainActivity extends Activity
                 if (mMyId.equals(turno)) desbloquearCartas();
 
                 //Animacion titulo tiempo de seï¿½as
-                titulos.setText("Tiempo de senyikas");
+                titulos.setText(getResources().getString(R.string.tiempo_señas));
                 animarTextoAccion(titulos);
 
             }
@@ -4042,7 +4033,6 @@ public class MainActivity extends Activity
 
                 if (mMyId.equals(turno) && ronda == 1) {
                     bloquearCartas();
-                    Toast.makeText(getApplicationContext(), "Es tu turno", Toast.LENGTH_SHORT).show();
                     aparecerCartas();
                     progressBar1.setVisibility(View.VISIBLE);
                     progressBar2.setVisibility(View.INVISIBLE);
@@ -4052,7 +4042,6 @@ public class MainActivity extends Activity
 
                 if (!mMyId.equals(turno) && ronda == 1) {
                     bloquearCartas();
-                    Toast.makeText(getApplicationContext(), "Esperando al Jugador", Toast.LENGTH_SHORT).show();
                     aparecerCartas();
                     progressBar2.setVisibility(View.VISIBLE);
                     progressBar1.setVisibility(View.INVISIBLE);
@@ -4109,11 +4098,10 @@ public class MainActivity extends Activity
         tapar_4J.setOnClickListener(menuListener);
         frases_4J.setOnClickListener(menuListener);
 
-        titulos.setText("Empezamos");
+        titulos.setText(getResources().getString(R.string.empezamos));
         animarTextoAccion(titulos);
 
         if (mMyId.equals(turno) && ronda == 1) {
-            Toast.makeText(getApplicationContext(), "Es tu turno", Toast.LENGTH_SHORT).show();
             animarAparecerMenu();
             envid_4J.setVisibility(View.GONE);
             laFalta_4J.setVisibility(View.GONE);
@@ -4122,7 +4110,6 @@ public class MainActivity extends Activity
         }
 
         if (!mMyId.equals(turno) && ronda == 1) {
-            Toast.makeText(getApplicationContext(), "Esperando al Jugador", Toast.LENGTH_SHORT).show();
 
             if(mMyId.equals(comprobarSiguienteMano())){
                 progressBarIzq.setVisibility(View.VISIBLE);
@@ -4139,10 +4126,10 @@ public class MainActivity extends Activity
 
         }
 
-        if (mMyId.equals(idJugador1)) txtNumeroJugador.setText("Soy el jugador 1");
+        /* if (mMyId.equals(idJugador1)) txtNumeroJugador.setText("Soy el jugador 1");
         else if (mMyId.equals(idJugador2)) txtNumeroJugador.setText("Soy el jugador 2");
         else if (mMyId.equals(idJugador3)) txtNumeroJugador.setText("Soy el jugador 3");
-        else if (mMyId.equals(idJugador4)) txtNumeroJugador.setText("Soy el jugador 4");
+        else if (mMyId.equals(idJugador4)) txtNumeroJugador.setText("Soy el jugador 4"); */
     }
 
     void cartaSeleccionada() {
@@ -4162,7 +4149,6 @@ public class MainActivity extends Activity
                 //Caso en el que tiro primero
                 if (tiroPrimero()) {
                     cambiarTurno();
-                    Toast.makeText(getApplicationContext(), "Esperando al Jugador", Toast.LENGTH_SHORT).show();
                     bloquearCartas();
                     enviarMensajeTurno();
 
@@ -4193,7 +4179,6 @@ public class MainActivity extends Activity
 
                                 //Vuelvo a tirar
                             } else {
-                                Toast.makeText(getApplicationContext(), "Es tu turno", Toast.LENGTH_SHORT).show();
                                 actualizaRonda();
                                 enviarMensajeRonda();
                                 enviarMensajeTurno();
@@ -4213,7 +4198,6 @@ public class MainActivity extends Activity
 
                             } else {
                                 cambiarTurno();
-                                Toast.makeText(getApplicationContext(), "Esperando al Jugador", Toast.LENGTH_SHORT).show();
                                 bloquearCartas();
                                 actualizaRonda();
                                 enviarMensajeRonda();
@@ -4243,7 +4227,6 @@ public class MainActivity extends Activity
 
                 if (!mMyId.equals(quienCalcula())) {
                     cambiarTurno();
-                    Toast.makeText(getApplicationContext(), "Esperando al Jugador", Toast.LENGTH_SHORT).show();
                     bloquearCartas();
                     enviarMensajeTurno4J(turno);
 
@@ -4291,7 +4274,6 @@ public class MainActivity extends Activity
                                     //Vuelvo a tirar
                                 } else {
                                     Log.d("KKKKK", "gano yo");
-                                    Toast.makeText(getApplicationContext(), "Es tu turno", Toast.LENGTH_SHORT).show();
                                     actualizaRonda();
                                     enviarMensajeRonda();
                                     enviarMensajeTurno4J(turno);
@@ -4312,7 +4294,6 @@ public class MainActivity extends Activity
                                     }, 1500);
                                 }else {
                                 Log.d("KKKKK", "gana mi compi");
-                                Toast.makeText(getApplicationContext(), "Esperando al jugador", Toast.LENGTH_SHORT).show();
                                     bloquearCartas();
                                     if (ronda == 1){
                                         enviarMensajeTurno4J(ganadorRonda1_4J);
@@ -4348,17 +4329,6 @@ public class MainActivity extends Activity
                                 }, 1500);
 
                             } else {
-        /*                        Log.d("KKKKK", "perdemos la ronda");
-                                cambiarTurno();
-                                Toast.makeText(getApplicationContext(), "Esperando al Jugador", Toast.LENGTH_SHORT).show();
-                                bloquearCartas();
-                                if (ronda == 1) enviarMensajeTurno4J(ganadorRonda1_4J);
-                                else if (ronda == 2) enviarMensajeTurno4J(ganadorRonda2_4J);
-                                else if (ronda == 3) enviarMensajeTurno4J(ganadorRonda3_4J);
-                                actualizaRonda();
-                                enviarMensajeRonda();*/
-
-                                Toast.makeText(getApplicationContext(), "Esperando al Jugador", Toast.LENGTH_SHORT).show();
                                 bloquearCartas();
                                 if (ronda == 1){
                                     enviarMensajeTurno4J(ganadorRonda1_4J);
@@ -4393,18 +4363,16 @@ public class MainActivity extends Activity
     }
 
     void casoEmpatePrimero() {
-        showBasicAlert("Empate en la primera ronda!", "La carta que elijas ser? mostrada arriba");
+        showBasicAlert(getResources().getString(R.string.empate_primera_ronda), getResources().getString(R.string.carta_mostrada));
         //Si no soy mano, cambio turno
         if (!mMyId.equals(mano)) {
             switch (numeroJugadores) {
                 case 2:
-                    Toast.makeText(getApplicationContext(), "Esperando al Jugador", Toast.LENGTH_SHORT).show();
                     bloquearCartas();
                     cambiarTurno();
                     enviarMensajeTurno();
                     break;
                 case 4:
-                    Toast.makeText(getApplicationContext(), "Esperando al Jugador", Toast.LENGTH_SHORT).show();
                     bloquearCartas();
                     enviarMensajeTurno4J(mano);
                     break;
@@ -4484,7 +4452,6 @@ public class MainActivity extends Activity
                 if (mMyId.equals(mano)) {
                     cambiarTurno();
                     enviarMensajeTurno();
-                    Toast.makeText(getApplicationContext(), "Esperando al Jugador", Toast.LENGTH_SHORT).show();
                     //Si no soy mano, compruebo quien gana
                 } else if (soyGanadorRondaEmpate()) {
                     //Caso en el que gano
@@ -4526,7 +4493,6 @@ public class MainActivity extends Activity
                 if (!mMyId.equals(realizaCalculo)) {
                     cambiarTurno();
                     enviarMensajeTurno();
-                    Toast.makeText(getApplicationContext(), "Esperando al Jugador", Toast.LENGTH_SHORT).show();
                     //Si no soy mano, compruebo quien gana
                 } else if (soyGanadorRondaEmpate4J()) {
                     Log.d("ZZZZ", "Soy ganador de ronda empate");
@@ -5142,31 +5108,8 @@ public class MainActivity extends Activity
         }
     }
 
-  /*  public void enviarMensajeQuieroTruc_4J(String sender, String respuesta, int caso) {
-        byte[] messageQuieroTruc = ("W "+respuesta+" "+caso+" "+sender).getBytes();
-        Games.RealTimeMultiplayer.sendReliableMessage(mGoogleApiClient, null, messageQuieroTruc,
-                        mRoomId, sender);
-
-
-    }*/
     public void enviarMensajeReQuaJoc_4J(String respuesta, int caso) {
         byte[] messageQuieroTruc = ("W "+respuesta+" "+caso).getBytes();
-      /*  String rival1 = "";
-        String rival2 = "";
-        if(esDeMiEquipo(idJugador1) || esDeMiEquipo(idJugador3)){
-            rival1 = idJugador2;
-            rival2 = idJugador4;
-        }
-        else if(esDeMiEquipo(idJugador2) || esDeMiEquipo(idJugador4)){
-            rival1 = idJugador1;
-            rival2 = idJugador3;
-        }
-        Log.d("KKKKK", "le envio "+respuesta+" a: "+rival1+" y a "+rival2);
-        Games.RealTimeMultiplayer.sendReliableMessage(mGoogleApiClient, null, messageQuieroTruc,
-                mRoomId, rival1);
-        Games.RealTimeMultiplayer.sendReliableMessage(mGoogleApiClient, null, messageQuieroTruc,
-                mRoomId, rival2);*/
-
         for (Participant p : mParticipants) {
             if (!p.getParticipantId().equals(mMyId)) {
                 Games.RealTimeMultiplayer.sendReliableMessage(mGoogleApiClient, null, messageQuieroTruc,
@@ -5363,13 +5306,6 @@ public class MainActivity extends Activity
             }
         }
     }
-
-
-
-
-
-
-
 
 
     /*
@@ -5793,7 +5729,7 @@ public class MainActivity extends Activity
                 case 'E':
                     //Mensaje que actualiza si hay empate en la primera ronda
                     if (ronda == 1)
-                        showBasicAlert("Empate en la primera ronda!", "La carta que eljas ser? mostrada arriba");
+                        showBasicAlert(getResources().getString(R.string.empate_primera_ronda), getResources().getString(R.string.carta_mostrada));
                     hayEmpate = true;
                     hayEmpate4J = true;
                     break;
@@ -5874,7 +5810,7 @@ public class MainActivity extends Activity
                             String aux1 = new String(buf, "UTF-8");
                             String suEnvid[] = aux1.split(" ");
                             envidOtro = Integer.parseInt(suEnvid[1]);
-                            showSingleChoiceAlertEnvid("Tu rival ha envidado", R.array.envid);
+                            showSingleChoiceAlertEnvid(getResources().getString(R.string.rival_ha_envidado), R.array.envid);
                             envid.setVisibility(View.GONE);
                             laFalta.setVisibility(View.GONE);
                             cambiarBarraProgreso();
@@ -5883,7 +5819,7 @@ public class MainActivity extends Activity
                         case 4:
                             if (esDeMiEquipo(sender)) {
                                 //Animar bocadillo del compi
-                                bocadilloArriba.setText("Envido!");
+                                bocadilloArriba.setText(getResources().getString(R.string.envido));
                                 animarTextoAccion(bocadilloArriba);
                                 cancelarBarraProgreso();
                                 activarDesactivarBarraCompi("DESACTIVAR");
@@ -5914,10 +5850,10 @@ public class MainActivity extends Activity
                                     cancelarBarraProgreso();
                                     barrasInvisibles();
                                     activarDesactivarMiBarra("ACTIVAR");
-                                    showSingleChoiceAlertEnvid_4J("Tu rival ha envidado", R.array.envid, sender);
+                                    showSingleChoiceAlertEnvid_4J(getResources().getString(R.string.rival_ha_envidado), R.array.envid, sender);
                                 } else {
                                     //Animar bocadillo del compi del que tiene que calcular
-                                    bocadilloDerecha.setText("Envide!");
+                                    bocadilloDerecha.setText(getResources().getString(R.string.envido));
                                     animarTextoAccion(bocadilloDerecha);
                                     cancelarBarraProgreso();
                                     barrasInvisibles();
@@ -5942,17 +5878,17 @@ public class MainActivity extends Activity
                     if(numeroJugadores == 2){
                         switch (caso) {
                             case 1:
-                                textoAccion2.setText("Quiero el envid");
+                                textoAccion2.setText(getResources().getString(R.string.quiero_envid));
                                 animarTextoAccion(textoAccion2);
                                 cambiarBarraProgreso();
                                 break;
                             case 2:
-                                textoAccion2.setText("Quiero el vuelvo");
-                                animarTextoAccion(textoAccion2);
+                                textoAccion2.setText(getResources().getString(R.string.quiero_vuelvo));
+                                        animarTextoAccion(textoAccion2);
                                 reiniciarBarraProgreso();
                                 break;
                             case 3:
-                                textoAccion2.setText("Quiero la falta");
+                                textoAccion2.setText(getResources().getString(R.string.quiero_falta));
                                 animarTextoAccion(textoAccion2);
                                 if (!mMyId.equals(turno)) {
                                     reiniciarBarraProgreso();
@@ -6032,7 +5968,7 @@ public class MainActivity extends Activity
                         String otro[] = aux3.split(" ");
                         envidOtro = Integer.parseInt(otro[1]);
                         hayVuelvo = true;
-                        showSingleChoiceAlertVuelvo("Tu rival ha vuelto a envidar", R.array.envid2);
+                        showSingleChoiceAlertVuelvo(getResources().getString(R.string.rival_vuelve), R.array.envid2);
                         cambiarBarraProgreso();
 
                     }else if(numeroJugadores == 4){
@@ -6045,11 +5981,11 @@ public class MainActivity extends Activity
                             cancelarBarraProgreso();
                             barrasInvisibles();
                             activarDesactivarMiBarra("ACTIVAR");
-                            showSingleChoiceAlertVuelvo_4J("Tu rival ha vuelto a envidar", R.array.envid2, sender);
+                            showSingleChoiceAlertVuelvo_4J(getResources().getString(R.string.rival_vuelve), R.array.envid2, sender);
 
                         }else {
                             if(!mMyId.equals(sender) && esDeMiEquipo(sender)){
-                                bocadilloArriba.setText("Vuelvo a envidar!");
+                                bocadilloArriba.setText(getResources().getString(R.string.vuelvo));
                                 animarTextoAccion(bocadilloArriba);
                                 cancelarBarraProgreso();
                                 barrasInvisibles();
@@ -6057,7 +5993,7 @@ public class MainActivity extends Activity
                                 iniciarBarraProgresoIzq();
 
                             } else if(!mMyId.equals(sender) && !esDeMiEquipo(sender)){
-                                bocadilloDerecha.setText("Vuelvo a envidar!");
+                                bocadilloDerecha.setText(getResources().getString(R.string.vuelvo));
                                 animarTextoAccion(bocadilloDerecha);
                                 cancelarBarraProgreso();
                                 barrasInvisibles();
@@ -6076,13 +6012,13 @@ public class MainActivity extends Activity
                         switch (caso1) {
                             case 1:
                                 puntosEnvid = NO_QUIERO_ENVID;
-                                textoAccion2.setText("No quiero el envid");
+                                textoAccion2.setText(getResources().getString(R.string.no_quiero_envid));
                                 animarTextoAccion(textoAccion2);
                                 cambiarBarraProgreso();
                                 break;
                             case 2:
                                 puntosEnvid = ENVID;
-                                textoAccion2.setText("No quiero el vuelvo");
+                                textoAccion2.setText(getResources().getString(R.string.no_quiero_vuelvo));
                                 animarTextoAccion(textoAccion2);
                                 reiniciarBarraProgreso();
                                 break;
@@ -6091,7 +6027,7 @@ public class MainActivity extends Activity
                                     puntosEnvid = TORNE;
                                 } else puntosEnvid = ENVID;
 
-                                textoAccion2.setText("No quiero la falta");
+                                textoAccion2.setText(getResources().getString(R.string.no_quiero_falta));
                                 animarTextoAccion(textoAccion2);
                                 if (!mMyId.equals(turno)) {
                                     reiniciarBarraProgreso();
@@ -6100,7 +6036,7 @@ public class MainActivity extends Activity
                             case 4:
 
                                 puntosEnvid = NO_QUIERO_ENVID;
-                                textoAccion2.setText("No quiero la falta");
+                                textoAccion2.setText(getResources().getString(R.string.no_quiero_falta));
                                 animarTextoAccion(textoAccion2);
                                 cambiarBarraProgreso();
                                 break;
@@ -6170,22 +6106,22 @@ public class MainActivity extends Activity
                     if(numeroJugadores == 2){
                         switch (caso2) {
                             case 1:
-                                textoAccion2.setText("No quiero el truc");
+                                textoAccion2.setText(getResources().getString(R.string.no_quiero_truc));
                                 animarTextoAccion(textoAccion2);
                                 hayTruc = false;
                                 break;
                             case 2:
-                                textoAccion2.setText("No quiero el retruc");
+                                textoAccion2.setText(getResources().getString(R.string.no_quiero_retruc));
                                 animarTextoAccion(textoAccion2);
                                 hayTruc = true;
                                 break;
                             case 3:
-                                textoAccion2.setText("No quiero el quatre val");
+                                textoAccion2.setText(getResources().getString(R.string.no_quiero_quatre));
                                 animarTextoAccion(textoAccion2);
                                 hayRetruc = true;
                                 break;
                             case 4:
-                                textoAccion2.setText("No quiero el joc fora");
+                                textoAccion2.setText(getResources().getString(R.string.no_quiero_joc));
                                 animarTextoAccion(textoAccion2);
                                 hayCuatreVal = true;
                                 break;
@@ -6253,19 +6189,19 @@ public class MainActivity extends Activity
                         if(mMyId.equals(yo)){
                             if (Integer.parseInt(otro2[2]) == 2) faltaDirecta = true;
                             activarDesactivarMiBarra("ACTIVAR");
-                            showSingleChoiceAlertFalta_4J("Tu rival ha envidado la falta", R.array.envid3);
+                            showSingleChoiceAlertFalta_4J(getResources().getString(R.string.rival_envida_falta), R.array.envid3);
                             envid_4J.setVisibility(View.GONE);
                             laFalta_4J.setVisibility(View.GONE);
 
                         }else {
                             if(!mMyId.equals(sender) && esDeMiEquipo(sender)){
-                                bocadilloArriba.setText("La falta!");
+                                bocadilloArriba.setText(getResources().getString(R.string.falta));
                                 animarTextoAccion(bocadilloArriba);
                                 progressBarIzq.setVisibility(View.VISIBLE);
                                 iniciarBarraProgresoIzq();
 
                             } else if(!mMyId.equals(sender) && !esDeMiEquipo(sender)){
-                                bocadilloDerecha.setText("Envido la falta!");
+                                bocadilloDerecha.setText(getResources().getString(R.string.falta));
                                 animarTextoAccion(bocadilloDerecha);
                                 activarDesactivarBarraCompi("ACTIVAR");
                             }
@@ -6293,7 +6229,7 @@ public class MainActivity extends Activity
                             barrasInvisibles();
                             activarDesactivarMiBarra("ACTIVAR");
                             activarDesactivarBarraCompi("ACTIVAR");
-                            showSingleChoiceAlertTruco_4J("Tu rival ha trucado", R.array.truc1, sender);
+                            showSingleChoiceAlertTruco_4J(getResources().getString(R.string.rival_truca), R.array.truc1, sender);
                         }
                     }
                     break;
@@ -6301,7 +6237,7 @@ public class MainActivity extends Activity
                 case 'Q':
                     hayTruc = true;
                     //if(numeroJugadores == 2) {
-                        textoAccion2.setText("Quiero el truc");
+                        textoAccion2.setText(getResources().getString(R.string.quiero_truc));
                         animarTextoAccion(textoAccion2);
                         cambiarBarraProgreso();
                     /*}else if(numeroJugadores == 4){
@@ -6317,13 +6253,13 @@ public class MainActivity extends Activity
 
                 case 'L':
                     if(numeroJugadores == 2) {
-                        showSingleChoiceAlertRetruc("Tu rival ha retrucado", R.array.truc2);
+                        showSingleChoiceAlertRetruc(getResources().getString(R.string.rival_retruca), R.array.truc2);
                         cambiarBarraProgreso();
 
                     }else if(numeroJugadores == 4){
                         if(esDeMiEquipo(sender)){
                             //Mostrar bocadillo
-                            bocadilloArriba.setText("Retruque!");
+                            bocadilloArriba.setText(getResources().getString(R.string.retruque));
                             animarTextoAccion(bocadilloArriba);
                             retruque_4J.setVisibility(View.GONE);
                             activarDesactivarBarraCompi("DESACTIVAR");
@@ -6334,14 +6270,14 @@ public class MainActivity extends Activity
                             barrasInvisibles();
                             activarDesactivarMiBarra("ACTIVAR");
                             activarDesactivarBarraCompi("ACTIVAR");
-                            showSingleChoiceAlertRetruc_4J("Tu rival ha retrucado", R.array.truc2, sender);
+                            showSingleChoiceAlertRetruc_4J(getResources().getString(R.string.rival_retruca), R.array.truc2, sender);
                         }
                     }
                     break;
 
                 case 'I':
                     hayRetruc = true;
-                    textoAccion2.setText("Quiero el retruc");
+                    textoAccion2.setText(getResources().getString(R.string.quiero_retruc));
                     animarTextoAccion(textoAccion2);
 
                     if (turno.equals(mMyId)) {
@@ -6353,13 +6289,13 @@ public class MainActivity extends Activity
 
                 case 'C':
                     if(numeroJugadores == 2) {
-                        showSingleChoiceAlertCuatreVal("?Quatre val!", R.array.truc3);
+                        showSingleChoiceAlertCuatreVal(getResources().getString(R.string.quatre), R.array.truc3);
                         cambiarBarraProgreso();
 
                     }else if(numeroJugadores == 4){
                         if(esDeMiEquipo(sender)){
                             //Mostrar bocadillo
-                            bocadilloArriba.setText("Quatre val!");
+                            bocadilloArriba.setText(getResources().getString(R.string.quatre));
                             animarTextoAccion(bocadilloArriba);
                             quatreVal_4J.setVisibility(View.GONE);
                             activarDesactivarBarraCompi("DESACTIVAR");
@@ -6370,7 +6306,7 @@ public class MainActivity extends Activity
                             barrasInvisibles();
                             activarDesactivarMiBarra("ACTIVAR");
                             activarDesactivarBarraCompi("ACTIVAR");
-                            showSingleChoiceAlertCuatreVal_4J("?Quatre val!", R.array.truc3, sender);
+                            showSingleChoiceAlertCuatreVal_4J(getResources().getString(R.string.quatre), R.array.truc3, sender);
                         }
                     }
 
@@ -6378,7 +6314,7 @@ public class MainActivity extends Activity
 
                 case 'B':
                     hayCuatreVal = true;
-                    textoAccion2.setText("Quiero el cuatre val");
+                    textoAccion2.setText(getResources().getString(R.string.quiero_quatre));
                     animarTextoAccion(textoAccion2);
 
                     if (turno.equals(mMyId)) {
@@ -6390,13 +6326,13 @@ public class MainActivity extends Activity
 
                 case 'J':
                     if(numeroJugadores == 2) {
-                        showSingleChoiceAlertJocFora("?Joc fora!", R.array.envid3);
+                        showSingleChoiceAlertJocFora(getResources().getString(R.string.joc_fora), R.array.envid3);
                         cambiarBarraProgreso();
 
                     }else if(numeroJugadores == 4){
                         if(esDeMiEquipo(sender)){
                             //Mostrar bocadillo
-                            bocadilloArriba.setText("Joc fora!");
+                            bocadilloArriba.setText(getResources().getString(R.string.joc_fora));
                             animarTextoAccion(bocadilloArriba);
                             jocFora_4J.setVisibility(View.GONE);
                             activarDesactivarBarraCompi("DESACTIVAR");
@@ -6407,14 +6343,14 @@ public class MainActivity extends Activity
                             barrasInvisibles();
                             activarDesactivarMiBarra("ACTIVAR");
                             activarDesactivarBarraCompi("ACTIVAR");
-                            showSingleChoiceAlertJocFora_4J("?Joc fora!", R.array.envid3, sender);
+                            showSingleChoiceAlertJocFora_4J(getResources().getString(R.string.joc_fora), R.array.envid3, sender);
                         }
                     }
                     break;
 
                 case 'Y':
                     hayJocFora = true;
-                    textoAccion2.setText("Quiero el joc fora");
+                    textoAccion2.setText(getResources().getString(R.string.quiero_joc));
                     animarTextoAccion(textoAccion2);
 
                     if (turno.equals(mMyId)) {
@@ -6452,53 +6388,53 @@ public class MainActivity extends Activity
                             if (caso3 == 1){
                                 hayTruc = true;
                                 retruque_4J.setVisibility(View.VISIBLE);
-                                bocadilloArriba.setText("Quiero el truc");
+                                bocadilloArriba.setText(getResources().getString(R.string.quiero_truc));
                                 animarTextoAccion(bocadilloArriba);
                             }
                             else if (caso3 == 2){
                                 hayRetruc = true;
                                 quatreVal_4J.setVisibility(View.VISIBLE);
-                                bocadilloArriba.setText("Quiero el retruq");
+                                bocadilloArriba.setText(getResources().getString(R.string.quiero_retruc));
                                 animarTextoAccion(bocadilloArriba);
                             }
                             else if (caso3 == 3){
                                 hayCuatreVal = true;
                                 jocFora_4J.setVisibility(View.VISIBLE);
-                                bocadilloArriba.setText("Quiero el quatre val");
+                                bocadilloArriba.setText(getResources().getString(R.string.quiero_quatre));
                                 animarTextoAccion(bocadilloArriba);
                             }
                             else if (caso3 == 4){
                                 hayJocFora = true;
-                                bocadilloArriba.setText("Quiero el Joc fora");
+                                bocadilloArriba.setText(getResources().getString(R.string.quiero_joc));
                                 animarTextoAccion(bocadilloArriba);
                             }
                         }else if(respuesta.equals("RETRUQUE")){
-                            bocadilloArriba.setText("Retruque");
+                            bocadilloArriba.setText(getResources().getString(R.string.retruque));
                             animarTextoAccion(bocadilloArriba);
 
                         }else if(respuesta.equals("QUATRE")){
-                            bocadilloArriba.setText("Quatre val");
+                            bocadilloArriba.setText(getResources().getString(R.string.quatre));
                             animarTextoAccion(bocadilloArriba);
 
                         }else if(respuesta.equals("JOC")){
-                            bocadilloArriba.setText("Joc fora");
+                            bocadilloArriba.setText(getResources().getString(R.string.joc_fora));
                             animarTextoAccion(bocadilloArriba);
 
                         }else if(respuesta.equals("NOQUIERO")){
                             if (caso3 == 1){
-                                bocadilloArriba.setText("No quiero el truc");
+                                bocadilloArriba.setText(getResources().getString(R.string.no_quiero_truc));
                                 animarTextoAccion(bocadilloArriba);
                             }
                             else if (caso3 == 2){
-                                bocadilloArriba.setText("No quiero el retruq");
+                                bocadilloArriba.setText(getResources().getString(R.string.no_quiero_retruc));
                                 animarTextoAccion(bocadilloArriba);
                             }
                             else if (caso3 == 3){
-                                bocadilloArriba.setText("No quiero el quatre val");
+                                bocadilloArriba.setText(getResources().getString(R.string.no_quiero_quatre));
                                 animarTextoAccion(bocadilloArriba);
                             }
                             else if (caso3 == 4){
-                                bocadilloArriba.setText("No quiero el Joc fora");
+                                bocadilloArriba.setText(getResources().getString(R.string.no_quiero_joc));
                                 animarTextoAccion(bocadilloArriba);
                             }
                         }
@@ -6592,7 +6528,7 @@ public class MainActivity extends Activity
                             //Animar los bocadillos
                             //cambiarBarraProgreso();
                             enviarMensajeBarraProgreso("RETRUQUE");
-                            showSingleChoiceAlertRetruc_4J("Tu rival ha retrucado", R.array.truc2, "");
+                            showSingleChoiceAlertRetruc_4J(getResources().getString(R.string.rival_retruca), R.array.truc2, "");
                             mensajesRecibidosTruc = 0;
                             sQuieroTruc = "NOQUIERO";
 
@@ -6605,7 +6541,7 @@ public class MainActivity extends Activity
                             //Animar los bocadillos
                             //cambiarBarraProgreso();
                             enviarMensajeBarraProgreso("QUATRE");
-                            showSingleChoiceAlertCuatreVal_4J("?Quatre val!", R.array.truc3, "");
+                            showSingleChoiceAlertCuatreVal_4J(getResources().getString(R.string.quatre), R.array.truc3, "");
                             mensajesRecibidosTruc = 0;
                             sQuieroTruc = "NOQUIERO";
 
@@ -6618,7 +6554,7 @@ public class MainActivity extends Activity
                             //Animar los bocadillos
                             //cambiarBarraProgreso();
                             enviarMensajeBarraProgreso("JOC");
-                            showSingleChoiceAlertJocFora_4J("?Joc fora!", R.array.envid3, "");
+                            showSingleChoiceAlertJocFora_4J(getResources().getString(R.string.joc_fora), R.array.envid3, "");
                             mensajesRecibidosTruc = 0;
                             sQuieroTruc = "NOQUIERO";
 
@@ -6734,7 +6670,7 @@ public class MainActivity extends Activity
                                             showProgressCustomDialog(layout);
                                         }
                                     } else {
-                                        showProgressDialog("Enhorabuena, ganas la mano");
+                                        showProgressDialog(getResources().getString(R.string.ganas_mano));
                                     }
                                     repartirTrasMano();
                                     Log.d("KKKKKKKK", "Repartiendo tras mano..." + mMyId);
@@ -6755,7 +6691,7 @@ public class MainActivity extends Activity
                                             showProgressCustomDialog(layout);
                                         }
                                     } else {
-                                        showProgressDialog("Lï¿½stima, pierdes la mano");
+                                        showProgressDialog(getResources().getString(R.string.pierdes_mano));
                                     }
                                     repartirTrasMano();
                                     Log.d("KKKKKKKK", "Repartiendo tras mano..." + mMyId);
@@ -6843,7 +6779,7 @@ public class MainActivity extends Activity
                                             Log.d("KKKKKKKK", "Gano truc pierdo envid");
                                         }
                                     } else {
-                                        showProgressDialog("Enhorabuena, ganas la mano");
+                                        showProgressDialog(getResources().getString(R.string.ganas_mano));
                                         Log.d("KKKKKKKK", "No hay envid");
                                     }
 
@@ -6869,7 +6805,7 @@ public class MainActivity extends Activity
                                             Log.d("KKKKKKKK", "Pierdo todo");
                                         }
                                     } else {
-                                        showProgressDialog("L?stima, pierdes la mano");
+                                        showProgressDialog(getResources().getString(R.string.pierdes_mano));
                                         Log.d("KKKKKKKK", "No hay envid");
                                     }
                                 repartirTrasMano();
@@ -7430,7 +7366,6 @@ public class MainActivity extends Activity
                                     laFalta.setVisibility(View.GONE);
                                 }
                                 desbloquearCartas();
-                                Toast.makeText(getApplicationContext(), "Es tu turno", Toast.LENGTH_SHORT).show();
                                 cambiarBarraProgreso();
                                 animarAparecerMenu();
                             }
@@ -7439,8 +7374,6 @@ public class MainActivity extends Activity
                                 bloquearCartas();
                                 envid.setVisibility(View.GONE);
                                 laFalta.setVisibility(View.GONE);
-
-                                Toast.makeText(getApplicationContext(), "Esperando al Jugador", Toast.LENGTH_SHORT).show();
                                 Log.d("LLLLLLL", "Me han comunicado cambio de turno");
                                 reiniciarBarraProgreso();
 
@@ -7457,15 +7390,12 @@ public class MainActivity extends Activity
                                     laFalta_4J.setVisibility(View.GONE);
                                 }
                                 desbloquearCartas();
-                                Toast.makeText(getApplicationContext(), "Es tu turno", Toast.LENGTH_SHORT).show();
                                 cambiarBarraProgreso();
                                 animarAparecerMenu();
                             }
 
                             if (!mMyId.equals(turno) && rondasGanadasMiEquipo < 2) {
                                 bloquearCartas();
-
-                                Toast.makeText(getApplicationContext(), "Esperando al Jugador", Toast.LENGTH_SHORT).show();
                                 Log.d("LLLLLLL", "Me han comunicado cambio de turno");
                                 cambiarBarraProgreso();
 
@@ -7675,10 +7605,6 @@ public class MainActivity extends Activity
                     break;
             }
         }
-    }
-
-    private void casoDesconectado(){
-
     }
 
     String comprobarSiguienteMano(){
@@ -9417,13 +9343,13 @@ public class MainActivity extends Activity
                         String frase = "";
                         switch (i){
                             case 1:
-                                frase = '"'+"Voy a ti"+'"';
+                                frase = '"'+getResources().getString(R.string.voy_a_ti)+'"';
                                 break;
                             case 2:
-                                frase = '"'+"Ven a mi"+'"';
+                                frase = '"'+getResources().getString(R.string.ven_a_mi)+'"';
                                 break;
                             case 3:
-                                frase = '"'+"Dicen que al basto se le envida"+'"';
+                                frase = '"'+getResources().getString(R.string.basto_envida)+'"';
                                 break;
                         }
                         enviarMensajeFrase(frase);
