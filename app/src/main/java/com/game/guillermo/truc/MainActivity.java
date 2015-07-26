@@ -125,21 +125,19 @@ public class MainActivity extends Activity
     final static String PRIMERA_PARTIDA = "CgkIpb6oxu8SEAIQCQ"; //AÑADIDO
     final static String MAREA_AZUL = "CgkIpb6oxu8SEAIQCg"; //AÑADIDO (COMPROBAR NUMEROS DE CARTAS)
     final static String MIRON_PRINCIPIANTE = "CgkIpb6oxu8SEAIQCw"; //AÑADIDO
-    final static String MIRON_PROFESIONAL = "CgkIpb6oxu8SEAIQDA";
-    final static String MIRON_EXPERTO = "CgkIpb6oxu8SEAIQDQ";
-    final static String ENVID_33 = "CgkIpb6oxu8SEAIQDg";
-    final static String CASA_POR_LA_VENTANA = "CgkIpb6oxu8SEAIQDw";
-    final static String TRIUNFADOR_PRINCIPIANTE = "CgkIpb6oxu8SEAIQEA";
-    final static String TRIUNFADOR_AVANZADO = "CgkIpb6oxu8SEAIQEQ";
-    final static String TRIUNFADOR_EXPERTO = "CgkIpb6oxu8SEAIQEg";
-    final static String LEYENDA = "CgkIpb6oxu8SEAIQEw";
-    final static String SOBRADO = "CgkIpb6oxu8SEAIQFA";
-    final static String FAROLERO = "CgkIpb6oxu8SEAIQFQ";
-    final static String AL_LIMITE = "CgkIpb6oxu8SEAIQFg";
-    final static String SOCIAL = "CgkIpb6oxu8SEAIQFw";
-    final static String MULTIFACETICO = "CgkIpb6oxu8SEAIQGA";
-
-    //Games.Achievements.unlock(mGoogleApiClient, PRIMERA_PARTIDA);
+    final static String MIRON_PROFESIONAL = "CgkIpb6oxu8SEAIQDA"; //AÑADIDO
+    final static String MIRON_EXPERTO = "CgkIpb6oxu8SEAIQDQ"; //AÑADIDO
+    final static String ENVID_33 = "CgkIpb6oxu8SEAIQDg"; //AÑADIDO
+    final static String CASA_POR_LA_VENTANA = "CgkIpb6oxu8SEAIQDw"; //AÑADIDO
+    final static String TRIUNFADOR_PRINCIPIANTE = "CgkIpb6oxu8SEAIQEA"; //AÑADIDO
+    final static String TRIUNFADOR_AVANZADO = "CgkIpb6oxu8SEAIQEQ"; //AÑADIDO
+    final static String TRIUNFADOR_EXPERTO = "CgkIpb6oxu8SEAIQEg"; //AÑADIDO
+    final static String LEYENDA = "CgkIpb6oxu8SEAIQEw"; //AÑADIDO
+    final static String SOBRADO = "CgkIpb6oxu8SEAIQFA"; //AÑADIDO
+    final static String FAROLERO = "CgkIpb6oxu8SEAIQFQ"; //AÑADIDO
+    final static String AL_LIMITE = "CgkIpb6oxu8SEAIQFg"; //AÑADIDO
+    final static String SOCIAL = "CgkIpb6oxu8SEAIQFw"; //AÑADIDO
+    final static String ESTRATEGA = "CgkIpb6oxu8SEAIQGA"; //AÑADIDO
 
     // Request code used to invoke sign in user interactions.
     private static final int RC_SIGN_IN = 9001;
@@ -208,6 +206,7 @@ public class MainActivity extends Activity
     String sCartasJ2 = "";
     String ganadorEnvid = null;
     String desconectado = "";
+    String filtro = "Player";
 
     //Boolean
     boolean hayEmpate = false;
@@ -226,7 +225,8 @@ public class MainActivity extends Activity
     boolean hayAnimacionRival3 = false;
     boolean tapoPrimera = false;
     boolean tapo = false;
-    boolean leaved = false;
+    boolean logro_farolero = false;
+    boolean logro_33 = false;
 
     //Listas y arrays
     int[] list = new int[3];
@@ -538,6 +538,7 @@ public class MainActivity extends Activity
                         jocFora();
                         actionButton.hide();
                         jocFora.setVisibility(View.GONE);
+                        Games.Achievements.unlock(mGoogleApiClient, CASA_POR_LA_VENTANA);
                         break;
                     case R.id.envido:
                         envido();
@@ -551,6 +552,8 @@ public class MainActivity extends Activity
                         actionButton.hide();
                         envid.setVisibility(View.GONE);
                         laFalta.setVisibility(View.GONE);
+                        Games.Achievements.unlock(mGoogleApiClient, AL_LIMITE);
+
                         break;
 
                     case R.id.me_voy:
@@ -586,6 +589,7 @@ public class MainActivity extends Activity
                         actionButton_4J.hide();
                         envid_4J.setVisibility(View.GONE);
                         laFalta_4J.setVisibility(View.GONE);
+                        Games.Achievements.unlock(mGoogleApiClient, AL_LIMITE);
                         break;
 
                     case R.id.truco_4J:
@@ -610,6 +614,7 @@ public class MainActivity extends Activity
                         jocFora();
                         actionButton_4J.hide();
                         jocFora_4J.setVisibility(View.GONE);
+                        Games.Achievements.unlock(mGoogleApiClient, CASA_POR_LA_VENTANA);
                         break;
                     case R.id.me_voy_4J:
                         if (!hayTruc) puntosTruc = NO_QUIERO_TRUC;
@@ -897,6 +902,7 @@ public class MainActivity extends Activity
                             case 0:
                                 miEnvid = comprobarEnvid();
                                 hayEnvid = true;
+                                if(miEnvid == 33) logro_33 = true;
                                 comprobarGanadorEnvid();
                                 puntosEnvid = ENVID;
                                 enviarMensajeHayEnvidAndGanador(ganadorEnvid, 1);
@@ -905,6 +911,7 @@ public class MainActivity extends Activity
                             //Vuelvo
                             case 1:
                                 miEnvid = comprobarEnvid();
+                                if(miEnvid == 33) logro_33 = true;
                                 enviarMensajeVuelvoAEnvidar("");
                                 cambiarBarraProgreso();
                                 hayVuelvo = true;
@@ -912,8 +919,10 @@ public class MainActivity extends Activity
                             //Falta
                             case 2:
                                 miEnvid = comprobarEnvid();
+                                if(miEnvid == 33) logro_33 = true;
                                 enviarMensajeLaFalta(1, "");
                                 cambiarBarraProgreso();
+                                Games.Achievements.unlock(mGoogleApiClient, AL_LIMITE);
                                 break;
                             //No quiero
                             case 3:
@@ -958,6 +967,7 @@ public class MainActivity extends Activity
                             case 1:
                                 enviarMensajeLaFalta(1, "");
                                 cambiarBarraProgreso();
+                                Games.Achievements.unlock(mGoogleApiClient, AL_LIMITE);
                                 break;
                             //No quiero
                             case 2:
@@ -1137,6 +1147,7 @@ public class MainActivity extends Activity
                             case 1:
                                 enviarMensajeJocFora();
                                 cambiarBarraProgreso();
+                                Games.Achievements.unlock(mGoogleApiClient, CASA_POR_LA_VENTANA);
                                 break;
                             //No quiero
                             case 2:
@@ -1487,6 +1498,7 @@ public class MainActivity extends Activity
                 animarDesaparecerMenu();
                 bloquearCartas();
                 miEnvid = comprobarEnvid();
+                if(miEnvid == 33) logro_33 = true;
                 enviarMensajeEnvid(miEnvid);
                 cambiarBarraProgreso();
                 break;
@@ -1507,6 +1519,7 @@ public class MainActivity extends Activity
             animarDesaparecerMenu();
             bloquearCartas();
             miEnvid = comprobarEnvid();
+            if(miEnvid == 33) logro_33 = true;
             enviarMensajeLaFalta(2, "");
             cambiarBarraProgreso();
         }else if(numeroJugadores == 4){
@@ -1573,6 +1586,7 @@ public class MainActivity extends Activity
             if (maximo < Integer.parseInt(manoJugador.get(i).getNumero()))
                 maximo = Integer.parseInt(manoJugador.get(i).getNumero());
         }
+        logro_farolero = true;
         return maximo;
 
     }
@@ -2186,9 +2200,11 @@ public class MainActivity extends Activity
             if(mMyId.equals(idJugador1)){
                 nombreJugador1.setText(nombreJ1);
                 nombreJugador2.setText(nombreJ2);
+                if(!nombreJ2.matches(filtro + "(.*)")) Games.Achievements.unlock(mGoogleApiClient, SOCIAL);
             }else if(mMyId.equals(idJugador2)){
                 nombreJugador1.setText(nombreJ2);
                 nombreJugador2.setText(nombreJ1);
+                if(!nombreJ1.matches(filtro + "(.*)")) Games.Achievements.unlock(mGoogleApiClient, SOCIAL);
             }
 
             turno = idJugador1;
@@ -2245,6 +2261,11 @@ public class MainActivity extends Activity
                 for (Participant p : mParticipants) {
                     String pid = p.getParticipantId();
                     if (mMyId.equals(idJugador1)) {
+                        if(!nombreJ2.matches(filtro + "(.*)") ||
+                                !nombreJ3.matches(filtro + "(.*)") ||
+                                !nombreJ4.matches(filtro + "(.*)")){
+                            Games.Achievements.unlock(mGoogleApiClient, SOCIAL);
+                        }
                         if(pid.equals(idJugador1)){
                             new LoadProfileImage(imgPerfilAbajo).execute(p.getIconImageUrl());
                             nombreJugAbajo.setText(nombreJ1);
@@ -2262,6 +2283,11 @@ public class MainActivity extends Activity
                             nombreJugIzq.setText(nombreJ4);
                         }
                     } else if (mMyId.equals(idJugador2)) {
+                        if(!nombreJ1.matches(filtro + "(.*)") ||
+                                !nombreJ3.matches(filtro + "(.*)") ||
+                                !nombreJ4.matches(filtro + "(.*)")){
+                            Games.Achievements.unlock(mGoogleApiClient, SOCIAL);
+                        }
                         if(pid.equals(idJugador1)){
                             new LoadProfileImage(imgPerfilIzq).execute(p.getIconImageUrl());
                             nombreJugIzq.setText(nombreJ1);
@@ -2279,6 +2305,11 @@ public class MainActivity extends Activity
                             nombreJugArriba.setText(nombreJ4);
                         }
                     } else if (mMyId.equals(idJugador3)) {
+                        if(!nombreJ2.matches(filtro + "(.*)") ||
+                                !nombreJ1.matches(filtro + "(.*)") ||
+                                !nombreJ4.matches(filtro + "(.*)")){
+                            Games.Achievements.unlock(mGoogleApiClient, SOCIAL);
+                        }
                         if(pid.equals(idJugador1)){
                             new LoadProfileImage(imgPerfilArriba).execute(p.getIconImageUrl());
                             nombreJugArriba.setText(nombreJ1);
@@ -2296,6 +2327,11 @@ public class MainActivity extends Activity
                             nombreJugDerecha.setText(nombreJ4);
                         }
                     } else if (mMyId.equals(idJugador4)) {
+                        if(!nombreJ2.matches(filtro + "(.*)") ||
+                                !nombreJ3.matches(filtro + "(.*)") ||
+                                !nombreJ1.matches(filtro + "(.*)")){
+                            Games.Achievements.unlock(mGoogleApiClient, SOCIAL);
+                        }
                         if(pid.equals(idJugador1)){
                             new LoadProfileImage(imgPerfilDerecha).execute(p.getIconImageUrl());
                             nombreJugDerecha.setText(nombreJ1);
@@ -2519,6 +2555,9 @@ public class MainActivity extends Activity
             jocFora.setVisibility(View.GONE);
             laFalta.setVisibility(View.VISIBLE);
 
+            logro_farolero = false;
+            logro_33 = false;
+
             if (hayAnimaciones) {
                 deshacerAnimaciones(tvJugador1);
                 deshacerAnimaciones(tvJugador2);
@@ -2651,6 +2690,9 @@ public class MainActivity extends Activity
             senyaIzq.setVisibility(View.INVISIBLE);
 
             segundosSenyas = 21;
+
+            logro_farolero = false;
+            logro_33 = false;
 
             if (hayAnimaciones) {
                 deshacerAnimaciones(tvJugador1_4J);
@@ -4856,18 +4898,15 @@ public class MainActivity extends Activity
     }
 
     String comprobarGanadorPartida() {
-       /* if (puntosTotalesMios >= 24) {
-            return "YO";
-        } else if (puntosTotalesJugador2 >= 24) {
-            return "RIVAL";
-        }
-        return "NADIE"; */
         if (puntosTotalesMios >= 24 && puntosTotalesJugador2 >= 24) {
             if(hayEnvid && ganadorEnvid.equals(mMyId) && numeroJugadores == 2) return "YO";
             else if (hayEnvid && (ganadorEnvid.equals(mMyId) || esDeMiEquipo(ganadorEnvid)) && numeroJugadores == 4) return "YO";
             else return "RIVAL";
         }
         else if (puntosTotalesMios >= 24) {
+            if((puntosTotalesMios - puntosTotalesJugador2) >= 10){
+                Games.Achievements.unlock(mGoogleApiClient, SOBRADO);
+            }
             return "YO";
         }
         else if (puntosTotalesJugador2 >= 24) {
@@ -5294,6 +5333,7 @@ public class MainActivity extends Activity
     }
 
     public void enviarMensajeSenyas(String senya1, String senya2) {
+        Games.Achievements.unlock(mGoogleApiClient, ESTRATEGA);
         byte[] messageSenyas = ("3 "+senya1+" "+senya2).getBytes();
         for (Participant p : mParticipants) {
             if (!p.getParticipantId().equals(mMyId)) {
@@ -5908,9 +5948,21 @@ public class MainActivity extends Activity
                                 } else cambiarBarraProgreso();
                                 break;
                         }
-                        if (ganadorEnvid.equals(mMyId) && caso == 1) puntosEnvid = ENVID;
-                        if (ganadorEnvid.equals(mMyId) && caso == 2) puntosEnvid = TORNE;
-                        if (ganadorEnvid.equals(mMyId) && caso == 3) puntosEnvid = 24;
+                        if (ganadorEnvid.equals(mMyId) && caso == 1){
+                            if(logro_farolero){ Games.Achievements.unlock(mGoogleApiClient, FAROLERO);}
+                            if(logro_33){Games.Achievements.unlock(mGoogleApiClient, ENVID_33);}
+                            puntosEnvid = ENVID;
+                        }
+                        if (ganadorEnvid.equals(mMyId) && caso == 2){
+                            if(logro_farolero){ Games.Achievements.unlock(mGoogleApiClient, FAROLERO);}
+                            if(logro_33){Games.Achievements.unlock(mGoogleApiClient, ENVID_33);}
+                            puntosEnvid = TORNE;
+                        }
+                        if (ganadorEnvid.equals(mMyId) && caso == 3){
+                            if(logro_farolero){ Games.Achievements.unlock(mGoogleApiClient, FAROLERO);}
+                            if(logro_33){Games.Achievements.unlock(mGoogleApiClient, ENVID_33);}
+                            puntosEnvid = 24;
+                        }
 
                         if (mMyId.equals(turno)) {
                             desbloquearCartas();
@@ -5932,9 +5984,19 @@ public class MainActivity extends Activity
                                 break;
                         }
 
-                        if ((ganadorEnvid.equals(mMyId) || esDeMiEquipo(ganadorEnvid)) && caso == 1) puntosEnvid = ENVID;
-                        if ((ganadorEnvid.equals(mMyId) || esDeMiEquipo(ganadorEnvid)) && caso == 2) puntosEnvid = TORNE;
+                        if ((ganadorEnvid.equals(mMyId) || esDeMiEquipo(ganadorEnvid)) && caso == 1){
+                            if(logro_farolero){ Games.Achievements.unlock(mGoogleApiClient, FAROLERO);}
+                            if(logro_33){Games.Achievements.unlock(mGoogleApiClient, ENVID_33);}
+                            puntosEnvid = ENVID;
+                        }
+                        if ((ganadorEnvid.equals(mMyId) || esDeMiEquipo(ganadorEnvid)) && caso == 2){
+                            if(logro_farolero){ Games.Achievements.unlock(mGoogleApiClient, FAROLERO);}
+                            if(logro_33){Games.Achievements.unlock(mGoogleApiClient, ENVID_33);}
+                            puntosEnvid = TORNE;
+                        }
                         if ((ganadorEnvid.equals(mMyId) || esDeMiEquipo(ganadorEnvid)) && caso == 3){
+                            if(logro_farolero){ Games.Achievements.unlock(mGoogleApiClient, FAROLERO);}
+                            if(logro_33){Games.Achievements.unlock(mGoogleApiClient, ENVID_33);}
                             if (puntosTotalesJugador2 <= 12) {
                                 puntosEnvid = 24;
                             } else if (puntosTotalesJugador2 > 12) {
@@ -6635,6 +6697,11 @@ public class MainActivity extends Activity
                                     //Actualiza el ranking sumando una victoria
                                     updateLeaderboards(mGoogleApiClient, LEADERBOARD_ID);
                                     Games.Achievements.unlock(mGoogleApiClient, PRIMERA_PARTIDA);
+                                    Games.Achievements.unlock(mGoogleApiClient, TRIUNFADOR_PRINCIPIANTE);
+                                    Games.Achievements.unlock(mGoogleApiClient, TRIUNFADOR_AVANZADO);
+                                    Games.Achievements.unlock(mGoogleApiClient, TRIUNFADOR_EXPERTO);
+                                    Games.Achievements.unlock(mGoogleApiClient, LEYENDA);
+
                                     switchToScreen(R.id.screen_win);
 
                                 } else if (ganadorFinal.equals("RIVAL")) {
@@ -6864,6 +6931,11 @@ public class MainActivity extends Activity
                     if(numeroJugadores == 2){
                         updateLeaderboards(mGoogleApiClient, LEADERBOARD_ID);
                         switchToScreen(R.id.screen_win_rival_desconectado);
+                        Games.Achievements.unlock(mGoogleApiClient, PRIMERA_PARTIDA);
+                        Games.Achievements.unlock(mGoogleApiClient, TRIUNFADOR_PRINCIPIANTE);
+                        Games.Achievements.unlock(mGoogleApiClient, TRIUNFADOR_AVANZADO);
+                        Games.Achievements.unlock(mGoogleApiClient, TRIUNFADOR_EXPERTO);
+                        Games.Achievements.unlock(mGoogleApiClient, LEYENDA);
                         leaveRoom();
 
                     }else if(numeroJugadores == 4) {
@@ -6883,6 +6955,11 @@ public class MainActivity extends Activity
                 case '5':
                     updateLeaderboards(mGoogleApiClient, LEADERBOARD_ID);
                     switchToScreen(R.id.screen_win_rival_desconectado);
+                    Games.Achievements.unlock(mGoogleApiClient, PRIMERA_PARTIDA);
+                    Games.Achievements.unlock(mGoogleApiClient, TRIUNFADOR_PRINCIPIANTE);
+                    Games.Achievements.unlock(mGoogleApiClient, TRIUNFADOR_AVANZADO);
+                    Games.Achievements.unlock(mGoogleApiClient, TRIUNFADOR_EXPERTO);
+                    Games.Achievements.unlock(mGoogleApiClient, LEYENDA);
                     leaveRoom();
 
 
@@ -6916,6 +6993,8 @@ public class MainActivity extends Activity
                                         public void onClick(View v) {
                                             senyaDerecha.setImageResource(R.drawable.adg);
                                             Games.Achievements.unlock(mGoogleApiClient, MIRON_PRINCIPIANTE);
+                                            Games.Achievements.unlock(mGoogleApiClient, MIRON_PROFESIONAL);
+                                            Games.Achievements.unlock(mGoogleApiClient, MIRON_EXPERTO);
                                             handlerDerecha.removeCallbacks(runi);
                                             handlerDerecha.postDelayed(new Runnable() {
                                                 public void run() {
@@ -6936,6 +7015,8 @@ public class MainActivity extends Activity
                                         public void onClick(View v) {
                                             senyaDerecha.setImageResource(R.drawable.bocaabierta);
                                             Games.Achievements.unlock(mGoogleApiClient, MIRON_PRINCIPIANTE);
+                                            Games.Achievements.unlock(mGoogleApiClient, MIRON_PROFESIONAL);
+                                            Games.Achievements.unlock(mGoogleApiClient, MIRON_EXPERTO);
                                             handlerDerecha.removeCallbacks(runi);
                                             handlerDerecha.postDelayed(new Runnable() {
                                                 public void run() {
@@ -6955,6 +7036,8 @@ public class MainActivity extends Activity
                                         public void onClick(View v) {
                                             senyaDerecha.setImageResource(R.drawable.cascos);
                                             Games.Achievements.unlock(mGoogleApiClient, MIRON_PRINCIPIANTE);
+                                            Games.Achievements.unlock(mGoogleApiClient, MIRON_PROFESIONAL);
+                                            Games.Achievements.unlock(mGoogleApiClient, MIRON_EXPERTO);
                                             handlerDerecha.removeCallbacks(runi);
                                             handlerDerecha.postDelayed(new Runnable() {
                                                 public void run() {
@@ -6974,6 +7057,8 @@ public class MainActivity extends Activity
                                         public void onClick(View v) {
                                             senyaDerecha.setImageResource(R.drawable.gafas);
                                             Games.Achievements.unlock(mGoogleApiClient, MIRON_PRINCIPIANTE);
+                                            Games.Achievements.unlock(mGoogleApiClient, MIRON_PROFESIONAL);
+                                            Games.Achievements.unlock(mGoogleApiClient, MIRON_EXPERTO);
                                             handlerDerecha.removeCallbacks(runi);
                                             handlerDerecha.postDelayed(new Runnable() {
                                                 public void run() {
@@ -6993,6 +7078,8 @@ public class MainActivity extends Activity
                                         public void onClick(View v) {
                                             senyaDerecha.setImageResource(R.drawable.cejas);
                                             Games.Achievements.unlock(mGoogleApiClient, MIRON_PRINCIPIANTE);
+                                            Games.Achievements.unlock(mGoogleApiClient, MIRON_PROFESIONAL);
+                                            Games.Achievements.unlock(mGoogleApiClient, MIRON_EXPERTO);
                                             handlerDerecha.removeCallbacks(runi);
                                             handlerDerecha.postDelayed(new Runnable() {
                                                 public void run() {
@@ -7012,6 +7099,8 @@ public class MainActivity extends Activity
                                         public void onClick(View v) {
                                             senyaDerecha.setImageResource(R.drawable.lenguafuera);
                                             Games.Achievements.unlock(mGoogleApiClient, MIRON_PRINCIPIANTE);
+                                            Games.Achievements.unlock(mGoogleApiClient, MIRON_PROFESIONAL);
+                                            Games.Achievements.unlock(mGoogleApiClient, MIRON_EXPERTO);
                                             handlerDerecha.removeCallbacks(runi);
                                             handlerDerecha.postDelayed(new Runnable() {
                                                 public void run() {
@@ -7031,6 +7120,8 @@ public class MainActivity extends Activity
                                         public void onClick(View v) {
                                             senyaDerecha.setImageResource(R.drawable.mofletes);
                                             Games.Achievements.unlock(mGoogleApiClient, MIRON_PRINCIPIANTE);
+                                            Games.Achievements.unlock(mGoogleApiClient, MIRON_PROFESIONAL);
+                                            Games.Achievements.unlock(mGoogleApiClient, MIRON_EXPERTO);
                                             handlerDerecha.removeCallbacks(runi);
                                             handlerDerecha.postDelayed(new Runnable() {
                                                 public void run() {
@@ -7050,6 +7141,8 @@ public class MainActivity extends Activity
                                         public void onClick(View v) {
                                             senyaDerecha.setImageResource(R.drawable.raro);
                                             Games.Achievements.unlock(mGoogleApiClient, MIRON_PRINCIPIANTE);
+                                            Games.Achievements.unlock(mGoogleApiClient, MIRON_PROFESIONAL);
+                                            Games.Achievements.unlock(mGoogleApiClient, MIRON_EXPERTO);
                                             handlerDerecha.removeCallbacks(runi);
                                             handlerDerecha.postDelayed(new Runnable() {
                                                 public void run() {
@@ -7069,6 +7162,8 @@ public class MainActivity extends Activity
                                         public void onClick(View v) {
                                             senyaDerecha.setImageResource(R.drawable.rojo);
                                             Games.Achievements.unlock(mGoogleApiClient, MIRON_PRINCIPIANTE);
+                                            Games.Achievements.unlock(mGoogleApiClient, MIRON_PROFESIONAL);
+                                            Games.Achievements.unlock(mGoogleApiClient, MIRON_EXPERTO);
                                             handlerDerecha.removeCallbacks(runi);
                                             handlerDerecha.postDelayed(new Runnable() {
                                                 public void run() {
@@ -7100,6 +7195,8 @@ public class MainActivity extends Activity
                                         public void onClick(View v) {
                                             senyaIzq.setImageResource(R.drawable.adg);
                                             Games.Achievements.unlock(mGoogleApiClient, MIRON_PRINCIPIANTE);
+                                            Games.Achievements.unlock(mGoogleApiClient, MIRON_PROFESIONAL);
+                                            Games.Achievements.unlock(mGoogleApiClient, MIRON_EXPERTO);
                                             handlerIzq.removeCallbacks(runi2);
                                             handlerIzq.postDelayed(new Runnable() {
                                                 public void run() {
@@ -7119,6 +7216,8 @@ public class MainActivity extends Activity
                                         public void onClick(View v) {
                                             senyaIzq.setImageResource(R.drawable.bocaabierta);
                                             Games.Achievements.unlock(mGoogleApiClient, MIRON_PRINCIPIANTE);
+                                            Games.Achievements.unlock(mGoogleApiClient, MIRON_PROFESIONAL);
+                                            Games.Achievements.unlock(mGoogleApiClient, MIRON_EXPERTO);
                                             handlerIzq.removeCallbacks(runi2);
                                             handlerIzq.postDelayed(new Runnable() {
                                                 public void run() {
@@ -7138,6 +7237,8 @@ public class MainActivity extends Activity
                                         public void onClick(View v) {
                                             senyaIzq.setImageResource(R.drawable.cascos);
                                             Games.Achievements.unlock(mGoogleApiClient, MIRON_PRINCIPIANTE);
+                                            Games.Achievements.unlock(mGoogleApiClient, MIRON_PROFESIONAL);
+                                            Games.Achievements.unlock(mGoogleApiClient, MIRON_EXPERTO);
                                             handlerIzq.removeCallbacks(runi2);
                                             handlerIzq.postDelayed(new Runnable() {
                                                 public void run() {
@@ -7157,6 +7258,8 @@ public class MainActivity extends Activity
                                         public void onClick(View v) {
                                             senyaIzq.setImageResource(R.drawable.gafas);
                                             Games.Achievements.unlock(mGoogleApiClient, MIRON_PRINCIPIANTE);
+                                            Games.Achievements.unlock(mGoogleApiClient, MIRON_PROFESIONAL);
+                                            Games.Achievements.unlock(mGoogleApiClient, MIRON_EXPERTO);
                                             handlerIzq.removeCallbacks(runi2);
                                             handlerIzq.postDelayed(new Runnable() {
                                                 public void run() {
@@ -7176,6 +7279,8 @@ public class MainActivity extends Activity
                                         public void onClick(View v) {
                                             senyaIzq.setImageResource(R.drawable.cejas);
                                             Games.Achievements.unlock(mGoogleApiClient, MIRON_PRINCIPIANTE);
+                                            Games.Achievements.unlock(mGoogleApiClient, MIRON_PROFESIONAL);
+                                            Games.Achievements.unlock(mGoogleApiClient, MIRON_EXPERTO);
                                             handlerIzq.removeCallbacks(runi2);
                                             handlerIzq.postDelayed(new Runnable() {
                                                 public void run() {
@@ -7195,6 +7300,8 @@ public class MainActivity extends Activity
                                         public void onClick(View v) {
                                             senyaIzq.setImageResource(R.drawable.lenguafuera);
                                             Games.Achievements.unlock(mGoogleApiClient, MIRON_PRINCIPIANTE);
+                                            Games.Achievements.unlock(mGoogleApiClient, MIRON_PROFESIONAL);
+                                            Games.Achievements.unlock(mGoogleApiClient, MIRON_EXPERTO);
                                             handlerIzq.removeCallbacks(runi2);
                                             handlerIzq.postDelayed(new Runnable() {
                                                 public void run() {
@@ -7214,6 +7321,8 @@ public class MainActivity extends Activity
                                         public void onClick(View v) {
                                             senyaIzq.setImageResource(R.drawable.mofletes);
                                             Games.Achievements.unlock(mGoogleApiClient, MIRON_PRINCIPIANTE);
+                                            Games.Achievements.unlock(mGoogleApiClient, MIRON_PROFESIONAL);
+                                            Games.Achievements.unlock(mGoogleApiClient, MIRON_EXPERTO);
                                             handlerIzq.removeCallbacks(runi2);
                                             handlerIzq.postDelayed(new Runnable() {
                                                 public void run() {
@@ -7233,6 +7342,8 @@ public class MainActivity extends Activity
                                         public void onClick(View v) {
                                             senyaIzq.setImageResource(R.drawable.raro);
                                             Games.Achievements.unlock(mGoogleApiClient, MIRON_PRINCIPIANTE);
+                                            Games.Achievements.unlock(mGoogleApiClient, MIRON_PROFESIONAL);
+                                            Games.Achievements.unlock(mGoogleApiClient, MIRON_EXPERTO);
                                             handlerIzq.removeCallbacks(runi2);
                                             handlerIzq.postDelayed(new Runnable() {
                                                 public void run() {
@@ -7252,6 +7363,8 @@ public class MainActivity extends Activity
                                         public void onClick(View v) {
                                             senyaIzq.setImageResource(R.drawable.rojo);
                                             Games.Achievements.unlock(mGoogleApiClient, MIRON_PRINCIPIANTE);
+                                            Games.Achievements.unlock(mGoogleApiClient, MIRON_PROFESIONAL);
+                                            Games.Achievements.unlock(mGoogleApiClient, MIRON_EXPERTO);
                                             handlerIzq.removeCallbacks(runi2);
                                             handlerIzq.postDelayed(new Runnable() {
                                                 public void run() {
