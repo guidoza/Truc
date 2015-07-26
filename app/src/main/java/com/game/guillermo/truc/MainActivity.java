@@ -122,22 +122,22 @@ public class MainActivity extends Activity
     final static String LEADERBOARD_ID = "CgkIpb6oxu8SEAIQCA";
 
     /*********** LOGROS ***********/
-    final static String PRIMERA_PARTIDA = "CgkIpb6oxu8SEAIQCQ"; //AÑADIDO
-    final static String MAREA_AZUL = "CgkIpb6oxu8SEAIQCg"; //AÑADIDO (COMPROBAR NUMEROS DE CARTAS)
-    final static String MIRON_PRINCIPIANTE = "CgkIpb6oxu8SEAIQCw"; //AÑADIDO
-    final static String MIRON_PROFESIONAL = "CgkIpb6oxu8SEAIQDA"; //AÑADIDO
-    final static String MIRON_EXPERTO = "CgkIpb6oxu8SEAIQDQ"; //AÑADIDO
-    final static String ENVID_33 = "CgkIpb6oxu8SEAIQDg"; //AÑADIDO
-    final static String CASA_POR_LA_VENTANA = "CgkIpb6oxu8SEAIQDw"; //AÑADIDO
-    final static String TRIUNFADOR_PRINCIPIANTE = "CgkIpb6oxu8SEAIQEA"; //AÑADIDO
-    final static String TRIUNFADOR_AVANZADO = "CgkIpb6oxu8SEAIQEQ"; //AÑADIDO
-    final static String TRIUNFADOR_EXPERTO = "CgkIpb6oxu8SEAIQEg"; //AÑADIDO
-    final static String LEYENDA = "CgkIpb6oxu8SEAIQEw"; //AÑADIDO
-    final static String SOBRADO = "CgkIpb6oxu8SEAIQFA"; //AÑADIDO
-    final static String FAROLERO = "CgkIpb6oxu8SEAIQFQ"; //AÑADIDO
-    final static String AL_LIMITE = "CgkIpb6oxu8SEAIQFg"; //AÑADIDO
-    final static String SOCIAL = "CgkIpb6oxu8SEAIQFw"; //AÑADIDO
-    final static String ESTRATEGA = "CgkIpb6oxu8SEAIQGA"; //AÑADIDO
+    final static String PRIMERA_PARTIDA = "CgkIpb6oxu8SEAIQCQ"; //Aï¿½ADIDO
+    final static String MAREA_AZUL = "CgkIpb6oxu8SEAIQCg"; //Aï¿½ADIDO (COMPROBAR NUMEROS DE CARTAS)
+    final static String MIRON_PRINCIPIANTE = "CgkIpb6oxu8SEAIQCw"; //Aï¿½ADIDO
+    final static String MIRON_PROFESIONAL = "CgkIpb6oxu8SEAIQDA"; //Aï¿½ADIDO
+    final static String MIRON_EXPERTO = "CgkIpb6oxu8SEAIQDQ"; //Aï¿½ADIDO
+    final static String ENVID_33 = "CgkIpb6oxu8SEAIQDg"; //Aï¿½ADIDO
+    final static String CASA_POR_LA_VENTANA = "CgkIpb6oxu8SEAIQDw"; //Aï¿½ADIDO
+    final static String TRIUNFADOR_PRINCIPIANTE = "CgkIpb6oxu8SEAIQEA"; //Aï¿½ADIDO
+    final static String TRIUNFADOR_AVANZADO = "CgkIpb6oxu8SEAIQEQ"; //Aï¿½ADIDO
+    final static String TRIUNFADOR_EXPERTO = "CgkIpb6oxu8SEAIQEg"; //Aï¿½ADIDO
+    final static String LEYENDA = "CgkIpb6oxu8SEAIQEw"; //Aï¿½ADIDO
+    final static String SOBRADO = "CgkIpb6oxu8SEAIQFA"; //Aï¿½ADIDO
+    final static String FAROLERO = "CgkIpb6oxu8SEAIQFQ"; //Aï¿½ADIDO
+    final static String AL_LIMITE = "CgkIpb6oxu8SEAIQFg"; //Aï¿½ADIDO
+    final static String SOCIAL = "CgkIpb6oxu8SEAIQFw"; //Aï¿½ADIDO
+    final static String ESTRATEGA = "CgkIpb6oxu8SEAIQGA"; //Aï¿½ADIDO
 
     // Request code used to invoke sign in user interactions.
     private static final int RC_SIGN_IN = 9001;
@@ -646,10 +646,17 @@ public class MainActivity extends Activity
                         else tapo = true;
                         break;
 
-                    case R.id.frases_4J:
+                    case R.id.frases:
                         Holder holder = new ListHolder();
                         SimpleAdapter adapter = new SimpleAdapter(MainActivity.this);
                         showOnlyContentDialog(holder, Gravity.BOTTOM, adapter, true);
+                        actionButton.hide();
+                        break;
+
+                    case R.id.frases_4J:
+                        Holder holder_4J = new ListHolder();
+                        SimpleAdapter adapter_4J = new SimpleAdapter(MainActivity.this);
+                        showOnlyContentDialog(holder_4J, Gravity.BOTTOM, adapter_4J, true);
                         actionButton_4J.hide();
                         break;
                 }
@@ -849,10 +856,6 @@ public class MainActivity extends Activity
         cargarPublicidad();
 
         //Cambio de la fuente de los elementos del juego
-        bQuickGame2 = (FButton) findViewById(R.id.button_quick_game);
-        bQuickGame4 = (FButton) findViewById(R.id.button_quick_game_4);
-        bInvitar = (FButton) findViewById(R.id.button_invite_players);
-        bVerInvitaciones = (FButton) findViewById(R.id.button_see_invitations);
         textoInvitacion = (TextView) findViewById(R.id.incoming_invitation_text);
         bAceptarInv = (FButton) findViewById(R.id.button_accept_popup_invitation);
         txtGanasPartida = (TextView) findViewById(R.id.txtGanasPartida);
@@ -2401,7 +2404,7 @@ public class MainActivity extends Activity
             Log.d("<HHHHHHHHHHH>", "UPDATE ROOM");
             Log.d("<HHHHHHHHHHH>", "Peers list: "+peersWhoLeft.toString());
             mParticipants = room.getParticipants();
-            Log.d("<HHHHHHHHHHH>", "Tamaño de la sala: " + mParticipants.size());
+            Log.d("<HHHHHHHHHHH>", "Tamaï¿½o de la sala: " + mParticipants.size());
             Participant aux = null;
             for (Participant p : mParticipants) {
                 if(p.getParticipantId().equals(peersWhoLeft.get(0))){
@@ -2409,7 +2412,7 @@ public class MainActivity extends Activity
                 }
             }
             mParticipants.remove(aux);
-            Log.d("<HHHHHHHHHHH>", "Tamaño de la sala tras remove: " + mParticipants.size());
+            Log.d("<HHHHHHHHHHH>", "Tamaï¿½o de la sala tras remove: " + mParticipants.size());
             updateRoomAfterLeft(room);
         }
 
@@ -2448,7 +2451,7 @@ public class MainActivity extends Activity
 
         if (room != null) {
             Log.d("<HHHHHHHHHHH>", "UPDATE ROOM AFTER LEFT");
-            Log.d("<HHHHHHHHHHH>", "Tamaño de la sala: "+mParticipants.size());
+            Log.d("<HHHHHHHHHHH>", "Tamaï¿½o de la sala: "+mParticipants.size());
 
             if(numeroJugadores == 2){
                 if(mParticipants.size()<2){
@@ -2583,6 +2586,9 @@ public class MainActivity extends Activity
                 tvMesaRival3.animate().scaleX((float) 1).scaleY((float) 1).setDuration(0);
                 hayAnimacionRival3 = false;
             }
+            layJ1.setBackground(getResources().getDrawable(R.drawable.fondo_carta, getTheme()));
+            layJ2.setBackground(getResources().getDrawable(R.drawable.fondo_carta, getTheme()));
+
         } else if (numeroJugadores == 4) {
             bloquearCartas();
             miValor = 0;
@@ -2740,6 +2746,11 @@ public class MainActivity extends Activity
                 tvMesaJ4_C1.animate().scaleX((float) 1).scaleY((float) 1).setDuration(0);
                 hayAnimacionIzqC3 = false;
             }
+
+            layBajo.setBackground(getResources().getDrawable(R.drawable.fondo_carta, getTheme()));
+            layDerecha.setBackground(getResources().getDrawable(R.drawable.fondo_carta, getTheme()));
+            layIzq.setBackground(getResources().getDrawable(R.drawable.fondo_carta, getTheme()));
+            layArriba.setBackground(getResources().getDrawable(R.drawable.fondo_carta, getTheme()));
 
         }
     }
@@ -3685,7 +3696,7 @@ public class MainActivity extends Activity
                 animacionAbrirCartas();
                 if (mMyId.equals(turno)) desbloquearCartas();
 
-                //Animacion titulo tiempo de señas
+                //Animacion titulo tiempo de seï¿½as
                 titulos.setText("Tiempo de senyikas");
                 animarTextoAccion(titulos);
 
@@ -6744,7 +6755,7 @@ public class MainActivity extends Activity
                                             showProgressCustomDialog(layout);
                                         }
                                     } else {
-                                        showProgressDialog("Lástima, pierdes la mano");
+                                        showProgressDialog("Lï¿½stima, pierdes la mano");
                                     }
                                     repartirTrasMano();
                                     Log.d("KKKKKKKK", "Repartiendo tras mano..." + mMyId);
@@ -6794,7 +6805,7 @@ public class MainActivity extends Activity
 
                                         if(equipo1[0].equals(mMyId) || equipo2[0].equals(mMyId)) {
                                             actualizarMarcador2_4J(puntosTotalesMios, "GANADOR", sender);
-                                            Log.d("ZZZZ", "Envío el segundo mensaje");
+                                            Log.d("ZZZZ", "Envï¿½o el segundo mensaje");
                                         }
                                     }
 
@@ -8274,8 +8285,8 @@ public class MainActivity extends Activity
             senyas.remove(0);
             senyas.add(view);
             ponerTick((ImageView) view);
-            //señas.add(0, señas.get(1));
-            //señas.add(1, view.getId());
+            //seï¿½as.add(0, seï¿½as.get(1));
+            //seï¿½as.add(1, view.getId());
         }else senyas.add(view);
         ponerTick((ImageView)view);
     }
