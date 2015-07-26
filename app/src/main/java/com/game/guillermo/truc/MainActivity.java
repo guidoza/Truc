@@ -7764,7 +7764,8 @@ public class MainActivity extends Activity
             R.id.button_quick_game, R.id.button_see_invitations, R.id.button_sign_in,
             R.id.button_sign_out, R.id.button_quick_game_4,R.id.button_ranking,
             R.id.button_logros, R.id.boton_iconos, R.id.button_return1,
-            R.id.button_return2, R.id.button_return3, R.id.button_return4
+            R.id.button_return2, R.id.button_return3, R.id.button_return4,
+            R.id.frases
     };
 
     // This array lists all the individual screens our game has.
