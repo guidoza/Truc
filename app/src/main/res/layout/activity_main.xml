@@ -505,8 +505,8 @@
 
                     <ImageButton
                         android:id="@+id/truco"
-                        android:layout_width="63dp"
-                        android:layout_height="63dp"
+                        android:layout_width="65dp"
+                        android:layout_height="65dp"
                         android:src="@drawable/ic_truco"
                         android:background="@drawable/but_truc"
                         android:layout_margin="5dp"
@@ -514,8 +514,8 @@
                         />
                     <ImageButton
                         android:id="@+id/retruco"
-                        android:layout_width="63dp"
-                        android:layout_height="63dp"
+                        android:layout_width="65dp"
+                        android:layout_height="65dp"
                         android:src="@drawable/ic_retruco"
                         android:background="@drawable/but_truc"
                         android:layout_margin="5dp"
@@ -524,8 +524,8 @@
                         />
                     <ImageButton
                         android:id="@+id/quatre"
-                        android:layout_width="63dp"
-                        android:layout_height="63dp"
+                        android:layout_width="65dp"
+                        android:layout_height="65dp"
                         android:src="@drawable/ic_quatre"
                         android:background="@drawable/but_truc"
                         android:layout_margin="5dp"
@@ -534,8 +534,8 @@
                         />
                     <ImageButton
                         android:id="@+id/joc_fora"
-                        android:layout_width="63dp"
-                        android:layout_height="63dp"
+                        android:layout_width="65dp"
+                        android:layout_height="65dp"
                         android:src="@drawable/ic_joc"
                         android:background="@drawable/but_truc"
                         android:layout_margin="10dp"
@@ -545,8 +545,8 @@
 
                     <ImageButton
                         android:id="@+id/envido"
-                        android:layout_width="63dp"
-                        android:layout_height="63dp"
+                        android:layout_width="65dp"
+                        android:layout_height="65dp"
                         android:src="@drawable/ic_envido"
                         android:background="@drawable/but_envid"
                         android:layout_margin="5dp"
@@ -556,8 +556,8 @@
 
                     <ImageButton
                         android:id="@+id/la_falta"
-                        android:layout_width="63dp"
-                        android:layout_height="63dp"
+                        android:layout_width="65dp"
+                        android:layout_height="65dp"
                         android:src="@drawable/ic_falta"
                         android:background="@drawable/but_falta"
                         android:layout_margin="5dp"
@@ -567,8 +567,8 @@
 
                     <ImageButton
                         android:id="@+id/me_voy"
-                        android:layout_width="63dp"
-                        android:layout_height="63dp"
+                        android:layout_width="65dp"
+                        android:layout_height="65dp"
                         android:background="@drawable/but_mevoy"
                         android:layout_margin="5dp"
                         android:layout_weight="1"
@@ -577,8 +577,8 @@
 
                     <ImageButton
                         android:id="@+id/frases"
-                        android:layout_width="63dp"
-                        android:layout_height="63dp"
+                        android:layout_width="65dp"
+                        android:layout_height="65dp"
                         android:background="@drawable/but_frases"
                         android:layout_margin="5dp"
                         android:layout_weight="1"
@@ -586,8 +586,8 @@
 
                     <ImageButton
                         android:id="@+id/tapar"
-                        android:layout_width="63dp"
-                        android:layout_height="63dp"
+                        android:layout_width="65dp"
+                        android:layout_height="65dp"
                         android:background="@drawable/but_tapar"
                         android:layout_margin="5dp"
                         android:layout_weight="1"
@@ -595,8 +595,8 @@
 
                     <ImageButton
                         android:id="@+id/abandonar"
-                        android:layout_width="63dp"
-                        android:layout_height="63dp"
+                        android:layout_width="65dp"
+                        android:layout_height="65dp"
                         android:background="@drawable/but_abandonar"
                         android:layout_margin="5dp"
                         android:layout_weight="1"
@@ -604,8 +604,8 @@
 
                     <ImageButton
                         android:id="@+id/salir"
-                        android:layout_width="63dp"
-                        android:layout_height="63dp"
+                        android:layout_width="65dp"
+                        android:layout_height="65dp"
                         android:background="@drawable/but_cerrar"
                         android:layout_margin="5dp"
                         android:layout_weight="1"

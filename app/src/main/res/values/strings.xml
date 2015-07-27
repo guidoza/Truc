@@ -42,8 +42,8 @@
     <string name="rival_disconnected">Tu rival se ha desconectado</string>
     <string name="loading">Cargando</string>
     <string name="pregunta_abandonar">Si abandonas, perderás la partida. ¿Estás seguro?</string>
-    <string name="tiempo_señas">¡Tiempo de señas!</string>
-    <string name="no_hago_señas">No hago señas</string>
+    <string name="tiempo_senyas">¡Tiempo de señas!</string>
+    <string name="no_hago_senyas">No hago señas</string>
     <string name="repartiendo">Repartiendo...</string>
     <string name="empezamos">¡Empezamos!</string>
     <string name="quiero_envid">Quiero el envid</string>
@@ -95,8 +95,8 @@
     <string name="sabes_hacer">¿Eso es todo lo que sabes hacer?</string>
 
     <!-- Frases para la pantalla Cargando -->
-    <string name="señas">Al iniciar la primera ronda del modo de 4 jugadores empieza el tiempo de señas. ¡Aprovéchalo para comunicarte con tu compañero!</string>
-    <string name="pillar_señas">Durante el tiempo de señas puedes pillar las señas de tus rivales. ¡Estate atento cuando salga su bocadillo y púlsalo!</string>
+    <string name="senyas">Al iniciar la primera ronda del modo de 4 jugadores empieza el tiempo de señas. ¡Aprovéchalo para comunicarte con tu compañero!</string>
+    <string name="pillar_senyas">Durante el tiempo de señas puedes pillar las señas de tus rivales. ¡Estate atento cuando salga su bocadillo y púlsalo!</string>
     <string name="amigos">Invita a tus amigos a la partida para que sea más divertido.</string>
     <string name="gente_cercana">Puedes buscar a jugadores cercanos a tu zona desde la pantalla de invitar a amigos. ¡Desafía a tus vecinos!</string>
     <string name="ranking">¿Quieres demostrar que eres el mejor? Gana partidas y compruébalo en el ranking.</string>

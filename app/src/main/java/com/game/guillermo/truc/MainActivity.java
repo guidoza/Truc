@@ -258,6 +258,7 @@ public class MainActivity extends Activity
     ImageView dedo;
     ImageButton abandonar;
     ImageButton tapar;
+    ImageButton frases;
 
     //TextViews
     TextView textoAccion1;
@@ -475,15 +476,6 @@ public class MainActivity extends Activity
     int cartaEspera = 0;
     int contador = 0;
 
-    private FButton bQuickGame2;
-    private FButton bQuickGame4;
-    private FButton bInvitar;
-    private FButton bVerInvitaciones;
-    private FButton bQuickGame;
-    private FButton button_return1;
-    private FButton button_return2;
-    private FButton button_return3;
-    private FButton button_return4;
     TextView textoInvitacion;
     FButton bAceptarInv;
     TextView txtGanasPartida;
@@ -509,14 +501,13 @@ public class MainActivity extends Activity
 
         carta = (ImageView) findViewById(R.id.carta_espera);
         dots = (DotsTextView) findViewById(R.id.dots);
-        dots.setTypeface(Typefaces.get(this, "Satisfy-Regular.ttf"));
+        dots.setTypeface(Typefaces.get(this, "Signika-Regular.ttf"));
         loading = (TextView) findViewById(R.id.text_loading);
-        loading.setTypeface(Typefaces.get(this, "Satisfy-Regular.ttf"));
+        loading.setTypeface(Typefaces.get(this, "Signika-Regular.ttf"));
 
         menuListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String text = "";
 
                 switch (v.getId()) {
                     case R.id.truco:
@@ -711,6 +702,7 @@ public class MainActivity extends Activity
         tapar = (ImageButton) findViewById(R.id.tapar);
         tapar_4J = (ImageButton) findViewById(R.id.tapar_4J);
 
+        frases = (ImageButton) findViewById(R.id.frases);
         frases_4J = (ImageButton) findViewById(R.id.frases_4J);
 
         progressBar1 = (ProgressBar) findViewById(R.id.progres_segundos_1);
@@ -803,6 +795,9 @@ public class MainActivity extends Activity
 
         txtNumeroJugador = (TextView) findViewById(R.id.textoNumeroJugador);
 
+        FButton desconectar = (FButton) findViewById(R.id.button_sign_out);
+        desconectar.setTypeface(Typefaces.get(this, "Signika-Regular.ttf"));
+
         bocadilloDerecha = (TextView) findViewById(R.id.bocadilloJ2);
         bocadilloArriba = (TextView) findViewById(R.id.bocadilloJ3);
         bocadilloIzq = (TextView) findViewById(R.id.bocadilloJ4);
@@ -864,10 +859,10 @@ public class MainActivity extends Activity
         txtGanasPartidaRivalDesc2 = (TextView) findViewById(R.id.txtGanasPartidaRivalDesc2);
         txtPierdesPartidaCompDesc1 = (TextView) findViewById(R.id.txtPierdesPartidaCompDesc1);
         txtPierdesPartidaCompDesc2 = (TextView) findViewById(R.id.txtPierdesPartidaCompDesc2);
-        button_return1 = (FButton) findViewById(R.id.button_return1);
-        button_return2 = (FButton) findViewById(R.id.button_return2);
-        button_return3 = (FButton) findViewById(R.id.button_return3);
-        button_return4 = (FButton) findViewById(R.id.button_return4);
+        FButton button_return1 = (FButton) findViewById(R.id.button_return1);
+        FButton button_return2 = (FButton) findViewById(R.id.button_return2);
+        FButton button_return3 = (FButton) findViewById(R.id.button_return3);
+        FButton button_return4 = (FButton) findViewById(R.id.button_return4);
 
 
         textoInvitacion.setTypeface(Typefaces.get(this, "Signika-Regular.ttf"));
@@ -894,10 +889,8 @@ public class MainActivity extends Activity
     private void showSingleChoiceAlertEnvid(String title, int array) {
         new MaterialDialog.Builder(this)
                 .title(title)
-                .titleColorRes(R.color.menuItems)
                 .items(array)
-                .itemColorRes(R.color.menuItems)
-                .itemsCallbackSingleChoice(2, new MaterialDialog.ListCallbackSingleChoice() {
+                .itemsCallbackSingleChoice(0, new MaterialDialog.ListCallbackSingleChoice() {
                     @Override
                     public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
                         switch (which) {
@@ -938,16 +931,14 @@ public class MainActivity extends Activity
                 })
                 .positiveText("Elegir")
                 .cancelable(false)
-                .show().getWindow().setBackgroundDrawable(new ColorDrawable(0x30000000));
+                .show().getWindow().setGravity(Gravity.TOP);
     }
 
     private void showSingleChoiceAlertVuelvo(String title, int array) {
         new MaterialDialog.Builder(this)
                 .title(title)
-                .titleColorRes(R.color.menuItems)
                 .items(array)
-                .itemColorRes(R.color.menuItems)
-                .itemsCallbackSingleChoice(2, new MaterialDialog.ListCallbackSingleChoice() {
+                .itemsCallbackSingleChoice(0, new MaterialDialog.ListCallbackSingleChoice() {
                     @Override
                     public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
                         switch (which) {
@@ -990,16 +981,14 @@ public class MainActivity extends Activity
                 })
                 .positiveText("Elegir")
                 .cancelable(false)
-                .show().getWindow().setBackgroundDrawable(new ColorDrawable(0x30000000));
+                .show().getWindow().setGravity(Gravity.TOP);
     }
 
     private void showSingleChoiceAlertFalta(String title, int array) {
         new MaterialDialog.Builder(this)
                 .title(title)
-                .titleColorRes(R.color.menuItems)
                 .items(array)
-                .itemColorRes(R.color.menuItems)
-                .itemsCallbackSingleChoice(2, new MaterialDialog.ListCallbackSingleChoice() {
+                .itemsCallbackSingleChoice(0, new MaterialDialog.ListCallbackSingleChoice() {
                     @Override
                     public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
                         switch (which) {
@@ -1042,16 +1031,14 @@ public class MainActivity extends Activity
                 })
                 .positiveText("Elegir")
                 .cancelable(false)
-                .show().getWindow().setBackgroundDrawable(new ColorDrawable(0x30000000));
+                .show().getWindow().setGravity(Gravity.TOP);
     }
 
     private void showSingleChoiceAlertTruco(String title, int array) {
         new MaterialDialog.Builder(this)
                 .title(title)
-                .titleColorRes(R.color.menuItems)
                 .items(array)
-                .itemColorRes(R.color.menuItems)
-                .itemsCallbackSingleChoice(2, new MaterialDialog.ListCallbackSingleChoice() {
+                .itemsCallbackSingleChoice(0, new MaterialDialog.ListCallbackSingleChoice() {
                     @Override
                     public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
                         switch (which) {
@@ -1078,16 +1065,14 @@ public class MainActivity extends Activity
                 })
                 .positiveText("Elegir")
                 .cancelable(false)
-                .show().getWindow().setBackgroundDrawable(new ColorDrawable(0x30000000));
+                .show().getWindow().setGravity(Gravity.TOP);
     }
 
     private void showSingleChoiceAlertRetruc(String title, int array) {
         new MaterialDialog.Builder(this)
                 .title(title)
-                .titleColorRes(R.color.menuItems)
                 .items(array)
-                .itemColorRes(R.color.menuItems)
-                .itemsCallbackSingleChoice(2, new MaterialDialog.ListCallbackSingleChoice() {
+                .itemsCallbackSingleChoice(0, new MaterialDialog.ListCallbackSingleChoice() {
                     @Override
                     public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
                         switch (which) {
@@ -1120,16 +1105,14 @@ public class MainActivity extends Activity
                 })
                 .positiveText("Elegir")
                 .cancelable(false)
-                .show().getWindow().setBackgroundDrawable(new ColorDrawable(0x30000000));
+                .show().getWindow().setGravity(Gravity.TOP);
     }
 
     private void showSingleChoiceAlertCuatreVal(String title, int array) {
         new MaterialDialog.Builder(this)
                 .title(title)
-                .titleColorRes(R.color.menuItems)
                 .items(array)
-                .itemColorRes(R.color.menuItems)
-                .itemsCallbackSingleChoice(2, new MaterialDialog.ListCallbackSingleChoice() {
+                .itemsCallbackSingleChoice(0, new MaterialDialog.ListCallbackSingleChoice() {
                     @Override
                     public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
                         switch (which) {
@@ -1163,16 +1146,14 @@ public class MainActivity extends Activity
                 })
                 .positiveText("Elegir")
                 .cancelable(false)
-                .show().getWindow().setBackgroundDrawable(new ColorDrawable(0x30000000));
+                .show().getWindow().setGravity(Gravity.TOP);
     }
 
     private void showSingleChoiceAlertJocFora(String title, int array) {
         new MaterialDialog.Builder(this)
                 .title(title)
-                .titleColorRes(R.color.menuItems)
                 .items(array)
-                .itemColorRes(R.color.menuItems)
-                .itemsCallbackSingleChoice(2, new MaterialDialog.ListCallbackSingleChoice() {
+                .itemsCallbackSingleChoice(0, new MaterialDialog.ListCallbackSingleChoice() {
                     @Override
                     public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
                         switch (which) {
@@ -1201,7 +1182,7 @@ public class MainActivity extends Activity
                 })
                 .positiveText("Elegir")
                 .cancelable(false)
-                .show().getWindow().setBackgroundDrawable(new ColorDrawable(0x30000000));
+                .show().getWindow().setGravity(Gravity.TOP);
     }
 
     private void comprobarGanadorEnvid() {
@@ -1235,10 +1216,10 @@ public class MainActivity extends Activity
 
     private void showIconosAlert() {
         dialogIconos = new MaterialDialog.Builder(this)
-                .title(getResources().getString(R.string.tiempo_señas))
+                .title(getResources().getString(R.string.tiempo_senyas))
                 .autoDismiss(false)
                 .positiveText("Enviar")
-                .negativeText(getResources().getString(R.string.no_hago_señas))
+                .negativeText(getResources().getString(R.string.no_hago_senyas))
                 .cancelable(false)
                 .callback(new MaterialDialog.ButtonCallback() {
                     @Override
@@ -1379,7 +1360,7 @@ public class MainActivity extends Activity
                 .titleGravity(GravityEnum.CENTER)
                 .customView(content, false)
                 .cancelable(false)
-                .theme(Theme.DARK);
+                .theme(Theme.LIGHT);
         repartiendo = materialDialog.show();
     }
 
@@ -2991,12 +2972,12 @@ public class MainActivity extends Activity
                 break;
             case "RETRUQUE":
                 if(esRivalDerecha(sender)){
-                    bocadilloDerecha.setText("¡Retruque!");
+                    bocadilloDerecha.setText("ï¿½Retruque!");
                     animarTextoAccion(bocadilloDerecha);
                     progressBarDerecha.setVisibility(View.INVISIBLE);
                     mCountDownTimerDerecha.cancel();
                 }else if(esRivalIzquierda(sender)){
-                    bocadilloIzq.setText("¡Retruque!");
+                    bocadilloIzq.setText("ï¿½Retruque!");
                     animarTextoAccion(bocadilloIzq);
                     progressBarIzq.setVisibility(View.INVISIBLE);
                     mCountDownTimerIzq.cancel();
@@ -3004,12 +2985,12 @@ public class MainActivity extends Activity
                 break;
             case "QUATRE":
                 if(esRivalDerecha(sender)){
-                    bocadilloDerecha.setText("¡Quatre val!");
+                    bocadilloDerecha.setText("ï¿½Quatre val!");
                     animarTextoAccion(bocadilloDerecha);
                     progressBarDerecha.setVisibility(View.INVISIBLE);
                     mCountDownTimerDerecha.cancel();
                 }else if(esRivalIzquierda(sender)){
-                    bocadilloIzq.setText("¡Quatre val!");
+                    bocadilloIzq.setText("ï¿½Quatre val!");
                     animarTextoAccion(bocadilloIzq);
                     progressBarIzq.setVisibility(View.INVISIBLE);
                     mCountDownTimerIzq.cancel();
@@ -3017,12 +2998,12 @@ public class MainActivity extends Activity
                 break;
             case "JOC":
                 if(esRivalDerecha(sender)){
-                    bocadilloDerecha.setText("¡Joc fora!");
+                    bocadilloDerecha.setText("ï¿½Joc fora!");
                     animarTextoAccion(bocadilloDerecha);
                     progressBarDerecha.setVisibility(View.INVISIBLE);
                     mCountDownTimerDerecha.cancel();
                 }else if(esRivalIzquierda(sender)){
-                    bocadilloIzq.setText("¡Joc fora!");
+                    bocadilloIzq.setText("ï¿½Joc fora!");
                     animarTextoAccion(bocadilloIzq);
                     progressBarIzq.setVisibility(View.INVISIBLE);
                     mCountDownTimerIzq.cancel();
@@ -3688,7 +3669,7 @@ public class MainActivity extends Activity
                 if (mMyId.equals(turno)) desbloquearCartas();
 
                 //Animacion titulo tiempo de seï¿½as
-                titulos.setText(getResources().getString(R.string.tiempo_señas));
+                titulos.setText(getResources().getString(R.string.tiempo_senyas));
                 animarTextoAccion(titulos);
 
             }
@@ -4029,6 +4010,7 @@ public class MainActivity extends Activity
                 meVoy.setOnClickListener(menuListener);
                 abandonar.setOnClickListener(menuListener);
                 tapar.setOnClickListener(menuListener);
+                frases.setOnClickListener(menuListener);
 
 
                 if (mMyId.equals(turno) && ronda == 1) {
@@ -7764,8 +7746,7 @@ public class MainActivity extends Activity
             R.id.button_quick_game, R.id.button_see_invitations, R.id.button_sign_in,
             R.id.button_sign_out, R.id.button_quick_game_4,R.id.button_ranking,
             R.id.button_logros, R.id.boton_iconos, R.id.button_return1,
-            R.id.button_return2, R.id.button_return3, R.id.button_return4,
-            R.id.frases
+            R.id.button_return2, R.id.button_return3, R.id.button_return4
     };
 
     // This array lists all the individual screens our game has.
@@ -8667,7 +8648,7 @@ public class MainActivity extends Activity
                 .titleColorRes(R.color.menuItems)
                 .items(array)
                 .itemColorRes(R.color.menuItems)
-                .itemsCallbackSingleChoice(1, new MaterialDialog.ListCallbackSingleChoice() {
+                .itemsCallbackSingleChoice(0, new MaterialDialog.ListCallbackSingleChoice() {
                     @Override
                     public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
                         switch (which) {
@@ -8738,7 +8719,7 @@ public class MainActivity extends Activity
                 .titleColorRes(R.color.menuItems)
                 .items(array)
                 .itemColorRes(R.color.menuItems)
-                .itemsCallbackSingleChoice(1, new MaterialDialog.ListCallbackSingleChoice() {
+                .itemsCallbackSingleChoice(0, new MaterialDialog.ListCallbackSingleChoice() {
                     @Override
                     public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
                         switch (which) {
@@ -8799,7 +8780,7 @@ public class MainActivity extends Activity
                 .titleColorRes(R.color.menuItems)
                 .items(array)
                 .itemColorRes(R.color.menuItems)
-                .itemsCallbackSingleChoice(1, new MaterialDialog.ListCallbackSingleChoice() {
+                .itemsCallbackSingleChoice(0, new MaterialDialog.ListCallbackSingleChoice() {
                     @Override
                     public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
                         switch (which) {
@@ -9150,7 +9131,7 @@ public class MainActivity extends Activity
                 .titleColorRes(R.color.menuItems)
                 .items(array)
                 .itemColorRes(R.color.menuItems)
-                .itemsCallbackSingleChoice(2, new MaterialDialog.ListCallbackSingleChoice() {
+                .itemsCallbackSingleChoice(0, new MaterialDialog.ListCallbackSingleChoice() {
                     @Override
                     public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
                         switch (which) {
@@ -9186,7 +9167,7 @@ public class MainActivity extends Activity
                 .titleColorRes(R.color.menuItems)
                 .items(array)
                 .itemColorRes(R.color.menuItems)
-                .itemsCallbackSingleChoice(2, new MaterialDialog.ListCallbackSingleChoice() {
+                .itemsCallbackSingleChoice(0, new MaterialDialog.ListCallbackSingleChoice() {
                     @Override
                     public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
                         switch (which) {
@@ -9223,7 +9204,7 @@ public class MainActivity extends Activity
                 .titleColorRes(R.color.menuItems)
                 .items(array)
                 .itemColorRes(R.color.menuItems)
-                .itemsCallbackSingleChoice(2, new MaterialDialog.ListCallbackSingleChoice() {
+                .itemsCallbackSingleChoice(0, new MaterialDialog.ListCallbackSingleChoice() {
                     @Override
                     public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
                         switch (which) {
@@ -9259,7 +9240,7 @@ public class MainActivity extends Activity
                 .titleColorRes(R.color.menuItems)
                 .items(array)
                 .itemColorRes(R.color.menuItems)
-                .itemsCallbackSingleChoice(2, new MaterialDialog.ListCallbackSingleChoice() {
+                .itemsCallbackSingleChoice(0, new MaterialDialog.ListCallbackSingleChoice() {
                     @Override
                     public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
                         switch (which) {
