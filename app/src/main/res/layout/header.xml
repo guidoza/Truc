@@ -12,14 +12,14 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Selecciona una frase:"
+            android:text="@string/selecciona_frase"
             android:textColor="@android:color/black"
             android:textSize="@dimen/header_text_size"/>
 
     <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="TODOS LA VERÁN"
+            android:text="@string/todos_la_veran"
             android:textColor="@color/black_overlay"
             android:textSize="@dimen/sample_text_size"/>
 

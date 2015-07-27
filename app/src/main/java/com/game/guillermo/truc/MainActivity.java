@@ -265,6 +265,7 @@ public class MainActivity extends Activity
     TextView textoAccion2;
     TextView nombreJugador1;
     TextView nombreJugador2;
+    TextView fraseAleatoria;
 
 
     //Otros objetos
@@ -847,6 +848,9 @@ public class MainActivity extends Activity
         layArriba = (LinearLayout) findViewById(R.id.layArriba);
         layIzq = (LinearLayout) findViewById(R.id.layIzq);
 
+        fraseAleatoria = (TextView) findViewById(R.id.textoFraseAleatoria);
+        fraseAleatoria.setTypeface(Typefaces.get(this, "Signika-Regular.ttf"));
+
         //Carga el anuncio para que este listo para mostrarlo
         cargarPublicidad();
 
@@ -1209,7 +1213,7 @@ public class MainActivity extends Activity
         materialDialog = new MaterialDialog.Builder(this)
                 .title(title)
                 .content(message)
-                .positiveText("Aceptar")
+                .positiveText(getResources().getString(R.string.aceptar))
                 .cancelable(false);
         materialDialog.show();
     }
@@ -1323,8 +1327,8 @@ public class MainActivity extends Activity
         materialDialog = new MaterialDialog.Builder(this)
                 .title(title)
                 .content(message)
-                .positiveText("Aceptar")
-                .negativeText("Cancelar")
+                .positiveText(getResources().getString(R.string.aceptar))
+                .negativeText(getResources().getString(R.string.cancelar))
                 .callback(new MaterialDialog.ButtonCallback() {
                     @Override
                     public void onPositive(MaterialDialog dialog) {
@@ -7765,7 +7769,10 @@ public class MainActivity extends Activity
         }
         mCurScreen = screenId;
 
-        if(mCurScreen == R.id.screen_wait) animarEspera();
+        if(mCurScreen == R.id.screen_wait){
+            animarEspera();
+            fraseAleatoria.setText(calcularFraseAleatoria());
+        }
 
         //Para la publicidad
         if(mCurScreen == R.id.screen_lost || mCurScreen == R.id.screen_win
@@ -9381,6 +9388,34 @@ public class MainActivity extends Activity
                 (numCarta1==18 || numCarta2==18 || numCarta3==18)){
             Games.Achievements.unlock(mGoogleApiClient, MAREA_AZUL);
         }
+    }
+
+    public String calcularFraseAleatoria(){
+        int frase = (int) (Math.random() * 9) + 1;
+
+        switch (frase){
+            case 0:
+                return getResources().getString(R.string.invitaciones);
+            case 1:
+                return getResources().getString(R.string.senyas);
+            case 2:
+                return getResources().getString(R.string.pillar_senyas);
+            case 3:
+                return getResources().getString(R.string.logros);
+            case 4:
+                return getResources().getString(R.string.gente_cercana);
+            case 5:
+                return getResources().getString(R.string.ranking);
+            case 6:
+                return getResources().getString(R.string.valenciano);
+            case 7:
+                return getResources().getString(R.string.agregar_amigos);
+            case 8:
+                return getResources().getString(R.string.gusta);
+            case 9:
+                return getResources().getString(R.string.amigos);
+        }
+         return getResources().getString(R.string.gusta);
     }
 
 }

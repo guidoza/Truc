@@ -192,7 +192,16 @@
                 android:textColor="@android:color/primary_text_light"
                 fab:autoplay="true"
                 fab:period="1000" />
+
         </LinearLayout>
+
+        <TextView
+            android:id="@+id/textoFraseAleatoria"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_margin="10dp"
+            android:background="@drawable/fondo_carta"
+            android:padding="2dp"/>
 
     </LinearLayout>
 
