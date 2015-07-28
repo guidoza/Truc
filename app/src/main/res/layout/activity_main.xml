@@ -166,7 +166,7 @@
             android:layout_marginTop="200dp"
             android:layout_gravity="center"
             android:background="@drawable/fondo_carta"
-            android:padding="2dp"/>
+            android:padding="7dp"/>
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -1231,6 +1231,12 @@
 
     <!-- PANTALLA HAS GANADO LA PARTIDA -->
     <LinearLayout android:id="@+id/screen_win" style="@style/LLScreen">
+        <ImageView
+            android:id="@+id/imgVictoria2"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:layout_marginBottom="15dp"
+            android:background="@drawable/victoria"/>
         <TextView style="@style/Blurb"
             android:id="@+id/txtGanasPartida"
             android:text="@string/win" />
@@ -1251,6 +1257,12 @@
 
     <!-- PANTALLA HAS PERDIDO LA PARTIDA -->
     <LinearLayout android:id="@+id/screen_lost" style="@style/LLScreen">
+        <ImageView
+            android:id="@+id/imgDerrota2"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:layout_marginBottom="15dp"
+            android:background="@drawable/derrota"/>
         <TextView style="@style/Blurb"
             android:id="@+id/txtPierdesPartida"
             android:text="@string/loose" />
@@ -1271,6 +1283,12 @@
 
     <!-- PANTALLA TU COMPAÑERO SE HA DESCONECTADO -->
     <LinearLayout android:id="@+id/screen_lost_companyero_desconectado" style="@style/LLScreen">
+        <ImageView
+            android:id="@+id/imgDerrota1"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:layout_marginBottom="15dp"
+            android:background="@drawable/derrota"/>
         <TextView style="@style/Blurb" android:id="@+id/txtPierdesPartidaCompDesc1"
             android:text="@string/loose" />
         <TextView style="@style/Blurb" android:id="@+id/txtPierdesPartidaCompDesc2"
@@ -1292,6 +1310,12 @@
 
     <!-- PANTALLA RIVAL SE HA DESCONECTADO -->
     <LinearLayout android:id="@+id/screen_win_rival_desconectado" style="@style/LLScreen">
+        <ImageView
+            android:id="@+id/imgVictoria1"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:layout_marginBottom="15dp"
+            android:background="@drawable/victoria"/>
         <TextView style="@style/Blurb" android:id="@+id/txtGanasPartidaRivalDesc1"
         android:text="@string/win" />
         <TextView style="@style/Blurb" android:id="@+id/txtGanasPartidaRivalDesc2"

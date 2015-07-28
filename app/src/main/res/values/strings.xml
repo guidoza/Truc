@@ -17,22 +17,22 @@
 
 <resources>
     <string name="signing_in">Entra con Google+</string>
-    <string name="signing_out" translatable="false">Signing out</string>
+    <string name="signing_out">Signing out</string>
     <string name="app_name">¡Retruque!</string>
-    <string name="game_title" translatable="false">¡Retruque!</string>
+    <string name="game_title">¡Retruque!</string>
     <string name="quick_game">2 jugadores</string>
     <string name="quick_game_4">Partida rápida 4 jugadores</string>
     <string name="invite_players">Invita a tus amigos</string>
     <string name="see_invitations">Mira tus invitaciones</string>
     <string name="inv_popup_text">¡Tienes una nueva invitacion!</string>
     <string name="accept_popup_invite">¡Acepto!</string>
-    <string name="sign_out" translatable="false">Desconectarse</string>
+    <string name="sign_out">Desconectarse</string>
     <string name="please_wait">Por favor espera...</string>
-    <string name="dismiss" translatable="false">Dismiss</string>
-    <string name="error" translatable="false">Error</string>
+    <string name="dismiss">Dismiss</string>
+    <string name="error">Error</string>
     <string name="game_problem">Ha habido un error iniciando el juego. Prueba de nuevo.</string>
-    <string name="LEADERBOARD_ID" translatable="false">CgkIpb6oxu8SEAIQCA</string>
-    <string name="ad_unit_id" translatable="false">ca-app-pub-4776780046370926/8556690699</string>
+    <string name="LEADERBOARD_ID">CgkIpb6oxu8SEAIQCA</string>
+    <string name="ad_unit_id">ca-app-pub-4776780046370926/8556690699</string>
     <string name="is_inviting_you">te ha invitado a una partida</string>
     <string name="signin_other_error">Ha habido un error con el login. Por favor, inténtalo de nuevo.</string>
     <string name="volver">Volver al menú principal</string>
@@ -70,14 +70,14 @@
     <string name="falta">¡Envido la falta!</string>
     <string name="rival_truca">Tu rival ha trucado</string>
     <string name="rival_retruca">Tu rival ha retrucado</string>
-    <string name="retruque" translatable="false">¡Retruque!</string>
-    <string name="quatre" translatable="false">¡Quatre val!</string>
-    <string name="joc_fora" translatable="false">¡Joc fora!</string>
+    <string name="retruque">¡Retruque!</string>
+    <string name="quatre">¡Quatre val!</string>
+    <string name="joc_fora">¡Joc fora!</string>
     <string name="ganas_mano">Enhorabuena, ganas la mano</string>
     <string name="pierdes_mano">Oh, has perdido la mano</string>
     <string name="aceptar">Aceptar</string>
     <string name="cancelar">Cancelar</string>
-    <string name="selecciona_frase" translatable="false">Selecciona una frase:</string>
+    <string name="selecciona_frase">Selecciona una frase:</string>
     <string name="todos_la_veran">TODOS LA VERÁN</string>
     <string name="ganaste_envid">Ganaste el envid</string>
     <string name="perdiste_envid">Perdiste el envid</string>
@@ -94,7 +94,7 @@
     <string name="no_pico">No voy a picar</string>
     <string name="sobrado">Voy sobrado</string>
     <string name="fantasmilla">Menudo fantasma</string>
-    <string name="bo" translatable="false">¡Va de bo!</string>
+    <string name="bo">¡Va de bo!</string>
     <string name="cargadito">Voy cargado</string>
     <string name="nada_que_hacer">No tienes nada que hacer</string>
     <string name="rival_digno">Se busca rival digno</string>
