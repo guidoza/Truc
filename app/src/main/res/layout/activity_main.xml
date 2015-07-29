@@ -4,7 +4,9 @@
     xmlns:fbutton="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@drawable/fondo_menu"
+    android:id="@+id/Frame">
 
     <!-- SIGN-IN SCREEN -->
     <LinearLayout android:id="@+id/screen_sign_in" style="@style/LLScreen">
@@ -155,10 +157,8 @@
     <LinearLayout
         android:layout_height="match_parent"
         android:layout_width="match_parent"
-        android:background="#1ABC9C"
         android:id="@+id/screen_wait"
         android:orientation="vertical">
-        <!-- <TextView style="@style/Blurb" android:text="@string/please_wait" />-->
         <ImageView
             android:id="@+id/carta_espera"
             android:layout_width="65dp"
@@ -166,7 +166,7 @@
             android:layout_marginTop="200dp"
             android:layout_gravity="center"
             android:background="@drawable/fondo_carta"
-            android:padding="7dp"/>
+            android:padding="3dp"/>
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -179,17 +179,17 @@
                 android:text="@string/loading"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@android:color/primary_text_light"
+                android:textColor="@android:color/primary_text_dark"
                 android:textSize="30sp" />
 
             <pl.tajchert.sample.DotsTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/dots"
-                android:layout_marginLeft="5dp"
+                android:layout_marginLeft="3dp"
                 android:padding="10dp"
                 android:textSize="30sp"
-                android:textColor="@android:color/primary_text_light"
+                android:textColor="@android:color/primary_text_dark"
                 fab:autoplay="true"
                 fab:period="1000" />
 
@@ -198,10 +198,13 @@
         <TextView
             android:id="@+id/textoFraseAleatoria"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_margin="10dp"
-            android:background="@drawable/fondo_carta"
-            android:padding="2dp"/>
+            android:layout_height="wrap_content"
+            android:layout_margin="30dp"
+            android:background="@drawable/fondo_boton"
+            android:padding="10dp"
+            android:textColor="@android:color/primary_text_dark"
+            android:textSize="10sp"
+            />
 
     </LinearLayout>
 
@@ -212,7 +215,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:background="@drawable/posiblefondo">
+        >
 
 
         <FrameLayout
@@ -633,7 +636,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:background="#088A4B">
+        >
 
         <FrameLayout
             android:layout_width="match_parent"
@@ -1235,9 +1238,14 @@
             android:id="@+id/imgVictoria2"
             android:layout_width="200dp"
             android:layout_height="200dp"
-            android:layout_marginBottom="15dp"
+            android:layout_margin="10dp"
             android:background="@drawable/victoria"/>
-        <TextView style="@style/Blurb"
+        <TextView
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:textColor="@color/primary_material_light"
+            android:textSize="13sp"
+            android:layout_margin="10dp"
             android:id="@+id/txtGanasPartida"
             android:text="@string/win" />
         <info.hoang8f.widget.FButton
@@ -1261,11 +1269,17 @@
             android:id="@+id/imgDerrota2"
             android:layout_width="200dp"
             android:layout_height="200dp"
-            android:layout_marginBottom="15dp"
+            android:layout_margin="10dp"
             android:background="@drawable/derrota"/>
-        <TextView style="@style/Blurb"
+        <TextView
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:textColor="@color/primary_material_light"
+            android:textSize="13sp"
             android:id="@+id/txtPierdesPartida"
-            android:text="@string/loose" />
+            android:text="@string/loose"
+            android:layout_margin="10dp"
+            />
         <info.hoang8f.widget.FButton
             android:id="@+id/button_return2"
             android:layout_width="match_parent"
@@ -1273,8 +1287,8 @@
             android:layout_marginBottom="6dp"
             android:text="@string/volver"
             android:textColor="@color/cpb_white"
-            fbutton:buttonColor="#1ABC9C"
-            fbutton:shadowColor="#16A085"
+            fbutton:buttonColor="@color/common_signin_btn_default_background"
+            fbutton:shadowColor="@color/AccentColor"
             fbutton:shadowEnabled="true"
             fbutton:shadowHeight="5dp"
             fbutton:cornerRadius="5dp"
@@ -1287,12 +1301,25 @@
             android:id="@+id/imgDerrota1"
             android:layout_width="200dp"
             android:layout_height="200dp"
-            android:layout_marginBottom="15dp"
+            android:layout_margin="10dp"
             android:background="@drawable/derrota"/>
-        <TextView style="@style/Blurb" android:id="@+id/txtPierdesPartidaCompDesc1"
-            android:text="@string/loose" />
-        <TextView style="@style/Blurb" android:id="@+id/txtPierdesPartidaCompDesc2"
-            android:text="@string/friend_disconnected" />
+        <TextView
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:textColor="@color/primary_material_light"
+            android:textSize="13sp"
+            android:id="@+id/txtPierdesPartidaCompDesc1"
+            android:text="@string/loose"
+            android:layout_marginBottom="5dp"
+            />
+        <TextView
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:textColor="@color/primary_material_light"
+            android:textSize="13sp"
+            android:id="@+id/txtPierdesPartidaCompDesc2"
+            android:text="@string/friend_disconnected"
+            />
         <info.hoang8f.widget.FButton
             android:id="@+id/button_return3"
             android:layout_width="match_parent"
@@ -1300,8 +1327,8 @@
             android:layout_marginBottom="6dp"
             android:text="@string/volver"
             android:textColor="@color/cpb_white"
-            fbutton:buttonColor="#1ABC9C"
-            fbutton:shadowColor="#16A085"
+            fbutton:buttonColor="@color/common_signin_btn_default_background"
+            fbutton:shadowColor="@color/AccentColor"
             fbutton:shadowEnabled="true"
             fbutton:shadowHeight="5dp"
             fbutton:cornerRadius="5dp"
@@ -1314,12 +1341,25 @@
             android:id="@+id/imgVictoria1"
             android:layout_width="200dp"
             android:layout_height="200dp"
-            android:layout_marginBottom="15dp"
+            android:layout_margin="10dp"
             android:background="@drawable/victoria"/>
-        <TextView style="@style/Blurb" android:id="@+id/txtGanasPartidaRivalDesc1"
-        android:text="@string/win" />
-        <TextView style="@style/Blurb" android:id="@+id/txtGanasPartidaRivalDesc2"
+        <TextView
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:textColor="@color/primary_material_light"
+            android:textSize="13sp"
+            android:id="@+id/txtGanasPartidaRivalDesc1"
+            android:text="@string/win"
+            android:layout_marginBottom="5dp"
+            />
+        <TextView
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:textColor="@color/primary_material_light"
+            android:textSize="20sp"
+            android:id="@+id/txtGanasPartidaRivalDesc2"
             android:text="@string/rival_disconnected" />
+
         <info.hoang8f.widget.FButton
             android:id="@+id/button_return4"
             android:layout_width="match_parent"

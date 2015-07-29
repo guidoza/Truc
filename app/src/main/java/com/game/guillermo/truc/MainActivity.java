@@ -41,6 +41,7 @@ import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.BaseAdapter;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -493,6 +494,7 @@ public class MainActivity extends Activity
     TextView tvEnvidRival2;
     TextView tvEnvidRival3;
     TextView tvEnvidRival4;
+    FrameLayout frame;
 
 
     @Override
@@ -507,6 +509,8 @@ public class MainActivity extends Activity
                 .addApi(Plus.API).addScope(Plus.SCOPE_PLUS_LOGIN)
                 .addApi(Games.API).addScope(Games.SCOPE_GAMES)
                 .build();
+
+        frame = (FrameLayout)findViewById(R.id.Frame);
 
         carta = (ImageView) findViewById(R.id.carta_espera);
         dots = (DotsTextView) findViewById(R.id.dots);
@@ -1936,6 +1940,13 @@ public class MainActivity extends Activity
         super.onStop();
     }
 
+    @Override
+    public void onPause() {
+        Log.d(TAG, "Reset All en onPause");
+        resetAll();
+        super.onPause();
+    }
+
     // Activity just got to the foreground. We switch to the wait screen because we will now
     // go through the sign-in flow (remember that, yes, every time the Activity comes back to the
     // foreground we go through the sign-in flow -- but if the user is already authenticated,
@@ -2539,7 +2550,7 @@ public class MainActivity extends Activity
 
             textoAccion1.setVisibility(View.INVISIBLE);
             textoAccion2.setVisibility(View.INVISIBLE);
-            if (mCountDownTimerJ1 != null && mCountDownTimerJ2 != null) cancelarBarraProgreso();
+            cancelarBarraProgreso();
             segundos = 40;
             segundos2 = 40;
 
@@ -2557,6 +2568,8 @@ public class MainActivity extends Activity
 
             logro_farolero = false;
             logro_33 = false;
+
+            ponerCartaRecta();
 
             if (hayAnimaciones) {
                 deshacerAnimaciones(tvJugador1);
@@ -2657,8 +2670,7 @@ public class MainActivity extends Activity
             contadorMensajeSenyas = 0;
             alguienHaSalido = false;
 
-            if (mCountDownTimerAbajo != null || mCountDownTimerArriba != null
-                    || mCountDownTimerDerecha != null || mCountDownTimerIzq != null) cancelarBarraProgreso();
+            cancelarBarraProgreso();
             segundos = 40;
             segundos2 = 40;
 
@@ -2694,6 +2706,8 @@ public class MainActivity extends Activity
 
             logro_farolero = false;
             logro_33 = false;
+
+            ponerCartaRecta();
 
             if (hayAnimaciones) {
                 deshacerAnimaciones(tvJugador1_4J);
@@ -2748,6 +2762,8 @@ public class MainActivity extends Activity
             layArriba.setBackground(getResources().getDrawable(R.drawable.fondo_carta, getTheme()));
 
         }
+
+        resetPuntos();
     }
 
     void resetPuntos() {
@@ -2769,69 +2785,54 @@ public class MainActivity extends Activity
         hayAnimacionRival3 = false;
     }
 
+    void ponerCartaRecta(){
+        if(numeroJugadores == 2){
+            tvJugador1.animate().translationX(inicio1.x).rotation(0).setDuration(500);
+            tvJugador1.animate().translationY(inicio1.y).rotation(0).setDuration(500);
+            tvJugador2.animate().translationX(inicio2.x).rotation(0).setDuration(500);
+            tvJugador2.animate().translationY(inicio2.y).rotation(0).setDuration(500);
+            tvJugador3.animate().translationX(inicio3.x).rotation(0).setDuration(500);
+            tvJugador3.animate().translationY(inicio3.y).rotation(0).setDuration(500);
+        }else if(numeroJugadores == 4){
+            tvJugador1_4J.animate().translationX(inicio1J1.x).rotation(0).setDuration(500);
+            tvJugador1_4J.animate().translationY(inicio1J1.y).rotation(0).setDuration(500);
+            tvJugador2_4J.animate().translationX(inicio2J1.x).rotation(0).setDuration(500);
+            tvJugador2_4J.animate().translationY(inicio2J1.y).rotation(0).setDuration(500);
+            tvJugador3_4J.animate().translationX(inicio3J1.x).rotation(0).setDuration(500);
+            tvJugador3_4J.animate().translationY(inicio3J1.y).rotation(0).setDuration(500);
+
+        }
+    }
+
     void deshacerAnimaciones(View view) {
 
         switch (numeroJugadores) {
 
             case 2:
-                if(view.equals(tvJugador1)){
-                    view.animate().translationX(inicio1.x).rotation(0).setDuration(500);
-                    view.animate().translationY(inicio1.y).rotation(0).setDuration(500);
+                if(view.equals(tvJugador1) && posTvJugador1 != 0){
+                    view.animate().rotationXBy(-30).scaleX((float) 1).scaleY((float) 1).setDuration(500);
 
-                    if (posTvJugador1 != 0) {
-                        view.animate().rotationXBy(-30).scaleX((float) 1).scaleY((float) 1).setDuration(500);
-                    }
+                }else if(view.equals(tvJugador2) && posTvJugador2 != 0){
+                    view.animate().rotationXBy(-30).scaleX((float) 1).scaleY((float) 1).setDuration(500);
 
-                }else if(view.equals(tvJugador2)){
+                } else if(view.equals(tvJugador3) && posTvJugador3 != 0){
+                    view.animate().rotationXBy(-30).scaleX((float) 1).scaleY((float) 1).setDuration(500);
 
-                    view.animate().translationX(inicio2.x).rotation(0).setDuration(500);
-                    view.animate().translationY(inicio2.y).rotation(0).setDuration(500);
-
-                    if (posTvJugador2 != 0) {
-                        view.animate().rotationXBy(-30).scaleX((float) 1).scaleY((float) 1).setDuration(500);
-                    }
-
-                } else if(view.equals(tvJugador3)){
-
-                    view.animate().translationX(inicio3.x).rotation(0).setDuration(500);
-                    view.animate().translationY(inicio3.y).rotation(0).setDuration(500);
-
-                    if (posTvJugador3 != 0) {
-                        view.animate().rotationXBy(-30).scaleX((float) 1).scaleY((float) 1).setDuration(500);
-                    }
                 }
-
                 break;
 
             case 4:
 
-                if(view.equals(tvJugador1_4J)){
-                view.animate().translationX(inicio1J1.x).rotation(0).setDuration(500);
-                view.animate().translationY(inicio1J1.y).rotation(0).setDuration(500);
-
-                if (posTvJugador1 != 0) {
+                if(view.equals(tvJugador1_4J) && posTvJugador1 != 0){
                     view.animate().rotationXBy(-30).scaleX((float) 1).scaleY((float) 1).setDuration(500);
+
+                }else if(view.equals(tvJugador2_4J) && posTvJugador2 != 0){
+                    view.animate().rotationXBy(-30).scaleX((float) 1).scaleY((float) 1).setDuration(500);
+
+                } else if(view.equals(tvJugador3_4J) && posTvJugador3 != 0){
+                    view.animate().rotationXBy(-30).scaleX((float) 1).scaleY((float) 1).setDuration(500);
+
                 }
-
-                }else if(view.equals(tvJugador2_4J)){
-
-                    view.animate().translationX(inicio2J1.x).rotation(0).setDuration(500);
-                    view.animate().translationY(inicio2J1.y).rotation(0).setDuration(500);
-
-                    if (posTvJugador2 != 0) {
-                        view.animate().rotationXBy(-30).scaleX((float) 1).scaleY((float) 1).setDuration(500);
-                    }
-
-                } else if(view.equals(tvJugador3_4J)){
-
-                    view.animate().translationX(inicio3J1.x).rotation(0).setDuration(500);
-                    view.animate().translationY(inicio3J1.y).rotation(0).setDuration(500);
-
-                    if (posTvJugador3 != 0) {
-                        view.animate().rotationXBy(-30).scaleX((float) 1).scaleY((float) 1).setDuration(500);
-                    }
-                }
-
                 break;
         }
 
@@ -3569,23 +3570,17 @@ public class MainActivity extends Activity
 
     void cancelarBarraProgreso() {
         if(numeroJugadores == 2) {
-            if (progressBar1.getVisibility() == View.VISIBLE) {
-                mCountDownTimerJ1.cancel();
-            } else if (progressBar2.getVisibility() == View.VISIBLE) {
-                mCountDownTimerJ2.cancel();
-            }
+            if (mCountDownTimerJ1 != null) mCountDownTimerJ1.cancel();
+            if (mCountDownTimerJ2 != null) mCountDownTimerJ2.cancel();
+
         }else if(numeroJugadores == 4){
             segundos = 40;
             segundos2 = 40;
-            if (progressBarAbajo.getVisibility() == View.VISIBLE) {
-                mCountDownTimerAbajo.cancel();
-            } else if (progressBarDerecha.getVisibility() == View.VISIBLE) {
-                mCountDownTimerDerecha.cancel();
-            }else if (progressBarArriba.getVisibility() == View.VISIBLE) {
-                mCountDownTimerArriba.cancel();
-            }else if (progressBarIzq.getVisibility() == View.VISIBLE) {
-                mCountDownTimerIzq.cancel();
-            }
+            if (mCountDownTimerAbajo != null) mCountDownTimerAbajo.cancel();
+            if (mCountDownTimerDerecha != null) mCountDownTimerDerecha.cancel();
+            if (mCountDownTimerArriba != null) mCountDownTimerArriba.cancel();
+            if (mCountDownTimerIzq != null) mCountDownTimerIzq.cancel();
+
         }
     }
 
@@ -7851,12 +7846,18 @@ public class MainActivity extends Activity
         for (int id : SCREENS) {
             findViewById(id).setVisibility(screenId == id ? View.VISIBLE : View.GONE);
         }
-        mCurScreen = screenId;
-
-        if(mCurScreen == R.id.screen_wait){
+        if(screenId == R.id.screen_wait){
             animarEspera();
             fraseAleatoria.setText(calcularFraseAleatoria());
+
+        }else if(screenId == R.id.screen_game || screenId == R.id.screen_game_4_jugadores){
+            frame.setBackground(getResources().getDrawable(R.drawable.mesa2, null));
+
+        }else if(mCurScreen == R.id.screen_game || mCurScreen == R.id.screen_game_4_jugadores){
+            frame.setBackground(getResources().getDrawable(R.drawable.fondo_menu, null));
         }
+
+        mCurScreen = screenId;
 
         //Para la publicidad
         if(mCurScreen == R.id.screen_lost || mCurScreen == R.id.screen_win
