@@ -37,7 +37,7 @@
                 android:id="@+id/espada"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-                android:background="@drawable/cejas"
+                android:background="@drawable/cejaslevantadas"
                 android:layout_gravity="center"
                 android:onClick="seleccionaUnaSenya"/>
 
@@ -53,7 +53,7 @@
                 android:id="@+id/basto"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-                android:background="@drawable/cejas"
+                android:background="@drawable/guinyo"
                 android:layout_gravity="center"
                 android:onClick="seleccionaUnaSenya"/>
 
@@ -69,7 +69,7 @@
                 android:id="@+id/manillaEspadas"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-                android:background="@drawable/cejas"
+                android:background="@drawable/dientes"
                 android:layout_gravity="center"
                 android:onClick="seleccionaUnaSenya"/>
 
@@ -85,7 +85,7 @@
                 android:id="@+id/manillaOros"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-                android:background="@drawable/cejas"
+                android:background="@drawable/lengua"
                 android:layout_gravity="center"
                 android:onClick="seleccionaUnaSenya"/>
 
@@ -101,7 +101,7 @@
                 android:id="@+id/tres"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-                android:background="@drawable/cejas"
+                android:background="@drawable/hombro"
                 android:layout_gravity="center"
                 android:onClick="seleccionaUnaSenya"/>
 
@@ -117,7 +117,7 @@
                 android:id="@+id/ciego"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-                android:background="@drawable/cejas"
+                android:background="@drawable/ojoscerrados"
                 android:layout_gravity="center"
                 android:onClick="seleccionaUnaSenya"/>
 
@@ -133,7 +133,7 @@
                 android:id="@+id/envid33"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-                android:background="@drawable/cejas"
+                android:background="@drawable/soplido"
                 android:layout_gravity="center"
                 android:onClick="seleccionaUnaSenya"/>
 
@@ -149,7 +149,7 @@
                 android:id="@+id/envid32"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-                android:background="@drawable/cejas"
+                android:background="@drawable/mofleteshinchados"
                 android:layout_gravity="center"
                 android:onClick="seleccionaUnaSenya"/>
 
@@ -162,10 +162,10 @@
             tools:background="#000">
 
             <ImageView
-                android:id="@+id/envid31"
+                android:id="@+id/falsa"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-                android:background="@drawable/cejas"
+                android:background="@drawable/falsa"
                 android:layout_gravity="center"
                 android:onClick="seleccionaUnaSenya"/>
 

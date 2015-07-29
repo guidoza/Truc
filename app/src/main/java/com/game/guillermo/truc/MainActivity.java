@@ -1271,8 +1271,8 @@ public class MainActivity extends Activity
                                 case R.id.envid32:
                                     senyaPrimera = "32";
                                     break;
-                                case R.id.envid31:
-                                    senyaPrimera = "31";
+                                case R.id.falsa:
+                                    senyaPrimera = "FALSA";
                                     break;
                             }
                         }
@@ -1303,8 +1303,8 @@ public class MainActivity extends Activity
                                 case R.id.envid32:
                                     senyaSegunda = "32";
                                     break;
-                                case R.id.envid31:
-                                    senyaSegunda = "31";
+                                case R.id.falsa:
+                                    senyaSegunda = "FALSA";
                                     break;
                             }
 
@@ -7003,7 +7003,7 @@ public class MainActivity extends Activity
                                     senyaDerecha.setOnClickListener(new View.OnClickListener() {
                                         @Override
                                         public void onClick(View v) {
-                                            senyaDerecha.setImageResource(R.drawable.adg);
+                                            senyaDerecha.setImageResource(R.drawable.cejaslevantadas);
                                             Games.Achievements.increment(mGoogleApiClient, MIRON_PRINCIPIANTE, 1);
                                             Games.Achievements.increment(mGoogleApiClient, MIRON_PROFESIONAL, 1);
                                             Games.Achievements.increment(mGoogleApiClient, MIRON_EXPERTO, 1 );
@@ -7025,7 +7025,7 @@ public class MainActivity extends Activity
                                     senyaDerecha.setOnClickListener(new View.OnClickListener() {
                                         @Override
                                         public void onClick(View v) {
-                                            senyaDerecha.setImageResource(R.drawable.bocaabierta);
+                                            senyaDerecha.setImageResource(R.drawable.guinyo);
                                             Games.Achievements.increment(mGoogleApiClient, MIRON_PRINCIPIANTE, 1);
                                             Games.Achievements.increment(mGoogleApiClient, MIRON_PROFESIONAL, 1);
                                             Games.Achievements.increment(mGoogleApiClient, MIRON_EXPERTO, 1);
@@ -7046,7 +7046,7 @@ public class MainActivity extends Activity
                                     senyaDerecha.setOnClickListener(new View.OnClickListener() {
                                         @Override
                                         public void onClick(View v) {
-                                            senyaDerecha.setImageResource(R.drawable.cascos);
+                                            senyaDerecha.setImageResource(R.drawable.dientes);
                                             Games.Achievements.increment(mGoogleApiClient, MIRON_PRINCIPIANTE, 1);
                                             Games.Achievements.increment(mGoogleApiClient, MIRON_PROFESIONAL, 1);
                                             Games.Achievements.increment(mGoogleApiClient, MIRON_EXPERTO, 1);
@@ -7067,7 +7067,7 @@ public class MainActivity extends Activity
                                     senyaDerecha.setOnClickListener(new View.OnClickListener() {
                                         @Override
                                         public void onClick(View v) {
-                                            senyaDerecha.setImageResource(R.drawable.gafas);
+                                            senyaDerecha.setImageResource(R.drawable.lengua);
                                             Games.Achievements.increment(mGoogleApiClient, MIRON_PRINCIPIANTE, 1);
                                             Games.Achievements.increment(mGoogleApiClient, MIRON_PROFESIONAL, 1);
                                             Games.Achievements.increment(mGoogleApiClient, MIRON_EXPERTO, 1);
@@ -7088,7 +7088,7 @@ public class MainActivity extends Activity
                                     senyaDerecha.setOnClickListener(new View.OnClickListener() {
                                         @Override
                                         public void onClick(View v) {
-                                            senyaDerecha.setImageResource(R.drawable.cejas);
+                                            senyaDerecha.setImageResource(R.drawable.hombro);
                                             Games.Achievements.increment(mGoogleApiClient, MIRON_PRINCIPIANTE, 1);
                                             Games.Achievements.increment(mGoogleApiClient, MIRON_PROFESIONAL, 1);
                                             Games.Achievements.increment(mGoogleApiClient, MIRON_EXPERTO, 1);
@@ -7109,7 +7109,7 @@ public class MainActivity extends Activity
                                     senyaDerecha.setOnClickListener(new View.OnClickListener() {
                                         @Override
                                         public void onClick(View v) {
-                                            senyaDerecha.setImageResource(R.drawable.lenguafuera);
+                                            senyaDerecha.setImageResource(R.drawable.ojoscerrados);
                                             Games.Achievements.increment(mGoogleApiClient, MIRON_PRINCIPIANTE, 1);
                                             Games.Achievements.increment(mGoogleApiClient, MIRON_PROFESIONAL, 1);
                                             Games.Achievements.increment(mGoogleApiClient, MIRON_EXPERTO, 1);
@@ -7130,7 +7130,7 @@ public class MainActivity extends Activity
                                     senyaDerecha.setOnClickListener(new View.OnClickListener() {
                                         @Override
                                         public void onClick(View v) {
-                                            senyaDerecha.setImageResource(R.drawable.mofletes);
+                                            senyaDerecha.setImageResource(R.drawable.soplido);
                                             Games.Achievements.increment(mGoogleApiClient, MIRON_PRINCIPIANTE, 1);
                                             Games.Achievements.increment(mGoogleApiClient, MIRON_PROFESIONAL, 1);
                                             Games.Achievements.increment(mGoogleApiClient, MIRON_EXPERTO, 1);
@@ -7151,7 +7151,7 @@ public class MainActivity extends Activity
                                     senyaDerecha.setOnClickListener(new View.OnClickListener() {
                                         @Override
                                         public void onClick(View v) {
-                                            senyaDerecha.setImageResource(R.drawable.raro);
+                                            senyaDerecha.setImageResource(R.drawable.mofleteshinchados);
                                             Games.Achievements.increment(mGoogleApiClient, MIRON_PRINCIPIANTE, 1);
                                             Games.Achievements.increment(mGoogleApiClient, MIRON_PROFESIONAL, 1);
                                             Games.Achievements.increment(mGoogleApiClient, MIRON_EXPERTO, 1);
@@ -7166,13 +7166,13 @@ public class MainActivity extends Activity
                                     });
                                     handlerDerecha.postDelayed(runi, 600);
                                     break;
-                                case "31":
+                                case "FALSA":
                                     senyaDerecha.setImageResource(R.drawable.interrogacion);
                                     senyaDerecha.setVisibility(View.VISIBLE);
                                     senyaDerecha.setOnClickListener(new View.OnClickListener() {
                                         @Override
                                         public void onClick(View v) {
-                                            senyaDerecha.setImageResource(R.drawable.rojo);
+                                            senyaDerecha.setImageResource(R.drawable.falsa);
                                             Games.Achievements.increment(mGoogleApiClient, MIRON_PRINCIPIANTE, 1);
                                             Games.Achievements.increment(mGoogleApiClient, MIRON_PROFESIONAL, 1);
                                             Games.Achievements.increment(mGoogleApiClient, MIRON_EXPERTO, 1);
@@ -7205,7 +7205,7 @@ public class MainActivity extends Activity
                                     senyaIzq.setOnClickListener(new View.OnClickListener() {
                                         @Override
                                         public void onClick(View v) {
-                                            senyaIzq.setImageResource(R.drawable.adg);
+                                            senyaIzq.setImageResource(R.drawable.cejaslevantadas);
                                             Games.Achievements.increment(mGoogleApiClient, MIRON_PRINCIPIANTE, 1);
                                             Games.Achievements.increment(mGoogleApiClient, MIRON_PROFESIONAL, 1);
                                             Games.Achievements.increment(mGoogleApiClient, MIRON_EXPERTO, 1);
@@ -7226,7 +7226,7 @@ public class MainActivity extends Activity
                                     senyaIzq.setOnClickListener(new View.OnClickListener() {
                                         @Override
                                         public void onClick(View v) {
-                                            senyaIzq.setImageResource(R.drawable.bocaabierta);
+                                            senyaIzq.setImageResource(R.drawable.guinyo);
                                             Games.Achievements.increment(mGoogleApiClient, MIRON_PRINCIPIANTE, 1);
                                             Games.Achievements.increment(mGoogleApiClient, MIRON_PROFESIONAL, 1);
                                             Games.Achievements.increment(mGoogleApiClient, MIRON_EXPERTO, 1);
@@ -7247,7 +7247,7 @@ public class MainActivity extends Activity
                                     senyaIzq.setOnClickListener(new View.OnClickListener() {
                                         @Override
                                         public void onClick(View v) {
-                                            senyaIzq.setImageResource(R.drawable.cascos);
+                                            senyaIzq.setImageResource(R.drawable.dientes);
                                             Games.Achievements.increment(mGoogleApiClient, MIRON_PRINCIPIANTE, 1);
                                             Games.Achievements.increment(mGoogleApiClient, MIRON_PROFESIONAL, 1);
                                             Games.Achievements.increment(mGoogleApiClient, MIRON_EXPERTO, 1);
@@ -7268,7 +7268,7 @@ public class MainActivity extends Activity
                                     senyaIzq.setOnClickListener(new View.OnClickListener() {
                                         @Override
                                         public void onClick(View v) {
-                                            senyaIzq.setImageResource(R.drawable.gafas);
+                                            senyaIzq.setImageResource(R.drawable.lengua);
                                             Games.Achievements.increment(mGoogleApiClient, MIRON_PRINCIPIANTE, 1);
                                             Games.Achievements.increment(mGoogleApiClient, MIRON_PROFESIONAL, 1);
                                             Games.Achievements.increment(mGoogleApiClient, MIRON_EXPERTO, 1);
@@ -7289,7 +7289,7 @@ public class MainActivity extends Activity
                                     senyaIzq.setOnClickListener(new View.OnClickListener() {
                                         @Override
                                         public void onClick(View v) {
-                                            senyaIzq.setImageResource(R.drawable.cejas);
+                                            senyaIzq.setImageResource(R.drawable.hombro);
                                             Games.Achievements.increment(mGoogleApiClient, MIRON_PRINCIPIANTE, 1);
                                             Games.Achievements.increment(mGoogleApiClient, MIRON_PROFESIONAL, 1);
                                             Games.Achievements.increment(mGoogleApiClient, MIRON_EXPERTO, 1);
@@ -7310,7 +7310,7 @@ public class MainActivity extends Activity
                                     senyaIzq.setOnClickListener(new View.OnClickListener() {
                                         @Override
                                         public void onClick(View v) {
-                                            senyaIzq.setImageResource(R.drawable.lenguafuera);
+                                            senyaIzq.setImageResource(R.drawable.ojoscerrados);
                                             Games.Achievements.increment(mGoogleApiClient, MIRON_PRINCIPIANTE, 1);
                                             Games.Achievements.increment(mGoogleApiClient, MIRON_PROFESIONAL, 1);
                                             Games.Achievements.increment(mGoogleApiClient, MIRON_EXPERTO, 1);
@@ -7331,7 +7331,7 @@ public class MainActivity extends Activity
                                     senyaIzq.setOnClickListener(new View.OnClickListener() {
                                         @Override
                                         public void onClick(View v) {
-                                            senyaIzq.setImageResource(R.drawable.mofletes);
+                                            senyaIzq.setImageResource(R.drawable.soplido);
                                             Games.Achievements.increment(mGoogleApiClient, MIRON_PRINCIPIANTE, 1);
                                             Games.Achievements.increment(mGoogleApiClient, MIRON_PROFESIONAL, 1);
                                             Games.Achievements.increment(mGoogleApiClient, MIRON_EXPERTO, 1);
@@ -7352,7 +7352,7 @@ public class MainActivity extends Activity
                                     senyaIzq.setOnClickListener(new View.OnClickListener() {
                                         @Override
                                         public void onClick(View v) {
-                                            senyaIzq.setImageResource(R.drawable.raro);
+                                            senyaIzq.setImageResource(R.drawable.mofleteshinchados);
                                             Games.Achievements.increment(mGoogleApiClient, MIRON_PRINCIPIANTE, 1);
                                             Games.Achievements.increment(mGoogleApiClient, MIRON_PROFESIONAL, 1);
                                             Games.Achievements.increment(mGoogleApiClient, MIRON_EXPERTO, 1);
@@ -7367,13 +7367,13 @@ public class MainActivity extends Activity
                                     });
                                     handlerIzq.postDelayed(runi2, 600);
                                     break;
-                                case "31":
+                                case "FALSA":
                                     senyaIzq.setImageResource(R.drawable.interrogacion);
                                     senyaIzq.setVisibility(View.VISIBLE);
                                     senyaIzq.setOnClickListener(new View.OnClickListener() {
                                         @Override
                                         public void onClick(View v) {
-                                            senyaIzq.setImageResource(R.drawable.rojo);
+                                            senyaIzq.setImageResource(R.drawable.falsa);
                                             Games.Achievements.increment(mGoogleApiClient, MIRON_PRINCIPIANTE, 1);
                                             Games.Achievements.increment(mGoogleApiClient, MIRON_PROFESIONAL, 1);
                                             Games.Achievements.increment(mGoogleApiClient, MIRON_EXPERTO, 1);
@@ -7484,7 +7484,7 @@ public class MainActivity extends Activity
         if(!senyaCompi1.equals("nada")){
             switch (senyaCompi1){
                 case "ESPADA":
-                    senyaArriba.setImageResource(R.drawable.adg);
+                    senyaArriba.setImageResource(R.drawable.cejaslevantadas);
                     senyaArriba.setVisibility(View.VISIBLE);
                     handlerArriba.postDelayed(new Runnable() {
                         public void run() {
@@ -7494,7 +7494,7 @@ public class MainActivity extends Activity
                     }, 1500);
                     break;
                 case "BASTO":
-                    senyaArriba.setImageResource(R.drawable.bocaabierta);
+                    senyaArriba.setImageResource(R.drawable.guinyo);
                     senyaArriba.setVisibility(View.VISIBLE);
                     handlerArriba.postDelayed(new Runnable() {
                         public void run() {
@@ -7504,7 +7504,7 @@ public class MainActivity extends Activity
                     }, 1500);
                     break;
                 case "7ESPADAS":
-                    senyaArriba.setImageResource(R.drawable.cascos);
+                    senyaArriba.setImageResource(R.drawable.dientes);
                     senyaArriba.setVisibility(View.VISIBLE);
                     handlerArriba.postDelayed(new Runnable() {
                         public void run() {
@@ -7514,7 +7514,7 @@ public class MainActivity extends Activity
                     }, 1500);
                     break;
                 case "7OROS":
-                    senyaArriba.setImageResource(R.drawable.gafas);
+                    senyaArriba.setImageResource(R.drawable.lengua);
                     senyaArriba.setVisibility(View.VISIBLE);
                     handlerArriba.postDelayed(new Runnable() {
                         public void run() {
@@ -7524,7 +7524,7 @@ public class MainActivity extends Activity
                     }, 1500);
                     break;
                 case "TRES":
-                    senyaArriba.setImageResource(R.drawable.cejas);
+                    senyaArriba.setImageResource(R.drawable.hombro);
                     senyaArriba.setVisibility(View.VISIBLE);
                     handlerArriba.postDelayed(new Runnable() {
                         public void run() {
@@ -7534,7 +7534,7 @@ public class MainActivity extends Activity
                     }, 1500);
                     break;
                 case "CIEGO":
-                    senyaArriba.setImageResource(R.drawable.lenguafuera);
+                    senyaArriba.setImageResource(R.drawable.ojoscerrados);
                     senyaArriba.setVisibility(View.VISIBLE);
                     handlerArriba.postDelayed(new Runnable() {
                         public void run() {
@@ -7544,7 +7544,7 @@ public class MainActivity extends Activity
                     }, 1500);
                     break;
                 case "33":
-                    senyaArriba.setImageResource(R.drawable.mofletes);
+                    senyaArriba.setImageResource(R.drawable.soplido);
                     senyaArriba.setVisibility(View.VISIBLE);
                     handlerArriba.postDelayed(new Runnable() {
                         public void run() {
@@ -7554,7 +7554,7 @@ public class MainActivity extends Activity
                     }, 1500);
                     break;
                 case "32":
-                    senyaArriba.setImageResource(R.drawable.raro);
+                    senyaArriba.setImageResource(R.drawable.mofleteshinchados);
                     senyaArriba.setVisibility(View.VISIBLE);
                     handlerArriba.postDelayed(new Runnable() {
                         public void run() {
@@ -7563,8 +7563,8 @@ public class MainActivity extends Activity
                         }
                     }, 1500);
                     break;
-                case "31":
-                    senyaArriba.setImageResource(R.drawable.rojo);
+                case "FALSA":
+                    senyaArriba.setImageResource(R.drawable.falsa);
                     senyaArriba.setVisibility(View.VISIBLE);
                     handlerArriba.postDelayed(new Runnable() {
                         public void run() {
@@ -7579,7 +7579,7 @@ public class MainActivity extends Activity
         if(!senyaCompi2.equals("nada")){
             switch (senyaCompi2){
                 case "ESPADA":
-                    senyaArriba2.setImageResource(R.drawable.adg);
+                    senyaArriba2.setImageResource(R.drawable.cejaslevantadas);
                     senyaArriba2.setVisibility(View.VISIBLE);
                     handlerArriba2.postDelayed(new Runnable() {
                         public void run() {
@@ -7589,7 +7589,7 @@ public class MainActivity extends Activity
                     }, 1500);
                     break;
                 case "BASTO":
-                    senyaArriba2.setImageResource(R.drawable.bocaabierta);
+                    senyaArriba2.setImageResource(R.drawable.guinyo);
                     senyaArriba2.setVisibility(View.VISIBLE);
                     handlerArriba2.postDelayed(new Runnable() {
                         public void run() {
@@ -7599,7 +7599,7 @@ public class MainActivity extends Activity
                     }, 1500);
                     break;
                 case "7ESPADAS":
-                    senyaArriba2.setImageResource(R.drawable.cascos);
+                    senyaArriba2.setImageResource(R.drawable.dientes);
                     senyaArriba2.setVisibility(View.VISIBLE);
                     handlerArriba2.postDelayed(new Runnable() {
                         public void run() {
@@ -7609,7 +7609,7 @@ public class MainActivity extends Activity
                     }, 1500);
                     break;
                 case "7OROS":
-                    senyaArriba2.setImageResource(R.drawable.gafas);
+                    senyaArriba2.setImageResource(R.drawable.lengua);
                     senyaArriba2.setVisibility(View.VISIBLE);
                     handlerArriba2.postDelayed(new Runnable() {
                         public void run() {
@@ -7619,7 +7619,7 @@ public class MainActivity extends Activity
                     }, 1500);
                     break;
                 case "TRES":
-                    senyaArriba2.setImageResource(R.drawable.cejas);
+                    senyaArriba2.setImageResource(R.drawable.hombro);
                     senyaArriba2.setVisibility(View.VISIBLE);
                     handlerArriba2.postDelayed(new Runnable() {
                         public void run() {
@@ -7629,7 +7629,7 @@ public class MainActivity extends Activity
                     }, 1500);
                     break;
                 case "CIEGO":
-                    senyaArriba2.setImageResource(R.drawable.lenguafuera);
+                    senyaArriba2.setImageResource(R.drawable.ojoscerrados);
                     senyaArriba2.setVisibility(View.VISIBLE);
                     handlerArriba2.postDelayed(new Runnable() {
                         public void run() {
@@ -7639,7 +7639,7 @@ public class MainActivity extends Activity
                     }, 1500);
                     break;
                 case "33":
-                    senyaArriba2.setImageResource(R.drawable.mofletes);
+                    senyaArriba2.setImageResource(R.drawable.soplido);
                     senyaArriba2.setVisibility(View.VISIBLE);
                     handlerArriba2.postDelayed(new Runnable() {
                         public void run() {
@@ -7649,7 +7649,7 @@ public class MainActivity extends Activity
                     }, 1500);
                     break;
                 case "32":
-                    senyaArriba2.setImageResource(R.drawable.raro);
+                    senyaArriba2.setImageResource(R.drawable.mofleteshinchados);
                     senyaArriba2.setVisibility(View.VISIBLE);
                     handlerArriba2.postDelayed(new Runnable() {
                         public void run() {
@@ -7658,8 +7658,8 @@ public class MainActivity extends Activity
                         }
                     }, 1500);
                     break;
-                case "31":
-                    senyaArriba2.setImageResource(R.drawable.rojo);
+                case "FALSA":
+                    senyaArriba2.setImageResource(R.drawable.falsa);
                     senyaArriba2.setVisibility(View.VISIBLE);
                     handlerArriba2.postDelayed(new Runnable() {
                         public void run() {
