@@ -317,7 +317,7 @@
                                     android:id="@+id/mano"
                                     android:layout_width="160dp"
                                     android:layout_height="150dp"
-                                    android:background="@drawable/mano"
+                                    android:background="@drawable/ic_mano"
                                     android:layout_centerHorizontal="true"
                                     android:layout_alignParentBottom="true"
                                     />
@@ -380,7 +380,7 @@
                 android:layout_width="160dp"
                 android:layout_height="150dp"
                 android:layout_gravity="bottom|center"
-                android:background="@drawable/dedo"
+                android:background="@drawable/ic_dedo"
                 />
 
             <LinearLayout
@@ -771,7 +771,7 @@
                     android:id="@+id/mano_4J"
                     android:layout_width="160dp"
                     android:layout_height="150dp"
-                    android:background="@drawable/mano"
+                    android:background="@drawable/ic_mano"
                     android:layout_centerHorizontal="true"
                     android:layout_alignParentBottom="true"
                     />
@@ -1082,7 +1082,7 @@
                 android:id="@+id/dedo_4J"
                 android:layout_width="160dp"
                 android:layout_height="150dp"
-                android:background="@drawable/dedo"
+                android:background="@drawable/ic_dedo"
                 android:layout_gravity="center_horizontal|bottom"
                 />
 
@@ -1239,7 +1239,7 @@
             android:layout_width="200dp"
             android:layout_height="200dp"
             android:layout_margin="10dp"
-            android:background="@drawable/victoria"/>
+            android:background="@drawable/ic_victoria"/>
         <TextView
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
@@ -1270,7 +1270,7 @@
             android:layout_width="200dp"
             android:layout_height="200dp"
             android:layout_margin="10dp"
-            android:background="@drawable/derrota"/>
+            android:background="@drawable/ic_derrota"/>
         <TextView
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
@@ -1302,7 +1302,7 @@
             android:layout_width="200dp"
             android:layout_height="200dp"
             android:layout_margin="10dp"
-            android:background="@drawable/derrota"/>
+            android:background="@drawable/ic_derrota"/>
         <TextView
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
@@ -1342,7 +1342,7 @@
             android:layout_width="200dp"
             android:layout_height="200dp"
             android:layout_margin="10dp"
-            android:background="@drawable/victoria"/>
+            android:background="@drawable/ic_victoria"/>
         <TextView
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"

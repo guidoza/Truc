@@ -22,13 +22,17 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.graphics.PointF;
 import android.graphics.Typeface;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -88,6 +92,8 @@ import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -1938,13 +1944,6 @@ public class MainActivity extends Activity
             switchToScreen(R.id.screen_wait);
         }
         super.onStop();
-    }
-
-    @Override
-    public void onPause() {
-        Log.d(TAG, "Reset All en onPause");
-        resetAll();
-        super.onPause();
     }
 
     // Activity just got to the foreground. We switch to the wait screen because we will now
@@ -7870,7 +7869,7 @@ public class MainActivity extends Activity
             fraseAleatoria.setText(calcularFraseAleatoria());
 
         }else if(screenId == R.id.screen_game || screenId == R.id.screen_game_4_jugadores){
-            frame.setBackground(getResources().getDrawable(R.drawable.mesa2, null));
+            //frame.setBackground(getResources().getDrawable(R.drawable.mesa2, null));
 
         }else if(mCurScreen == R.id.screen_game || mCurScreen == R.id.screen_game_4_jugadores){
             frame.setBackground(getResources().getDrawable(R.drawable.fondo_menu, null));
@@ -7912,6 +7911,35 @@ public class MainActivity extends Activity
         } else {
             switchToScreen(R.id.screen_sign_in);
         }
+    }
+
+    void setFondo(Drawable drawable){
+
+        DisplayMetrics metrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(metrics);
+
+        Bitmap bitmap = ((BitmapDrawable)drawable).getBitmap();
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+        byte[] bitmapdata = stream.toByteArray();
+
+        Bitmap bitmapOrg = new BitmapDrawable(getResources(), new  ByteArrayInputStream(bitmapdata)).getBitmap();
+
+
+        int width = bitmapOrg.getWidth();
+        int height = bitmapOrg.getHeight();
+
+        float scaleWidth = metrics.scaledDensity;
+        float scaleHeight = metrics.scaledDensity;
+
+        // create a matrix for the manipulation
+        Matrix matrix = new Matrix();
+        // resize the bit map
+        matrix.postScale(scaleWidth, scaleHeight);
+
+        // recreate the new Bitmap
+        Bitmap resizedBitmap = Bitmap.createBitmap(bitmapOrg, 0, 0, width, height, matrix, true);
+        frame.setBackground(new BitmapDrawable(getResources(), resizedBitmap));
     }
 
     /*
@@ -9518,7 +9546,7 @@ public class MainActivity extends Activity
 
         }else{
             if(tvCartaMesa1_4J.getVisibility() != View.VISIBLE) {
-                lanzarCarta_4J(new PointF(), tvJugador1);
+                lanzarCarta_4J(new PointF(), tvJugador1_4J);
             }
             else if(tvCartaMesa2_4J.getVisibility() != View.VISIBLE) {
                 if(posTvJugador1 == 0) lanzarCarta_4J(new PointF(), tvJugador1_4J);
