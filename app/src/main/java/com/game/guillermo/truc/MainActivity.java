@@ -16,6 +16,7 @@
 package com.game.guillermo.truc;
 
 import android.animation.Animator;
+import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -29,6 +30,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
@@ -40,6 +42,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
@@ -506,6 +509,10 @@ public class MainActivity extends Activity
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
         setContentView(R.layout.activity_main);
 
         // Creamos el nuevo cliente de Google con acceso a Plus y Games
@@ -1754,11 +1761,6 @@ public class MainActivity extends Activity
                 startActivityForResult(Games.Achievements.getAchievementsIntent(mGoogleApiClient),
                         REQUEST_ACHIEVEMENTS);
                 break;
-            case R.id.boton_iconos:
-                // Show the ad if it's ready. Otherwise toast and restart the game.
-                switchToScreen(R.id.screen_wait);
-
-                break;
             case R.id.button_return1:
                 switchToMainScreen();
                 break;
@@ -1986,7 +1988,7 @@ public class MainActivity extends Activity
                 showBasicAlertDesconectarse("Abandonar partida", getResources().getString(R.string.pregunta_abandonar));
             }
             else if(mCurScreen == R.id.screen_wait){
-                switchToMainScreen();
+                //No hacer nada, puesto que despues se ejecuta el Activity result igualmente
             }
             else if(mCurScreen == R.id.screen_main){
                 if(!showingFrases) finish();
@@ -1996,6 +1998,9 @@ public class MainActivity extends Activity
             }
             else if(mCurScreen == R.id.screen_win_rival_desconectado){
 
+
+            }else if(mCurScreen == R.id.screen_sign_in){
+                finish();
         }
 
             return true;
@@ -7422,15 +7427,21 @@ public class MainActivity extends Activity
                     String aux13 = new String(buf, "UTF-8");
                     String otro10[] = aux13.split("-");
                     String frase = otro10[1];
-                    if(esDeMiEquipo(sender)){
-                        bocadilloArriba.setText(frase);
-                        animarTextoAccion(bocadilloArriba);
-                    }else if(esRivalDerecha(sender)){
-                        bocadilloDerecha.setText(frase);
-                        animarTextoAccion(bocadilloDerecha);
-                    }else if(esRivalIzquierda(sender)){
-                        bocadilloIzq.setText(frase);
-                        animarTextoAccion(bocadilloIzq);
+                    if (numeroJugadores == 2) {
+                        textoAccion2.setText(frase);
+                        animarTextoAccion(textoAccion2);
+
+                    }else{
+                        if(esDeMiEquipo(sender)){
+                            bocadilloArriba.setText(frase);
+                            animarTextoAccion(bocadilloArriba);
+                        }else if(esRivalDerecha(sender)){
+                            bocadilloDerecha.setText(frase);
+                            animarTextoAccion(bocadilloDerecha);
+                        }else if(esRivalIzquierda(sender)){
+                            bocadilloIzq.setText(frase);
+                            animarTextoAccion(bocadilloIzq);
+                        }
                     }
 
                     break;
@@ -7755,7 +7766,7 @@ public class MainActivity extends Activity
             R.id.button_accept_popup_invitation, R.id.button_invite_players,
             R.id.button_quick_game, R.id.button_see_invitations, R.id.button_sign_in,
             R.id.button_sign_out, R.id.button_quick_game_4,R.id.button_ranking,
-            R.id.button_logros, R.id.boton_iconos, R.id.button_return1,
+            R.id.button_logros, R.id.button_return1,
             R.id.button_return2, R.id.button_return3, R.id.button_return4
     };
 
