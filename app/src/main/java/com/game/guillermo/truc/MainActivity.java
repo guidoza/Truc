@@ -9477,6 +9477,42 @@ public class MainActivity extends Activity
                             case 3:
                                 frase = '"'+getResources().getString(R.string.basto_envida)+'"';
                                 break;
+                            case 4:
+                                frase = '"'+getResources().getString(R.string.paliza)+'"';
+                                break;
+                            case 5:
+                                frase = '"'+getResources().getString(R.string.farol)+'"';
+                                break;
+                            case 6:
+                                frase = '"'+getResources().getString(R.string.atreves)+'"';
+                                break;
+                            case 7:
+                                frase = '"'+getResources().getString(R.string.bien_jugado)+'"';
+                                break;
+                            case 8:
+                                frase = '"'+getResources().getString(R.string.espera_y_veras)+'"';
+                                break;
+                            case 9:
+                                frase = '"'+getResources().getString(R.string.sobrado)+'"';
+                                break;
+                            case 10:
+                                frase = '"'+getResources().getString(R.string.fantasmilla)+'"';
+                                break;
+                            case 11:
+                                frase = '"'+getResources().getString(R.string.bo)+'"';
+                                break;
+                            case 12:
+                                frase = '"'+getResources().getString(R.string.cargadito)+'"';
+                                break;
+                            case 13:
+                                frase = '"'+getResources().getString(R.string.nada_que_hacer)+'"';
+                                break;
+                            case 14:
+                                frase = '"'+getResources().getString(R.string.rival_digno)+'"';
+                                break;
+                            case 15:
+                                frase = '"'+getResources().getString(R.string.sabes_hacer)+'"';
+                                break;
                         }
                         enviarMensajeFrase(frase);
                         dialogPlus.dismiss();

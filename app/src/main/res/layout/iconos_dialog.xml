@@ -28,146 +28,256 @@
         android:clipToPadding="false">
 
         <FrameLayout
-            android:layout_width="56dp"
-            android:layout_height="56dp"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
             android:layout_margin="4dp"
             tools:background="#000">
 
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_gravity="center">
             <ImageView
                 android:id="@+id/espada"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
                 android:background="@drawable/cejaslevantadas"
                 android:layout_gravity="center"
                 android:onClick="seleccionaUnaSenya"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/espada"
+                android:layout_gravity="center"
+                android:textSize="12sp"/>
+            </LinearLayout>
 
         </FrameLayout>
 
         <FrameLayout
-            android:layout_width="56dp"
-            android:layout_height="56dp"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
             android:layout_margin="4dp"
             tools:background="#000">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_gravity="center">
 
             <ImageView
                 android:id="@+id/basto"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
                 android:background="@drawable/guinyo"
                 android:layout_gravity="center"
                 android:onClick="seleccionaUnaSenya"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/basto"
+                    android:layout_gravity="center"
+                    android:textSize="12sp" />
+            </LinearLayout>
 
         </FrameLayout>
 
         <FrameLayout
-            android:layout_width="56dp"
-            android:layout_height="56dp"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
             android:layout_margin="4dp"
             tools:background="#000">
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_gravity="center">
 
             <ImageView
                 android:id="@+id/manillaEspadas"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
                 android:background="@drawable/dientes"
                 android:layout_gravity="center"
                 android:onClick="seleccionaUnaSenya"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/siete_espadas"
+                    android:layout_gravity="center"
+                    android:textSize="12sp"/>
+            </LinearLayout>
 
         </FrameLayout>
 
         <FrameLayout
-            android:layout_width="56dp"
-            android:layout_height="56dp"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
             android:layout_margin="4dp"
             tools:background="#000">
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_gravity="center">
 
             <ImageView
                 android:id="@+id/manillaOros"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
                 android:background="@drawable/lengua"
                 android:layout_gravity="center"
                 android:onClick="seleccionaUnaSenya"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/siete_oros"
+                    android:layout_gravity="center"
+                    android:textSize="12sp"/>
+            </LinearLayout>
 
         </FrameLayout>
 
         <FrameLayout
-            android:layout_width="56dp"
-            android:layout_height="56dp"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
             android:layout_margin="4dp"
             tools:background="#000">
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_gravity="center">
 
             <ImageView
                 android:id="@+id/tres"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
                 android:background="@drawable/hombro"
                 android:layout_gravity="center"
                 android:onClick="seleccionaUnaSenya"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/tres"
+                    android:layout_gravity="center"
+                    android:textSize="12sp"/>
+            </LinearLayout>
 
         </FrameLayout>
 
         <FrameLayout
-            android:layout_width="56dp"
-            android:layout_height="56dp"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
             android:layout_margin="4dp"
             tools:background="#000">
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_gravity="center">
 
             <ImageView
                 android:id="@+id/ciego"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
                 android:background="@drawable/ojoscerrados"
                 android:layout_gravity="center"
                 android:onClick="seleccionaUnaSenya"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/ciego"
+                    android:layout_gravity="center"
+                    android:textSize="12sp"/>
+            </LinearLayout>
 
         </FrameLayout>
 
         <FrameLayout
-            android:layout_width="56dp"
-            android:layout_height="56dp"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
             android:layout_margin="4dp"
             tools:background="#000">
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_gravity="center">
 
             <ImageView
                 android:id="@+id/envid33"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
                 android:background="@drawable/soplido"
                 android:layout_gravity="center"
                 android:onClick="seleccionaUnaSenya"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="33 envid"
+                    android:layout_gravity="center"
+                    android:textSize="12sp"/>
+            </LinearLayout>
+
 
         </FrameLayout>
 
         <FrameLayout
-            android:layout_width="56dp"
-            android:layout_height="56dp"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
             android:layout_margin="4dp"
             tools:background="#000">
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_gravity="center">
 
             <ImageView
                 android:id="@+id/envid32"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
                 android:background="@drawable/mofleteshinchados"
                 android:layout_gravity="center"
                 android:onClick="seleccionaUnaSenya"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="32 envid"
+                    android:layout_gravity="center"
+                    android:textSize="12sp"/>
+            </LinearLayout>
 
         </FrameLayout>
 
         <FrameLayout
-            android:layout_width="56dp"
-            android:layout_height="56dp"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
             android:layout_margin="4dp"
             tools:background="#000">
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_gravity="center">
 
             <ImageView
                 android:id="@+id/falsa"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
                 android:background="@drawable/falsa"
                 android:layout_gravity="center"
                 android:onClick="seleccionaUnaSenya"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/senya_falsa"
+                    android:layout_gravity="center"
+                    android:textSize="12sp"/>
+            </LinearLayout>
 
         </FrameLayout>
 

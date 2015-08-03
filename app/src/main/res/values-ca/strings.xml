@@ -14,7 +14,7 @@
     <string name="empate_primera_ronda">Empat a la primera ronda</string>
     <string name="empezamos">Comencem!</string>
     <string name="envido">Envide!</string>
-    <string name="espera_y_veras">Espera y voràs!</string>
+    <string name="espera_y_veras">Espera i voràs!</string>
     <string name="falta">Envide la falta!</string>
     <string name="fantasmilla">Quin fantasma</string>
     <string name="farol">Quin farolero tu</string>
@@ -92,4 +92,11 @@
     <string name="retruque">Retruque!</string>
     <string name="sign_out" translatable="false">Desconectar-se</string>
     <string name="signing_out">Signing out</string>
+    <string name="basto">Basto</string>
+    <string name="ciego">Cec</string>
+    <string name="espada">Espasa</string>
+    <string name="senya_falsa">Senya falsa</string>
+    <string name="siete_espadas">7 espases</string>
+    <string name="siete_oros">7 ors</string>
+    <string name="tres">Tres</string>
 </resources>

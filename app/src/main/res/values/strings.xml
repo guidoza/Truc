@@ -81,6 +81,14 @@
     <string name="todos_la_veran">TODOS LA VERÁN</string>
     <string name="ganaste_envid">Ganaste el envid</string>
     <string name="perdiste_envid">Perdiste el envid</string>
+    <string name="espada">Espada</string>
+    <string name="basto">Basto</string>
+    <string name="siete_espadas">7 espadas</string>
+    <string name="siete_oros">7 oros</string>
+    <string name="tres">Tres</string>
+    <string name="ciego">Ciego</string>
+    <string name="senya_falsa">Seña falsa</string>
+
 
     <!-- Frases del juego -->
     <string name="voy_a_ti">Voy a ti</string>

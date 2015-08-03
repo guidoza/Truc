@@ -19,11 +19,15 @@
 
     <!--SCREEN MENU PRINCIPAL -->
     <LinearLayout android:id="@+id/screen_main" style="@style/LLScreen">
-        <TextView
+        <!-- <TextView
             android:text="@string/app_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            />
+            /> -->
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/ic_retruque2"/>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -1244,7 +1248,7 @@
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
             android:textColor="@color/primary_material_light"
-            android:textSize="13sp"
+            android:textSize="20sp"
             android:layout_margin="10dp"
             android:id="@+id/txtGanasPartida"
             android:text="@string/win" />
@@ -1275,7 +1279,7 @@
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
             android:textColor="@color/primary_material_light"
-            android:textSize="13sp"
+            android:textSize="20sp"
             android:id="@+id/txtPierdesPartida"
             android:text="@string/loose"
             android:layout_margin="10dp"
@@ -1307,7 +1311,7 @@
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
             android:textColor="@color/primary_material_light"
-            android:textSize="13sp"
+            android:textSize="20sp"
             android:id="@+id/txtPierdesPartidaCompDesc1"
             android:text="@string/loose"
             android:layout_marginBottom="5dp"
@@ -1316,7 +1320,7 @@
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
             android:textColor="@color/primary_material_light"
-            android:textSize="13sp"
+            android:textSize="20sp"
             android:id="@+id/txtPierdesPartidaCompDesc2"
             android:text="@string/friend_disconnected"
             />
@@ -1347,7 +1351,7 @@
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
             android:textColor="@color/primary_material_light"
-            android:textSize="13sp"
+            android:textSize="20sp"
             android:id="@+id/txtGanasPartidaRivalDesc1"
             android:text="@string/win"
             android:layout_marginBottom="5dp"
