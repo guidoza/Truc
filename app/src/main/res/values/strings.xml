@@ -18,8 +18,8 @@
 <resources>
     <string name="signing_in">Entra con Google+</string>
     <string name="signing_out">Signing out</string>
-    <string name="app_name">¡Retruque!</string>
-    <string name="game_title">¡Retruque!</string>
+    <string name="app_name">Retruque!</string>
+    <string name="game_title">Retruque!</string>
     <string name="quick_game">2 jugadores</string>
     <string name="quick_game_4">Partida rápida 4 jugadores</string>
     <string name="invite_players">Invita a tus amigos</string>

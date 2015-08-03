@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">¡Retruque!</string>
+    <string name="app_name">Retruque!</string>
     <string name="accept_popup_invite">Accepte!</string>
     <string name="aceptar">Acceptar</string>
     <string name="agregar_amigos">Afegeix als teus amics amb el teu compte de Google+ per poder jugar amb ells.</string>

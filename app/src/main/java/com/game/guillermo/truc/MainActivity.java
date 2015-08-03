@@ -787,18 +787,18 @@ public class MainActivity extends Activity
         //Marcadores modo 2 jugadores
         botonMarcadorAbajo = (CircularProgressButton) findViewById(R.id.botonMarcadorJ1);
         botonMarcadorArriba = (CircularProgressButton) findViewById(R.id.botonMarcadorJ2);
-        botonMarcadorAbajo.setProgress(100);
-        botonMarcadorArriba.setProgress(100);
         botonMarcadorAbajo.setCompleteText("0");
         botonMarcadorArriba.setCompleteText("0");
+        botonMarcadorAbajo.setProgress(100);
+        botonMarcadorArriba.setProgress(100);
 
         //Marcadores modo 4 jugadores
         botonMarcadorAbajo_4J = (CircularProgressButton) findViewById(R.id.botonMarcadorAbajo);
         botonMarcadorArriba_4J = (CircularProgressButton) findViewById(R.id.botonMarcadorArriba);
-        botonMarcadorAbajo_4J.setProgress(100);
-        botonMarcadorArriba_4J.setProgress(100);
         botonMarcadorAbajo_4J.setCompleteText("0");
         botonMarcadorArriba_4J.setCompleteText("0");
+        botonMarcadorAbajo_4J.setProgress(100);
+        botonMarcadorArriba_4J.setProgress(100);
 
         soundPool = new SoundPool(8, AudioManager.STREAM_MUSIC, 0);
         sonidoBasto = soundPool.load(this,R.raw.basto,1);
@@ -2133,7 +2133,7 @@ public class MainActivity extends Activity
         mParticipants = room.getParticipants();
         mMyId = room.getParticipantId(Games.Players.getCurrentPlayerId(mGoogleApiClient));
         remoteId = null;
-        resetPuntos();
+        //resetPuntos();
         Log.d("ZZZ", "Numero de jugadores: " + numeroJugadores);
 
         // print out the list of participants (for debug purposes)
@@ -2762,20 +2762,36 @@ public class MainActivity extends Activity
             layArriba.setBackground(getResources().getDrawable(R.drawable.fondo_carta, getTheme()));
 
         }
-
-        resetPuntos();
     }
 
     void resetPuntos() {
         puntosTotalesMios = 0;
         puntosTotalesJugador2 = 0;
+
+        //Modo de 2 jugadores
+        botonMarcadorAbajo.setProgress(0);
+        botonMarcadorAbajo.setIndeterminateProgressMode(true); // turn on indeterminate progress
+        botonMarcadorAbajo.setProgress(50);
         botonMarcadorAbajo.setCompleteText("0");
+        botonMarcadorAbajo.setProgress(100);
+        botonMarcadorArriba.setProgress(0);
+        botonMarcadorArriba.setIndeterminateProgressMode(true); // turn on indeterminate progress
+        botonMarcadorArriba.setProgress(50);
         botonMarcadorArriba.setCompleteText("0");
+        botonMarcadorArriba.setProgress(100);
+
+        //Modo de 4 jugadores
+        botonMarcadorAbajo_4J.setProgress(0);
+        botonMarcadorAbajo_4J.setIndeterminateProgressMode(true); // turn on indeterminate progress
+        botonMarcadorAbajo_4J.setProgress(50);
         botonMarcadorAbajo_4J.setCompleteText("0");
+        botonMarcadorAbajo_4J.setProgress(100);
+        botonMarcadorArriba_4J.setProgress(0);
+        botonMarcadorArriba_4J.setIndeterminateProgressMode(true); // turn on indeterminate progress
+        botonMarcadorArriba_4J.setProgress(50);
         botonMarcadorArriba_4J.setCompleteText("0");
-        //marcador.setText("");
-        //marcador2.setText("");
-        //Poner los nuevos marcadores
+        botonMarcadorArriba_4J.setProgress(100);
+
     }
 
     void resetAnimaciones() {
@@ -4090,6 +4106,9 @@ public class MainActivity extends Activity
                 abandonar.setOnClickListener(menuListener);
                 tapar.setOnClickListener(menuListener);
                 frases.setOnClickListener(menuListener);
+
+                Log.d("ZZZZ", "Mis puntos: " +puntosTotalesMios);
+                Log.d("ZZZZ", "Puntos J2: "+puntosTotalesJugador2);
 
 
                 if (mMyId.equals(turno) && ronda == 1) {
