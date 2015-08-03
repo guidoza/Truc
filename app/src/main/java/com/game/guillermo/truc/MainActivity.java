@@ -7503,93 +7503,48 @@ public class MainActivity extends Activity
             switch (senyaCompi1){
                 case "ESPADA":
                     senyaArriba.setImageResource(R.drawable.cejaslevantadas);
-                    senyaArriba.setVisibility(View.VISIBLE);
-                    handlerArriba.postDelayed(new Runnable() {
-                        public void run() {
-                            // acciones que se ejecutan tras los milisegundos
-                            senyaArriba.setVisibility(View.INVISIBLE);
-                        }
-                    }, 1500);
+                    animarTextoAccion(senyaArriba);
                     break;
+
                 case "BASTO":
                     senyaArriba.setImageResource(R.drawable.guinyo);
-                    senyaArriba.setVisibility(View.VISIBLE);
-                    handlerArriba.postDelayed(new Runnable() {
-                        public void run() {
-                            // acciones que se ejecutan tras los milisegundos
-                            senyaArriba.setVisibility(View.INVISIBLE);
-                        }
-                    }, 1500);
+                    animarTextoAccion(senyaArriba);
                     break;
+
                 case "7ESPADAS":
                     senyaArriba.setImageResource(R.drawable.dientes);
-                    senyaArriba.setVisibility(View.VISIBLE);
-                    handlerArriba.postDelayed(new Runnable() {
-                        public void run() {
-                            // acciones que se ejecutan tras los milisegundos
-                            senyaDerecha.setVisibility(View.INVISIBLE);
-                        }
-                    }, 1500);
+                    animarTextoAccion(senyaArriba);
                     break;
+
                 case "7OROS":
                     senyaArriba.setImageResource(R.drawable.lengua);
-                    senyaArriba.setVisibility(View.VISIBLE);
-                    handlerArriba.postDelayed(new Runnable() {
-                        public void run() {
-                            // acciones que se ejecutan tras los milisegundos
-                            senyaArriba.setVisibility(View.INVISIBLE);
-                        }
-                    }, 1500);
+                    animarTextoAccion(senyaArriba);
                     break;
+
                 case "TRES":
                     senyaArriba.setImageResource(R.drawable.hombro);
-                    senyaArriba.setVisibility(View.VISIBLE);
-                    handlerArriba.postDelayed(new Runnable() {
-                        public void run() {
-                            // acciones que se ejecutan tras los milisegundos
-                            senyaArriba.setVisibility(View.INVISIBLE);
-                        }
-                    }, 1500);
+                    animarTextoAccion(senyaArriba);
                     break;
+
                 case "CIEGO":
                     senyaArriba.setImageResource(R.drawable.ojoscerrados);
-                    senyaArriba.setVisibility(View.VISIBLE);
-                    handlerArriba.postDelayed(new Runnable() {
-                        public void run() {
-                            // acciones que se ejecutan tras los milisegundos
-                            senyaArriba.setVisibility(View.INVISIBLE);
-                        }
-                    }, 1500);
+                    animarTextoAccion(senyaArriba);
                     break;
+
                 case "33":
                     senyaArriba.setImageResource(R.drawable.soplido);
-                    senyaArriba.setVisibility(View.VISIBLE);
-                    handlerArriba.postDelayed(new Runnable() {
-                        public void run() {
-                            // acciones que se ejecutan tras los milisegundos
-                            senyaArriba.setVisibility(View.INVISIBLE);
-                        }
-                    }, 1500);
+                    animarTextoAccion(senyaArriba);
                     break;
+
                 case "32":
                     senyaArriba.setImageResource(R.drawable.mofleteshinchados);
-                    senyaArriba.setVisibility(View.VISIBLE);
-                    handlerArriba.postDelayed(new Runnable() {
-                        public void run() {
-                            // acciones que se ejecutan tras los milisegundos
-                            senyaArriba.setVisibility(View.INVISIBLE);
-                        }
-                    }, 1500);
+                    animarTextoAccion(senyaArriba);
                     break;
+
                 case "FALSA":
                     senyaArriba.setImageResource(R.drawable.falsa);
-                    senyaArriba.setVisibility(View.VISIBLE);
-                    handlerArriba.postDelayed(new Runnable() {
-                        public void run() {
-                            // acciones que se ejecutan tras los milisegundos
-                            senyaArriba.setVisibility(View.INVISIBLE);
-                        }
-                    }, 1500);
+                    animarTextoAccion(senyaArriba);
+
                     break;
             }
         }
@@ -7598,93 +7553,47 @@ public class MainActivity extends Activity
             switch (senyaCompi2){
                 case "ESPADA":
                     senyaArriba2.setImageResource(R.drawable.cejaslevantadas);
-                    senyaArriba2.setVisibility(View.VISIBLE);
-                    handlerArriba2.postDelayed(new Runnable() {
-                        public void run() {
-                            // acciones que se ejecutan tras los milisegundos
-                            senyaArriba2.setVisibility(View.INVISIBLE);
-                        }
-                    }, 1500);
+                    animarTextoAccion(senyaArriba2);
                     break;
+
                 case "BASTO":
                     senyaArriba2.setImageResource(R.drawable.guinyo);
-                    senyaArriba2.setVisibility(View.VISIBLE);
-                    handlerArriba2.postDelayed(new Runnable() {
-                        public void run() {
-                            // acciones que se ejecutan tras los milisegundos
-                            senyaArriba2.setVisibility(View.INVISIBLE);
-                        }
-                    }, 1500);
+                    animarTextoAccion(senyaArriba2);
                     break;
+
                 case "7ESPADAS":
                     senyaArriba2.setImageResource(R.drawable.dientes);
-                    senyaArriba2.setVisibility(View.VISIBLE);
-                    handlerArriba2.postDelayed(new Runnable() {
-                        public void run() {
-                            // acciones que se ejecutan tras los milisegundos
-                            senyaArriba2.setVisibility(View.INVISIBLE);
-                        }
-                    }, 1500);
+                    animarTextoAccion(senyaArriba2);
                     break;
+
                 case "7OROS":
                     senyaArriba2.setImageResource(R.drawable.lengua);
-                    senyaArriba2.setVisibility(View.VISIBLE);
-                    handlerArriba2.postDelayed(new Runnable() {
-                        public void run() {
-                            // acciones que se ejecutan tras los milisegundos
-                            senyaArriba2.setVisibility(View.INVISIBLE);
-                        }
-                    }, 1500);
+                    animarTextoAccion(senyaArriba2);
                     break;
+
                 case "TRES":
                     senyaArriba2.setImageResource(R.drawable.hombro);
-                    senyaArriba2.setVisibility(View.VISIBLE);
-                    handlerArriba2.postDelayed(new Runnable() {
-                        public void run() {
-                            // acciones que se ejecutan tras los milisegundos
-                            senyaArriba2.setVisibility(View.INVISIBLE);
-                        }
-                    }, 1500);
+                    animarTextoAccion(senyaArriba2);
                     break;
+
                 case "CIEGO":
                     senyaArriba2.setImageResource(R.drawable.ojoscerrados);
-                    senyaArriba2.setVisibility(View.VISIBLE);
-                    handlerArriba2.postDelayed(new Runnable() {
-                        public void run() {
-                            // acciones que se ejecutan tras los milisegundos
-                            senyaArriba2.setVisibility(View.INVISIBLE);
-                        }
-                    }, 1500);
+                    animarTextoAccion(senyaArriba2);
                     break;
+
                 case "33":
                     senyaArriba2.setImageResource(R.drawable.soplido);
-                    senyaArriba2.setVisibility(View.VISIBLE);
-                    handlerArriba2.postDelayed(new Runnable() {
-                        public void run() {
-                            // acciones que se ejecutan tras los milisegundos
-                            senyaArriba2.setVisibility(View.INVISIBLE);
-                        }
-                    }, 1500);
+                    animarTextoAccion(senyaArriba2);
                     break;
+
                 case "32":
                     senyaArriba2.setImageResource(R.drawable.mofleteshinchados);
-                    senyaArriba2.setVisibility(View.VISIBLE);
-                    handlerArriba2.postDelayed(new Runnable() {
-                        public void run() {
-                            // acciones que se ejecutan tras los milisegundos
-                            senyaArriba2.setVisibility(View.INVISIBLE);
-                        }
-                    }, 1500);
+                    animarTextoAccion(senyaArriba2);
                     break;
+
                 case "FALSA":
                     senyaArriba2.setImageResource(R.drawable.falsa);
-                    senyaArriba2.setVisibility(View.VISIBLE);
-                    handlerArriba2.postDelayed(new Runnable() {
-                        public void run() {
-                            // acciones que se ejecutan tras los milisegundos
-                            senyaArriba2.setVisibility(View.INVISIBLE);
-                        }
-                    }, 1500);
+                    animarTextoAccion(senyaArriba2);
                     break;
             }
         }
@@ -7697,7 +7606,7 @@ public class MainActivity extends Activity
             return idJugador3;
         }else if(mano.equals(idJugador3)){
             return idJugador4;
-        }else if(mano.equals(idJugador4)){
+        } else if(mano.equals(idJugador4)){
             return idJugador1;
         }
         return "";
@@ -7872,7 +7781,7 @@ public class MainActivity extends Activity
             //frame.setBackground(getResources().getDrawable(R.drawable.mesa2, null));
 
         }else if(mCurScreen == R.id.screen_game || mCurScreen == R.id.screen_game_4_jugadores){
-            frame.setBackground(getResources().getDrawable(R.drawable.fondo_menu, null));
+            //frame.setBackground(getResources().getDrawable(R.drawable.fondo_menu, null));
         }
 
         mCurScreen = screenId;

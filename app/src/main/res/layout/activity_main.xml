@@ -319,7 +319,7 @@
 
                                 <ImageView
                                     android:id="@+id/mano"
-                                    android:layout_width="160dp"
+                                    android:layout_width="150dp"
                                     android:layout_height="150dp"
                                     android:background="@drawable/ic_mano"
                                     android:layout_centerHorizontal="true"
@@ -381,7 +381,7 @@
                             </RelativeLayout>
             <ImageView
                 android:id="@+id/dedo"
-                android:layout_width="160dp"
+                android:layout_width="150dp"
                 android:layout_height="150dp"
                 android:layout_gravity="bottom|center"
                 android:background="@drawable/ic_dedo"
@@ -773,7 +773,7 @@
 
                 <ImageView
                     android:id="@+id/mano_4J"
-                    android:layout_width="160dp"
+                    android:layout_width="150dp"
                     android:layout_height="150dp"
                     android:background="@drawable/ic_mano"
                     android:layout_centerHorizontal="true"
@@ -856,42 +856,42 @@
 
                 <ImageView
                     android:id="@+id/senyaArriba"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
                     android:layout_toLeftOf="@+id/layArriba"
                     android:layout_marginRight="10dp"
                     android:layout_marginTop="10dp"
-                    android:padding="5dp"
+                    android:padding="10dp"
                     android:background="@drawable/bocadilloder"/>
 
                 <ImageView
                     android:id="@+id/senyaArriba2"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
                     android:layout_toLeftOf="@+id/senyaArriba"
                     android:layout_marginRight="10dp"
                     android:layout_marginTop="10dp"
-                    android:padding="5dp"
+                    android:padding="10dp"
                     android:background="@drawable/bocadilloder"/>
 
                 <ImageView
                     android:id="@+id/senyaDerecha"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
                     android:layout_toLeftOf="@+id/layDer"
                     android:layout_marginRight="10dp"
                     android:layout_centerVertical="true"
-                    android:padding="5dp"
+                    android:padding="10dp"
                     android:background="@drawable/bocadilloder"/>
 
                 <ImageView
                     android:id="@+id/senyaIzq"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
                     android:layout_toRightOf="@+id/layIzq"
                     android:layout_marginLeft="10dp"
                     android:layout_centerVertical="true"
-                    android:padding="5dp"
+                    android:padding="10dp"
                     android:background="@drawable/bocadilloizq"/>
 
                 <LinearLayout
@@ -1084,7 +1084,7 @@
 
             <ImageView
                 android:id="@+id/dedo_4J"
-                android:layout_width="160dp"
+                android:layout_width="150dp"
                 android:layout_height="150dp"
                 android:background="@drawable/ic_dedo"
                 android:layout_gravity="center_horizontal|bottom"
