@@ -1950,6 +1950,13 @@ public class MainActivity extends Activity
         super.onStop();
     }
 
+    @Override
+    public void onPause() {
+        Log.d(TAG, "**** got onPause");
+        if(mCurScreen == R.id.screen_wait)findViewById(mCurScreen).setVisibility(View.GONE);
+        super.onPause();
+    }
+
     // Activity just got to the foreground. We switch to the wait screen because we will now
     // go through the sign-in flow (remember that, yes, every time the Activity comes back to the
     // foreground we go through the sign-in flow -- but if the user is already authenticated,
@@ -7797,7 +7804,10 @@ public class MainActivity extends Activity
         }else if(screenId == R.id.screen_game || screenId == R.id.screen_game_4_jugadores){
             //frame.setBackground(getResources().getDrawable(R.drawable.mesa2, null));
             fondo.recycle();
-            fondo = decodeSampledBitmapFromResource(getResources(), R.drawable.mesa2, 100, 100);
+            int f = 0;
+            if(Math.random()<0.5) f = R.drawable.mesa2;
+            else f = R.drawable.mesa3;
+            fondo = decodeSampledBitmapFromResource(getResources(), f, 400, 400);
             frame.setBackground(new BitmapDrawable(getResources(), fondo));
             //frame.setBackgroundResource(R.drawable.mesa2);
 
