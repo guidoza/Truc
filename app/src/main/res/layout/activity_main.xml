@@ -7,14 +7,22 @@
     android:id="@+id/Frame">
 
     <!-- SIGN-IN SCREEN -->
-    <LinearLayout android:id="@+id/screen_sign_in" style="@style/LLScreen">
+    <LinearLayout
+        android:id="@+id/screen_sign_in"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:padding="30dp">
         <ImageView
             android:layout_width="match_parent"
-            android:layout_height="200dp"
+            android:layout_height="250dp"
+            android:layout_marginTop="60dp"
             android:background="@drawable/ic_retruque2"/>
 
-        <com.google.android.gms.common.SignInButton android:id="@+id/button_sign_in"
-            style="@style/SignInButton" />
+        <com.google.android.gms.common.SignInButton
+            android:id="@+id/button_sign_in"
+            style="@style/SignInButton"
+            android:layout_marginTop="40dp"/>
     </LinearLayout>
 
     <!--SCREEN MENU PRINCIPAL -->
