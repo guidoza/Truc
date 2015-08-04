@@ -7809,7 +7809,6 @@ public class MainActivity extends Activity
             fondoMenu.recycle();
             //frame.setBackgroundResource(R.drawable.mesa2);
         }
-
         mCurScreen = screenId;
 
         //Para la publicidad
