@@ -240,6 +240,7 @@ public class MainActivity extends Activity
     boolean tapo = false;
     boolean logro_farolero = false;
     boolean logro_33 = false;
+    boolean hayFondo = false;
 
     //Listas y arrays
     int[] list = new int[3];
@@ -7786,6 +7787,11 @@ public class MainActivity extends Activity
             findViewById(id).setVisibility(screenId == id ? View.VISIBLE : View.GONE);
         }
         if(screenId == R.id.screen_wait){
+            if(!hayFondo){
+                Bitmap fondoMenu = decodeSampledBitmapFromResource(getResources(), R.drawable.fondo_menu, 100, 100);
+                frame.setBackground(new BitmapDrawable(getResources(), fondoMenu));
+                fondoMenu.recycle();
+            }
             animarEspera();
             fraseAleatoria.setText(calcularFraseAleatoria());
 
