@@ -2,10 +2,8 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:fab="http://schemas.android.com/apk/res-auto"
     xmlns:fbutton="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/fondo_menu"
     android:id="@+id/Frame">
 
     <!-- SIGN-IN SCREEN -->
@@ -25,6 +23,7 @@
         android:layout_height="match_parent"
         android:layout_width="match_parent"
         android:orientation="vertical"
+        android:visibility="gone"
         >
 
             <ImageView
@@ -107,7 +106,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1.4"
-                android:layout_marginTop="5dp">
+                android:layout_marginTop="5dp"
+                android:padding="5dp">
                 <info.hoang8f.widget.FButton
                     android:layout_margin="10dp"
                     android:id="@+id/button_sign_out"

@@ -21,6 +21,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
@@ -7790,9 +7791,17 @@ public class MainActivity extends Activity
 
         }else if(screenId == R.id.screen_game || screenId == R.id.screen_game_4_jugadores){
             //frame.setBackground(getResources().getDrawable(R.drawable.mesa2, null));
+            Bitmap fondoGame = decodeSampledBitmapFromResource(getResources(), R.drawable.mesa2, 100, 100);
+            frame.setBackground(new BitmapDrawable(getResources(), fondoGame));
+            fondoGame.recycle();
+            //frame.setBackgroundResource(R.drawable.mesa2);
 
         }else if(mCurScreen == R.id.screen_game || mCurScreen == R.id.screen_game_4_jugadores){
             //frame.setBackground(getResources().getDrawable(R.drawable.fondo_menu, null));
+            Bitmap fondoMenu = decodeSampledBitmapFromResource(getResources(), R.drawable.fondo_menu, 100, 100);
+            frame.setBackground(new BitmapDrawable(getResources(), fondoMenu));
+            fondoMenu.recycle();
+            //frame.setBackgroundResource(R.drawable.mesa2);
         }
 
         mCurScreen = screenId;
@@ -7831,6 +7840,45 @@ public class MainActivity extends Activity
         } else {
             switchToScreen(R.id.screen_sign_in);
         }
+    }
+
+    public static Bitmap decodeSampledBitmapFromResource(Resources res, int resId,
+                                                         int reqWidth, int reqHeight) {
+
+        // First decode with inJustDecodeBounds=true to check dimensions
+        final BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        BitmapFactory.decodeResource(res, resId, options);
+
+        // Calculate inSampleSize
+        options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight);
+
+        // Decode bitmap with inSampleSize set
+        options.inJustDecodeBounds = false;
+        return BitmapFactory.decodeResource(res, resId, options);
+    }
+
+    public static int calculateInSampleSize(
+            BitmapFactory.Options options, int reqWidth, int reqHeight) {
+        // Raw height and width of image
+        final int height = options.outHeight;
+        final int width = options.outWidth;
+        int inSampleSize = 1;
+
+        if (height > reqHeight || width > reqWidth) {
+
+            final int halfHeight = height / 2;
+            final int halfWidth = width / 2;
+
+            // Calculate the largest inSampleSize value that is a power of 2 and keeps both
+            // height and width larger than the requested height and width.
+            while ((halfHeight / inSampleSize) > reqHeight
+                    && (halfWidth / inSampleSize) > reqWidth) {
+                inSampleSize *= 2;
+            }
+        }
+
+        return inSampleSize;
     }
 
     void setFondo(Drawable drawable){
