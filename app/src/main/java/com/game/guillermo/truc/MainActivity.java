@@ -7858,7 +7858,7 @@ public class MainActivity extends Activity
             int f = 0;
             if(Math.random()<0.5) f = R.drawable.mesa2;
             else f = R.drawable.mesa3;
-            fondo = decodeSampledBitmapFromResource(getResources(), f, 350, 350);
+            fondo = decodeSampledBitmapFromResource(getResources(), f, 319, 350);
             frame.setBackground(new BitmapDrawable(getResources(), fondo));
             //frame.setBackgroundResource(R.drawable.mesa2);
 
