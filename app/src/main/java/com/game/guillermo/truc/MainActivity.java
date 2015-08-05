@@ -21,6 +21,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -112,6 +113,10 @@ import java.util.Set;
 
 import info.hoang8f.widget.FButton;
 import pl.tajchert.sample.DotsTextView;
+import tourguide.tourguide.Overlay;
+import tourguide.tourguide.Pointer;
+import tourguide.tourguide.ToolTip;
+import tourguide.tourguide.TourGuide;
 
 
 public class MainActivity extends Activity
@@ -506,6 +511,10 @@ public class MainActivity extends Activity
     TextView tvEnvidRival4;
     FrameLayout frame;
     Bitmap fondo = null;
+    TourGuide invitarTour = null;
+    TourGuide verInvitacionesTour = null;
+    SharedPreferences preferencias;
+    SharedPreferences.Editor editor;
 
 
     @Override
@@ -524,6 +533,11 @@ public class MainActivity extends Activity
                 .addApi(Plus.API).addScope(Plus.SCOPE_PLUS_LOGIN)
                 .addApi(Games.API).addScope(Games.SCOPE_GAMES)
                 .build();
+
+        preferencias = getSharedPreferences("MisPreferencias", Activity.MODE_PRIVATE);
+        editor = preferencias.edit();
+        editor.clear();
+        editor.commit();
 
         frame = (FrameLayout)findViewById(R.id.Frame);
 
@@ -1700,6 +1714,8 @@ public class MainActivity extends Activity
 
     @Override
     public void onClick(View v) {
+        //invitarTour.cleanUp();
+        //verInvitacionesTour.cleanUp();
         Intent intent;
 
         switch (v.getId()) {
@@ -1728,12 +1744,20 @@ public class MainActivity extends Activity
                 switchToScreen(R.id.screen_sign_in);
                 break;
             case R.id.button_invite_players:
+
+                String invitarTourShown = preferencias.getString("invitar", "nunca");
+                if(invitarTourShown.equals("mostrando")) invitarTour.cleanUp();
+
                 // show list of invitable players
                 intent = Games.RealTimeMultiplayer.getSelectOpponentsIntent(mGoogleApiClient, 1, 3);
                 switchToScreen(R.id.screen_wait);
                 startActivityForResult(intent, RC_SELECT_PLAYERS);
                 break;
             case R.id.button_see_invitations:
+
+                String verInvitacionesTourShown = preferencias.getString("verInvitaciones", "nunca");
+                if(verInvitacionesTourShown.equals("mostrando")) verInvitacionesTour.cleanUp();
+
                 // show list of pending invitations
                 intent = Games.Invitations.getInvitationInboxIntent(mGoogleApiClient);
                 switchToScreen(R.id.screen_wait);
@@ -1968,6 +1992,7 @@ public class MainActivity extends Activity
             Log.w(TAG,
                     "GameHelper: client was already connected on onStart()");
             switchToScreen(R.id.screen_main);
+
         } else {
             Log.d(TAG, "Connecting client.");
             mGoogleApiClient.connect();
@@ -7793,6 +7818,39 @@ public class MainActivity extends Activity
         for (int id : SCREENS) {
             findViewById(id).setVisibility(screenId == id ? View.VISIBLE : View.GONE);
         }
+        if(screenId == R.id.screen_main){
+            String invitarTourShown = preferencias.getString("invitar", "nunca");
+            String verInvitacionesTourShown = preferencias.getString("verInvitaciones", "nunca");
+
+            if(invitarTourShown.equals("nunca")){
+            ImageButton invitar = (ImageButton) findViewById(R.id.button_invite_players);
+
+            invitarTour = TourGuide.init(this).with(TourGuide.Technique.Click)
+                    .setPointer(new Pointer().setGravity(Gravity.BOTTOM))
+                    .setToolTip(new ToolTip().setTitle(getResources().getString(R.string.invitar)).setGravity(Gravity.BOTTOM|Gravity.CENTER_VERTICAL)
+                            .setDescription(getResources().getString(R.string.invitar_cuerpo)))
+                    .setOverlay(new Overlay())
+                    .playOn(invitar);
+
+
+                editor.putString("invitar", "mostrando");
+                editor.commit();
+            }else if(verInvitacionesTourShown.equals("nunca")){
+                ImageButton invitaciones = (ImageButton) findViewById(R.id.button_see_invitations);
+
+                verInvitacionesTour = TourGuide.init(this).with(TourGuide.Technique.Click)
+                    .setPointer(new Pointer().setGravity(Gravity.TOP))
+                    .setToolTip(new ToolTip().setTitle(getResources().
+                            getString(R.string.ver_invitaciones)).setDescription(getResources()
+                            .getString(R.string.ver_invitaciones_cuerpo)).setGravity(Gravity.TOP|Gravity.CENTER_VERTICAL))
+                    .setOverlay(new Overlay())
+                    .playOn(invitaciones);
+
+                editor.putString("verInvitaciones", "mostrando");
+                editor.commit();
+
+            }
+        }
         if(screenId == R.id.screen_wait){
             if(fondo == null){
                 fondo = decodeSampledBitmapFromResource(getResources(), R.drawable.fondo_menu, 100, 100);
@@ -7807,7 +7865,7 @@ public class MainActivity extends Activity
             int f = 0;
             if(Math.random()<0.5) f = R.drawable.mesa2;
             else f = R.drawable.mesa3;
-            fondo = decodeSampledBitmapFromResource(getResources(), f, 400, 400);
+            fondo = decodeSampledBitmapFromResource(getResources(), f, 350, 350);
             frame.setBackground(new BitmapDrawable(getResources(), fondo));
             //frame.setBackgroundResource(R.drawable.mesa2);
 

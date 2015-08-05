@@ -33,5 +33,8 @@ dependencies {
     compile 'info.hoang8f:fbutton:1.0.5'
     compile 'com.orhanobut:dialogplus:1.7@aar'
     compile 'pl.tajchert:waitingdots:0.2.0'
+    compile ('com.github.worker8:tourguide:1.0.12-SNAPSHOT@aar'){
+        transitive=true
+    }
 
 }

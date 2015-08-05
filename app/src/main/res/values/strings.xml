@@ -114,10 +114,17 @@
     <string name="amigos">Invita a tus amigos a la partida para que sea más divertido.</string>
     <string name="gente_cercana">Puedes buscar a jugadores cercanos a tu zona desde la pantalla de invitar a amigos. ¡Desafía a tus vecinos!</string>
     <string name="ranking">¿Quieres demostrar que eres el mejor? Gana partidas y compruébalo en el ranking.</string>
-    <string name="valenciano">Puedes jugar a ¡Retruque! en valenciano. Cambia el idioma de tu móvil y disfruta el juego de otra manera.</string>
+    <string name="valenciano">Puedes jugar a Retruque! en valenciano. Cambia el idioma de tu móvil y disfruta el juego de otra manera.</string>
     <string name="agregar_amigos">Agrega a tus amigos con tu cuenta de Google+ para poder jugar con ellos.</string>
     <string name="gusta">¿Te gusta el juego? Puntúalo en Google Play y deja algún comentario para ayudarnos a mejorar.</string>
     <string name="logros">¿Buscas nuevos desafíos? ¡Intenta conseguir todos los logros del juego!</string>
     <string name="invitaciones">Revisa tus invitaciones. Puede que algún amigo te haya desafiado.</string>
+
+    <!-- Frases para la guia -->
+    <string name="invitar">¡Juega con amigos!</string>
+    <string name="invitar_cuerpo">Aquí puedes invitar a una partida \na tus amigos de Google+, añádelos\n a tus círculos y pásalo en grande.</string>
+    <string name="ver_invitaciones">¡Mira tus invitaciones!</string>
+    <string name="ver_invitaciones_cuerpo">¿Te han invitado? Compruébalo aquí \ny demuestra quién es el mejor.</string>
+
 
 </resources>
