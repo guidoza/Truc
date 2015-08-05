@@ -430,7 +430,6 @@ public class MainActivity extends Activity
     ImageView senyaIzq;
 
     //TextViews
-    TextView txtNumeroJugador;
     TextView bocadilloDerecha;
     TextView bocadilloArriba;
     TextView bocadilloIzq;
@@ -822,8 +821,6 @@ public class MainActivity extends Activity
         sonidoTirar = soundPool.load(this,R.raw.tirarcarta,4);
         sonidoGanador = soundPool.load(this,R.raw.youwin,5);
         sonidoPerdedor = soundPool.load(this,R.raw.youlose,6);
-
-        txtNumeroJugador = (TextView) findViewById(R.id.textoNumeroJugador);
 
         FButton desconectar = (FButton) findViewById(R.id.button_sign_out);
         desconectar.setTypeface(Typefaces.get(this, "Signika-Regular.ttf"));
@@ -4211,10 +4208,6 @@ public class MainActivity extends Activity
 
         }
 
-        /* if (mMyId.equals(idJugador1)) txtNumeroJugador.setText("Soy el jugador 1");
-        else if (mMyId.equals(idJugador2)) txtNumeroJugador.setText("Soy el jugador 2");
-        else if (mMyId.equals(idJugador3)) txtNumeroJugador.setText("Soy el jugador 3");
-        else if (mMyId.equals(idJugador4)) txtNumeroJugador.setText("Soy el jugador 4"); */
     }
 
     void cartaSeleccionada() {
