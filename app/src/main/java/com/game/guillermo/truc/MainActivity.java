@@ -589,11 +589,13 @@ public class MainActivity extends Activity
                         break;
 
                     case R.id.me_voy:
-                        if (!hayTruc) puntosTruc = NO_QUIERO_TRUC;
+                        actionButton.hide();
+                      /*  if (!hayTruc) puntosTruc = NO_QUIERO_TRUC;
                         if (hayTruc && !hayRetruc) puntosTruc = TRUC;
                         if (hayRetruc && !hayCuatreVal) puntosTruc = RETRUC;
                         if (hayCuatreVal && !hayJocFora) puntosTruc = CUATRE_VAL;
-                        if (hayJocFora) puntosTruc = 24;
+                        if (hayJocFora) puntosTruc = 24;*/
+                        puntosTruc = 0;
                         mostrarResultadosPerdedorMano("PRIMERO");
                         break;
 
@@ -1416,22 +1418,22 @@ public class MainActivity extends Activity
         }
         else if(repartiendo.findViewById(R.id.envid_rival2) != null){
             tvEnvidRival2 = (TextView) repartiendo.findViewById(R.id.envid_rival2);
-            if(numeroJugadores == 2) tvEnvidRival.setText("Envid rival: " + envidOtro);
-            else tvEnvidRival.setText("Envid rival: " + envidOtro+" Envid compañero: "+envidCompi);
+            if(numeroJugadores == 2) tvEnvidRival2.setText("Envid rival: " + envidOtro);
+            else tvEnvidRival2.setText("Envid rival: " + envidOtro+" Envid compañero: "+envidCompi);
             tvEnvidRival2.setTypeface(Typefaces.get(this, "Signika-Regular.ttf"));
 
         }
         else if(repartiendo.findViewById(R.id.envid_rival3) != null){
             tvEnvidRival3 = (TextView) repartiendo.findViewById(R.id.envid_rival3);
-            if(numeroJugadores == 2) tvEnvidRival.setText("Envid rival: " + envidOtro);
-            else tvEnvidRival.setText("Envid rival: " + envidOtro+" Envid compañero: "+envidCompi);
+            if(numeroJugadores == 2) tvEnvidRival3.setText("Envid rival: " + envidOtro);
+            else tvEnvidRival3.setText("Envid rival: " + envidOtro+" Envid compañero: "+envidCompi);
             tvEnvidRival3.setTypeface(Typefaces.get(this, "Signika-Regular.ttf"));
 
         }
         else if(repartiendo.findViewById(R.id.envid_rival4) != null){
             tvEnvidRival4 = (TextView) repartiendo.findViewById(R.id.envid_rival4);
-            if(numeroJugadores == 2) tvEnvidRival.setText("Envid rival: " + envidOtro);
-            else tvEnvidRival.setText("Envid rival: " + envidOtro+" Envid compañero: "+envidCompi);
+            if(numeroJugadores == 2) tvEnvidRival4.setText("Envid rival: " + envidOtro);
+            else tvEnvidRival4.setText("Envid rival: " + envidOtro+" Envid compañero: "+envidCompi);
             tvEnvidRival4.setTypeface(Typefaces.get(this, "Signika-Regular.ttf"));
         }
 
@@ -6719,6 +6721,19 @@ public class MainActivity extends Activity
                             puntosTotalesJugador2 = Integer.parseInt(otro5[1]);
                             String quien = otro5[2];
                             String contador = otro5[3];
+
+                            //Para que actualice los puntos antes de comprobar quien es el ganador
+                            //Primero y segundo para que no entre en un bucle
+                            if (quien.equals("PERDEDOR")) {
+                                if (contador.equals("PRIMERO")){
+                                    mostrarResultadosGanadorMano("SEGUNDO");
+                                }
+                            } else if (quien.equals("GANADOR")) {
+                                if (contador.equals("PRIMERO")) {
+                                    mostrarResultadosPerdedorMano("SEGUNDO");
+                                }
+                            }
+
                             botonMarcadorArriba.setProgress(0);
                             botonMarcadorArriba.setIndeterminateProgressMode(true); // turn on indeterminate progress
                             botonMarcadorArriba.setProgress(50); // set progress > 0 & < 100 to display indeterminate progress
@@ -6731,20 +6746,10 @@ public class MainActivity extends Activity
                                 }
                             }, 5000);
 
-                            //Para que actualice los puntos antes de comprobar quien es el ganador
-                            //Primero y segundo para que no entre en un bucle
-                            if (quien.equals("PERDEDOR")) {
-                                if (contador.equals("PRIMERO")){
-                                        mostrarResultadosGanadorMano("SEGUNDO");
-                                }
-                            } else if (quien.equals("GANADOR")) {
-                                if (contador.equals("PRIMERO")) {
-                                    mostrarResultadosPerdedorMano("SEGUNDO");
-                                }
-                            }
-
-                            Log.d("HHHHHH", "Mis puntos: " + puntosTotalesMios);
-                            Log.d("HHHHHH", "Puntos rival: " + puntosTotalesJugador2);
+                            Log.d("EN MENSAJE Z", "PUNTOS TRUC: " + puntosTruc);
+                            Log.d("EN MENSAJE Z", "PUNTOS ENVID: " + puntosEnvid);
+                            Log.d("EN MENSAJE Z", "MIS PUNTOS TOTALES: " + puntosTotalesMios);
+                            Log.d("EN MENSAJE Z", "PUNTOS TOTALES RIVAL: " + puntosTotalesJugador2);
 
                             String ganadorFinal = comprobarGanadorPartida();
                             Log.d("HHHHHH", "Ganador: " + ganadorFinal);
@@ -7858,7 +7863,7 @@ public class MainActivity extends Activity
             int f = 0;
             if(Math.random()<0.5) f = R.drawable.mesa2;
             else f = R.drawable.mesa3;
-            fondo = decodeSampledBitmapFromResource(getResources(), f, 319, 350);
+            fondo = decodeSampledBitmapFromResource(getResources(), f, 350, 350);
             frame.setBackground(new BitmapDrawable(getResources(), fondo));
             //frame.setBackgroundResource(R.drawable.mesa2);
 
