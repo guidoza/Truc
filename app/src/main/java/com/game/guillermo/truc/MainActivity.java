@@ -61,6 +61,7 @@ import android.widget.Toast;
 import android.media.AudioManager;
 import android.media.SoundPool;
 
+import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.GravityEnum;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.afollestad.materialdialogs.Theme;
@@ -298,6 +299,7 @@ public class MainActivity extends Activity
     MaterialDialog.Builder materialDialog;
     MaterialDialog repartiendo;
     MaterialDialog dialogEnvid;
+    MaterialDialog dialogTruc;
     MaterialDialog.ButtonCallback callbackReinicio;
     ProgressBar progressBar1;
     ProgressBar progressBar2;
@@ -535,8 +537,6 @@ public class MainActivity extends Activity
 
         preferencias = getSharedPreferences("MisPreferencias", Activity.MODE_PRIVATE);
         editor = preferencias.edit();
-        editor.clear();
-        editor.commit();
 
         frame = (FrameLayout)findViewById(R.id.Frame);
 
@@ -932,10 +932,10 @@ public class MainActivity extends Activity
     }
 
     private void showSingleChoiceAlertEnvid(String title, int array) {
-        new MaterialDialog.Builder(this)
+        materialDialog = new MaterialDialog.Builder(this)
                 .title(title)
                 .items(array)
-                .itemsCallbackSingleChoice(0, new MaterialDialog.ListCallbackSingleChoice() {
+                .itemsCallbackSingleChoice(3, new MaterialDialog.ListCallbackSingleChoice() {
                     @Override
                     public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
                         switch (which) {
@@ -975,20 +975,24 @@ public class MainActivity extends Activity
                     }
                 })
                 .positiveText("Elegir")
-                .cancelable(false)
-                .show().getWindow().setGravity(Gravity.TOP);
+                .cancelable(false);
+
+        dialogEnvid = materialDialog.show();
+        dialogEnvid.getWindow().setGravity(Gravity.TOP);
+
     }
 
     private void showSingleChoiceAlertVuelvo(String title, int array) {
-        new MaterialDialog.Builder(this)
+        materialDialog = new MaterialDialog.Builder(this)
                 .title(title)
                 .items(array)
-                .itemsCallbackSingleChoice(0, new MaterialDialog.ListCallbackSingleChoice() {
+                .itemsCallbackSingleChoice(2, new MaterialDialog.ListCallbackSingleChoice() {
                     @Override
                     public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
                         switch (which) {
                             //Quiero
                             case 0:
+                                miEnvid = comprobarEnvid();
                                 hayEnvid = true;
                                 comprobarGanadorEnvid();
                                 enviarMensajeHayEnvidAndGanador(ganadorEnvid, 2);
@@ -996,7 +1000,7 @@ public class MainActivity extends Activity
 
                                 if (!turno.equals(mMyId)) {
                                     cambiarBarraProgreso();
-                                } else{
+                                } else {
                                     reiniciarBarraProgreso();
                                     desbloquearCartas();
                                     animarAparecerMenu();
@@ -1004,6 +1008,7 @@ public class MainActivity extends Activity
                                 break;
                             //Falta
                             case 1:
+                                miEnvid = comprobarEnvid();
                                 enviarMensajeLaFalta(1, "");
                                 cambiarBarraProgreso();
                                 Games.Achievements.unlock(mGoogleApiClient, AL_LIMITE);
@@ -1014,7 +1019,7 @@ public class MainActivity extends Activity
                                 enviarMensajeNoQuiero(2);
                                 if (!turno.equals(mMyId)) {
                                     cambiarBarraProgreso();
-                                } else{
+                                } else {
                                     reiniciarBarraProgreso();
                                     desbloquearCartas();
                                     animarAparecerMenu();
@@ -1025,22 +1030,26 @@ public class MainActivity extends Activity
                     }
                 })
                 .positiveText("Elegir")
-                .cancelable(false)
-                .show().getWindow().setGravity(Gravity.TOP);
+                .cancelable(false);
+
+        dialogEnvid = materialDialog.show();
+        dialogEnvid.getWindow().setGravity(Gravity.TOP);
     }
 
     private void showSingleChoiceAlertFalta(String title, int array) {
-        new MaterialDialog.Builder(this)
+        materialDialog = new MaterialDialog.Builder(this)
                 .title(title)
                 .items(array)
-                .itemsCallbackSingleChoice(0, new MaterialDialog.ListCallbackSingleChoice() {
+                .itemsCallbackSingleChoice(1, new MaterialDialog.ListCallbackSingleChoice() {
                     @Override
                     public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
                         switch (which) {
                             //Quiero
                             case 0:
+                                miEnvid = comprobarEnvid();
                                 hayEnvid = true;
                                 comprobarGanadorEnvid();
+                                Log.d("JEJEJEJEJEJEJEJE", "Soy ganador del envid? "+ganadorEnvid.equals(mMyId));
                                 //puntos a sumar por la falta
                                 if (ganadorEnvid.equals(mMyId)) {
                                     if (puntosTotalesJugador2 <= 12) {
@@ -1049,10 +1058,11 @@ public class MainActivity extends Activity
                                         puntosEnvid = 24 - puntosTotalesJugador2;
                                     }
                                 }
+                                Log.d("JEJEJEJEJEJEJEJE", "Puntos envid: "+puntosEnvid);
                                 enviarMensajeHayEnvidAndGanador(ganadorEnvid, 3);
                                 if (!turno.equals(mMyId)) {
                                     cambiarBarraProgreso();
-                                } else{
+                                } else {
                                     reiniciarBarraProgreso();
                                     desbloquearCartas();
                                     animarAparecerMenu();
@@ -1064,7 +1074,7 @@ public class MainActivity extends Activity
                                 } else enviarMensajeNoQuiero(3);
                                 if (!turno.equals(mMyId)) {
                                     cambiarBarraProgreso();
-                                } else{
+                                } else {
                                     reiniciarBarraProgreso();
                                     desbloquearCartas();
                                     animarAparecerMenu();
@@ -1075,12 +1085,15 @@ public class MainActivity extends Activity
                     }
                 })
                 .positiveText("Elegir")
-                .cancelable(false)
-                .show().getWindow().setGravity(Gravity.TOP);
+                .cancelable(false);
+
+        dialogEnvid = materialDialog.show();
+        dialogEnvid.getWindow().setGravity(Gravity.TOP);
+
     }
 
     private void showSingleChoiceAlertTruco(String title, int array) {
-        new MaterialDialog.Builder(this)
+        materialDialog = new MaterialDialog.Builder(this)
                 .title(title)
                 .items(array)
                 .itemsCallbackSingleChoice(0, new MaterialDialog.ListCallbackSingleChoice() {
@@ -1109,12 +1122,14 @@ public class MainActivity extends Activity
                     }
                 })
                 .positiveText("Elegir")
-                .cancelable(false)
-                .show().getWindow().setGravity(Gravity.TOP);
+                .cancelable(false);
+
+        dialogTruc = materialDialog.show();
+        dialogTruc.getWindow().setGravity(Gravity.TOP);
     }
 
     private void showSingleChoiceAlertRetruc(String title, int array) {
-        new MaterialDialog.Builder(this)
+        materialDialog = new MaterialDialog.Builder(this)
                 .title(title)
                 .items(array)
                 .itemsCallbackSingleChoice(0, new MaterialDialog.ListCallbackSingleChoice() {
@@ -1149,12 +1164,14 @@ public class MainActivity extends Activity
                     }
                 })
                 .positiveText("Elegir")
-                .cancelable(false)
-                .show().getWindow().setGravity(Gravity.TOP);
+                .cancelable(false);
+
+        dialogTruc = materialDialog.show();
+        dialogTruc.getWindow().setGravity(Gravity.TOP);
     }
 
     private void showSingleChoiceAlertCuatreVal(String title, int array) {
-        new MaterialDialog.Builder(this)
+        materialDialog = new MaterialDialog.Builder(this)
                 .title(title)
                 .items(array)
                 .itemsCallbackSingleChoice(0, new MaterialDialog.ListCallbackSingleChoice() {
@@ -1190,12 +1207,14 @@ public class MainActivity extends Activity
                     }
                 })
                 .positiveText("Elegir")
-                .cancelable(false)
-                .show().getWindow().setGravity(Gravity.TOP);
+                .cancelable(false);
+
+        dialogTruc = materialDialog.show();
+        dialogTruc.getWindow().setGravity(Gravity.TOP);
     }
 
     private void showSingleChoiceAlertJocFora(String title, int array) {
-        new MaterialDialog.Builder(this)
+        materialDialog = new MaterialDialog.Builder(this)
                 .title(title)
                 .items(array)
                 .itemsCallbackSingleChoice(0, new MaterialDialog.ListCallbackSingleChoice() {
@@ -1226,11 +1245,15 @@ public class MainActivity extends Activity
                     }
                 })
                 .positiveText("Elegir")
-                .cancelable(false)
-                .show().getWindow().setGravity(Gravity.TOP);
+                .cancelable(false);
+
+        dialogTruc = materialDialog.show();
+        dialogTruc.getWindow().setGravity(Gravity.TOP);
     }
 
     private void comprobarGanadorEnvid() {
+        Log.d("JEJEJEJEJEJEJEJE", "Mi envid: "+miEnvid);
+        Log.d("JEJEJEJEJEJEJEJE", "Rival envid: "+envidOtro);
         if (miEnvid > envidOtro && mMyId.equals(idJugador1)) {
             ganadorEnvid = idJugador1;
         } else if (miEnvid > envidOtro && mMyId.equals(idJugador2)) {
@@ -1743,23 +1766,36 @@ public class MainActivity extends Activity
                 switchToScreen(R.id.screen_sign_in);
                 break;
             case R.id.button_invite_players:
+                switchToScreen(R.id.screen_wait);
 
-                String invitarTourShown = preferencias.getString("invitar", "nunca");
-                if(invitarTourShown.equals("mostrando")) invitarTour.cleanUp();
+                String invitarTourShown = preferencias.getString("tour", "nunca");
+                if (invitarTourShown != null) {
+                    if(invitarTourShown.equals("mostrandoInvitaciones")){
+                        invitarTour.cleanUp();
+                        editor.putString("tour", "segundoTour");
+                        editor.commit();
+                    }
+                }
+
 
                 // show list of invitable players
                 intent = Games.RealTimeMultiplayer.getSelectOpponentsIntent(mGoogleApiClient, 1, 3);
-                switchToScreen(R.id.screen_wait);
                 startActivityForResult(intent, RC_SELECT_PLAYERS);
                 break;
             case R.id.button_see_invitations:
+                switchToScreen(R.id.screen_wait);
 
-                String verInvitacionesTourShown = preferencias.getString("verInvitaciones", "nunca");
-                if(verInvitacionesTourShown.equals("mostrando")) verInvitacionesTour.cleanUp();
+                String verInvitacionesTourShown = preferencias.getString("tour", "nunca");
+                if (verInvitacionesTourShown != null) {
+                    if(verInvitacionesTourShown.equals("mostrandoSegundo")){
+                        verInvitacionesTour.cleanUp();
+                        editor.putString("tour", "acabado");
+                        editor.commit();
+                    }
+                }
 
                 // show list of pending invitations
                 intent = Games.Invitations.getInvitationInboxIntent(mGoogleApiClient);
-                switchToScreen(R.id.screen_wait);
                 startActivityForResult(intent, RC_INVITATION_INBOX);
                 break;
             case R.id.button_accept_popup_invitation:
@@ -1859,6 +1895,12 @@ public class MainActivity extends Activity
                     resetAnimaciones();
                     inicializarMano();
                     showProgressDialog(getResources().getString(R.string.empezamos));
+                    if(numeroJugadores == 2){
+                        switchToScreen(R.id.screen_game);
+                    }else if(numeroJugadores == 4){
+                        switchToScreen(R.id.screen_game_4_jugadores);
+                    }
+
                 } else if (responseCode == GamesActivityResultCodes.RESULT_LEFT_ROOM) {
                     // player indicated that they want to leave the room
                     leaveRoom();
@@ -3204,7 +3246,7 @@ public class MainActivity extends Activity
     }
 
     void iniciarBarraProgresoJ1() {
-
+        segundos = 40;
         mCountDownTimerJ1 = new CountDownTimer(40000, 1000) {
 
             @Override
@@ -3219,7 +3261,19 @@ public class MainActivity extends Activity
                 segundos--;
                 progressBar1.setProgress(segundos);
                 if(mCurScreen == R.id.screen_game || mCurScreen == R.id.screen_game_4_jugadores){
-                    tirarAleatoria();
+                    if(turno.equals(mMyId)) {
+                        tirarAleatoria();
+                    }else if(dialogTruc != null){
+
+                        if(dialogTruc.isShowing())
+                            dialogTruc.getActionButton(DialogAction.POSITIVE).performClick();
+
+                    }else if(dialogEnvid != null){
+
+                        if(dialogEnvid.isShowing())
+                            dialogEnvid.getActionButton(DialogAction.POSITIVE).performClick();
+                    }
+
                 }
             }
         }.start();
@@ -3228,6 +3282,7 @@ public class MainActivity extends Activity
     }
 
     void iniciarBarraProgresoJ2() {
+        segundos = 40;
         mCountDownTimerJ2 = new CountDownTimer(40000, 1000) {
 
             @Override
@@ -3242,9 +3297,6 @@ public class MainActivity extends Activity
                 //Do what you want
                 segundos--;
                 progressBar2.setProgress(segundos);
-                if(mCurScreen == R.id.screen_game || mCurScreen == R.id.screen_game_4_jugadores){
-                    tirarAleatoria();
-                }
             }
         }.start();
 
@@ -3288,7 +3340,7 @@ public class MainActivity extends Activity
                     segundos--;
                     progressBarAbajo.setProgress(segundos);
                     if(mCurScreen == R.id.screen_game || mCurScreen == R.id.screen_game_4_jugadores){
-                        tirarAleatoria();
+                        if(turno.equals(mMyId))tirarAleatoria();
                     }
                 }
             }.start();
@@ -3319,7 +3371,7 @@ public class MainActivity extends Activity
                     segundos--;
                     progressBarDerecha.setProgress(segundos);
                     if(mCurScreen == R.id.screen_game || mCurScreen == R.id.screen_game_4_jugadores){
-                        tirarAleatoria();
+                        if(turno.equals(mMyId))tirarAleatoria();
                     }
                 }
             }.start();
@@ -3349,7 +3401,7 @@ public class MainActivity extends Activity
                     segundos2--;
                     progressBarArriba.setProgress(segundos2);
                     if(mCurScreen == R.id.screen_game || mCurScreen == R.id.screen_game_4_jugadores){
-                        tirarAleatoria();
+                        if(turno.equals(mMyId))tirarAleatoria();
                     }
                 }
             }.start();
@@ -3379,7 +3431,7 @@ public class MainActivity extends Activity
                 segundos2--;
                 progressBarIzq.setProgress(segundos2);
                 if(mCurScreen == R.id.screen_game || mCurScreen == R.id.screen_game_4_jugadores){
-                    tirarAleatoria();
+                    if(turno.equals(mMyId))tirarAleatoria();
                 }
             }
         }.start();
@@ -5983,7 +6035,7 @@ public class MainActivity extends Activity
                     String ganador[] = aux2.split(" ");
                     hayEnvid = true;
                     ganadorEnvid = ganador[1];
-                    Log.d("EEEEEE", "Ganador del envid es: "+ganadorEnvid);
+                    Log.d("JEJEJEJEJEJEJEJE", "Ganador del envid es: "+ganadorEnvid);
                     envidOtro = Integer.parseInt(ganador[2]);
                     int caso = Integer.parseInt(ganador[3]);
 
@@ -6022,6 +6074,8 @@ public class MainActivity extends Activity
                             if(logro_33){Games.Achievements.unlock(mGoogleApiClient, ENVID_33);}
                             puntosEnvid = 24;
                         }
+
+                        Log.d("JEJEJEJEJEJEJEJE", "Puntos envid: "+puntosEnvid);
 
                         if (mMyId.equals(turno)) {
                             desbloquearCartas();
@@ -7817,36 +7871,35 @@ public class MainActivity extends Activity
             findViewById(id).setVisibility(screenId == id ? View.VISIBLE : View.GONE);
         }
         if(screenId == R.id.screen_main){
-            String invitarTourShown = preferencias.getString("invitar", "nunca");
-            String verInvitacionesTourShown = preferencias.getString("verInvitaciones", "nunca");
+            String tour = preferencias.getString("tour", "nunca");
 
-            if(invitarTourShown.equals("nunca")){
-            ImageButton invitar = (ImageButton) findViewById(R.id.button_invite_players);
+            if (tour != null) {
+                if(tour.equals("nunca")){
+                ImageButton invitar = (ImageButton) findViewById(R.id.button_invite_players);
+                invitarTour = TourGuide.init(this).with(TourGuide.Technique.Click)
+                        .setPointer(new Pointer().setGravity(Gravity.BOTTOM))
+                        .setToolTip(new ToolTip().setTitle(getResources().getString(R.string.invitar)).setGravity(Gravity.BOTTOM | Gravity.CENTER_VERTICAL)
+                                .setDescription(getResources().getString(R.string.invitar_cuerpo)))
+                        .setOverlay(new Overlay())
+                        .playOn(invitar);
 
-            invitarTour = TourGuide.init(this).with(TourGuide.Technique.Click)
-                    .setPointer(new Pointer().setGravity(Gravity.BOTTOM))
-                    .setToolTip(new ToolTip().setTitle(getResources().getString(R.string.invitar)).setGravity(Gravity.BOTTOM|Gravity.CENTER_VERTICAL)
-                            .setDescription(getResources().getString(R.string.invitar_cuerpo)))
-                    .setOverlay(new Overlay())
-                    .playOn(invitar);
 
+                    editor.putString("tour", "mostrandoInvitaciones");
+                    editor.commit();
+                }else if(tour.equals("segundoTour")){
+                    ImageButton invitaciones = (ImageButton) findViewById(R.id.button_see_invitations);
+                    verInvitacionesTour = TourGuide.init(this).with(TourGuide.Technique.Click)
+                        .setPointer(new Pointer().setGravity(Gravity.TOP))
+                        .setToolTip(new ToolTip().setTitle(getResources().
+                                getString(R.string.ver_invitaciones)).setDescription(getResources()
+                                .getString(R.string.ver_invitaciones_cuerpo)).setGravity(Gravity.TOP | Gravity.CENTER_VERTICAL))
+                        .setOverlay(new Overlay())
+                        .playOn(invitaciones);
 
-                editor.putString("invitar", "mostrando");
-                editor.commit();
-            }else if(verInvitacionesTourShown.equals("nunca")){
-                ImageButton invitaciones = (ImageButton) findViewById(R.id.button_see_invitations);
+                    editor.putString("tour", "mostrandoSegundo");
+                    editor.commit();
 
-                verInvitacionesTour = TourGuide.init(this).with(TourGuide.Technique.Click)
-                    .setPointer(new Pointer().setGravity(Gravity.TOP))
-                    .setToolTip(new ToolTip().setTitle(getResources().
-                            getString(R.string.ver_invitaciones)).setDescription(getResources()
-                            .getString(R.string.ver_invitaciones_cuerpo)).setGravity(Gravity.TOP|Gravity.CENTER_VERTICAL))
-                    .setOverlay(new Overlay())
-                    .playOn(invitaciones);
-
-                editor.putString("verInvitaciones", "mostrando");
-                editor.commit();
-
+                }
             }
         }
         if(screenId == R.id.screen_wait){
@@ -8177,12 +8230,6 @@ public class MainActivity extends Activity
         //Preparando la partida
         Log.d("BBBBBBBBB", "cartas2: " + sCartasJ2 + " cartas3: " + sCartasJ3 + " cartas3: " + sCartasJ3);
         resetAll();
-
-        if(numeroJugadores == 2){
-            switchToScreen(R.id.screen_game);
-        }else if(numeroJugadores == 4){
-            switchToScreen(R.id.screen_game_4_jugadores);
-        }
 
         //Si soy mano reparto
         if (mMyId.equals(mano)) {
@@ -8830,7 +8877,7 @@ public class MainActivity extends Activity
     }
 
     private void showSingleChoiceAlertEnvid_4J(String title, int array, final String sender) {
-        new MaterialDialog.Builder(this)
+        materialDialog = new MaterialDialog.Builder(this)
                 .title(title)
                 .items(array)
                 .itemsCallbackSingleChoice(0, new MaterialDialog.ListCallbackSingleChoice() {
@@ -8849,14 +8896,14 @@ public class MainActivity extends Activity
                             case 1:
                                 enviarMensajeVuelvoAEnvidar(sender);
                                 //Soy el ultimo
-                                if(mMyId.equals(comprobarTerceroeMano())){
+                                if (mMyId.equals(comprobarTerceroeMano())) {
                                     cancelarBarraProgreso();
                                     barrasInvisibles();
                                     progressBarIzq.setVisibility(View.VISIBLE);
                                     iniciarBarraProgresoIzq();
 
-                                //Soy tercero
-                                }else if(mMyId.equals(comprobarSegundoMano())){
+                                    //Soy tercero
+                                } else if (mMyId.equals(comprobarSegundoMano())) {
                                     cancelarBarraProgreso();
                                     barrasInvisibles();
                                     progressBarDerecha.setVisibility(View.VISIBLE);
@@ -8869,14 +8916,14 @@ public class MainActivity extends Activity
                             case 2:
                                 enviarMensajeLaFalta(1, sender);
                                 //Soy el ultimo
-                                if(mMyId.equals(comprobarTerceroeMano())){
+                                if (mMyId.equals(comprobarTerceroeMano())) {
                                     cancelarBarraProgreso();
                                     barrasInvisibles();
                                     progressBarIzq.setVisibility(View.VISIBLE);
                                     iniciarBarraProgresoIzq();
 
                                     //Soy tercero
-                                }else if(mMyId.equals(comprobarSegundoMano())){
+                                } else if (mMyId.equals(comprobarSegundoMano())) {
                                     cancelarBarraProgreso();
                                     barrasInvisibles();
                                     progressBarDerecha.setVisibility(View.VISIBLE);
@@ -8894,12 +8941,14 @@ public class MainActivity extends Activity
                     }
                 })
                 .positiveText("Elegir")
-                .cancelable(false)
-                .show().getWindow().setGravity(Gravity.TOP);
+                .cancelable(false);
+
+        dialogEnvid = materialDialog.show();
+        dialogEnvid.getWindow().setGravity(Gravity.TOP);
     }
 
     private void showSingleChoiceAlertVuelvo_4J(String title, int array, final String sender) {
-        new MaterialDialog.Builder(this)
+        materialDialog = new MaterialDialog.Builder(this)
                 .title(title)
                 .items(array)
                 .itemsCallbackSingleChoice(0, new MaterialDialog.ListCallbackSingleChoice() {
@@ -8924,14 +8973,14 @@ public class MainActivity extends Activity
                             case 1:
                                 enviarMensajeLaFalta(1, sender);
                                 //Soy el ultimo
-                                if(mMyId.equals(comprobarTerceroeMano())){
+                                if (mMyId.equals(comprobarTerceroeMano())) {
                                     cancelarBarraProgreso();
                                     barrasInvisibles();
                                     progressBarIzq.setVisibility(View.VISIBLE);
                                     iniciarBarraProgresoIzq();
 
                                     //Soy tercero
-                                }else if(mMyId.equals(comprobarSegundoMano())){
+                                } else if (mMyId.equals(comprobarSegundoMano())) {
                                     cancelarBarraProgreso();
                                     barrasInvisibles();
                                     progressBarDerecha.setVisibility(View.VISIBLE);
@@ -8953,12 +9002,14 @@ public class MainActivity extends Activity
                     }
                 })
                 .positiveText("Elegir")
-                .cancelable(false)
-                .show().getWindow().setGravity(Gravity.TOP);
+                .cancelable(false);
+
+        dialogEnvid = materialDialog.show();
+        dialogEnvid.getWindow().setGravity(Gravity.TOP);
     }
 
     private void showSingleChoiceAlertFalta_4J(String title, int array) {
-        new MaterialDialog.Builder(this)
+        materialDialog = new MaterialDialog.Builder(this)
                 .title(title)
                 .items(array)
                 .itemsCallbackSingleChoice(0, new MaterialDialog.ListCallbackSingleChoice() {
@@ -8971,7 +9022,7 @@ public class MainActivity extends Activity
                                 ganadorEnvid = comprobarGanadorEnvid_4J();
                                 enviarMensajeHayEnvidAndGanador(ganadorEnvid, 3);
                                 //puntos a sumar por la falta
-                               if (ganadorEnvid.equals(mMyId)) {
+                                if (ganadorEnvid.equals(mMyId)) {
                                     if (puntosTotalesJugador2 <= 12) {
                                         puntosEnvid = 24;
                                     } else if (puntosTotalesJugador2 > 12) {
@@ -9000,8 +9051,10 @@ public class MainActivity extends Activity
                     }
                 })
                 .positiveText("Elegir")
-                .cancelable(false)
-                .show().getWindow().setGravity(Gravity.TOP);
+                .cancelable(false);
+
+        dialogEnvid = materialDialog.show();
+        dialogEnvid.getWindow().setGravity(Gravity.TOP);
     }
 
     private String comprobarGanadorEnvid_4J() {
@@ -9310,7 +9363,7 @@ public class MainActivity extends Activity
     }
 
     private void showSingleChoiceAlertTruco_4J(String title, int array, final String sender) {
-        new MaterialDialog.Builder(this)
+        materialDialog = new MaterialDialog.Builder(this)
                 .title(title)
                 .items(array)
                 .itemsCallbackSingleChoice(0, new MaterialDialog.ListCallbackSingleChoice() {
@@ -9339,12 +9392,14 @@ public class MainActivity extends Activity
                     }
                 })
                 .positiveText("Elegir")
-                .cancelable(false)
-                .show().getWindow().setGravity(Gravity.TOP);
+                .cancelable(false);
+
+        dialogTruc = materialDialog.show();
+        dialogTruc.getWindow().setGravity(Gravity.TOP);
     }
 
     private void showSingleChoiceAlertRetruc_4J(String title, int array, final String sender) {
-        new MaterialDialog.Builder(this)
+        materialDialog = new MaterialDialog.Builder(this)
                 .title(title)
                 .items(array)
                 .itemsCallbackSingleChoice(0, new MaterialDialog.ListCallbackSingleChoice() {
@@ -9374,12 +9429,14 @@ public class MainActivity extends Activity
                     }
                 })
                 .positiveText("Elegir")
-                .cancelable(false)
-                .show().getWindow().setGravity(Gravity.TOP);
+                .cancelable(false);
+
+        dialogTruc = materialDialog.show();
+        dialogTruc.getWindow().setGravity(Gravity.TOP);
     }
 
     private void showSingleChoiceAlertCuatreVal_4J(String title, int array, final String sender) {
-        new MaterialDialog.Builder(this)
+        materialDialog = new MaterialDialog.Builder(this)
                 .title(title)
                 .items(array)
                 .itemsCallbackSingleChoice(0, new MaterialDialog.ListCallbackSingleChoice() {
@@ -9408,12 +9465,14 @@ public class MainActivity extends Activity
                     }
                 })
                 .positiveText("Elegir")
-                .cancelable(false)
-                .show().getWindow().setGravity(Gravity.TOP);
+                .cancelable(false);
+
+        dialogTruc = materialDialog.show();
+        dialogTruc.getWindow().setGravity(Gravity.TOP);
     }
 
     private void showSingleChoiceAlertJocFora_4J(String title, int array, final String sender) {
-        new MaterialDialog.Builder(this)
+        materialDialog = new MaterialDialog.Builder(this)
                 .title(title)
                 .items(array)
                 .itemsCallbackSingleChoice(0, new MaterialDialog.ListCallbackSingleChoice() {
@@ -9437,8 +9496,10 @@ public class MainActivity extends Activity
                     }
                 })
                 .positiveText("Elegir")
-                .cancelable(false)
-                .show().getWindow().setGravity(Gravity.TOP);
+                .cancelable(false);
+
+        dialogTruc = materialDialog.show();
+        dialogTruc.getWindow().setGravity(Gravity.TOP);
     }
 
 
