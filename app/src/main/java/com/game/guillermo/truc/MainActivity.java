@@ -6251,6 +6251,10 @@ public class MainActivity extends Activity
                                 break;
 
                         }
+                        if (turno.equals(mMyId)) {
+                            desbloquearCartas();
+                            animarAparecerMenu();
+                        }
 
                     //COPIAR DE ARRIBA
                     }else if(numeroJugadores ==4){
@@ -6296,7 +6300,6 @@ public class MainActivity extends Activity
                                     break;
                             }
                         }
-
                         if (turno.equals(mMyId)) {
                             cancelarBarraProgreso();
                             barrasInvisibles();
