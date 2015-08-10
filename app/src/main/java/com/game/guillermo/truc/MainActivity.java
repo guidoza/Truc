@@ -944,7 +944,7 @@ public class MainActivity extends Activity
                                 hayEnvid = true;
                                 if(miEnvid == 33) logro_33 = true;
                                 comprobarGanadorEnvid();
-                                puntosEnvid = ENVID;
+                                if(ganadorEnvid.equals(mMyId))puntosEnvid = ENVID;
                                 enviarMensajeHayEnvidAndGanador(ganadorEnvid, 1);
                                 cambiarBarraProgreso();
                                 break;
@@ -954,6 +954,8 @@ public class MainActivity extends Activity
                                 if(miEnvid == 33) logro_33 = true;
                                 enviarMensajeVuelvoAEnvidar("");
                                 cambiarBarraProgreso();
+                                Log.d("JEJEJEJEJEJEJE", "Visibilidad progresbar1 = " + progressBar1.getVisibility());
+                                Log.d("JEJEJEJEJEJEJE", "Visibilidad progresbar2 = " + progressBar2.getVisibility());
                                 hayVuelvo = true;
                                 break;
                             //Falta
@@ -995,7 +997,7 @@ public class MainActivity extends Activity
                                 hayEnvid = true;
                                 comprobarGanadorEnvid();
                                 enviarMensajeHayEnvidAndGanador(ganadorEnvid, 2);
-                                puntosEnvid = TORNE;
+                                if(ganadorEnvid.equals(mMyId))puntosEnvid = TORNE;
 
                                 if (!turno.equals(mMyId)) {
                                     cambiarBarraProgreso();
@@ -2000,7 +2002,7 @@ public class MainActivity extends Activity
     @Override
     public void onStop() {
         Log.d(TAG, "**** got onStop");
-        //Log.d("<HHHHHHHHHHHHHHH>", "**** en onPause");
+        //Log.d("<HHHHHHHHHHHHHHH>", "**** en onStop");
         // if we're in a room, leave it.
         leaveRoom();
         // stop trying to keep the screen on
@@ -2018,6 +2020,9 @@ public class MainActivity extends Activity
     public void onPause() {
         Log.d(TAG, "**** got onPause");
         if(mCurScreen == R.id.screen_wait)findViewById(mCurScreen).setVisibility(View.GONE);
+        fondo = decodeSampledBitmapFromResource(getResources(), R.drawable.fondo_menu, 100, 100);
+        frame.setBackground(new BitmapDrawable(getResources(), fondo));
+
         super.onPause();
     }
 
@@ -3504,6 +3509,7 @@ public class MainActivity extends Activity
                 progressBar1.setVisibility(View.VISIBLE);
                 iniciarBarraProgresoJ1();
             }
+
         }else if(numeroJugadores == 4){
 
             if(turno.equals(mMyId)){
@@ -3653,6 +3659,7 @@ public class MainActivity extends Activity
                 mCountDownTimerJ2.cancel();
                 segundos = 40;
                 iniciarBarraProgresoJ2();
+                Log.d("JEJEJEJEJEJEJE", "reiniciamos la 2");
             }
         }else if(numeroJugadores == 4){
             if (progressBarAbajo.getVisibility() == View.VISIBLE) {
@@ -4330,6 +4337,7 @@ public class MainActivity extends Activity
                         if (soyGanadorRonda()) {
                             if (ronda == 1) {
                                 misRondasGanadas = 1;
+                                ganadorRonda1 = mMyId;
                             } else if (ronda == 2) {
                                 misRondasGanadas++;
                             } else if (ronda == 3) {
@@ -4351,6 +4359,7 @@ public class MainActivity extends Activity
                             } else {
                                 actualizaRonda();
                                 enviarMensajeRonda();
+                                enviarMensajeGanadorRonda1();
                                 enviarMensajeTurno();
                                 reiniciarBarraProgreso();
                             }
@@ -4367,10 +4376,15 @@ public class MainActivity extends Activity
                                 }, 1500);
 
                             } else {
+                                if (ronda == 1) {
+                                    if(mMyId.equals(idJugador1)) ganadorRonda1 = idJugador2;
+                                    else ganadorRonda1 = idJugador1;
+                                }
                                 cambiarTurno();
                                 bloquearCartas();
                                 actualizaRonda();
                                 enviarMensajeRonda();
+                                enviarMensajeGanadorRonda1();
                                 enviarMensajeTurno();
                             }
                         }
@@ -5114,6 +5128,16 @@ public class MainActivity extends Activity
         for (Participant p : mParticipants) {
             if (!p.getParticipantId().equals(mMyId)) {
                 Games.RealTimeMultiplayer.sendReliableMessage(mGoogleApiClient, null, messageRonda,
+                        mRoomId, p.getParticipantId());
+            }
+        }
+    }
+
+    public void enviarMensajeGanadorRonda1() {
+        byte[] messageRondaUno = ("G " + ganadorRonda1).getBytes();
+        for (Participant p : mParticipants) {
+            if (!p.getParticipantId().equals(mMyId)) {
+                Games.RealTimeMultiplayer.sendReliableMessage(mGoogleApiClient, null, messageRondaUno,
                         mRoomId, p.getParticipantId());
             }
         }
@@ -5900,21 +5924,11 @@ public class MainActivity extends Activity
 
                 case 'G':
                     //Si ha habido empate
-                    Log.d("TTTTTT", "SUmo mis rondas ganadas");
-                    if (hayEmpate) {
-                        // mostrarResultadosGanadorMano();
-                    } else {
-                        //Sumo rondas ganadas
-                        if (ronda == 1) {
-                            ganadorRonda1 = mMyId;
-                        }
-                        misRondasGanadas++;
-                        //Si llego a 2 he ganado
-                        if (misRondasGanadas == 2) {
-                            //  mostrarResultadosGanadorMano();
-                        }
-                    }
+                    String rondaUno = new String(buf, "UTF-8");
+                    String GanadorRondaUno[] = rondaUno.split(" ");
+                    ganadorRonda1 = GanadorRondaUno[1];
                     break;
+
                 case 'E':
                     //Mensaje que actualiza si hay empate en la primera ronda
                     if (ronda == 1)
@@ -6207,12 +6221,14 @@ public class MainActivity extends Activity
                                 animarTextoAccion(textoAccion2);
                                 cambiarBarraProgreso();
                                 break;
+
                             case 2:
                                 puntosEnvid = ENVID;
                                 textoAccion2.setText(getResources().getString(R.string.no_quiero_vuelvo));
                                 animarTextoAccion(textoAccion2);
                                 reiniciarBarraProgreso();
                                 break;
+
                             case 3:
                                 if (hayVuelvo) {
                                     puntosEnvid = TORNE;
@@ -6224,12 +6240,14 @@ public class MainActivity extends Activity
                                     reiniciarBarraProgreso();
                                 } else cambiarBarraProgreso();
                                 break;
-                            case 4:
 
+                            case 4:
                                 puntosEnvid = NO_QUIERO_ENVID;
                                 textoAccion2.setText(getResources().getString(R.string.no_quiero_falta));
                                 animarTextoAccion(textoAccion2);
-                                cambiarBarraProgreso();
+                                if (!mMyId.equals(turno)) {
+                                    reiniciarBarraProgreso();
+                                } else cambiarBarraProgreso();
                                 break;
 
                         }
@@ -6278,14 +6296,15 @@ public class MainActivity extends Activity
                                     break;
                             }
                         }
+
+                        if (turno.equals(mMyId)) {
+                            cancelarBarraProgreso();
+                            barrasInvisibles();
+                            activarDesactivarMiBarra("ACTIVAR");
+                            desbloquearCartas();
+                            animarAparecerMenu();
+                        }else cambiarBarraProgreso();
                     }
-                    if (turno.equals(mMyId)) {
-                        cancelarBarraProgreso();
-                        barrasInvisibles();
-                        activarDesactivarMiBarra("ACTIVAR");
-                        desbloquearCartas();
-                        animarAparecerMenu();
-                    }else cambiarBarraProgreso();
 
                     break;
 
@@ -8933,7 +8952,7 @@ public class MainActivity extends Activity
                             case 0:
                                 hayEnvid = true;
                                 ganadorEnvid = comprobarGanadorEnvid_4J();
-                                puntosEnvid = ENVID;
+                                if(ganadorEnvid.equals(mMyId))puntosEnvid = ENVID;
                                 enviarMensajeHayEnvidAndGanador(ganadorEnvid, 1);
                                 cambiarBarraProgreso();
                                 break;
@@ -9004,7 +9023,7 @@ public class MainActivity extends Activity
                             case 0:
                                 hayEnvid = true;
                                 ganadorEnvid = comprobarGanadorEnvid_4J();
-                                puntosEnvid = TORNE;
+                                if(ganadorEnvid.equals(mMyId))puntosEnvid = TORNE;
                                 enviarMensajeHayEnvidAndGanador(ganadorEnvid, 2);
                                 cambiarBarraProgreso();
                                 if (turno.equals(mMyId)) {

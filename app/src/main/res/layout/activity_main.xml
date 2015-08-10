@@ -167,7 +167,7 @@
         android:layout_width="match_parent"
         android:id="@+id/screen_wait"
         android:orientation="vertical"
-        android:visibility="visible">
+        android:visibility="gone">
         <ImageView
             android:id="@+id/carta_espera"
             android:layout_width="65dp"
