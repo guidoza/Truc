@@ -1049,7 +1049,7 @@ public class MainActivity extends Activity
                                 miEnvid = comprobarEnvid();
                                 hayEnvid = true;
                                 comprobarGanadorEnvid();
-                                Log.d("JEJEJEJEJEJEJEJE", "Soy ganador del envid? "+ganadorEnvid.equals(mMyId));
+                                Log.d("JEJEJEJEJEJEJEJE", "Soy ganador del envid? " + ganadorEnvid.equals(mMyId));
                                 //puntos a sumar por la falta
                                 if (ganadorEnvid.equals(mMyId)) {
                                     if (puntosTotalesJugador2 <= 12) {
@@ -1058,7 +1058,7 @@ public class MainActivity extends Activity
                                         puntosEnvid = 24 - puntosTotalesJugador2;
                                     }
                                 }
-                                Log.d("JEJEJEJEJEJEJEJE", "Puntos envid: "+puntosEnvid);
+                                Log.d("JEJEJEJEJEJEJEJE", "Puntos envid: " + puntosEnvid);
                                 enviarMensajeHayEnvidAndGanador(ganadorEnvid, 3);
                                 if (!turno.equals(mMyId)) {
                                     cambiarBarraProgreso();
@@ -1253,7 +1253,7 @@ public class MainActivity extends Activity
 
     private void comprobarGanadorEnvid() {
         Log.d("JEJEJEJEJEJEJEJE", "Mi envid: "+miEnvid);
-        Log.d("JEJEJEJEJEJEJEJE", "Rival envid: "+envidOtro);
+        Log.d("JEJEJEJEJEJEJEJE", "Rival envid: " + envidOtro);
         if (miEnvid > envidOtro && mMyId.equals(idJugador1)) {
             ganadorEnvid = idJugador1;
         } else if (miEnvid > envidOtro && mMyId.equals(idJugador2)) {
@@ -2051,10 +2051,10 @@ public class MainActivity extends Activity
         if (keyCode == KeyEvent.KEYCODE_BACK){
 
             if(mCurScreen == R.id.screen_lost){
-                leaveRoom();
+                //leaveRoom();
             }
             else if(mCurScreen == R.id.screen_win){
-                leaveRoom();
+                //leaveRoom();
             }
             else if(mCurScreen == R.id.screen_game){
                 showBasicAlertDesconectarse("Abandonar partida", getResources().getString(R.string.pregunta_abandonar));
@@ -2103,12 +2103,15 @@ public class MainActivity extends Activity
             Games.RealTimeMultiplayer.leave(mGoogleApiClient, this, mRoomId);
             mRoomId = null;
         }
-    resetPuntos();
-    stopKeepingScreenOn();
 
-    if(mCurScreen == R.id.screen_wait){
-        switchToMainScreen();
-    }
+        if(comprobarGanadorPartida().equals("NADIE")){
+            resetPuntos();
+        }
+        stopKeepingScreenOn();
+
+        if(mCurScreen == R.id.screen_wait){
+            switchToMainScreen();
+        }
 
     }
 
@@ -2483,21 +2486,25 @@ public class MainActivity extends Activity
 
     @Override
     public void onPeerLeft(Room room, List<String> peersWhoLeft) {
-        Log.d("<HHHHHHHHHHH>", "onPeerLeft");
-        if (room != null) {
-            Log.d("<HHHHHHHHHHH>", "UPDATE ROOM");
-            Log.d("<HHHHHHHHHHH>", "Peers list: "+peersWhoLeft.toString());
-            mParticipants = room.getParticipants();
-            Log.d("<HHHHHHHHHHH>", "Tama�o de la sala: " + mParticipants.size());
-            Participant aux = null;
-            for (Participant p : mParticipants) {
-                if(p.getParticipantId().equals(peersWhoLeft.get(0))){
-                    aux = p;
+
+        if(comprobarGanadorPartida().equals("NADIE")){
+
+            Log.d("<HHHHHHHHHHH>", "onPeerLeft");
+            if (room != null) {
+                Log.d("<HHHHHHHHHHH>", "UPDATE ROOM");
+                Log.d("<HHHHHHHHHHH>", "Peers list: "+peersWhoLeft.toString());
+                mParticipants = room.getParticipants();
+                Log.d("<HHHHHHHHHHH>", "Tama�o de la sala: " + mParticipants.size());
+                Participant aux = null;
+                for (Participant p : mParticipants) {
+                    if(p.getParticipantId().equals(peersWhoLeft.get(0))){
+                        aux = p;
+                    }
                 }
+                mParticipants.remove(aux);
+                Log.d("<HHHHHHHHHHH>", "Tama�o de la sala tras remove: " + mParticipants.size());
+                updateRoomAfterLeft(room);
             }
-            mParticipants.remove(aux);
-            Log.d("<HHHHHHHHHHH>", "Tama�o de la sala tras remove: " + mParticipants.size());
-            updateRoomAfterLeft(room);
         }
 
     }
@@ -4955,6 +4962,25 @@ public class MainActivity extends Activity
             }
         }, milisegundos);
     }
+    public void cerrarDialogoAndStartIfWin(int milisegundos, int c) {
+        final int caso = c;
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            public void run() {
+                repartiendo.cancel();
+                if(caso == 0){
+                    switchToScreen(R.id.screen_win);
+                    reproducirSonidoGanador();
+                    leaveRoom();
+                }else {
+                    switchToScreen(R.id.screen_lost);
+                    reproducirSonidoPerdedor();
+                    leaveRoom();
+                }
+
+            }
+        }, milisegundos);
+    }
 
     public void mostrarResultadosGanadorMano(String contador) {
         Log.d("FFFFFFF", "Hay truc? " + hayTruc);
@@ -6805,7 +6831,7 @@ public class MainActivity extends Activity
                             Log.d("EN MENSAJE Z", "MIS PUNTOS TOTALES: " + puntosTotalesMios);
                             Log.d("EN MENSAJE Z", "PUNTOS TOTALES RIVAL: " + puntosTotalesJugador2);
 
-                            String ganadorFinal = comprobarGanadorPartida();
+                           /* String ganadorFinal = comprobarGanadorPartida();
                             Log.d("HHHHHH", "Ganador: " + ganadorFinal);
                             if (!ganadorFinal.equals("NADIE")) {
                                 if (ganadorFinal.equals("YO")) {
@@ -6825,7 +6851,7 @@ public class MainActivity extends Activity
                                     switchToScreen(R.id.screen_lost);
                                     reproducirSonidoPerdedor();
                                 }
-                            } else {
+                            } else {*/
                                 //Lo recibe el ganador
                                 if (quien.equals("PERDEDOR")) {
                                     if (hayEnvid) {
@@ -6868,7 +6894,7 @@ public class MainActivity extends Activity
                                     Log.d("KKKKKKKK", "Repartiendo tras mano..." + mMyId);
                                 }
 
-                            }
+                            //}
                             break;
 
                         case 4:
@@ -8282,40 +8308,61 @@ public class MainActivity extends Activity
     }
 
     public void repartirTrasMano() {
-        if(numeroJugadores == 2){
-            cambiarMano();
-            if (mMyId.equals(mano)) {
-                inicializarMano();
-            }
-        }else if(numeroJugadores == 4){
-            cambiarMano();
-            if (!mMyId.equals(mano)) {
-                enviarMensajeListo();
-                botonMarcadorAbajo_4J.setProgress(0);
-                botonMarcadorAbajo_4J.setIndeterminateProgressMode(true); // turn on indeterminate progress
-                botonMarcadorAbajo_4J.setProgress(50); // set progress > 0 & < 100 to display indeterminate progress
-                Handler handler2 = new Handler();
-                handler2.postDelayed(new Runnable() {
-                    public void run() {
-                        // acciones que se ejecutan tras los milisegundos
-                        botonMarcadorAbajo_4J.setCompleteText(Integer.toString(puntosTotalesMios));
-                        botonMarcadorAbajo_4J.setProgress(100);
-                    }
-                }, 5000);
+        String ganadorFinal = comprobarGanadorPartida();
+        Log.d("HHHHHH", "Ganador: " + ganadorFinal);
+        if (!ganadorFinal.equals("NADIE")) {
+            if (ganadorFinal.equals("YO")) {
 
-                botonMarcadorArriba_4J.setProgress(0);
-                botonMarcadorArriba_4J.setIndeterminateProgressMode(true); // turn on indeterminate progress
-                botonMarcadorArriba_4J.setProgress(50); // set progress > 0 & < 100 to display indeterminate progress
-                Handler handler3 = new Handler();
-                handler3.postDelayed(new Runnable() {
-                    public void run() {
-                        // acciones que se ejecutan tras los milisegundos
-                        botonMarcadorArriba_4J.setCompleteText(Integer.toString(puntosTotalesJugador2));
-                        botonMarcadorArriba_4J.setProgress(100);
-                    }
-                }, 5000);
+                //Actualiza el ranking sumando una victoria
+                updateLeaderboards(mGoogleApiClient, LEADERBOARD_ID);
+                Games.Achievements.unlock(mGoogleApiClient, PRIMERA_PARTIDA);
+                Games.Achievements.increment(mGoogleApiClient, TRIUNFADOR_PRINCIPIANTE, 1);
+                Games.Achievements.increment(mGoogleApiClient, TRIUNFADOR_AVANZADO, 1);
+                Games.Achievements.increment(mGoogleApiClient, TRIUNFADOR_EXPERTO, 1);
+                Games.Achievements.increment(mGoogleApiClient, LEYENDA, 1);
+
+                cerrarDialogoAndStartIfWin(4000, 0);
+
+            } else if (ganadorFinal.equals("RIVAL")) {
+                cerrarDialogoAndStartIfWin(4000, 1);
             }
-        }
+        } else {
+
+            if(numeroJugadores == 2){
+                cambiarMano();
+                if (mMyId.equals(mano)) {
+                    inicializarMano();
+                }
+            }else if(numeroJugadores == 4){
+                cambiarMano();
+                if (!mMyId.equals(mano)) {
+                    enviarMensajeListo();
+                    botonMarcadorAbajo_4J.setProgress(0);
+                    botonMarcadorAbajo_4J.setIndeterminateProgressMode(true); // turn on indeterminate progress
+                    botonMarcadorAbajo_4J.setProgress(50); // set progress > 0 & < 100 to display indeterminate progress
+                    Handler handler2 = new Handler();
+                    handler2.postDelayed(new Runnable() {
+                        public void run() {
+                            // acciones que se ejecutan tras los milisegundos
+                            botonMarcadorAbajo_4J.setCompleteText(Integer.toString(puntosTotalesMios));
+                            botonMarcadorAbajo_4J.setProgress(100);
+                        }
+                    }, 5000);
+
+                    botonMarcadorArriba_4J.setProgress(0);
+                    botonMarcadorArriba_4J.setIndeterminateProgressMode(true); // turn on indeterminate progress
+                    botonMarcadorArriba_4J.setProgress(50); // set progress > 0 & < 100 to display indeterminate progress
+                    Handler handler3 = new Handler();
+                    handler3.postDelayed(new Runnable() {
+                        public void run() {
+                            // acciones que se ejecutan tras los milisegundos
+                            botonMarcadorArriba_4J.setCompleteText(Integer.toString(puntosTotalesJugador2));
+                            botonMarcadorArriba_4J.setProgress(100);
+                        }
+                    }, 5000);
+                }
+                }
+            }
 
 
  /*       if (mMyId.equals(mano)) {
