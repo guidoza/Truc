@@ -5945,12 +5945,12 @@ public class MainActivity extends Activity
                         numCarta[0] = Integer.parseInt(arrayCartasJ2[1]);
                         numCarta[1] = Integer.parseInt(arrayCartasJ2[2]);
                         numCarta[2] = Integer.parseInt(arrayCartasJ2[3]);
-                        comprobarMareaAzul(numCarta[0],numCarta[1],numCarta[2]);
                         repartir(numCarta);
                         reproducirSonidoRepartir();
                         carta1 = new Carta(manoJugador.get(0).getNumero(), manoJugador.get(0).getPalo(), manoJugador.get(0).getValor());
                         carta2 = new Carta(manoJugador.get(1).getNumero(), manoJugador.get(1).getPalo(), manoJugador.get(1).getValor());
                         carta3 = new Carta(manoJugador.get(2).getNumero(), manoJugador.get(2).getPalo(), manoJugador.get(2).getValor());
+                        comprobarMareaAzul(carta1,carta2,carta3);
                         cerrarDialogoAndStart(4000);
                     } else if (numeroJugadores == 4) {
 
@@ -5975,23 +5975,21 @@ public class MainActivity extends Activity
                             numCarta[0] = Integer.parseInt(arrayCartasJugadores[1]);
                             numCarta[1] = Integer.parseInt(arrayCartasJugadores[2]);
                             numCarta[2] = Integer.parseInt(arrayCartasJugadores[3]);
-                            comprobarMareaAzul(numCarta[0],numCarta[1],numCarta[2]);
                         } else if (mMyId.equals(ids.get(1))) {
                             numCarta[0] = Integer.parseInt(arrayCartasJugadores[4]);
                             numCarta[1] = Integer.parseInt(arrayCartasJugadores[5]);
                             numCarta[2] = Integer.parseInt(arrayCartasJugadores[6]);
-                            comprobarMareaAzul(numCarta[0],numCarta[1],numCarta[2]);
                         } else if (mMyId.equals(ids.get(2))) {
                             numCarta[0] = Integer.parseInt(arrayCartasJugadores[7]);
                             numCarta[1] = Integer.parseInt(arrayCartasJugadores[8]);
                             numCarta[2] = Integer.parseInt(arrayCartasJugadores[9]);
-                            comprobarMareaAzul(numCarta[0],numCarta[1],numCarta[2]);
                         }
                         reproducirSonidoRepartir();
                         repartir(numCarta);
                         carta1 = new Carta(manoJugador.get(0).getNumero(), manoJugador.get(0).getPalo(), manoJugador.get(0).getValor());
                         carta2 = new Carta(manoJugador.get(1).getNumero(), manoJugador.get(1).getPalo(), manoJugador.get(1).getValor());
                         carta3 = new Carta(manoJugador.get(2).getNumero(), manoJugador.get(2).getPalo(), manoJugador.get(2).getValor());
+                        comprobarMareaAzul(carta1,carta2,carta3);
                         cerrarDialogoAndStart(4000);
                         Log.d("TTTTTT", "Start game");
                     }
@@ -9718,10 +9716,12 @@ public class MainActivity extends Activity
         //A?adir c?digo para mostrar el bot?n
     }
 
-    public void comprobarMareaAzul(int numCarta1, int numCarta2, int numCarta3){
-        if((numCarta1==22 || numCarta2==22 || numCarta3==22) &&
-                (numCarta1==10 || numCarta2==10 || numCarta3==10) &&
-                (numCarta1==18 || numCarta2==18 || numCarta3==18)){
+    public void comprobarMareaAzul(Carta carta1, Carta carta2, Carta carta3){
+        if((carta1.getValor().equals(10) || carta2.getValor().equals(10) || carta3.getValor().equals(10)) &&
+                (carta1.getValor().equals(8) || carta2.getValor().equals(8) || carta3.getValor().equals(8)) &&
+                (carta1.getValor().equals(4) && carta1.getPalo().equals("espadas")
+                        || carta2.getValor().equals(4) && carta2.getPalo().equals("espadas")
+                        || carta3.getValor().equals(4) && carta3.getPalo().equals("espadas"))){
             Games.Achievements.unlock(mGoogleApiClient, MAREA_AZUL);
         }
     }
