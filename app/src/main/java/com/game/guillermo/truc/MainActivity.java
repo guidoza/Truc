@@ -1892,6 +1892,7 @@ public class MainActivity extends Activity
                     Log.d(TAG, "Starting game (waiting room returned OK).");
                     resetPuntos();
                     resetAnimaciones();
+                    resetAll();
                     inicializarMano();
                     showProgressDialog(getResources().getString(R.string.empezamos));
                     if(numeroJugadores == 2){
@@ -2594,6 +2595,18 @@ public class MainActivity extends Activity
     void resetAll() {
         Log.d("JEJEJEJEJEJEJE", "En reset all");
         if (numeroJugadores == 2) {
+            ponerCartaRecta();
+
+            if (hayAnimaciones) {
+                deshacerAnimaciones(tvJugador1);
+                deshacerAnimaciones(tvJugador2);
+                deshacerAnimaciones(tvJugador3);
+                posTvJugador1 = 0;
+                posTvJugador2 = 0;
+                posTvJugador3 = 0;
+                hayAnimaciones = false;
+            }
+
             miValor = 0;
             valor1 = 0;
             valor2 = 0;
@@ -2657,18 +2670,6 @@ public class MainActivity extends Activity
 
             logro_farolero = false;
             logro_33 = false;
-
-            ponerCartaRecta();
-
-            if (hayAnimaciones) {
-                deshacerAnimaciones(tvJugador1);
-                deshacerAnimaciones(tvJugador2);
-                deshacerAnimaciones(tvJugador3);
-                posTvJugador1 = 0;
-                posTvJugador2 = 0;
-                posTvJugador3 = 0;
-                hayAnimaciones = false;
-            }
 
             if (hayAnimacionRival1) {
                 tvMesaRival1.animate().scaleX((float) 1).scaleY((float) 1).setDuration(0);
@@ -2892,19 +2893,19 @@ public class MainActivity extends Activity
 
     void ponerCartaRecta(){
         if(numeroJugadores == 2){
-            tvJugador1.animate().translationX(inicio1.x).rotation(0).setDuration(500);
-            tvJugador1.animate().translationY(inicio1.y).rotation(0).setDuration(500);
-            tvJugador2.animate().translationX(inicio2.x).rotation(0).setDuration(500);
-            tvJugador2.animate().translationY(inicio2.y).rotation(0).setDuration(500);
-            tvJugador3.animate().translationX(inicio3.x).rotation(0).setDuration(500);
-            tvJugador3.animate().translationY(inicio3.y).rotation(0).setDuration(500);
+            tvJugador1.animate().translationX(inicio1.x).rotation(0).setDuration(0);
+            tvJugador1.animate().translationY(inicio1.y).rotation(0).setDuration(0);
+            tvJugador2.animate().translationX(inicio2.x).rotation(0).setDuration(0);
+            tvJugador2.animate().translationY(inicio2.y).rotation(0).setDuration(0);
+            tvJugador3.animate().translationX(inicio3.x).rotation(0).setDuration(0);
+            tvJugador3.animate().translationY(inicio3.y).rotation(0).setDuration(0);
         }else if(numeroJugadores == 4){
-            tvJugador1_4J.animate().translationX(inicio1J1.x).rotation(0).setDuration(500);
-            tvJugador1_4J.animate().translationY(inicio1J1.y).rotation(0).setDuration(500);
-            tvJugador2_4J.animate().translationX(inicio2J1.x).rotation(0).setDuration(500);
-            tvJugador2_4J.animate().translationY(inicio2J1.y).rotation(0).setDuration(500);
-            tvJugador3_4J.animate().translationX(inicio3J1.x).rotation(0).setDuration(500);
-            tvJugador3_4J.animate().translationY(inicio3J1.y).rotation(0).setDuration(500);
+            tvJugador1_4J.animate().translationX(inicio1J1.x).rotation(0).setDuration(0);
+            tvJugador1_4J.animate().translationY(inicio1J1.y).rotation(0).setDuration(0);
+            tvJugador2_4J.animate().translationX(inicio2J1.x).rotation(0).setDuration(0);
+            tvJugador2_4J.animate().translationY(inicio2J1.y).rotation(0).setDuration(0);
+            tvJugador3_4J.animate().translationX(inicio3J1.x).rotation(0).setDuration(0);
+            tvJugador3_4J.animate().translationY(inicio3J1.y).rotation(0).setDuration(0);
 
         }
     }
@@ -4968,7 +4969,10 @@ public class MainActivity extends Activity
         handler.postDelayed(new Runnable() {
             public void run() {
                 resetAll();
-                // acciones que se ejecutan tras los milisegundos
+            }
+        }, 3000);
+        handler.postDelayed(new Runnable() {
+            public void run() {
                 repartiendo.cancel();
                 startGame(true);
 
@@ -5953,6 +5957,7 @@ public class MainActivity extends Activity
                         carta3 = new Carta(manoJugador.get(2).getNumero(), manoJugador.get(2).getPalo(), manoJugador.get(2).getValor());
                         comprobarMareaAzul(carta1,carta2,carta3);
                         cerrarDialogoAndStart(4000);
+
                     } else if (numeroJugadores == 4) {
 
                         //resetAll();
@@ -8248,7 +8253,7 @@ public class MainActivity extends Activity
 
     public void inicializarMano() {
         //Preparando la partida
-        resetAll();
+        //resetAll();
 
         //Si soy mano reparto
         if (mMyId.equals(mano)) {
