@@ -14,14 +14,16 @@ import android.widget.TextView;
 public class SimpleAdapter extends BaseAdapter {
 
     private LayoutInflater layoutInflater;
+    private Context context;
 
     public SimpleAdapter(Context context) {
+        this.context = context;
         layoutInflater = LayoutInflater.from(context);
     }
 
     @Override
     public int getCount() {
-        return 3;
+        return 15;
     }
 
     @Override
@@ -52,15 +54,63 @@ public class SimpleAdapter extends BaseAdapter {
 
         switch (position) {
             case 0:
-                viewHolder.textView.setText('"'+"Voy a ti"+'"');
+                viewHolder.textView.setText('"'+context.getResources().getString(R.string.voy_a_ti)+'"');
                 viewHolder.imageView.setImageResource(R.drawable.common_signin_btn_icon_dark);
                 break;
             case 1:
-                viewHolder.textView.setText('"'+"Ven a mi"+'"');
+                viewHolder.textView.setText('"'+context.getResources().getString(R.string.ven_a_mi)+'"');
                 viewHolder.imageView.setImageResource(R.drawable.common_signin_btn_icon_dark);
                 break;
             case 2:
-                viewHolder.textView.setText(('"'+"Dicen que al basto se le envida"+'"'));
+                viewHolder.textView.setText('"'+context.getResources().getString(R.string.basto_envida)+'"');
+                viewHolder.imageView.setImageResource(R.drawable.common_signin_btn_icon_dark);
+                break;
+            case 3:
+                viewHolder.textView.setText('"'+context.getResources().getString(R.string.paliza)+'"');
+                viewHolder.imageView.setImageResource(R.drawable.common_signin_btn_icon_dark);
+                break;
+            case 4:
+                viewHolder.textView.setText('"'+context.getResources().getString(R.string.farol)+'"');
+                viewHolder.imageView.setImageResource(R.drawable.common_signin_btn_icon_dark);
+                break;
+            case 5:
+                viewHolder.textView.setText('"'+context.getResources().getString(R.string.atreves)+'"');
+                viewHolder.imageView.setImageResource(R.drawable.common_signin_btn_icon_dark);
+                break;
+            case 6:
+                viewHolder.textView.setText('"'+context.getResources().getString(R.string.bien_jugado)+'"');
+                viewHolder.imageView.setImageResource(R.drawable.common_signin_btn_icon_dark);
+                break;
+            case 7:
+                viewHolder.textView.setText('"'+context.getResources().getString(R.string.espera_y_veras)+'"');
+                viewHolder.imageView.setImageResource(R.drawable.common_signin_btn_icon_dark);
+                break;
+            case 8:
+                viewHolder.textView.setText('"'+context.getResources().getString(R.string.sobrado)+'"');
+                viewHolder.imageView.setImageResource(R.drawable.common_signin_btn_icon_dark);
+                break;
+            case 9:
+                viewHolder.textView.setText('"'+context.getResources().getString(R.string.fantasmilla)+'"');
+                viewHolder.imageView.setImageResource(R.drawable.common_signin_btn_icon_dark);
+                break;
+            case 10:
+                viewHolder.textView.setText('"'+context.getResources().getString(R.string.bo)+'"');
+                viewHolder.imageView.setImageResource(R.drawable.common_signin_btn_icon_dark);
+                break;
+            case 11:
+                viewHolder.textView.setText('"'+context.getResources().getString(R.string.cargadito)+'"');
+                viewHolder.imageView.setImageResource(R.drawable.common_signin_btn_icon_dark);
+                break;
+            case 12:
+                viewHolder.textView.setText('"'+context.getResources().getString(R.string.nada_que_hacer)+'"');
+                viewHolder.imageView.setImageResource(R.drawable.common_signin_btn_icon_dark);
+                break;
+            case 13:
+                viewHolder.textView.setText('"'+context.getResources().getString(R.string.rival_digno)+'"');
+                viewHolder.imageView.setImageResource(R.drawable.common_signin_btn_icon_dark);
+                break;
+            case 14:
+                viewHolder.textView.setText('"'+context.getResources().getString(R.string.sabes_hacer)+'"');
                 viewHolder.imageView.setImageResource(R.drawable.common_signin_btn_icon_dark);
                 break;
         }

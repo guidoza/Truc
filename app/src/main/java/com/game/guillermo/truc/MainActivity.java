@@ -225,7 +225,6 @@ public class MainActivity extends Activity
     String sCartasJ2 = "";
     String ganadorEnvid = null;
     String desconectado = "";
-    String filtro = "Player";
 
     //Boolean
     boolean hayEmpate = false;
@@ -1823,15 +1822,19 @@ public class MainActivity extends Activity
                         REQUEST_ACHIEVEMENTS);
                 break;
             case R.id.button_return1:
+                leaveRoom();
                 switchToMainScreen();
                 break;
             case R.id.button_return2:
+                leaveRoom();
                 switchToMainScreen();
                 break;
             case R.id.button_return3:
+                leaveRoom();
                 switchToMainScreen();
                 break;
             case R.id.button_return4:
+                leaveRoom();
                 switchToMainScreen();
                 break;
         }
@@ -6368,7 +6371,7 @@ public class MainActivity extends Activity
                     if(numeroJugadores == 2){
                         envidOtro = Integer.parseInt(otro2[1]);
                         if (Integer.parseInt(otro2[2]) == 2) faltaDirecta = true;
-                        showSingleChoiceAlertFalta("Tu rival ha envidado la falta", R.array.envid3);
+                        showSingleChoiceAlertFalta(getResources().getString(R.string.rival_envida_falta), R.array.envid3);
                         envid.setVisibility(View.GONE);
                         laFalta.setVisibility(View.GONE);
                         cambiarBarraProgreso();
@@ -6788,7 +6791,6 @@ public class MainActivity extends Activity
                     }
 
                     break;
-
 
 
                 case 'Z':
