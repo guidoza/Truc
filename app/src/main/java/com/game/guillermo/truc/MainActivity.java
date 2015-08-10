@@ -1822,19 +1822,15 @@ public class MainActivity extends Activity
                         REQUEST_ACHIEVEMENTS);
                 break;
             case R.id.button_return1:
-                leaveRoom();
                 switchToMainScreen();
                 break;
             case R.id.button_return2:
-                leaveRoom();
                 switchToMainScreen();
                 break;
             case R.id.button_return3:
-                leaveRoom();
                 switchToMainScreen();
                 break;
             case R.id.button_return4:
-                leaveRoom();
                 switchToMainScreen();
                 break;
         }
