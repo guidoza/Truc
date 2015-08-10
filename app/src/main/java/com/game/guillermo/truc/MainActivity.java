@@ -954,8 +954,6 @@ public class MainActivity extends Activity
                                 if(miEnvid == 33) logro_33 = true;
                                 enviarMensajeVuelvoAEnvidar("");
                                 cambiarBarraProgreso();
-                                Log.d("JEJEJEJEJEJEJE", "Visibilidad progresbar1 = " + progressBar1.getVisibility());
-                                Log.d("JEJEJEJEJEJEJE", "Visibilidad progresbar2 = " + progressBar2.getVisibility());
                                 hayVuelvo = true;
                                 break;
                             //Falta
@@ -2594,6 +2592,7 @@ public class MainActivity extends Activity
      */
 
     void resetAll() {
+        Log.d("JEJEJEJEJEJEJE", "En reset all");
         if (numeroJugadores == 2) {
             miValor = 0;
             valor1 = 0;
@@ -2916,13 +2915,13 @@ public class MainActivity extends Activity
 
             case 2:
                 if(view.equals(tvJugador1) && posTvJugador1 != 0){
-                    view.animate().rotationXBy(-30).scaleX((float) 1).scaleY((float) 1).setDuration(500);
+                    view.animate().rotationXBy(-30).scaleX((float) 1).scaleY((float) 1).setDuration(0);
 
                 }else if(view.equals(tvJugador2) && posTvJugador2 != 0){
-                    view.animate().rotationXBy(-30).scaleX((float) 1).scaleY((float) 1).setDuration(500);
+                    view.animate().rotationXBy(-30).scaleX((float) 1).scaleY((float) 1).setDuration(0);
 
                 } else if(view.equals(tvJugador3) && posTvJugador3 != 0){
-                    view.animate().rotationXBy(-30).scaleX((float) 1).scaleY((float) 1).setDuration(500);
+                    view.animate().rotationXBy(-30).scaleX((float) 1).scaleY((float) 1).setDuration(0);
 
                 }
                 break;
@@ -2930,13 +2929,13 @@ public class MainActivity extends Activity
             case 4:
 
                 if(view.equals(tvJugador1_4J) && posTvJugador1 != 0){
-                    view.animate().rotationXBy(-30).scaleX((float) 1).scaleY((float) 1).setDuration(500);
+                    view.animate().rotationXBy(-30).scaleX((float) 1).scaleY((float) 1).setDuration(0);
 
                 }else if(view.equals(tvJugador2_4J) && posTvJugador2 != 0){
-                    view.animate().rotationXBy(-30).scaleX((float) 1).scaleY((float) 1).setDuration(500);
+                    view.animate().rotationXBy(-30).scaleX((float) 1).scaleY((float) 1).setDuration(0);
 
                 } else if(view.equals(tvJugador3_4J) && posTvJugador3 != 0){
-                    view.animate().rotationXBy(-30).scaleX((float) 1).scaleY((float) 1).setDuration(500);
+                    view.animate().rotationXBy(-30).scaleX((float) 1).scaleY((float) 1).setDuration(0);
 
                 }
                 break;
@@ -4096,10 +4095,10 @@ public class MainActivity extends Activity
 
             @Override
             public void onAnimationEnd(Animation animation) {
-                if(contador == 0){
+                if (contador == 0) {
                     contador = 1;
 
-                    switch (cartaEspera){
+                    switch (cartaEspera) {
                         case 0:
                             carta.setImageResource(R.drawable.uno_espadas);
                             break;
@@ -4113,12 +4112,12 @@ public class MainActivity extends Activity
                             carta.setImageResource(R.drawable.unooros);
                             break;
                     }
-                    if(cartaEspera<3){
+                    if (cartaEspera < 3) {
                         cartaEspera++;
-                    }else{
+                    } else {
                         cartaEspera = 0;
                     }
-                }else{
+                } else {
                     carta.setImageResource(R.drawable.cartagirada);
                     contador = 0;
                 }
@@ -4968,6 +4967,7 @@ public class MainActivity extends Activity
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             public void run() {
+                resetAll();
                 // acciones que se ejecutan tras los milisegundos
                 repartiendo.cancel();
                 startGame(true);
@@ -5242,6 +5242,7 @@ public class MainActivity extends Activity
     }
 
     public void enviarMensajeHayEnvidAndGanador(String ganador, int caso) {
+        Log.d("JEJEJEJEJEJEJE", "Enviando mensaje hay envid, hay envid? " + hayEnvid);
         byte[] messageEnvid = ("K " + ganador + " " + miEnvid + " " + caso).getBytes();
         for (Participant p : mParticipants) {
             if (!p.getParticipantId().equals(mMyId)) {
@@ -5939,7 +5940,7 @@ public class MainActivity extends Activity
 
                 case 'S':
                     if (numeroJugadores == 2) {
-                        resetAll();
+
                         String ssBuf = new String(buf, "UTF-8");
                         String[] arrayCartasJ2 = ssBuf.split(" ");
                         numCarta[0] = Integer.parseInt(arrayCartasJ2[1]);
@@ -5954,7 +5955,7 @@ public class MainActivity extends Activity
                         cerrarDialogoAndStart(4000);
                     } else if (numeroJugadores == 4) {
 
-                        resetAll();
+                        //resetAll();
                         Log.d("TTTTTT", "Recibo las cartas");
                         String ssBuf = new String(buf, "UTF-8");
                         Log.d("TTTTTT", ssBuf.toString());
@@ -6072,6 +6073,7 @@ public class MainActivity extends Activity
                     String ganador[] = aux2.split(" ");
                     hayEnvid = true;
                     ganadorEnvid = ganador[1];
+                    Log.d("JEJEJEJEJEJEJE", "Llega el mensaje hay envid, hay envid? " + hayEnvid);
                     Log.d("JEJEJEJEJEJEJEJE", "Ganador del envid es: "+ganadorEnvid);
                     envidOtro = Integer.parseInt(ganador[2]);
                     int caso = Integer.parseInt(ganador[3]);
@@ -6841,32 +6843,8 @@ public class MainActivity extends Activity
                                 }
                             }, 5000);
 
-                            Log.d("EN MENSAJE Z", "PUNTOS TRUC: " + puntosTruc);
-                            Log.d("EN MENSAJE Z", "PUNTOS ENVID: " + puntosEnvid);
-                            Log.d("EN MENSAJE Z", "MIS PUNTOS TOTALES: " + puntosTotalesMios);
-                            Log.d("EN MENSAJE Z", "PUNTOS TOTALES RIVAL: " + puntosTotalesJugador2);
-
-                           /* String ganadorFinal = comprobarGanadorPartida();
-                            Log.d("HHHHHH", "Ganador: " + ganadorFinal);
-                            if (!ganadorFinal.equals("NADIE")) {
-                                if (ganadorFinal.equals("YO")) {
-
-                                    //Actualiza el ranking sumando una victoria
-                                    updateLeaderboards(mGoogleApiClient, LEADERBOARD_ID);
-                                    Games.Achievements.unlock(mGoogleApiClient, PRIMERA_PARTIDA);
-                                    Games.Achievements.increment(mGoogleApiClient, TRIUNFADOR_PRINCIPIANTE, 1);
-                                    Games.Achievements.increment(mGoogleApiClient, TRIUNFADOR_AVANZADO, 1);
-                                    Games.Achievements.increment(mGoogleApiClient, TRIUNFADOR_EXPERTO, 1);
-                                    Games.Achievements.increment(mGoogleApiClient, LEYENDA, 1);
-
-                                    switchToScreen(R.id.screen_win);
-                                    reproducirSonidoGanador();
-
-                                } else if (ganadorFinal.equals("RIVAL")) {
-                                    switchToScreen(R.id.screen_lost);
-                                    reproducirSonidoPerdedor();
-                                }
-                            } else {*/
+                            Log.d("JIJIJIJIJIJIJI", "QUIEN? " + quien);
+                            Log.d("JIJIJIJIJIJIJI", "HAY ENVID? "+hayEnvid);
                                 //Lo recibe el ganador
                                 if (quien.equals("PERDEDOR")) {
                                     if (hayEnvid) {
@@ -6885,7 +6863,6 @@ public class MainActivity extends Activity
                                         showProgressDialog(getResources().getString(R.string.ganas_mano));
                                     }
                                     repartirTrasMano();
-                                    Log.d("KKKKKKKK", "Repartiendo tras mano..." + mMyId);
 
 
                                     //Lo recibe el perdedor
@@ -6906,7 +6883,6 @@ public class MainActivity extends Activity
                                         showProgressDialog(getResources().getString(R.string.pierdes_mano));
                                     }
                                     repartirTrasMano();
-                                    Log.d("KKKKKKKK", "Repartiendo tras mano..." + mMyId);
                                 }
 
                             //}
@@ -8269,7 +8245,6 @@ public class MainActivity extends Activity
 
     public void inicializarMano() {
         //Preparando la partida
-        Log.d("BBBBBBBBB", "cartas2: " + sCartasJ2 + " cartas3: " + sCartasJ3 + " cartas3: " + sCartasJ3);
         resetAll();
 
         //Si soy mano reparto
@@ -8280,13 +8255,10 @@ public class MainActivity extends Activity
             carta2 = new Carta(manoJugador.get(1).getNumero(), manoJugador.get(1).getPalo(), manoJugador.get(1).getValor());
             carta3 = new Carta(manoJugador.get(2).getNumero(), manoJugador.get(2).getPalo(), manoJugador.get(2).getValor());
             //Mando las cartas
-            Log.d("BBBBBBBBB", "mandando cartas");
-            Log.d("BBBBBBBBB", "cartas2: " + sCartasJ2 + " cartas3: " + sCartasJ3 + " cartas3: " + sCartasJ3);
             if (numeroJugadores == 2) {
                 enviarMensajeRepartir();
             } else if (numeroJugadores == 4) {
                 enviarMensajeRepartir4J();
-                Log.d("BBBBBBBBB", "Mensaje 4J");
             }
             cerrarDialogoAndStart(4000);
         }
