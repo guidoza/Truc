@@ -352,7 +352,7 @@ public class MainActivity extends Activity
     int sonidoGanador = 0;
     int sonidoPerdedor = 0;
 
-    int segundosSenyas = 21;
+    int segundosSenyas = 20;
     //Strings
     String idJugador3 = null;
     String idJugador4 = null;
@@ -3323,14 +3323,12 @@ public class MainActivity extends Activity
         progressSenyas.setVisibility(View.VISIBLE);
         countSenyas = new CountDownTimer(20000, 1000) {
             @Override
-            public void onTick(long millisUntilFinished) {
-                segundosSenyas--;
+            public void onTick(long millisUntilFinished) {     
                 progressSenyas.setProgress(segundosSenyas);
+                segundosSenyas--;
             }
             @Override
             public void onFinish() {
-                //Do what you want
-                segundosSenyas--;
                 progressSenyas.setProgress(segundosSenyas);
             }
         }.start();
