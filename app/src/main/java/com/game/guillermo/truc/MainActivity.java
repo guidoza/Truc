@@ -5249,7 +5249,7 @@ public class MainActivity extends Activity
 
     public void enviarMensajeHayEnvidAndGanador(String ganador, int caso) {
         Log.d("JEJEJEJEJEJEJE", "Enviando mensaje hay envid, hay envid? " + hayEnvid);
-        byte[] messageEnvid = ("K " + ganador + " " + miEnvid + " " + caso+" "+envidCompi+" "+envidOtro).getBytes();
+        byte[] messageEnvid = ("K " + ganador + " " + miEnvid + " " + caso).getBytes();
         for (Participant p : mParticipants) {
             if (!p.getParticipantId().equals(mMyId)) {
                 Games.RealTimeMultiplayer.sendReliableMessage(mGoogleApiClient, null, messageEnvid,
@@ -6138,13 +6138,6 @@ public class MainActivity extends Activity
 
 
                     }else if(numeroJugadores == 4){
-                        if(esDeMiEquipo(sender)){
-                            envidOtro = Integer.parseInt(ganador[5]);
-                            envidCompi = Integer.parseInt(ganador[4]);
-                        }else{
-                            envidOtro = Integer.parseInt(ganador[4]);
-                            envidCompi = Integer.parseInt(ganador[5]);
-                        }
 
                         switch (caso) {
                             case 1:
@@ -6981,6 +6974,7 @@ public class MainActivity extends Activity
                                         Log.d("KKKKKKKK", "Hay envid");
                                         LayoutInflater inflater = getLayoutInflater();
                                         ViewGroup container = null;
+                                        comprobarGanadorEnvid_4J();
 
                                         if (ganadorEnvid.equals(mMyId) || esDeMiEquipo(ganadorEnvid)) {
                                             View layout = inflater.inflate(R.layout.progres_content, container);
@@ -7006,6 +7000,7 @@ public class MainActivity extends Activity
                                         Log.d("KKKKKKKK", "Hay envid");
                                         LayoutInflater inflater = getLayoutInflater();
                                         ViewGroup container = null;
+                                        comprobarGanadorEnvid_4J();
 
                                         if (ganadorEnvid.equals(mMyId) || esDeMiEquipo(ganadorEnvid)) {
                                             View layout = inflater.inflate(R.layout.progres_content3, container);
@@ -8289,6 +8284,11 @@ public class MainActivity extends Activity
                     sCartasJ2 = list2[0] + " " + list2[1] + " " + list2[2];
                     sCartasJ3 = list3[0] + " " + list3[1] + " " + list3[2];
                     sCartasJ4 = list4[0] + " " + list4[1] + " " + list4[2];
+
+                    arrayCartasJugadores[0] = sCartasJ2;
+                    arrayCartasJugadores[1] = sCartasJ3;
+                    arrayCartasJugadores[2] = sCartasJ4;
+                    arrayCartasJugadores[3] = sCartasJ1;
 
                 }
                 break;
