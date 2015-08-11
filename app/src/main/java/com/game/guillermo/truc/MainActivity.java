@@ -515,6 +515,7 @@ public class MainActivity extends Activity
     TourGuide verInvitacionesTour = null;
     SharedPreferences preferencias;
     SharedPreferences.Editor editor;
+    DisplayMetrics metrics = null;
 
 
     @Override
@@ -544,6 +545,10 @@ public class MainActivity extends Activity
         dots.setTypeface(Typefaces.get(this, "Signika-Regular.ttf"));
         loading = (TextView) findViewById(R.id.text_loading);
         loading.setTypeface(Typefaces.get(this, "Signika-Regular.ttf"));
+
+        metrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(metrics);
+
 
         menuListener = new View.OnClickListener() {
             @Override
@@ -7939,20 +7944,24 @@ public class MainActivity extends Activity
 
         }else if(screenId == R.id.screen_game || screenId == R.id.screen_game_4_jugadores){
             //frame.setBackground(getResources().getDrawable(R.drawable.mesa2, null));
-            fondo.recycle();
-            int f = 0;
-            if(Math.random()<0.5) f = R.drawable.mesa2;
-            else f = R.drawable.mesa3;
-            fondo = decodeSampledBitmapFromResource(getResources(), f, 350, 350);
-            frame.setBackground(new BitmapDrawable(getResources(), fondo));
-            //frame.setBackgroundResource(R.drawable.mesa2);
+            if(metrics.densityDpi > DisplayMetrics.DENSITY_LOW){
+                fondo.recycle();
+                int f = 0;
+                if(Math.random()<0.5) f = R.drawable.mesa2;
+                else f = R.drawable.mesa3;
+                fondo = decodeSampledBitmapFromResource(getResources(), f, 350, 350);
+                frame.setBackground(new BitmapDrawable(getResources(), fondo));
+                //frame.setBackgroundResource(R.drawable.mesa2);
+            }
 
         }else if(mCurScreen == R.id.screen_game || mCurScreen == R.id.screen_game_4_jugadores){
-            //frame.setBackground(getResources().getDrawable(R.drawable.fondo_menu, null));
-            fondo.recycle();
-            fondo = decodeSampledBitmapFromResource(getResources(), R.drawable.fondo_menu, 100, 100);
-            frame.setBackground(new BitmapDrawable(getResources(), fondo));
-            //frame.setBackgroundResource(R.drawable.mesa2);
+            if(metrics.densityDpi > DisplayMetrics.DENSITY_LOW) {
+                //frame.setBackground(getResources().getDrawable(R.drawable.fondo_menu, null));
+                fondo.recycle();
+                fondo = decodeSampledBitmapFromResource(getResources(), R.drawable.fondo_menu, 100, 100);
+                frame.setBackground(new BitmapDrawable(getResources(), fondo));
+                //frame.setBackgroundResource(R.drawable.mesa2);
+            }
         }
         mCurScreen = screenId;
 
