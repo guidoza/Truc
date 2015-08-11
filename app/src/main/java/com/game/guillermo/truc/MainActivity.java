@@ -5527,7 +5527,7 @@ public class MainActivity extends Activity
     }
 
     public void enviarMensajeHayGanador(String ganador) {
-        byte[] messageFrase = ("5-"+ganador).getBytes();
+        byte[] messageFrase = ("6 "+ganador).getBytes();
         for (Participant p : mParticipants) {
             if (!p.getParticipantId().equals(mMyId)) {
                 Games.RealTimeMultiplayer.sendReliableMessage(mGoogleApiClient, null, messageFrase,
@@ -6975,6 +6975,7 @@ public class MainActivity extends Activity
                                         Log.d("KKKKKKKK", "Hay envid");
                                         LayoutInflater inflater = getLayoutInflater();
                                         ViewGroup container = null;
+                                        comprobarGanadorEnvid_4J();
 
                                         if (ganadorEnvid.equals(mMyId) || esDeMiEquipo(ganadorEnvid)) {
                                             View layout = inflater.inflate(R.layout.progres_content, container);
@@ -7000,6 +7001,7 @@ public class MainActivity extends Activity
                                         Log.d("KKKKKKKK", "Hay envid");
                                         LayoutInflater inflater = getLayoutInflater();
                                         ViewGroup container = null;
+                                        comprobarGanadorEnvid_4J();
 
                                         if (ganadorEnvid.equals(mMyId) || esDeMiEquipo(ganadorEnvid)) {
                                             View layout = inflater.inflate(R.layout.progres_content3, container);
@@ -7066,9 +7068,11 @@ public class MainActivity extends Activity
                                 Games.Achievements.increment(mGoogleApiClient, TRIUNFADOR_EXPERTO, 1);
                                 Games.Achievements.increment(mGoogleApiClient, LEYENDA, 1);
 
+                                enviarMensajeHayGanador(ganadorFinal);
                                 cerrarDialogoAndStartIfWin(4000, 0);
 
                             } else if (ganadorFinal.equals("RIVAL")) {
+                                enviarMensajeHayGanador(ganadorFinal);
                                 cerrarDialogoAndStartIfWin(4000, 1);
                             }
                         }else{
@@ -7591,7 +7595,7 @@ public class MainActivity extends Activity
 
                 case '6':
                     String aux14 = new String(buf, "UTF-8");
-                    String otro11[] = aux14.split("-");
+                    String otro11[] = aux14.split(" ");
                     String ganadorFinal = otro11[1];
 
                     if(esDeMiEquipo(sender) && ganadorFinal.equals("YO")) cerrarDialogoAndStartIfWin(4000, 0);
@@ -7663,8 +7667,6 @@ public class MainActivity extends Activity
     }
 
     void mostrarSenyas(){
-        Handler handlerArriba = new Handler();
-        Handler handlerArriba2 = new Handler();
 
         if(!senyaCompi1.equals("nada")){
             switch (senyaCompi1){
