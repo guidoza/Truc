@@ -7977,7 +7977,6 @@ public class MainActivity extends Activity
                 }
             }, 2200);
         }
-
         // should we show the invitation popup?
         boolean showInvPopup;
         if (mIncomingInvitationId == null) {
