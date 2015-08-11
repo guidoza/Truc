@@ -1389,6 +1389,7 @@ public class MainActivity extends Activity
                 })
                 .customView(R.layout.iconos_dialog, false)
                 .build();
+        dialogIconos.getWindow().setGravity(Gravity.TOP);
         dialogIconos.show();
         iniciarBarraProgresoSenyas();
     }
@@ -2758,12 +2759,7 @@ public class MainActivity extends Activity
             senyaCompi2 = "";
             senyaRivalDerecha = "";
             senyaRivalIzq = "";
-            if(senyas.size() == 1){
-                senyas.remove(0);
-            }else if(senyas.size() == 2){
-                senyas.remove(0);
-                senyas.remove(1);
-            }
+            if(senyas != null && !senyas.isEmpty())senyas.clear();
             contadorMensajeSenyas = 0;
             alguienHaSalido = false;
 
