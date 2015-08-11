@@ -5248,7 +5248,7 @@ public class MainActivity extends Activity
 
     public void enviarMensajeHayEnvidAndGanador(String ganador, int caso) {
         Log.d("JEJEJEJEJEJEJE", "Enviando mensaje hay envid, hay envid? " + hayEnvid);
-        byte[] messageEnvid = ("K " + ganador + " " + miEnvid + " " + caso).getBytes();
+        byte[] messageEnvid = ("K " + ganador + " " + miEnvid + " " + caso+" "+envidCompi+" "+envidOtro).getBytes();
         for (Participant p : mParticipants) {
             if (!p.getParticipantId().equals(mMyId)) {
                 Games.RealTimeMultiplayer.sendReliableMessage(mGoogleApiClient, null, messageEnvid,
@@ -6089,12 +6089,10 @@ public class MainActivity extends Activity
                     String ganador[] = aux2.split(" ");
                     hayEnvid = true;
                     ganadorEnvid = ganador[1];
-                    Log.d("JEJEJEJEJEJEJE", "Llega el mensaje hay envid, hay envid? " + hayEnvid);
-                    Log.d("JEJEJEJEJEJEJEJE", "Ganador del envid es: "+ganadorEnvid);
-                    envidOtro = Integer.parseInt(ganador[2]);
                     int caso = Integer.parseInt(ganador[3]);
 
                     if(numeroJugadores == 2){
+                        envidOtro = Integer.parseInt(ganador[2]);
                         switch (caso) {
                             case 1:
                                 textoAccion2.setText(getResources().getString(R.string.quiero_envid));
@@ -6139,6 +6137,13 @@ public class MainActivity extends Activity
 
 
                     }else if(numeroJugadores == 4){
+                        if(esDeMiEquipo(sender)){
+                            envidOtro = Integer.parseInt(ganador[5]);
+                            envidCompi = Integer.parseInt(ganador[4]);
+                        }else{
+                            envidOtro = Integer.parseInt(ganador[4]);
+                            envidCompi = Integer.parseInt(ganador[5]);
+                        }
 
                         switch (caso) {
                             case 1:
@@ -6975,7 +6980,6 @@ public class MainActivity extends Activity
                                         Log.d("KKKKKKKK", "Hay envid");
                                         LayoutInflater inflater = getLayoutInflater();
                                         ViewGroup container = null;
-                                        comprobarGanadorEnvid_4J();
 
                                         if (ganadorEnvid.equals(mMyId) || esDeMiEquipo(ganadorEnvid)) {
                                             View layout = inflater.inflate(R.layout.progres_content, container);
@@ -7001,7 +7005,6 @@ public class MainActivity extends Activity
                                         Log.d("KKKKKKKK", "Hay envid");
                                         LayoutInflater inflater = getLayoutInflater();
                                         ViewGroup container = null;
-                                        comprobarGanadorEnvid_4J();
 
                                         if (ganadorEnvid.equals(mMyId) || esDeMiEquipo(ganadorEnvid)) {
                                             View layout = inflater.inflate(R.layout.progres_content3, container);
