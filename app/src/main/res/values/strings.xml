@@ -25,7 +25,7 @@
     <string name="invite_players">Invita a tus amigos</string>
     <string name="see_invitations">Mira tus invitaciones</string>
     <string name="inv_popup_text">¡Tienes una nueva invitacion!</string>
-    <string name="accept_popup_invite">¡Acepto!</string>
+    <string name="accept_popup_invite">Acepto</string>
     <string name="sign_out">Desconectarse</string>
     <string name="please_wait">Por favor espera...</string>
     <string name="dismiss">Dismiss</string>
