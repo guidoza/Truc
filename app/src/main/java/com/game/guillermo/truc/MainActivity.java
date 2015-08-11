@@ -7356,7 +7356,7 @@ public class MainActivity extends Activity
                                             handlerIzq.postDelayed(new Runnable() {
                                                 public void run() {
                                                     // acciones que se ejecutan tras los milisegundos
-                                                    senyaDerecha.setVisibility(View.INVISIBLE);
+                                                    senyaIzq.setVisibility(View.INVISIBLE);
                                                 }
                                             }, 3000);
                                         }
@@ -7377,7 +7377,7 @@ public class MainActivity extends Activity
                                             handlerIzq.postDelayed(new Runnable() {
                                                 public void run() {
                                                     // acciones que se ejecutan tras los milisegundos
-                                                    senyaDerecha.setVisibility(View.INVISIBLE);
+                                                    senyaIzq.setVisibility(View.INVISIBLE);
                                                 }
                                             }, 3000);
                                         }
@@ -7398,7 +7398,7 @@ public class MainActivity extends Activity
                                             handlerIzq.postDelayed(new Runnable() {
                                                 public void run() {
                                                     // acciones que se ejecutan tras los milisegundos
-                                                    senyaDerecha.setVisibility(View.INVISIBLE);
+                                                    senyaIzq.setVisibility(View.INVISIBLE);
                                                 }
                                             }, 3000);
                                         }
@@ -7419,7 +7419,7 @@ public class MainActivity extends Activity
                                             handlerIzq.postDelayed(new Runnable() {
                                                 public void run() {
                                                     // acciones que se ejecutan tras los milisegundos
-                                                    senyaDerecha.setVisibility(View.INVISIBLE);
+                                                    senyaIzq.setVisibility(View.INVISIBLE);
                                                 }
                                             }, 3000);
                                         }
@@ -7440,7 +7440,7 @@ public class MainActivity extends Activity
                                             handlerIzq.postDelayed(new Runnable() {
                                                 public void run() {
                                                     // acciones que se ejecutan tras los milisegundos
-                                                    senyaDerecha.setVisibility(View.INVISIBLE);
+                                                    senyaIzq.setVisibility(View.INVISIBLE);
                                                 }
                                             }, 3000);
                                         }
@@ -7461,7 +7461,7 @@ public class MainActivity extends Activity
                                             handlerIzq.postDelayed(new Runnable() {
                                                 public void run() {
                                                     // acciones que se ejecutan tras los milisegundos
-                                                    senyaDerecha.setVisibility(View.INVISIBLE);
+                                                    senyaIzq.setVisibility(View.INVISIBLE);
                                                 }
                                             }, 3000);
                                         }
@@ -7482,7 +7482,7 @@ public class MainActivity extends Activity
                                             handlerIzq.postDelayed(new Runnable() {
                                                 public void run() {
                                                     // acciones que se ejecutan tras los milisegundos
-                                                    senyaDerecha.setVisibility(View.INVISIBLE);
+                                                    senyaIzq.setVisibility(View.INVISIBLE);
                                                 }
                                             }, 3000);
                                         }
@@ -7503,7 +7503,7 @@ public class MainActivity extends Activity
                                             handlerIzq.postDelayed(new Runnable() {
                                                 public void run() {
                                                     // acciones que se ejecutan tras los milisegundos
-                                                    senyaDerecha.setVisibility(View.INVISIBLE);
+                                                    senyaIzq.setVisibility(View.INVISIBLE);
                                                 }
                                             }, 3000);
                                         }
@@ -7524,7 +7524,7 @@ public class MainActivity extends Activity
                                             handlerIzq.postDelayed(new Runnable() {
                                                 public void run() {
                                                     // acciones que se ejecutan tras los milisegundos
-                                                    senyaDerecha.setVisibility(View.INVISIBLE);
+                                                    senyaIzq.setVisibility(View.INVISIBLE);
                                                 }
                                             }, 3000);
                                         }
