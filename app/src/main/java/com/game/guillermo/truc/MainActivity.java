@@ -1898,14 +1898,13 @@ public class MainActivity extends Activity
                     Log.d(TAG, "Starting game (waiting room returned OK).");
                     resetPuntos();
                     resetAnimaciones();
-                    resetAll();
-                    inicializarMano();
                     showProgressDialog(getResources().getString(R.string.empezamos));
                     if(numeroJugadores == 2){
                         switchToScreen(R.id.screen_game);
                     }else if(numeroJugadores == 4){
                         switchToScreen(R.id.screen_game_4_jugadores);
                     }
+                    empezandoPartida();
 
                 } else if (responseCode == GamesActivityResultCodes.RESULT_LEFT_ROOM) {
                     // player indicated that they want to leave the room
@@ -2121,6 +2120,8 @@ public class MainActivity extends Activity
         if(mCurScreen == R.id.screen_wait){
             switchToMainScreen();
         }
+
+        resetAll();
 
     }
 
@@ -8304,6 +8305,11 @@ public class MainActivity extends Activity
 
     }
 
+    public void empezandoPartida(){
+        resetAll();
+        inicializarMano();
+    }
+
     public void inicializarMano() {
         //Preparando la partida
         //resetAll();
@@ -8508,7 +8514,7 @@ public class MainActivity extends Activity
     public void seleccionaUnaSenya(View view) {
         numeroSenyas++;
         if(numeroSenyas >2){
-            quitarTick((ImageView)senyas.get(0));
+            quitarTick((ImageView) senyas.get(0));
             senyas.remove(0);
             senyas.add(view);
             ponerTick((ImageView) view);
@@ -9435,10 +9441,14 @@ public class MainActivity extends Activity
                 maximo = maximosPrime[i];
             }
         }
-        if(valorDerechaEnvid <= valorIzqEnvid) envidOtro = valorIzqEnvid;
-        else envidOtro = valorDerechaEnvid;
-        envidCompi = valorArribaEnvid;
-
+        if(esDeMiEquipo(mano)){
+            if(mano.equals(mMyId)){
+                envidCompi = valorArribaEnvid;
+            }else envidCompi = valorAbajoEnvid;
+        }else {
+            if(valorDerechaEnvid <= valorIzqEnvid) envidOtro = valorIzqEnvid;
+            else envidOtro = valorDerechaEnvid;
+        }
 
         if (maximo == valorAbajoEnvid) {
             Log.d("KKKKKKKK", "id Ganador del envid: " + valorAbajo);

@@ -145,7 +145,8 @@
 
     <!-- INVITATION POPUP -->
     <LinearLayout android:id="@+id/invitation_popup" style="@style/InvPopup">
-        <TextView android:id="@+id/incoming_invitation_text" style="@style/InvPopupText" />
+        <TextView android:id="@+id/incoming_invitation_text" style="@style/InvPopupText"
+            android:padding="5dp"/>
         <info.hoang8f.widget.FButton
             android:id="@+id/button_accept_popup_invitation"
             android:layout_width="wrap_content"
