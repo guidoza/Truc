@@ -7955,7 +7955,7 @@ public class MainActivity extends Activity
             }
 
         }else if(mCurScreen == R.id.screen_game || mCurScreen == R.id.screen_game_4_jugadores){
-            if(metrics.densityDpi > DisplayMetrics.DENSITY_LOW) {
+            if(metrics.densityDpi > DisplayMetrics.DENSITY_MEDIUM) {
                 //frame.setBackground(getResources().getDrawable(R.drawable.fondo_menu, null));
                 fondo.recycle();
                 fondo = decodeSampledBitmapFromResource(getResources(), R.drawable.fondo_menu, 100, 100);
