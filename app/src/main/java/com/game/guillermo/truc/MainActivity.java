@@ -548,6 +548,8 @@ public class MainActivity extends Activity
 
         metrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(metrics);
+        Log.d("JOJOJOJOJOJOJO", "Metrics de la pantalla: " + metrics.densityDpi);
+        Log.d("JOJOJOJOJOJOJO", "Metrics Medium: "+DisplayMetrics.DENSITY_LOW);
 
 
         menuListener = new View.OnClickListener() {
