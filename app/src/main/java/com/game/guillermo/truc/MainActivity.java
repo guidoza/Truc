@@ -7159,7 +7159,7 @@ public class MainActivity extends Activity
                                             }, 3000);
                                         }
                                     });
-                                    handlerDerecha.postDelayed(runi, 600);
+                                    handlerDerecha.postDelayed(runi, 300);
 
                                     break;
                                 case "BASTO":
@@ -7181,7 +7181,7 @@ public class MainActivity extends Activity
                                             }, 3000);
                                         }
                                     });
-                                    handlerDerecha.postDelayed(runi, 600);
+                                    handlerDerecha.postDelayed(runi, 300);
                                     break;
                                 case "7ESPADAS":
                                     senyaDerecha.setImageResource(R.drawable.interrogacion);
@@ -7202,7 +7202,7 @@ public class MainActivity extends Activity
                                             }, 3000);
                                         }
                                     });
-                                    handlerDerecha.postDelayed(runi, 600);
+                                    handlerDerecha.postDelayed(runi, 300);
                                     break;
                                 case "7OROS":
                                     senyaDerecha.setImageResource(R.drawable.interrogacion);
@@ -7223,7 +7223,7 @@ public class MainActivity extends Activity
                                             }, 3000);
                                         }
                                     });
-                                    handlerDerecha.postDelayed(runi, 600);
+                                    handlerDerecha.postDelayed(runi, 300);
                                     break;
                                 case "TRES":
                                     senyaDerecha.setImageResource(R.drawable.interrogacion);
@@ -7244,7 +7244,7 @@ public class MainActivity extends Activity
                                             }, 3000);
                                         }
                                     });
-                                    handlerDerecha.postDelayed(runi, 600);
+                                    handlerDerecha.postDelayed(runi, 300);
                                     break;
                                 case "CIEGO":
                                     senyaDerecha.setImageResource(R.drawable.interrogacion);
@@ -7265,7 +7265,7 @@ public class MainActivity extends Activity
                                             }, 3000);
                                         }
                                     });
-                                    handlerDerecha.postDelayed(runi, 600);
+                                    handlerDerecha.postDelayed(runi, 300);
                                     break;
                                 case "33":
                                     senyaDerecha.setImageResource(R.drawable.interrogacion);
@@ -7286,7 +7286,7 @@ public class MainActivity extends Activity
                                             }, 3000);
                                         }
                                     });
-                                    handlerDerecha.postDelayed(runi, 600);
+                                    handlerDerecha.postDelayed(runi, 300);
                                     break;
                                 case "32":
                                     senyaDerecha.setImageResource(R.drawable.interrogacion);
@@ -7307,7 +7307,7 @@ public class MainActivity extends Activity
                                             }, 3000);
                                         }
                                     });
-                                    handlerDerecha.postDelayed(runi, 600);
+                                    handlerDerecha.postDelayed(runi, 300);
                                     break;
                                 case "FALSA":
                                     senyaDerecha.setImageResource(R.drawable.interrogacion);
@@ -7328,7 +7328,7 @@ public class MainActivity extends Activity
                                             }, 3000);
                                         }
                                     });
-                                    handlerDerecha.postDelayed(runi, 600);
+                                    handlerDerecha.postDelayed(runi, 300);
                                     break;
                             }
 
@@ -7361,7 +7361,7 @@ public class MainActivity extends Activity
                                             }, 3000);
                                         }
                                     });
-                                    handlerIzq.postDelayed(runi2, 600);
+                                    handlerIzq.postDelayed(runi2, 300);
                                     break;
                                 case "BASTO":
                                     senyaIzq.setImageResource(R.drawable.interrogacion);
@@ -7382,7 +7382,7 @@ public class MainActivity extends Activity
                                             }, 3000);
                                         }
                                     });
-                                    handlerIzq.postDelayed(runi2, 600);
+                                    handlerIzq.postDelayed(runi2, 300);
                                     break;
                                 case "7ESPADAS":
                                     senyaIzq.setImageResource(R.drawable.interrogacion);
@@ -7403,7 +7403,7 @@ public class MainActivity extends Activity
                                             }, 3000);
                                         }
                                     });
-                                    handlerIzq.postDelayed(runi2, 600);
+                                    handlerIzq.postDelayed(runi2, 300);
                                     break;
                                 case "7OROS":
                                     senyaIzq.setImageResource(R.drawable.interrogacion);
@@ -7424,7 +7424,7 @@ public class MainActivity extends Activity
                                             }, 3000);
                                         }
                                     });
-                                    handlerIzq.postDelayed(runi2, 600);
+                                    handlerIzq.postDelayed(runi2, 300);
                                     break;
                                 case "TRES":
                                     senyaIzq.setImageResource(R.drawable.interrogacion);
@@ -7445,7 +7445,7 @@ public class MainActivity extends Activity
                                             }, 3000);
                                         }
                                     });
-                                    handlerIzq.postDelayed(runi2, 600);
+                                    handlerIzq.postDelayed(runi2, 300);
                                     break;
                                 case "CIEGO":
                                     senyaIzq.setImageResource(R.drawable.interrogacion);
@@ -7466,7 +7466,7 @@ public class MainActivity extends Activity
                                             }, 3000);
                                         }
                                     });
-                                    handlerIzq.postDelayed(runi2, 600);
+                                    handlerIzq.postDelayed(runi2, 300);
                                     break;
                                 case "33":
                                     senyaIzq.setImageResource(R.drawable.interrogacion);
@@ -7487,7 +7487,7 @@ public class MainActivity extends Activity
                                             }, 3000);
                                         }
                                     });
-                                    handlerIzq.postDelayed(runi2, 600);
+                                    handlerIzq.postDelayed(runi2, 300);
                                     break;
                                 case "32":
                                     senyaIzq.setImageResource(R.drawable.interrogacion);
@@ -7508,7 +7508,7 @@ public class MainActivity extends Activity
                                             }, 3000);
                                         }
                                     });
-                                    handlerIzq.postDelayed(runi2, 600);
+                                    handlerIzq.postDelayed(runi2, 300);
                                     break;
                                 case "FALSA":
                                     senyaIzq.setImageResource(R.drawable.interrogacion);
@@ -7529,7 +7529,7 @@ public class MainActivity extends Activity
                                             }, 3000);
                                         }
                                     });
-                                    handlerIzq.postDelayed(runi2, 600);
+                                    handlerIzq.postDelayed(runi2, 300);
                                     break;
                             }
                         }
