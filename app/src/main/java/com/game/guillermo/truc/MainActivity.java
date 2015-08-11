@@ -1095,7 +1095,7 @@ public class MainActivity extends Activity
         materialDialog = new MaterialDialog.Builder(this)
                 .title(title)
                 .items(array)
-                .itemsCallbackSingleChoice(0, new MaterialDialog.ListCallbackSingleChoice() {
+                .itemsCallbackSingleChoice(2, new MaterialDialog.ListCallbackSingleChoice() {
                     @Override
                     public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
                         switch (which) {
@@ -1131,7 +1131,7 @@ public class MainActivity extends Activity
         materialDialog = new MaterialDialog.Builder(this)
                 .title(title)
                 .items(array)
-                .itemsCallbackSingleChoice(0, new MaterialDialog.ListCallbackSingleChoice() {
+                .itemsCallbackSingleChoice(2, new MaterialDialog.ListCallbackSingleChoice() {
                     @Override
                     public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
                         switch (which) {
@@ -1173,7 +1173,7 @@ public class MainActivity extends Activity
         materialDialog = new MaterialDialog.Builder(this)
                 .title(title)
                 .items(array)
-                .itemsCallbackSingleChoice(0, new MaterialDialog.ListCallbackSingleChoice() {
+                .itemsCallbackSingleChoice(2, new MaterialDialog.ListCallbackSingleChoice() {
                     @Override
                     public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
                         switch (which) {
@@ -1216,7 +1216,7 @@ public class MainActivity extends Activity
         materialDialog = new MaterialDialog.Builder(this)
                 .title(title)
                 .items(array)
-                .itemsCallbackSingleChoice(0, new MaterialDialog.ListCallbackSingleChoice() {
+                .itemsCallbackSingleChoice(1, new MaterialDialog.ListCallbackSingleChoice() {
                     @Override
                     public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
                         switch (which) {
@@ -3316,7 +3316,6 @@ public class MainActivity extends Activity
 
     void iniciarBarraProgresoSenyas() {
         //Layout layout = (Layout) getResources().getLayout(R.layout.iconos_dialog);
-        dialogIconos.getCustomView().findViewById(R.id.progressSenyas);
         progressSenyas = (ProgressBar) dialogIconos.getCustomView().findViewById(R.id.progressSenyas);
         progressSenyas.setVisibility(View.VISIBLE);
         countSenyas = new CountDownTimer(20000, 1000) {
@@ -3351,7 +3350,19 @@ public class MainActivity extends Activity
                     segundos--;
                     progressBarAbajo.setProgress(segundos);
                     if(mCurScreen == R.id.screen_game || mCurScreen == R.id.screen_game_4_jugadores){
-                        if(turno.equals(mMyId))tirarAleatoria();
+                        if(turno.equals(mMyId)) {
+                            tirarAleatoria();
+                        }else if(dialogTruc != null){
+
+                            if(dialogTruc.isShowing())
+                                dialogTruc.getActionButton(DialogAction.POSITIVE).performClick();
+
+                        }else if(dialogEnvid != null){
+
+                            if(dialogEnvid.isShowing())
+                                dialogEnvid.getActionButton(DialogAction.POSITIVE).performClick();
+                        }
+
                     }
                 }
             }.start();
@@ -3381,9 +3392,6 @@ public class MainActivity extends Activity
                     //Do what you want
                     segundos--;
                     progressBarDerecha.setProgress(segundos);
-                    if(mCurScreen == R.id.screen_game || mCurScreen == R.id.screen_game_4_jugadores){
-                        if(turno.equals(mMyId))tirarAleatoria();
-                    }
                 }
             }.start();
         }else {
@@ -3411,9 +3419,6 @@ public class MainActivity extends Activity
                     //Do what you want
                     segundos2--;
                     progressBarArriba.setProgress(segundos2);
-                    if(mCurScreen == R.id.screen_game || mCurScreen == R.id.screen_game_4_jugadores){
-                        if(turno.equals(mMyId))tirarAleatoria();
-                    }
                 }
             }.start();
         }else {
@@ -3441,9 +3446,6 @@ public class MainActivity extends Activity
                 //Do what you want
                 segundos2--;
                 progressBarIzq.setProgress(segundos2);
-                if(mCurScreen == R.id.screen_game || mCurScreen == R.id.screen_game_4_jugadores){
-                    if(turno.equals(mMyId))tirarAleatoria();
-                }
             }
         }.start();
         }else {
@@ -8922,7 +8924,7 @@ public class MainActivity extends Activity
         materialDialog = new MaterialDialog.Builder(this)
                 .title(title)
                 .items(array)
-                .itemsCallbackSingleChoice(0, new MaterialDialog.ListCallbackSingleChoice() {
+                .itemsCallbackSingleChoice(3, new MaterialDialog.ListCallbackSingleChoice() {
                     @Override
                     public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
                         switch (which) {
@@ -8993,7 +8995,7 @@ public class MainActivity extends Activity
         materialDialog = new MaterialDialog.Builder(this)
                 .title(title)
                 .items(array)
-                .itemsCallbackSingleChoice(0, new MaterialDialog.ListCallbackSingleChoice() {
+                .itemsCallbackSingleChoice(2, new MaterialDialog.ListCallbackSingleChoice() {
                     @Override
                     public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
                         switch (which) {
@@ -9054,7 +9056,7 @@ public class MainActivity extends Activity
         materialDialog = new MaterialDialog.Builder(this)
                 .title(title)
                 .items(array)
-                .itemsCallbackSingleChoice(0, new MaterialDialog.ListCallbackSingleChoice() {
+                .itemsCallbackSingleChoice(1, new MaterialDialog.ListCallbackSingleChoice() {
                     @Override
                     public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
                         switch (which) {
@@ -9408,7 +9410,7 @@ public class MainActivity extends Activity
         materialDialog = new MaterialDialog.Builder(this)
                 .title(title)
                 .items(array)
-                .itemsCallbackSingleChoice(0, new MaterialDialog.ListCallbackSingleChoice() {
+                .itemsCallbackSingleChoice(2, new MaterialDialog.ListCallbackSingleChoice() {
                     @Override
                     public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
                         switch (which) {
@@ -9444,7 +9446,7 @@ public class MainActivity extends Activity
         materialDialog = new MaterialDialog.Builder(this)
                 .title(title)
                 .items(array)
-                .itemsCallbackSingleChoice(0, new MaterialDialog.ListCallbackSingleChoice() {
+                .itemsCallbackSingleChoice(2, new MaterialDialog.ListCallbackSingleChoice() {
                     @Override
                     public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
                         switch (which) {
@@ -9481,7 +9483,7 @@ public class MainActivity extends Activity
         materialDialog = new MaterialDialog.Builder(this)
                 .title(title)
                 .items(array)
-                .itemsCallbackSingleChoice(0, new MaterialDialog.ListCallbackSingleChoice() {
+                .itemsCallbackSingleChoice(2, new MaterialDialog.ListCallbackSingleChoice() {
                     @Override
                     public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
                         switch (which) {
@@ -9517,7 +9519,7 @@ public class MainActivity extends Activity
         materialDialog = new MaterialDialog.Builder(this)
                 .title(title)
                 .items(array)
-                .itemsCallbackSingleChoice(0, new MaterialDialog.ListCallbackSingleChoice() {
+                .itemsCallbackSingleChoice(1, new MaterialDialog.ListCallbackSingleChoice() {
                     @Override
                     public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
                         switch (which) {
