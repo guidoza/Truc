@@ -16,10 +16,10 @@
 package com.game.guillermo.truc;
 
 import android.animation.Animator;
-import android.app.ActionBar;
+
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.Context;
+
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
@@ -29,10 +29,9 @@ import android.graphics.Matrix;
 import android.graphics.PointF;
 import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.ColorDrawable;
+
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
@@ -57,7 +56,6 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.media.AudioManager;
 import android.media.SoundPool;
 
@@ -5528,6 +5526,16 @@ public class MainActivity extends Activity
         }
     }
 
+    public void enviarMensajeHayGanador(String ganador) {
+        byte[] messageFrase = ("5-"+ganador).getBytes();
+        for (Participant p : mParticipants) {
+            if (!p.getParticipantId().equals(mMyId)) {
+                Games.RealTimeMultiplayer.sendReliableMessage(mGoogleApiClient, null, messageFrase,
+                        mRoomId, p.getParticipantId());
+            }
+        }
+    }
+
 
     /*
      * COMMUNICATIONS SECTION. Methods that implement the game's network
@@ -7045,30 +7053,51 @@ public class MainActivity extends Activity
                 case 'H':
                     mensajesRecibidos++;
                     if(mensajesRecibidos == 3){
-                        inicializarMano();
-                        botonMarcadorAbajo_4J.setProgress(0);
-                        botonMarcadorAbajo_4J.setIndeterminateProgressMode(true); // turn on indeterminate progress
-                        botonMarcadorAbajo_4J.setProgress(50); // set progress > 0 & < 100 to display indeterminate progress
-                        Handler handler2 = new Handler();
-                        handler2.postDelayed(new Runnable() {
-                            public void run() {
-                                // acciones que se ejecutan tras los milisegundos
-                                botonMarcadorAbajo_4J.setCompleteText(Integer.toString(puntosTotalesMios));
-                                botonMarcadorAbajo_4J.setProgress(100);
-                            }
-                        }, 5000);
+                        String ganadorFinal = comprobarGanadorPartida();
+                        Log.d("HHHHHH", "Ganador: " + ganadorFinal);
+                        if (!ganadorFinal.equals("NADIE")) {
+                            if (ganadorFinal.equals("YO")) {
 
-                        botonMarcadorArriba_4J.setProgress(0);
-                        botonMarcadorArriba_4J.setIndeterminateProgressMode(true); // turn on indeterminate progress
-                        botonMarcadorArriba_4J.setProgress(50); // set progress > 0 & < 100 to display indeterminate progress
-                        Handler handler3 = new Handler();
-                        handler3.postDelayed(new Runnable() {
-                            public void run() {
-                                // acciones que se ejecutan tras los milisegundos
-                                botonMarcadorArriba_4J.setCompleteText(Integer.toString(puntosTotalesJugador2));
-                                botonMarcadorArriba_4J.setProgress(100);
+                                //Actualiza el ranking sumando una victoria
+                                updateLeaderboards(mGoogleApiClient, LEADERBOARD_ID);
+                                Games.Achievements.unlock(mGoogleApiClient, PRIMERA_PARTIDA);
+                                Games.Achievements.increment(mGoogleApiClient, TRIUNFADOR_PRINCIPIANTE, 1);
+                                Games.Achievements.increment(mGoogleApiClient, TRIUNFADOR_AVANZADO, 1);
+                                Games.Achievements.increment(mGoogleApiClient, TRIUNFADOR_EXPERTO, 1);
+                                Games.Achievements.increment(mGoogleApiClient, LEYENDA, 1);
+
+                                cerrarDialogoAndStartIfWin(4000, 0);
+
+                            } else if (ganadorFinal.equals("RIVAL")) {
+                                cerrarDialogoAndStartIfWin(4000, 1);
                             }
-                        }, 5000);
+                        }else{
+
+                            inicializarMano();
+                            botonMarcadorAbajo_4J.setProgress(0);
+                            botonMarcadorAbajo_4J.setIndeterminateProgressMode(true); // turn on indeterminate progress
+                            botonMarcadorAbajo_4J.setProgress(50); // set progress > 0 & < 100 to display indeterminate progress
+                            Handler handler2 = new Handler();
+                            handler2.postDelayed(new Runnable() {
+                                public void run() {
+                                    // acciones que se ejecutan tras los milisegundos
+                                    botonMarcadorAbajo_4J.setCompleteText(Integer.toString(puntosTotalesMios));
+                                    botonMarcadorAbajo_4J.setProgress(100);
+                                }
+                            }, 5000);
+
+                            botonMarcadorArriba_4J.setProgress(0);
+                            botonMarcadorArriba_4J.setIndeterminateProgressMode(true); // turn on indeterminate progress
+                            botonMarcadorArriba_4J.setProgress(50); // set progress > 0 & < 100 to display indeterminate progress
+                            Handler handler3 = new Handler();
+                            handler3.postDelayed(new Runnable() {
+                                public void run() {
+                                    // acciones que se ejecutan tras los milisegundos
+                                    botonMarcadorArriba_4J.setCompleteText(Integer.toString(puntosTotalesJugador2));
+                                    botonMarcadorArriba_4J.setProgress(100);
+                                }
+                            }, 5000);
+                        }
                     }
 
                     break;
@@ -7557,6 +7586,19 @@ public class MainActivity extends Activity
                             animarTextoAccion(bocadilloIzq);
                         }
                     }
+
+                    break;
+
+                case '6':
+                    String aux14 = new String(buf, "UTF-8");
+                    String otro11[] = aux14.split("-");
+                    String ganadorFinal = otro11[1];
+
+                    if(esDeMiEquipo(sender) && ganadorFinal.equals("YO")) cerrarDialogoAndStartIfWin(4000, 0);
+                    else if(esDeMiEquipo(sender) && ganadorFinal.equals("RIVAL")) cerrarDialogoAndStartIfWin(4000, 1);
+                    else if(!esDeMiEquipo(sender) && ganadorFinal.equals("YO")) cerrarDialogoAndStartIfWin(4000, 1);
+                    else if(!esDeMiEquipo(sender) && ganadorFinal.equals("RIVAL")) cerrarDialogoAndStartIfWin(4000, 0);
+
 
                     break;
 
@@ -8309,30 +8351,31 @@ public class MainActivity extends Activity
     }
 
     public void repartirTrasMano() {
-        String ganadorFinal = comprobarGanadorPartida();
-        Log.d("HHHHHH", "Ganador: " + ganadorFinal);
-        if (!ganadorFinal.equals("NADIE")) {
-            if (ganadorFinal.equals("YO")) {
-
-                //Actualiza el ranking sumando una victoria
-                updateLeaderboards(mGoogleApiClient, LEADERBOARD_ID);
-                Games.Achievements.unlock(mGoogleApiClient, PRIMERA_PARTIDA);
-                Games.Achievements.increment(mGoogleApiClient, TRIUNFADOR_PRINCIPIANTE, 1);
-                Games.Achievements.increment(mGoogleApiClient, TRIUNFADOR_AVANZADO, 1);
-                Games.Achievements.increment(mGoogleApiClient, TRIUNFADOR_EXPERTO, 1);
-                Games.Achievements.increment(mGoogleApiClient, LEYENDA, 1);
-
-                cerrarDialogoAndStartIfWin(4000, 0);
-
-            } else if (ganadorFinal.equals("RIVAL")) {
-                cerrarDialogoAndStartIfWin(4000, 1);
-            }
-        } else {
 
             if(numeroJugadores == 2){
-                cambiarMano();
-                if (mMyId.equals(mano)) {
-                    inicializarMano();
+                String ganadorFinal = comprobarGanadorPartida();
+                Log.d("HHHHHH", "Ganador: " + ganadorFinal);
+                if (!ganadorFinal.equals("NADIE")) {
+                    if (ganadorFinal.equals("YO")) {
+
+                        //Actualiza el ranking sumando una victoria
+                        updateLeaderboards(mGoogleApiClient, LEADERBOARD_ID);
+                        Games.Achievements.unlock(mGoogleApiClient, PRIMERA_PARTIDA);
+                        Games.Achievements.increment(mGoogleApiClient, TRIUNFADOR_PRINCIPIANTE, 1);
+                        Games.Achievements.increment(mGoogleApiClient, TRIUNFADOR_AVANZADO, 1);
+                        Games.Achievements.increment(mGoogleApiClient, TRIUNFADOR_EXPERTO, 1);
+                        Games.Achievements.increment(mGoogleApiClient, LEYENDA, 1);
+
+                        cerrarDialogoAndStartIfWin(4000, 0);
+
+                    } else if (ganadorFinal.equals("RIVAL")) {
+                        cerrarDialogoAndStartIfWin(4000, 1);
+                    }
+                }else{
+                    cambiarMano();
+                    if (mMyId.equals(mano)) {
+                        inicializarMano();
+                    }
                 }
             }else if(numeroJugadores == 4){
                 cambiarMano();
@@ -8361,7 +8404,6 @@ public class MainActivity extends Activity
                             botonMarcadorArriba_4J.setProgress(100);
                         }
                     }, 5000);
-                }
                 }
             }
 
