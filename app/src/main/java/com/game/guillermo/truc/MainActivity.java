@@ -5973,9 +5973,7 @@ public class MainActivity extends Activity
                     } else if (numeroJugadores == 4) {
 
                         //resetAll();
-                        Log.d("TTTTTT", "Recibo las cartas");
                         String ssBuf = new String(buf, "UTF-8");
-                        Log.d("TTTTTT", ssBuf.toString());
                         arrayCartasJugadores = ssBuf.split(" ");
 
                         ArrayList<String> ids = new ArrayList<>(4);
@@ -8285,10 +8283,10 @@ public class MainActivity extends Activity
                     sCartasJ3 = list3[0] + " " + list3[1] + " " + list3[2];
                     sCartasJ4 = list4[0] + " " + list4[1] + " " + list4[2];
 
-                    arrayCartasJugadores[0] = sCartasJ2;
-                    arrayCartasJugadores[1] = sCartasJ3;
-                    arrayCartasJugadores[2] = sCartasJ4;
-                    arrayCartasJugadores[3] = sCartasJ1;
+                    //String ssBuf = new String(cartas, "UTF-8");
+
+                    String cartas = sCartasJ2 + " " + sCartasJ3 + " " + sCartasJ4 + " " + sCartasJ1;
+                    arrayCartasJugadores = cartas.split(" ");
 
                 }
                 break;
