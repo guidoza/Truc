@@ -1439,29 +1439,41 @@ public class MainActivity extends Activity
 
         if(repartiendo.findViewById(R.id.envid_rival) != null){
             tvEnvidRival = (TextView) repartiendo.findViewById(R.id.envid_rival);
-            if(numeroJugadores == 2) tvEnvidRival.setText("Envid rival: " + envidOtro);
-            else tvEnvidRival.setText("Envid rival: " + envidOtro+" Envid compañero: "+envidCompi);
+            if(numeroJugadores == 4){
+                if(esDeMiEquipo(ganadorEnvid))tvEnvidRival.setText("Has ganado el envid");
+                else tvEnvidRival.setText("Has perdido el envid");
+            }
+            else tvEnvidRival.setText("Envid rival: " + envidOtro);
             tvEnvidRival.setTypeface(Typefaces.get(this, "Signika-Regular.ttf"));
 
         }
         else if(repartiendo.findViewById(R.id.envid_rival2) != null){
             tvEnvidRival2 = (TextView) repartiendo.findViewById(R.id.envid_rival2);
-            if(numeroJugadores == 2) tvEnvidRival2.setText("Envid rival: " + envidOtro);
-            else tvEnvidRival2.setText("Envid rival: " + envidOtro+" Envid compañero: "+envidCompi);
+            if(numeroJugadores == 4){
+                if(esDeMiEquipo(ganadorEnvid))tvEnvidRival2.setText("Has ganado el envid");
+                else tvEnvidRival2.setText("Has perdido el envid");
+            }
+            else tvEnvidRival2.setText("Envid rival: " + envidOtro);
             tvEnvidRival2.setTypeface(Typefaces.get(this, "Signika-Regular.ttf"));
 
         }
         else if(repartiendo.findViewById(R.id.envid_rival3) != null){
             tvEnvidRival3 = (TextView) repartiendo.findViewById(R.id.envid_rival3);
-            if(numeroJugadores == 2) tvEnvidRival3.setText("Envid rival: " + envidOtro);
-            else tvEnvidRival3.setText("Envid rival: " + envidOtro+" Envid compañero: "+envidCompi);
+            if(numeroJugadores == 4){
+                if(esDeMiEquipo(ganadorEnvid))tvEnvidRival3.setText("Has ganado el envid");
+                else tvEnvidRival3.setText("Has perdido el envid");
+            }
+            else tvEnvidRival3.setText("Envid rival: " + envidOtro);
             tvEnvidRival3.setTypeface(Typefaces.get(this, "Signika-Regular.ttf"));
 
         }
         else if(repartiendo.findViewById(R.id.envid_rival4) != null){
             tvEnvidRival4 = (TextView) repartiendo.findViewById(R.id.envid_rival4);
-            if(numeroJugadores == 2) tvEnvidRival4.setText("Envid rival: " + envidOtro);
-            else tvEnvidRival4.setText("Envid rival: " + envidOtro+" Envid compañero: "+envidCompi);
+            if(numeroJugadores == 4){
+                if(esDeMiEquipo(ganadorEnvid))tvEnvidRival4.setText("Has ganado el envid");
+                else tvEnvidRival4.setText("Has perdido el envid");
+            }
+            else tvEnvidRival4.setText("Envid rival: " + envidOtro);
             tvEnvidRival4.setTypeface(Typefaces.get(this, "Signika-Regular.ttf"));
         }
 
@@ -2024,8 +2036,8 @@ public class MainActivity extends Activity
     public void onPause() {
         Log.d(TAG, "**** got onPause");
         if(mCurScreen == R.id.screen_wait)findViewById(mCurScreen).setVisibility(View.GONE);
-        fondo = decodeSampledBitmapFromResource(getResources(), R.drawable.fondo_menu, 100, 100);
-        frame.setBackground(new BitmapDrawable(getResources(), fondo));
+        //fondo = decodeSampledBitmapFromResource(getResources(), R.drawable.fondo_menu, 100, 100);
+       // frame.setBackground(new BitmapDrawable(getResources(), fondo));
 
         super.onPause();
     }
@@ -6972,7 +6984,7 @@ public class MainActivity extends Activity
                                         Log.d("KKKKKKKK", "Hay envid");
                                         LayoutInflater inflater = getLayoutInflater();
                                         ViewGroup container = null;
-                                        comprobarGanadorEnvid_4J();
+                                        //comprobarGanadorEnvid_4J();
 
                                         if (ganadorEnvid.equals(mMyId) || esDeMiEquipo(ganadorEnvid)) {
                                             View layout = inflater.inflate(R.layout.progres_content, container);
@@ -6998,7 +7010,7 @@ public class MainActivity extends Activity
                                         Log.d("KKKKKKKK", "Hay envid");
                                         LayoutInflater inflater = getLayoutInflater();
                                         ViewGroup container = null;
-                                        comprobarGanadorEnvid_4J();
+                                        //comprobarGanaFdorEnvid_4J();
 
                                         if (ganadorEnvid.equals(mMyId) || esDeMiEquipo(ganadorEnvid)) {
                                             View layout = inflater.inflate(R.layout.progres_content3, container);
@@ -7632,8 +7644,7 @@ public class MainActivity extends Activity
                             break;
 
                         case 4:
-                            String turnoNuevo4J = new String(buf, "UTF-8");
-                            turno = turnoNuevo4J;
+                            turno = new String(buf, "UTF-8");
                             Log.d("LLLLLLL", "Turno para: " + turno + " mi id: " + mMyId);
                             if (mMyId.equals(turno) && rondasGanadasMiEquipo < 2) {
                                 if ((mMyId.equals(comprobarSiguienteMano())) || (ronda > 1 && !hayEnvid)) {
@@ -7649,6 +7660,7 @@ public class MainActivity extends Activity
                                 bloquearCartas();
                                 Log.d("LLLLLLL", "Me han comunicado cambio de turno");
                                 cambiarBarraProgreso();
+                                animarDesaparecerMenu();
 
                             }
                             break;
@@ -7971,17 +7983,22 @@ public class MainActivity extends Activity
                 }
             }
         }
-        if(screenId == R.id.screen_wait){
+        else if(screenId == R.id.screen_wait){
             if(fondo == null){
                 fondo = decodeSampledBitmapFromResource(getResources(), R.drawable.fondo_menu, 100, 100);
                 frame.setBackground(new BitmapDrawable(getResources(), fondo));
+            }else {
+                fondo.recycle();
+                fondo = decodeSampledBitmapFromResource(getResources(), R.drawable.fondo_menu, 100, 100);
+                frame.setBackground(new BitmapDrawable(getResources(), fondo));
             }
+
             animarEspera();
             fraseAleatoria.setText(calcularFraseAleatoria());
-
-        }else if(screenId == R.id.screen_game || screenId == R.id.screen_game_4_jugadores){
+        }
+        else if(screenId == R.id.screen_game || screenId == R.id.screen_game_4_jugadores){
             //frame.setBackground(getResources().getDrawable(R.drawable.mesa2, null));
-            if(metrics.densityDpi > DisplayMetrics.DENSITY_LOW){
+            if(metrics.densityDpi > DisplayMetrics.DENSITY_MEDIUM){
                 fondo.recycle();
                 int f = 0;
                 if(Math.random()<0.5) f = R.drawable.mesa2;
@@ -7990,8 +8007,9 @@ public class MainActivity extends Activity
                 frame.setBackground(new BitmapDrawable(getResources(), fondo));
                 //frame.setBackgroundResource(R.drawable.mesa2);
             }
+        }
 
-        }else if(mCurScreen == R.id.screen_game || mCurScreen == R.id.screen_game_4_jugadores){
+        if(mCurScreen == R.id.screen_game || mCurScreen == R.id.screen_game_4_jugadores){
             if(metrics.densityDpi > DisplayMetrics.DENSITY_MEDIUM) {
                 //frame.setBackground(getResources().getDrawable(R.drawable.fondo_menu, null));
                 fondo.recycle();
@@ -8000,6 +8018,7 @@ public class MainActivity extends Activity
                 //frame.setBackgroundResource(R.drawable.mesa2);
             }
         }
+
         mCurScreen = screenId;
 
         //Para la publicidad
