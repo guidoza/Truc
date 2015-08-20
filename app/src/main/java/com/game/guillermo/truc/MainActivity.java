@@ -66,6 +66,8 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.afollestad.materialdialogs.Theme;
 import com.dd.CircularProgressButton;
 import com.github.alexkolpa.fabtoolbar.FabToolbar;
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.InterstitialAd;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -1501,8 +1503,7 @@ public class MainActivity extends Activity
         if(repartiendo.findViewById(R.id.envid_rival) != null){
             tvEnvidRival = (TextView) repartiendo.findViewById(R.id.envid_rival);
             if(numeroJugadores == 4){
-                if(esDeMiEquipo(ganadorEnvid))tvEnvidRival.setText("Has ganado el envid");
-                else tvEnvidRival.setText("Has perdido el envid");
+                tvEnvidRival.setText(getResources().getString(R.string.proximamente));
             }
             else tvEnvidRival.setText("Envid rival: " + envidOtro);
             tvEnvidRival.setTypeface(Typefaces.get(this, "Signika-Regular.ttf"));
@@ -1511,8 +1512,7 @@ public class MainActivity extends Activity
         else if(repartiendo.findViewById(R.id.envid_rival2) != null){
             tvEnvidRival2 = (TextView) repartiendo.findViewById(R.id.envid_rival2);
             if(numeroJugadores == 4){
-                if(esDeMiEquipo(ganadorEnvid))tvEnvidRival2.setText("Has ganado el envid");
-                else tvEnvidRival2.setText("Has perdido el envid");
+                tvEnvidRival2.setText(getResources().getString(R.string.proximamente));
             }
             else tvEnvidRival2.setText("Envid rival: " + envidOtro);
             tvEnvidRival2.setTypeface(Typefaces.get(this, "Signika-Regular.ttf"));
@@ -1521,8 +1521,7 @@ public class MainActivity extends Activity
         else if(repartiendo.findViewById(R.id.envid_rival3) != null){
             tvEnvidRival3 = (TextView) repartiendo.findViewById(R.id.envid_rival3);
             if(numeroJugadores == 4){
-                if(esDeMiEquipo(ganadorEnvid))tvEnvidRival3.setText("Has ganado el envid");
-                else tvEnvidRival3.setText("Has perdido el envid");
+                tvEnvidRival3.setText(getResources().getString(R.string.proximamente));
             }
             else tvEnvidRival3.setText("Envid rival: " + envidOtro);
             tvEnvidRival3.setTypeface(Typefaces.get(this, "Signika-Regular.ttf"));
@@ -1531,8 +1530,7 @@ public class MainActivity extends Activity
         else if(repartiendo.findViewById(R.id.envid_rival4) != null){
             tvEnvidRival4 = (TextView) repartiendo.findViewById(R.id.envid_rival4);
             if(numeroJugadores == 4){
-                if(esDeMiEquipo(ganadorEnvid))tvEnvidRival4.setText("Has ganado el envid");
-                else tvEnvidRival4.setText("Has perdido el envid");
+                tvEnvidRival4.setText(getResources().getString(R.string.proximamente));
             }
             else tvEnvidRival4.setText("Envid rival: " + envidOtro);
             tvEnvidRival4.setTypeface(Typefaces.get(this, "Signika-Regular.ttf"));
@@ -3394,7 +3392,7 @@ public class MainActivity extends Activity
         //Layout layout = (Layout) getResources().getLayout(R.layout.iconos_dialog);
         progressSenyas = (ProgressBar) dialogIconos.getCustomView().findViewById(R.id.progressSenyas);
         progressSenyas.setVisibility(View.VISIBLE);
-        countSenyas = new CountDownTimer(20000, 1000) {
+        countSenyas = new CountDownTimer(21000, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
                 segundosSenyas--;
@@ -4541,7 +4539,7 @@ public class MainActivity extends Activity
                                     enviarMensajeTurno4J(turno);
                                     reiniciarBarraProgreso();
                                 }
-                                //Ha ganado mi compa?ero
+                                //Ha ganado mi companyero
                             } else {
                                 if (rondasGanadasMiEquipo == 2) {
                                     //enviarMensajeHasPerdido();
@@ -5586,7 +5584,7 @@ public class MainActivity extends Activity
     }
 
     public void enviarMensajeSenyas(String senya1, String senya2) {
-        if(!senya1.equals("NADA") || !senya2.equals("NADA")) Games.Achievements.increment(mGoogleApiClient, ESTRATEGA, 1);
+        if(!senya1.equals("nada") || !senya2.equals("nada")) Games.Achievements.increment(mGoogleApiClient, ESTRATEGA, 1);
         byte[] messageSenyas = ("3 "+senya1+" "+senya2).getBytes();
         for (Participant p : mParticipants) {
             if (!p.getParticipantId().equals(mMyId)) {
@@ -9776,9 +9774,8 @@ public class MainActivity extends Activity
     }
 
     public void cargarPublicidad(){
-       /* mInterstitialAd = new InterstitialAd(this);
+        mInterstitialAd = new InterstitialAd(this);
         mInterstitialAd.setAdUnitId(getString(R.string.ad_unit_id));
-        /*************************** QUITAR EL TEST DEVICE *******************************
         AdRequest adRequest = new AdRequest.Builder().addTestDevice(AdRequest.DEVICE_ID_EMULATOR).build();
         mInterstitialAd.loadAd(adRequest);
 
@@ -9787,13 +9784,13 @@ public class MainActivity extends Activity
             public void onAdClosed() {
                cargarPublicidad();
             }
-        }); */
+        });
 
     }
 
     public void mostrarPublicidad(){
         if (mInterstitialAd != null && mInterstitialAd.isLoaded()) {
-            //mInterstitialAd.show();
+            mInterstitialAd.show();
         }
         //A?adir c?digo para mostrar el bot?n
     }
