@@ -1855,9 +1855,11 @@ public class MainActivity extends Activity
                 // Check to see the developer who's running this sample code read the instructions :-)
                 // NOTE: this check is here only because this is a sample! Don't include this
                 // check in your actual production app.
+                /*
                 if (!BaseGameUtils.verifySampleSetup(this, R.string.app_id)) {
                     Log.w(TAG, "*** Warning: setup problems detected. Sign in may not work!");
                 }
+                */
 
                 // start the sign-in flow
                 Log.d(TAG, "Sign-in button clicked");
@@ -8656,7 +8658,7 @@ public class MainActivity extends Activity
                     break;
                 case MotionEvent.ACTION_UP:
                     //Vemos donde colocamos la carta
-                    double medioLayout = ((float) view.getLayoutParams().height) * 1.3;
+                    double medioLayout = ((float) view.getLayoutParams().height) * 1.9;
                     Log.d("HHHHHHHHHHHHHH", String.valueOf(medioLayout));
                     Log.d("HHHHHHHHHHHHHH", String.valueOf(view.getY()));
                     if (view.getY() < (medioLayout)) {
@@ -8859,7 +8861,7 @@ public class MainActivity extends Activity
                     break;
                 case MotionEvent.ACTION_UP:
                     //Vemos donde colocamos la carta
-                    double medioLayout = ((float) view.getLayoutParams().height) * 1.3;
+                    double medioLayout = ((float) view.getLayoutParams().height) * 1.9;
 
                     if (view.getY() < (medioLayout)) {
                         lanzarCarta_4J(destino, view);
@@ -8908,7 +8910,7 @@ public class MainActivity extends Activity
             }
 
             view.animate().x(destino.x).y(destino.y).rotation(0).rotationXBy(30)
-                    .scaleX((float) 0.6).scaleY((float) 0.6)
+                    .scaleX((float) 0.65).scaleY((float) 0.65)
                     .rotation(0).setDuration(500);
             view.setEnabled(false);
 
@@ -8943,7 +8945,7 @@ public class MainActivity extends Activity
             }
 
             view.animate().x(destino.x).y(destino.y).rotation(0).rotationXBy(30)
-                    .scaleX((float) 0.6).scaleY((float) 0.6)
+                    .scaleX((float) 0.65).scaleY((float) 0.65)
                     .rotation(0).setDuration(500);
             view.setEnabled(false);
 
@@ -8991,7 +8993,7 @@ public class MainActivity extends Activity
             }
 
             view.animate().x(destino.x).y(destino.y).rotation(0).rotationXBy(30)
-                    .scaleX((float) 0.6).scaleY((float) 0.6)
+                    .scaleX((float) 0.65).scaleY((float) 0.65)
                     .rotation(0).setDuration(500);
             view.setEnabled(false);
 
@@ -9814,7 +9816,7 @@ public class MainActivity extends Activity
     public void cargarPublicidad(){
         mInterstitialAd = new InterstitialAd(this);
         mInterstitialAd.setAdUnitId(getString(R.string.ad_unit_id));
-        AdRequest adRequest = new AdRequest.Builder().addTestDevice(AdRequest.DEVICE_ID_EMULATOR).build();
+        AdRequest adRequest = new AdRequest.Builder().build();
         mInterstitialAd.loadAd(adRequest);
 
         mInterstitialAd.setAdListener(new AdListener() {

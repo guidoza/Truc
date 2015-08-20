@@ -45,7 +45,6 @@
     <string name="pillar_senyas">Durant el temps de senyes pots descobrir les senyes dels teus rivals. Estigues atent quan ixca el seu globus i pressiona`l!</string>
     <string name="please_wait">Per favor espera...</string>
     <string name="pregunta_abandonar">Si abandones, perdràs la partida. Estàs segur?</string>
-    <string name="quatre" translatable="false">Quatre val!</string>
     <string name="quick_game">2 jugadors</string>
     <string name="quick_game_4">Partida ràpida 4 jugadors</string>
     <string name="quiero_envid">Vuic l`envid</string>
@@ -90,7 +89,6 @@
     <string name="game_title">Retruque!</string>
     <string name="joc_fora">Joc fora!</string>
     <string name="retruque">Retruque!</string>
-    <string name="sign_out" translatable="false">Desconectar-se</string>
     <string name="signing_out">Signing out</string>
     <string name="basto">Basto</string>
     <string name="ciego">Cec</string>
@@ -104,4 +102,6 @@
     <string name="ver_invitaciones">Invitacions!</string>
     <string name="ver_invitaciones_cuerpo">T´han convidat? Comprova-ho ací \ndemostra qui és el millor.</string>
     <string name="proximamente">Próx. voràs l´envid rival</string>
+    <string name="sign_out">Desconectar-se</string>
+    <string name="quatre">Quatre val!</string>
 </resources>
