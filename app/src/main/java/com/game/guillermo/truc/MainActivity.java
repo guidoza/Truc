@@ -4572,8 +4572,8 @@ public class MainActivity extends Activity
                     break;
                 case 4:
                     bloquearCartas();
+                    animarDesaparecerMenu();
                     enviarMensajeTurno4J(mano);
-                    animarDesaparecerMano();
                     break;
             }
         }
@@ -7655,7 +7655,7 @@ public class MainActivity extends Activity
                                 desbloquearCartas();
                                 cambiarBarraProgreso();
                                 animarAparecerMenu();
-                            }
+                            }else
 
                             if (!mMyId.equals(turno) && rondasGanadasMiEquipo < 2) {
                                 bloquearCartas();
