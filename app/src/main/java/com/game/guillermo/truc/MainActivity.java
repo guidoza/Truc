@@ -6126,20 +6126,24 @@ public class MainActivity extends Activity
                                 } else cambiarBarraProgreso();
                                 break;
                         }
-                        if (ganadorEnvid.equals(mMyId) && caso == 1){
+                        if ((ganadorEnvid.equals(mMyId) || esDeMiEquipo(ganadorEnvid)) && caso == 1){
                             if(logro_farolero){ Games.Achievements.unlock(mGoogleApiClient, FAROLERO);}
                             if(logro_33){Games.Achievements.unlock(mGoogleApiClient, ENVID_33);}
                             puntosEnvid = ENVID;
                         }
-                        if (ganadorEnvid.equals(mMyId) && caso == 2){
+                        if ((ganadorEnvid.equals(mMyId) || esDeMiEquipo(ganadorEnvid)) && caso == 2){
                             if(logro_farolero){ Games.Achievements.unlock(mGoogleApiClient, FAROLERO);}
                             if(logro_33){Games.Achievements.unlock(mGoogleApiClient, ENVID_33);}
                             puntosEnvid = TORNE;
                         }
-                        if (ganadorEnvid.equals(mMyId) && caso == 3){
+                        if ((ganadorEnvid.equals(mMyId) || esDeMiEquipo(ganadorEnvid)) && caso == 3){
                             if(logro_farolero){ Games.Achievements.unlock(mGoogleApiClient, FAROLERO);}
                             if(logro_33){Games.Achievements.unlock(mGoogleApiClient, ENVID_33);}
-                            puntosEnvid = 24;
+                            if (puntosTotalesJugador2 <= 12) {
+                                puntosEnvid = 24;
+                            } else if (puntosTotalesJugador2 > 12) {
+                                puntosEnvid = 24 - puntosTotalesJugador2;
+                            }
                         }
 
                         Log.d("JEJEJEJEJEJEJEJE", "Puntos envid: "+puntosEnvid);
@@ -9008,7 +9012,7 @@ public class MainActivity extends Activity
                             case 0:
                                 hayEnvid = true;
                                 ganadorEnvid = comprobarGanadorEnvid_4J();
-                                if(ganadorEnvid.equals(mMyId))puntosEnvid = ENVID;
+                                if (ganadorEnvid.equals(mMyId) || esDeMiEquipo(ganadorEnvid))puntosEnvid = ENVID;
                                 enviarMensajeHayEnvidAndGanador(ganadorEnvid, 1);
                                 cambiarBarraProgreso();
                                 break;
@@ -9079,7 +9083,7 @@ public class MainActivity extends Activity
                             case 0:
                                 hayEnvid = true;
                                 ganadorEnvid = comprobarGanadorEnvid_4J();
-                                if(ganadorEnvid.equals(mMyId))puntosEnvid = TORNE;
+                                if (ganadorEnvid.equals(mMyId) || esDeMiEquipo(ganadorEnvid))puntosEnvid = TORNE;
                                 enviarMensajeHayEnvidAndGanador(ganadorEnvid, 2);
                                 cambiarBarraProgreso();
                                 if (turno.equals(mMyId)) {
@@ -9142,7 +9146,7 @@ public class MainActivity extends Activity
                                 ganadorEnvid = comprobarGanadorEnvid_4J();
                                 enviarMensajeHayEnvidAndGanador(ganadorEnvid, 3);
                                 //puntos a sumar por la falta
-                                if (ganadorEnvid.equals(mMyId)) {
+                                if (ganadorEnvid.equals(mMyId) || esDeMiEquipo(ganadorEnvid)) {
                                     if (puntosTotalesJugador2 <= 12) {
                                         puntosEnvid = 24;
                                     } else if (puntosTotalesJugador2 > 12) {
