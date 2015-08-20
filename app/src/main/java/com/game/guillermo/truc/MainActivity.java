@@ -518,6 +518,10 @@ public class MainActivity extends Activity
     SharedPreferences.Editor editor;
     DisplayMetrics metrics = null;
     boolean hecho = false;
+    FButton button_return1 = null;
+    FButton button_return2 = null;
+    FButton button_return3 = null;
+    FButton button_return4 = null;
 
 
     @Override
@@ -913,10 +917,10 @@ public class MainActivity extends Activity
         txtGanasPartidaRivalDesc2 = (TextView) findViewById(R.id.txtGanasPartidaRivalDesc2);
         txtPierdesPartidaCompDesc1 = (TextView) findViewById(R.id.txtPierdesPartidaCompDesc1);
         txtPierdesPartidaCompDesc2 = (TextView) findViewById(R.id.txtPierdesPartidaCompDesc2);
-        FButton button_return1 = (FButton) findViewById(R.id.button_return1);
-        FButton button_return2 = (FButton) findViewById(R.id.button_return2);
-        FButton button_return3 = (FButton) findViewById(R.id.button_return3);
-        FButton button_return4 = (FButton) findViewById(R.id.button_return4);
+        button_return1 = (FButton) findViewById(R.id.button_return1);
+        button_return2 = (FButton) findViewById(R.id.button_return2);
+        button_return3 = (FButton) findViewById(R.id.button_return3);
+        button_return4 = (FButton) findViewById(R.id.button_return4);
 
 
         textoInvitacion.setTypeface(Typefaces.get(this, "Signika-Regular.ttf"));
@@ -2672,6 +2676,11 @@ public class MainActivity extends Activity
 
     void resetAll() {
         Log.d("JEJEJEJEJEJEJE", "En reset all");
+        button_return1.setVisibility(View.INVISIBLE);
+        button_return2.setVisibility(View.INVISIBLE);
+        button_return3.setVisibility(View.INVISIBLE);
+        button_return4.setVisibility(View.INVISIBLE);
+
         if (numeroJugadores == 2) {
             ponerCartaRecta();
 
@@ -9782,6 +9791,10 @@ public class MainActivity extends Activity
         mInterstitialAd.setAdListener(new AdListener() {
             @Override
             public void onAdClosed() {
+               button_return1.setVisibility(View.VISIBLE);
+                button_return2.setVisibility(View.VISIBLE);
+                button_return3.setVisibility(View.VISIBLE);
+                button_return4.setVisibility(View.VISIBLE);
                cargarPublicidad();
             }
         });

@@ -1264,7 +1264,8 @@
             fbutton:shadowEnabled="true"
             fbutton:shadowHeight="5dp"
             fbutton:cornerRadius="5dp"
-            android:layout_margin="10dp"/>
+            android:layout_margin="10dp"
+            android:visibility="invisible"/>
     </LinearLayout>
 
     <!-- PANTALLA HAS PERDIDO LA PARTIDA -->
@@ -1296,7 +1297,8 @@
             fbutton:shadowEnabled="true"
             fbutton:shadowHeight="5dp"
             fbutton:cornerRadius="5dp"
-            android:layout_margin="10dp"/>
+            android:layout_margin="10dp"
+            android:visibility="invisible"/>
     </LinearLayout>
 
     <!-- PANTALLA TU COMPAÑERO SE HA DESCONECTADO -->
@@ -1336,7 +1338,8 @@
             fbutton:shadowEnabled="true"
             fbutton:shadowHeight="5dp"
             fbutton:cornerRadius="5dp"
-            android:layout_margin="10dp"/>
+            android:layout_margin="10dp"
+            android:visibility="invisible"/>
     </LinearLayout>
 
     <!-- PANTALLA RIVAL SE HA DESCONECTADO -->
@@ -1376,7 +1379,8 @@
             fbutton:shadowEnabled="true"
             fbutton:shadowHeight="5dp"
             fbutton:cornerRadius="5dp"
-            android:layout_margin="10dp"/>
+            android:layout_margin="10dp"
+            android:visibility="invisible"/>
     </LinearLayout>
 
 </FrameLayout>
