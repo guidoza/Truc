@@ -4571,6 +4571,7 @@ public class MainActivity extends Activity
                     enviarMensajeTurno();
                     break;
                 case 4:
+                    turno = mano;
                     bloquearCartas();
                     animarDesaparecerMenu();
                     cambiarBarraProgreso();
