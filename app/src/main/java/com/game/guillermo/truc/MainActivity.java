@@ -20,6 +20,7 @@ import android.animation.Animator;
 import android.app.Activity;
 import android.app.AlertDialog;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
@@ -514,6 +515,7 @@ public class MainActivity extends Activity
     SharedPreferences preferencias;
     SharedPreferences.Editor editor;
     DisplayMetrics metrics = null;
+    boolean hecho = false;
 
 
     @Override
@@ -1392,6 +1394,60 @@ public class MainActivity extends Activity
         iniciarBarraProgresoSenyas();
     }
 
+    public void inicializa(){
+        if(numeroJugadores == 4){
+            if(mensajesRecibidos == 3 && repartiendo.isShowing()){
+                String ganadorFinal = comprobarGanadorPartida();
+                Log.d("HHHHHH", "Ganador: " + ganadorFinal);
+                if (!ganadorFinal.equals("NADIE")) {
+                    if (ganadorFinal.equals("YO")) {
+
+                        //Actualiza el ranking sumando una victoria
+                        updateLeaderboards(mGoogleApiClient, LEADERBOARD_ID);
+                        Games.Achievements.unlock(mGoogleApiClient, PRIMERA_PARTIDA);
+                        Games.Achievements.increment(mGoogleApiClient, TRIUNFADOR_PRINCIPIANTE, 1);
+                        Games.Achievements.increment(mGoogleApiClient, TRIUNFADOR_AVANZADO, 1);
+                        Games.Achievements.increment(mGoogleApiClient, TRIUNFADOR_EXPERTO, 1);
+                        Games.Achievements.increment(mGoogleApiClient, LEYENDA, 1);
+
+                        enviarMensajeHayGanador(ganadorFinal);
+                        cerrarDialogoAndStartIfWin(4000, 0);
+
+                    } else if (ganadorFinal.equals("RIVAL")) {
+                        enviarMensajeHayGanador(ganadorFinal);
+                        cerrarDialogoAndStartIfWin(4000, 1);
+                    }
+                }else{
+
+                    inicializarMano();
+                    botonMarcadorAbajo_4J.setProgress(0);
+                    botonMarcadorAbajo_4J.setIndeterminateProgressMode(true); // turn on indeterminate progress
+                    botonMarcadorAbajo_4J.setProgress(50); // set progress > 0 & < 100 to display indeterminate progress
+                    Handler handler2 = new Handler();
+                    handler2.postDelayed(new Runnable() {
+                        public void run() {
+                            // acciones que se ejecutan tras los milisegundos
+                            botonMarcadorAbajo_4J.setCompleteText(Integer.toString(puntosTotalesMios));
+                            botonMarcadorAbajo_4J.setProgress(100);
+                        }
+                    }, 5000);
+
+                    botonMarcadorArriba_4J.setProgress(0);
+                    botonMarcadorArriba_4J.setIndeterminateProgressMode(true); // turn on indeterminate progress
+                    botonMarcadorArriba_4J.setProgress(50); // set progress > 0 & < 100 to display indeterminate progress
+                    Handler handler3 = new Handler();
+                    handler3.postDelayed(new Runnable() {
+                        public void run() {
+                            // acciones que se ejecutan tras los milisegundos
+                            botonMarcadorArriba_4J.setCompleteText(Integer.toString(puntosTotalesJugador2));
+                            botonMarcadorArriba_4J.setProgress(100);
+                        }
+                    }, 5000);
+                }
+            }
+        }
+    }
+
     private void showBasicAlertDesconectarse(String title, String message) {
         materialDialog = new MaterialDialog.Builder(this)
                 .title(title)
@@ -1425,6 +1481,8 @@ public class MainActivity extends Activity
                 .cancelable(false);
         repartiendo = materialDialog.show();
 
+        inicializa();
+
     }
 
     private void showProgressCustomDialog(View content) {
@@ -1436,6 +1494,9 @@ public class MainActivity extends Activity
                 .cancelable(false)
                 .theme(Theme.LIGHT);
         repartiendo = materialDialog.show();
+
+        inicializa();
+
 
         if(repartiendo.findViewById(R.id.envid_rival) != null){
             tvEnvidRival = (TextView) repartiendo.findViewById(R.id.envid_rival);
@@ -2706,6 +2767,7 @@ public class MainActivity extends Activity
             layJ2.setBackground(getResources().getDrawable(R.drawable.fondo_carta, getTheme()));
 
         } else if (numeroJugadores == 4) {
+            hecho = false;
             bloquearCartas();
             miValor = 0;
             valorEmpate = 0;
@@ -3334,14 +3396,16 @@ public class MainActivity extends Activity
         progressSenyas.setVisibility(View.VISIBLE);
         countSenyas = new CountDownTimer(20000, 1000) {
             @Override
-            public void onTick(long millisUntilFinished) {     
-                progressSenyas.setProgress(segundosSenyas);
+            public void onTick(long millisUntilFinished) {
                 segundosSenyas--;
+                progressSenyas.setProgress(segundosSenyas);
             }
+
             @Override
             public void onFinish() {
-                progressSenyas.setProgress(segundosSenyas);
+
             }
+
         }.start();
     }
 
@@ -7070,55 +7134,7 @@ public class MainActivity extends Activity
 
                 case 'H':
                     mensajesRecibidos++;
-                    if(mensajesRecibidos == 3){
-                        String ganadorFinal = comprobarGanadorPartida();
-                        Log.d("HHHHHH", "Ganador: " + ganadorFinal);
-                        if (!ganadorFinal.equals("NADIE")) {
-                            if (ganadorFinal.equals("YO")) {
-
-                                //Actualiza el ranking sumando una victoria
-                                updateLeaderboards(mGoogleApiClient, LEADERBOARD_ID);
-                                Games.Achievements.unlock(mGoogleApiClient, PRIMERA_PARTIDA);
-                                Games.Achievements.increment(mGoogleApiClient, TRIUNFADOR_PRINCIPIANTE, 1);
-                                Games.Achievements.increment(mGoogleApiClient, TRIUNFADOR_AVANZADO, 1);
-                                Games.Achievements.increment(mGoogleApiClient, TRIUNFADOR_EXPERTO, 1);
-                                Games.Achievements.increment(mGoogleApiClient, LEYENDA, 1);
-
-                                enviarMensajeHayGanador(ganadorFinal);
-                                cerrarDialogoAndStartIfWin(4000, 0);
-
-                            } else if (ganadorFinal.equals("RIVAL")) {
-                                enviarMensajeHayGanador(ganadorFinal);
-                                cerrarDialogoAndStartIfWin(4000, 1);
-                            }
-                        }else{
-
-                            inicializarMano();
-                            botonMarcadorAbajo_4J.setProgress(0);
-                            botonMarcadorAbajo_4J.setIndeterminateProgressMode(true); // turn on indeterminate progress
-                            botonMarcadorAbajo_4J.setProgress(50); // set progress > 0 & < 100 to display indeterminate progress
-                            Handler handler2 = new Handler();
-                            handler2.postDelayed(new Runnable() {
-                                public void run() {
-                                    // acciones que se ejecutan tras los milisegundos
-                                    botonMarcadorAbajo_4J.setCompleteText(Integer.toString(puntosTotalesMios));
-                                    botonMarcadorAbajo_4J.setProgress(100);
-                                }
-                            }, 5000);
-
-                            botonMarcadorArriba_4J.setProgress(0);
-                            botonMarcadorArriba_4J.setIndeterminateProgressMode(true); // turn on indeterminate progress
-                            botonMarcadorArriba_4J.setProgress(50); // set progress > 0 & < 100 to display indeterminate progress
-                            Handler handler3 = new Handler();
-                            handler3.postDelayed(new Runnable() {
-                                public void run() {
-                                    // acciones que se ejecutan tras los milisegundos
-                                    botonMarcadorArriba_4J.setCompleteText(Integer.toString(puntosTotalesJugador2));
-                                    botonMarcadorArriba_4J.setProgress(100);
-                                }
-                            }, 5000);
-                        }
-                    }
+                    inicializa();
 
                     break;
 
@@ -8004,7 +8020,7 @@ public class MainActivity extends Activity
         }
         else if(screenId == R.id.screen_game || screenId == R.id.screen_game_4_jugadores){
             //frame.setBackground(getResources().getDrawable(R.drawable.mesa2, null));
-            if(metrics.densityDpi > DisplayMetrics.DENSITY_MEDIUM){
+            if(metrics.densityDpi > 200){
                 fondo.recycle();
                 int f = 0;
                 if(Math.random()<0.5) f = R.drawable.mesa2;
@@ -8016,7 +8032,7 @@ public class MainActivity extends Activity
         }
 
         if(mCurScreen == R.id.screen_game || mCurScreen == R.id.screen_game_4_jugadores){
-            if(metrics.densityDpi > DisplayMetrics.DENSITY_MEDIUM) {
+            if(metrics.densityDpi > 200) {
                 //frame.setBackground(getResources().getDrawable(R.drawable.fondo_menu, null));
                 fondo.recycle();
                 fondo = decodeSampledBitmapFromResource(getResources(), R.drawable.fondo_menu, 100, 100);
@@ -8414,7 +8430,6 @@ public class MainActivity extends Activity
             }else if(numeroJugadores == 4){
                 cambiarMano();
                 if (!mMyId.equals(mano)) {
-                    enviarMensajeListo();
                     botonMarcadorAbajo_4J.setProgress(0);
                     botonMarcadorAbajo_4J.setIndeterminateProgressMode(true); // turn on indeterminate progress
                     botonMarcadorAbajo_4J.setProgress(50); // set progress > 0 & < 100 to display indeterminate progress
@@ -8438,6 +8453,7 @@ public class MainActivity extends Activity
                             botonMarcadorArriba_4J.setProgress(100);
                         }
                     }, 5000);
+                    enviarMensajeListo();
                 }
             }
 
