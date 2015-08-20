@@ -4571,8 +4571,10 @@ public class MainActivity extends Activity
                     enviarMensajeTurno();
                     break;
                 case 4:
+                    turno = mano;
                     bloquearCartas();
                     animarDesaparecerMenu();
+                    cambiarBarraProgreso();
                     enviarMensajeTurno4J(mano);
                     break;
             }
@@ -5520,7 +5522,7 @@ public class MainActivity extends Activity
     }
 
     public void enviarMensajeSenyas(String senya1, String senya2) {
-        Games.Achievements.increment(mGoogleApiClient, ESTRATEGA, 1);
+        if(!senya1.equals("NADA") || !senya2.equals("NADA")) Games.Achievements.increment(mGoogleApiClient, ESTRATEGA, 1);
         byte[] messageSenyas = ("3 "+senya1+" "+senya2).getBytes();
         for (Participant p : mParticipants) {
             if (!p.getParticipantId().equals(mMyId)) {
