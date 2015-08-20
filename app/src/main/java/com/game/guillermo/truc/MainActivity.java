@@ -1454,6 +1454,34 @@ public class MainActivity extends Activity
         }
     }
 
+    public void inicializaPost(){
+        if(numeroJugadores == 4){
+            if(mensajesRecibidos == 3 && repartiendo.isShowing()){
+                String ganadorFinal = comprobarGanadorPartida();
+                Log.d("HHHHHH", "Ganador: " + ganadorFinal);
+                if (!ganadorFinal.equals("NADIE")) {
+                    if (ganadorFinal.equals("YO")) {
+
+                        //Actualiza el ranking sumando una victoria
+                        updateLeaderboards(mGoogleApiClient, LEADERBOARD_ID);
+                        Games.Achievements.unlock(mGoogleApiClient, PRIMERA_PARTIDA);
+                        Games.Achievements.increment(mGoogleApiClient, TRIUNFADOR_PRINCIPIANTE, 1);
+                        Games.Achievements.increment(mGoogleApiClient, TRIUNFADOR_AVANZADO, 1);
+                        Games.Achievements.increment(mGoogleApiClient, TRIUNFADOR_EXPERTO, 1);
+                        Games.Achievements.increment(mGoogleApiClient, LEYENDA, 1);
+
+                        enviarMensajeHayGanador(ganadorFinal);
+                        cerrarDialogoAndStartIfWin(0, 0);
+
+                    } else if (ganadorFinal.equals("RIVAL")) {
+                        enviarMensajeHayGanador(ganadorFinal);
+                        cerrarDialogoAndStartIfWin(0, 1);
+                    }
+                }
+            }
+        }
+    }
+
     private void showBasicAlertDesconectarse(String title, String message) {
         materialDialog = new MaterialDialog.Builder(this)
                 .title(title)
@@ -1487,6 +1515,8 @@ public class MainActivity extends Activity
                 .cancelable(false);
         repartiendo = materialDialog.show();
 
+        inicializa();
+
     }
 
     private void showProgressCustomDialog(View content) {
@@ -1498,6 +1528,8 @@ public class MainActivity extends Activity
                 .cancelable(false)
                 .theme(Theme.LIGHT);
         repartiendo = materialDialog.show();
+
+        inicializa();
 
 
         if(repartiendo.findViewById(R.id.envid_rival) != null){
@@ -5057,6 +5089,7 @@ public class MainActivity extends Activity
         }, 3000);
         handler.postDelayed(new Runnable() {
             public void run() {
+                inicializaPost();
                 repartiendo.cancel();
                 startGame(true);
 
@@ -8457,8 +8490,7 @@ public class MainActivity extends Activity
                         }
                     }, 5000);
                     enviarMensajeListo();
-
-                } else inicializa();
+                }
             }
 
 
