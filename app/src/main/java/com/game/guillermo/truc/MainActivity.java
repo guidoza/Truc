@@ -1487,8 +1487,6 @@ public class MainActivity extends Activity
                 .cancelable(false);
         repartiendo = materialDialog.show();
 
-        inicializa();
-
     }
 
     private void showProgressCustomDialog(View content) {
@@ -1500,8 +1498,6 @@ public class MainActivity extends Activity
                 .cancelable(false)
                 .theme(Theme.LIGHT);
         repartiendo = materialDialog.show();
-
-        inicializa();
 
 
         if(repartiendo.findViewById(R.id.envid_rival) != null){
@@ -8461,7 +8457,8 @@ public class MainActivity extends Activity
                         }
                     }, 5000);
                     enviarMensajeListo();
-                }
+
+                } else inicializa();
             }
 
 
