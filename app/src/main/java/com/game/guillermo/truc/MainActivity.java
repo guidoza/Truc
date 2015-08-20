@@ -4573,6 +4573,7 @@ public class MainActivity extends Activity
                 case 4:
                     bloquearCartas();
                     enviarMensajeTurno4J(mano);
+                    animarDesaparecerMano();
                     break;
             }
         }
@@ -7660,7 +7661,6 @@ public class MainActivity extends Activity
                                 bloquearCartas();
                                 Log.d("LLLLLLL", "Me han comunicado cambio de turno");
                                 cambiarBarraProgreso();
-                                animarDesaparecerMenu();
 
                             }
                             break;
