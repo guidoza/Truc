@@ -4,7 +4,8 @@
     xmlns:fbutton="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/Frame">
+    android:id="@+id/Frame"
+    android:background="@drawable/fondo_menu">
 
     <!-- SIGN-IN SCREEN -->
     <LinearLayout

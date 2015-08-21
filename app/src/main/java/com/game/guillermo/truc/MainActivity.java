@@ -8028,6 +8028,7 @@ public class MainActivity extends Activity
                 }
             }
         }
+        /*
         else if(screenId == R.id.screen_wait){
             if(fondo == null){
                 fondo = decodeSampledBitmapFromResource(getResources(), R.drawable.fondo_menu, 100, 100);
@@ -8063,6 +8064,7 @@ public class MainActivity extends Activity
                 //frame.setBackgroundResource(R.drawable.mesa2);
             }
         }
+        */
 
         mCurScreen = screenId;
 
