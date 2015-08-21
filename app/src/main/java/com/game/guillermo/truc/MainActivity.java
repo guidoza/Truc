@@ -2646,6 +2646,7 @@ public class MainActivity extends Activity
 
             if(numeroJugadores == 2){
                 if(mParticipants.size()<2){
+                    if(repartiendo != null && repartiendo.isShowing()) repartiendo.dismiss();
                     updateLeaderboards(mGoogleApiClient, LEADERBOARD_ID);
                     switchToScreen(R.id.screen_win_rival_desconectado);
                     reproducirSonidoGanador();
@@ -2663,6 +2664,7 @@ public class MainActivity extends Activity
                         Log.d("<HHHHHHHHHHH>", "Esta mi compi? "+estaMiCompi);
                     }
                     if(estaMiCompi){
+                        if(repartiendo != null && repartiendo.isShowing())repartiendo.dismiss();
                         if(dialogIconos != null && dialogIconos.isShowing()) dialogIconos.dismiss();
                         handlerShowIconos.removeCallbacks(icons);
                         handlerIconos.removeCallbacks(trasIcon);
@@ -2672,6 +2674,7 @@ public class MainActivity extends Activity
                         leaveRoom();
 
                     }else{
+                        if(repartiendo != null && repartiendo.isShowing())repartiendo.dismiss();
                         if(dialogIconos != null && dialogIconos.isShowing()) dialogIconos.dismiss();
                         handlerShowIconos.removeCallbacks(icons);
                         handlerIconos.removeCallbacks(trasIcon);
