@@ -169,7 +169,7 @@
         android:layout_width="match_parent"
         android:id="@+id/screen_wait"
         android:orientation="vertical"
-        android:visibility="gone">
+        android:visibility="visible">
         <ImageView
             android:id="@+id/carta_espera"
             android:layout_width="65dp"
@@ -178,33 +178,6 @@
             android:layout_gravity="center"
             android:background="@drawable/fondo_carta"
             android:padding="3dp"/>
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:orientation="horizontal"
-            android:layout_marginTop="10dp">
-
-            <TextView
-                android:id="@+id/text_loading"
-                android:text="@string/loading"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@android:color/primary_text_dark"
-                android:textSize="30sp" />
-
-            <pl.tajchert.sample.DotsTextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/dots"
-                android:layout_marginLeft="3dp"
-                android:padding="10dp"
-                android:textSize="30sp"
-                android:textColor="@android:color/primary_text_dark"
-                fab:autoplay="true"
-                fab:period="1000" />
-
-        </LinearLayout>
 
         <TextView
             android:id="@+id/textoFraseAleatoria"

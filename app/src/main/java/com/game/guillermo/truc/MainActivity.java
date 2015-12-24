@@ -5,7 +5,6 @@ import android.animation.Animator;
 import android.app.Activity;
 import android.app.AlertDialog;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
@@ -99,7 +98,6 @@ import java.util.Map;
 import java.util.Set;
 
 import info.hoang8f.widget.FButton;
-import pl.tajchert.sample.DotsTextView;
 import tourguide.tourguide.Overlay;
 import tourguide.tourguide.Pointer;
 import tourguide.tourguide.ToolTip;
@@ -478,8 +476,6 @@ public class MainActivity extends Activity
 
     private InterstitialAd mInterstitialAd;
     ImageView carta;
-    DotsTextView dots;
-    TextView loading;
     int cartaEspera = 0;
     int contador = 0;
 
@@ -507,6 +503,7 @@ public class MainActivity extends Activity
     FButton button_return2 = null;
     FButton button_return3 = null;
     FButton button_return4 = null;
+    int apilLevel = 0;
 
 
     @Override
@@ -516,8 +513,6 @@ public class MainActivity extends Activity
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-        setContentView(R.layout.activity_main);
-
         // Creamos el nuevo cliente de Google con acceso a Plus y Games
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .addConnectionCallbacks(this)
@@ -526,16 +521,18 @@ public class MainActivity extends Activity
                 .addApi(Games.API).addScope(Games.SCOPE_GAMES)
                 .build();
 
+        setContentView(R.layout.activity_main);
+
         preferencias = getSharedPreferences("MisPreferencias", Activity.MODE_PRIVATE);
         editor = preferencias.edit();
+
+        if(android.os.Build.VERSION.SDK_INT >= 21){
+            apilLevel = 1;
+        }
 
         frame = (FrameLayout)findViewById(R.id.Frame);
 
         carta = (ImageView) findViewById(R.id.carta_espera);
-        dots = (DotsTextView) findViewById(R.id.dots);
-        dots.setTypeface(Typefaces.get(this, "Signika-Regular.ttf"));
-        loading = (TextView) findViewById(R.id.text_loading);
-        loading.setTypeface(Typefaces.get(this, "Signika-Regular.ttf"));
 
         metrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(metrics);
@@ -2788,8 +2785,16 @@ public class MainActivity extends Activity
                 tvMesaRival3.animate().scaleX((float) 1).scaleY((float) 1).setDuration(0);
                 hayAnimacionRival3 = false;
             }
-            layJ1.setBackground(getResources().getDrawable(R.drawable.fondo_carta, getTheme()));
-            layJ2.setBackground(getResources().getDrawable(R.drawable.fondo_carta, getTheme()));
+
+            if(apilLevel == 1){
+                layJ1.setBackground(getResources().getDrawable(R.drawable.fondo_carta, getTheme()));
+                layJ2.setBackground(getResources().getDrawable(R.drawable.fondo_carta, getTheme()));
+            }else {
+                layJ1.setBackground(getResources().getDrawable(R.drawable.fondo_carta));
+                layJ2.setBackground(getResources().getDrawable(R.drawable.fondo_carta));
+            }
+
+
 
         } else if (numeroJugadores == 4) {
             hecho = false;
@@ -2947,10 +2952,18 @@ public class MainActivity extends Activity
                 hayAnimacionIzqC3 = false;
             }
 
-            layBajo.setBackground(getResources().getDrawable(R.drawable.fondo_carta, getTheme()));
-            layDerecha.setBackground(getResources().getDrawable(R.drawable.fondo_carta, getTheme()));
-            layIzq.setBackground(getResources().getDrawable(R.drawable.fondo_carta, getTheme()));
-            layArriba.setBackground(getResources().getDrawable(R.drawable.fondo_carta, getTheme()));
+            if(apilLevel == 1){
+                layBajo.setBackground(getResources().getDrawable(R.drawable.fondo_carta, getTheme()));
+                layDerecha.setBackground(getResources().getDrawable(R.drawable.fondo_carta, getTheme()));
+                layIzq.setBackground(getResources().getDrawable(R.drawable.fondo_carta, getTheme()));
+                layArriba.setBackground(getResources().getDrawable(R.drawable.fondo_carta, getTheme()));
+            }else {
+                layBajo.setBackground(getResources().getDrawable(R.drawable.fondo_carta));
+                layDerecha.setBackground(getResources().getDrawable(R.drawable.fondo_carta));
+                layIzq.setBackground(getResources().getDrawable(R.drawable.fondo_carta));
+                layArriba.setBackground(getResources().getDrawable(R.drawable.fondo_carta));
+            }
+
 
         }
     }
@@ -3263,7 +3276,7 @@ public class MainActivity extends Activity
                             break;
                         case 4:
                             bocadilloDerecha.setText(getResources().getString(R.string.no_quiero_joc));
-                                    animarTextoAccion(bocadilloDerecha);
+                            animarTextoAccion(bocadilloDerecha);
                             progressBarDerecha.setVisibility(View.INVISIBLE);
                             mCountDownTimerDerecha.cancel();
                             break;
@@ -3560,36 +3573,80 @@ public class MainActivity extends Activity
     private void resaltarMiIcono(int layout){
         switch (layout){
             case R.id.layJ1:
-                layJ1.setBackground(getResources().getDrawable(R.drawable.fondo_turno, getTheme()));
-                layJ2.setBackground(getResources().getDrawable(R.drawable.fondo_carta, getTheme()));
+                if(apilLevel == 1){
+                    layJ1.setBackground(getResources().getDrawable(R.drawable.fondo_turno, getTheme()));
+                    layJ2.setBackground(getResources().getDrawable(R.drawable.fondo_carta, getTheme()));
+                }else {
+                    layJ1.setBackground(getResources().getDrawable(R.drawable.fondo_turno));
+                    layJ2.setBackground(getResources().getDrawable(R.drawable.fondo_carta));
+                }
+
                 break;
             case R.id.layJ2:
-                layJ2.setBackground(getResources().getDrawable(R.drawable.fondo_turno, getTheme()));
-                layJ1.setBackground(getResources().getDrawable(R.drawable.fondo_carta, getTheme()));
+                if(apilLevel == 1){
+                    layJ2.setBackground(getResources().getDrawable(R.drawable.fondo_turno, getTheme()));
+                    layJ1.setBackground(getResources().getDrawable(R.drawable.fondo_carta, getTheme()));
+                }else {
+                    layJ2.setBackground(getResources().getDrawable(R.drawable.fondo_turno));
+                    layJ1.setBackground(getResources().getDrawable(R.drawable.fondo_carta));
+                }
+
                 break;
             case R.id.layAbajo:
-                layBajo.setBackground(getResources().getDrawable(R.drawable.fondo_turno, getTheme()));
-                layDerecha.setBackground(getResources().getDrawable(R.drawable.fondo_carta, getTheme()));
-                layIzq.setBackground(getResources().getDrawable(R.drawable.fondo_carta, getTheme()));
-                layArriba.setBackground(getResources().getDrawable(R.drawable.fondo_carta, getTheme()));
+                if(apilLevel == 1){
+                    layBajo.setBackground(getResources().getDrawable(R.drawable.fondo_turno, getTheme()));
+                    layDerecha.setBackground(getResources().getDrawable(R.drawable.fondo_carta, getTheme()));
+                    layIzq.setBackground(getResources().getDrawable(R.drawable.fondo_carta, getTheme()));
+                    layArriba.setBackground(getResources().getDrawable(R.drawable.fondo_carta, getTheme()));
+                }else {
+                    layBajo.setBackground(getResources().getDrawable(R.drawable.fondo_turno));
+                    layDerecha.setBackground(getResources().getDrawable(R.drawable.fondo_carta));
+                    layIzq.setBackground(getResources().getDrawable(R.drawable.fondo_carta));
+                    layArriba.setBackground(getResources().getDrawable(R.drawable.fondo_carta));
+                }
+
                 break;
             case R.id.layDer:
-                layDerecha.setBackground(getResources().getDrawable(R.drawable.fondo_turno, getTheme()));
-                layBajo.setBackground(getResources().getDrawable(R.drawable.fondo_carta, getTheme()));
-                layIzq.setBackground(getResources().getDrawable(R.drawable.fondo_carta, getTheme()));
-                layArriba.setBackground(getResources().getDrawable(R.drawable.fondo_carta, getTheme()));
+                if(apilLevel == 1){
+                    layDerecha.setBackground(getResources().getDrawable(R.drawable.fondo_turno, getTheme()));
+                    layBajo.setBackground(getResources().getDrawable(R.drawable.fondo_carta, getTheme()));
+                    layIzq.setBackground(getResources().getDrawable(R.drawable.fondo_carta, getTheme()));
+                    layArriba.setBackground(getResources().getDrawable(R.drawable.fondo_carta, getTheme()));
+                }else {
+                    layDerecha.setBackground(getResources().getDrawable(R.drawable.fondo_turno));
+                    layBajo.setBackground(getResources().getDrawable(R.drawable.fondo_carta));
+                    layIzq.setBackground(getResources().getDrawable(R.drawable.fondo_carta));
+                    layArriba.setBackground(getResources().getDrawable(R.drawable.fondo_carta));
+                }
+
                 break;
             case R.id.layArriba:
-                layArriba.setBackground(getResources().getDrawable(R.drawable.fondo_turno, getTheme()));
-                layBajo.setBackground(getResources().getDrawable(R.drawable.fondo_carta, getTheme()));
-                layDerecha.setBackground(getResources().getDrawable(R.drawable.fondo_carta, getTheme()));
-                layIzq.setBackground(getResources().getDrawable(R.drawable.fondo_carta, getTheme()));
+                if(apilLevel == 1){
+                    layArriba.setBackground(getResources().getDrawable(R.drawable.fondo_turno, getTheme()));
+                    layBajo.setBackground(getResources().getDrawable(R.drawable.fondo_carta, getTheme()));
+                    layDerecha.setBackground(getResources().getDrawable(R.drawable.fondo_carta, getTheme()));
+                    layIzq.setBackground(getResources().getDrawable(R.drawable.fondo_carta, getTheme()));
+                }else {
+                    layArriba.setBackground(getResources().getDrawable(R.drawable.fondo_turno));
+                    layBajo.setBackground(getResources().getDrawable(R.drawable.fondo_carta));
+                    layDerecha.setBackground(getResources().getDrawable(R.drawable.fondo_carta));
+                    layIzq.setBackground(getResources().getDrawable(R.drawable.fondo_carta));
+                }
+
                 break;
             case R.id.layIzq:
-                layIzq.setBackground(getResources().getDrawable(R.drawable.fondo_turno, getTheme()));
-                layBajo.setBackground(getResources().getDrawable(R.drawable.fondo_carta, getTheme()));
-                layDerecha.setBackground(getResources().getDrawable(R.drawable.fondo_carta, getTheme()));
-                layArriba.setBackground(getResources().getDrawable(R.drawable.fondo_carta, getTheme()));
+                if(apilLevel == 1){
+                    layIzq.setBackground(getResources().getDrawable(R.drawable.fondo_turno, getTheme()));
+                    layBajo.setBackground(getResources().getDrawable(R.drawable.fondo_carta, getTheme()));
+                    layDerecha.setBackground(getResources().getDrawable(R.drawable.fondo_carta, getTheme()));
+                    layArriba.setBackground(getResources().getDrawable(R.drawable.fondo_carta, getTheme()));
+                }else {
+                    layIzq.setBackground(getResources().getDrawable(R.drawable.fondo_turno));
+                    layBajo.setBackground(getResources().getDrawable(R.drawable.fondo_carta));
+                    layDerecha.setBackground(getResources().getDrawable(R.drawable.fondo_carta));
+                    layArriba.setBackground(getResources().getDrawable(R.drawable.fondo_carta));
+                }
+
                 break;
         }
     }
@@ -4656,6 +4713,7 @@ public class MainActivity extends Activity
             switch (numeroJugadores) {
                 case 2:
                     bloquearCartas();
+                    Log.d("DEBUG", "Bloqueando cartas");
                     cambiarTurno();
                     enviarMensajeTurno();
                     break;
@@ -4740,8 +4798,10 @@ public class MainActivity extends Activity
             case 2:
                 // Si soy mano, tiro y cambio turno
                 if (mMyId.equals(mano)) {
+                    bloquearCartas();
                     cambiarTurno();
                     enviarMensajeTurno();
+
                     //Si no soy mano, compruebo quien gana
                 } else if (soyGanadorRondaEmpate()) {
                     //Caso en el que gano
@@ -8031,20 +8091,21 @@ public class MainActivity extends Activity
                 }
             }
         }
-        /*
+
         else if(screenId == R.id.screen_wait){
-            if(fondo == null){
+        /*    if(fondo == null){
                 fondo = decodeSampledBitmapFromResource(getResources(), R.drawable.fondo_menu, 100, 100);
                 frame.setBackground(new BitmapDrawable(getResources(), fondo));
             }else {
                 fondo.recycle();
                 fondo = decodeSampledBitmapFromResource(getResources(), R.drawable.fondo_menu, 100, 100);
                 frame.setBackground(new BitmapDrawable(getResources(), fondo));
-            }
+            }*/
 
             animarEspera();
             fraseAleatoria.setText(calcularFraseAleatoria());
         }
+        /*
         else if(screenId == R.id.screen_game || screenId == R.id.screen_game_4_jugadores){
             //frame.setBackground(getResources().getDrawable(R.drawable.mesa2, null));
             if(metrics.densityDpi > 200){
@@ -8485,13 +8546,6 @@ public class MainActivity extends Activity
                 }
             }
 
-
- /*       if (mMyId.equals(mano)) {
-            cambiarMano();
-            enviarMensajeMano(mano);
-            Log.d("KKKKKKKK", "Soy mano..." + mMyId);
-        }else Log.d("KKKKKKKK", "No soy mano..." + mMyId);
-   */
     }
 
     public void asignarImagenCarta(Carta carta, ImageView view) {
@@ -9830,16 +9884,17 @@ public class MainActivity extends Activity
     }
 
     public void comprobarMareaAzul(Carta carta1, Carta carta2, Carta carta3){
-        if((carta1.getValor().equals(10) || carta2.getValor().equals(10) || carta3.getValor().equals(10)) &&
-                (carta1.getValor().equals(8) || carta2.getValor().equals(8) || carta3.getValor().equals(8)) &&
-                (carta1.getValor().equals(4) && carta1.getPalo().equals("espadas")
-                        || carta2.getValor().equals(4) && carta2.getPalo().equals("espadas")
-                        || carta3.getValor().equals(4) && carta3.getPalo().equals("espadas"))){
+        if((carta1.getValor().equals("10") || carta2.getValor().equals("10") || carta3.getValor().equals("10")) &&
+                (carta1.getValor().equals("8") || carta2.getValor().equals("8") || carta3.getValor().equals("8")) &&
+                (carta1.getValor().equals("4") && carta1.getPalo().equals("espadas")
+                        || carta2.getValor().equals("4") && carta2.getPalo().equals("espadas")
+                        || carta3.getValor().equals("4") && carta3.getPalo().equals("espadas"))){
             Games.Achievements.unlock(mGoogleApiClient, MAREA_AZUL);
         }
     }
 
     public void tirarAleatoria(){
+        Log.d("DEBUG", "En lanzar aleatoria");
         if(numeroJugadores == 2){
             if(tvCartaMesa1.getVisibility() != View.VISIBLE) {
                 lanzarCarta(new PointF(), tvJugador1);
