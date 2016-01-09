@@ -90,6 +90,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -234,6 +235,10 @@ public class MainActivity extends Activity
     int[] list = new int[3];
     int[] list2 = new int[3];
     int[] numCarta = new int[3];
+    static ArrayList<Integer> numeros = new ArrayList<Integer>(Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11,
+            12, 13, 14, 15, 16, 17, 18, 19, 20, 21));
+    static final ArrayList<Integer> numerosAux = new ArrayList<Integer>(Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11,
+            12, 13, 14, 15, 16, 17, 18, 19, 20, 21));
 
 
     //ImageViews
@@ -2690,7 +2695,12 @@ public class MainActivity extends Activity
      */
 
     void resetAll() {
+
         Log.d("JEJEJEJEJEJEJE", "En reset all");
+
+        numeros.clear();
+        numeros.addAll(numerosAux);
+
         button_return1.setVisibility(View.INVISIBLE);
         button_return2.setVisibility(View.INVISIBLE);
         button_return3.setVisibility(View.INVISIBLE);
@@ -8093,21 +8103,22 @@ public class MainActivity extends Activity
         }
 
         else if(screenId == R.id.screen_wait){
-        /*    if(fondo == null){
+        ///*
+        if(fondo == null){
                 fondo = decodeSampledBitmapFromResource(getResources(), R.drawable.fondo_menu, 100, 100);
                 frame.setBackground(new BitmapDrawable(getResources(), fondo));
             }else {
                 fondo.recycle();
                 fondo = decodeSampledBitmapFromResource(getResources(), R.drawable.fondo_menu, 100, 100);
                 frame.setBackground(new BitmapDrawable(getResources(), fondo));
-            }*/
+            }
+            //*/
 
             animarEspera();
             fraseAleatoria.setText(calcularFraseAleatoria());
         }
-        /*
+        ///*
         else if(screenId == R.id.screen_game || screenId == R.id.screen_game_4_jugadores){
-            //frame.setBackground(getResources().getDrawable(R.drawable.mesa2, null));
             if(metrics.densityDpi > 200){
                 fondo.recycle();
                 int f = 0;
@@ -8115,7 +8126,6 @@ public class MainActivity extends Activity
                 else f = R.drawable.mesa3;
                 fondo = decodeSampledBitmapFromResource(getResources(), f, 350, 350);
                 frame.setBackground(new BitmapDrawable(getResources(), fondo));
-                //frame.setBackgroundResource(R.drawable.mesa2);
             }
         }
 
@@ -8128,7 +8138,7 @@ public class MainActivity extends Activity
                 //frame.setBackgroundResource(R.drawable.mesa2);
             }
         }
-        */
+        //*/
 
         mCurScreen = screenId;
 
@@ -8294,6 +8304,7 @@ public class MainActivity extends Activity
 
                 if (mMyId.equals(mano)) {
 
+                    /*
                     list[0] = (int) (Math.random() * 22);
                     int aux = (int) (Math.random() * 22);
                     while (list[0] == aux) {
@@ -8322,6 +8333,17 @@ public class MainActivity extends Activity
                     list2[2] = aux5;
 
                     sCartasJ2 = list2[0] + " " + list2[1] + " " + list2[2];
+                    */
+
+                    list[0] = cogerCarta(1);
+                    list[1] = cogerCarta(2);
+                    list[2] = cogerCarta(3);
+
+                    list2[0] = cogerCarta(4);
+                    list2[1] = cogerCarta(5);
+                    list2[2] = cogerCarta(6);
+
+                    sCartasJ2 = list2[0] + " " + list2[1] + " " + list2[2];
 
                 }
                 break;
@@ -8329,6 +8351,7 @@ public class MainActivity extends Activity
             case 4:
                 if (mMyId.equals(mano)) {
 
+                    /*
                     list[0] = (int) (Math.random() * 22);
 
                     int aux = (int) (Math.random() * 22);
@@ -8417,6 +8440,31 @@ public class MainActivity extends Activity
 
                     String cartas = sCartasJ2 + " " + sCartasJ3 + " " + sCartasJ4 + " " + sCartasJ1;
                     arrayCartasJugadores = cartas.split(" ");
+                    */
+
+                    list[0] = cogerCarta(1);
+                    list[1] = cogerCarta(2);
+                    list[2] = cogerCarta(3);
+
+                    list2[0] = cogerCarta(4);
+                    list2[1] = cogerCarta(5);
+                    list2[2] = cogerCarta(6);
+
+                    list3[0] = cogerCarta(7);
+                    list3[1] = cogerCarta(8);
+                    list3[2] = cogerCarta(9);
+
+                    list4[0] = cogerCarta(10);
+                    list4[1] = cogerCarta(11);
+                    list4[2] = cogerCarta(12);
+
+                    sCartasJ1 = list[0] + " " + list[1] + " " + list[2];
+                    sCartasJ2 = list2[0] + " " + list2[1] + " " + list2[2];
+                    sCartasJ3 = list3[0] + " " + list3[1] + " " + list3[2];
+                    sCartasJ4 = list4[0] + " " + list4[1] + " " + list4[2];
+
+                    String cartas = sCartasJ2 + " " + sCartasJ3 + " " + sCartasJ4 + " " + sCartasJ1;
+                    arrayCartasJugadores = cartas.split(" ");
 
                 }
                 break;
@@ -8431,6 +8479,54 @@ public class MainActivity extends Activity
         manoJugador.add(1, baraja.get(numeros[1]));
         manoJugador.add(2, baraja.get(numeros[2]));
 
+    }
+
+    public static int cogerCarta(int vez){
+        int azar = 0;
+
+        switch(vez){
+            case 1:
+                azar = (int) (Math.random() * 22);
+                break;
+            case 2:
+                azar = (int) (Math.random() * 21);
+                break;
+            case 3:
+                azar = (int) (Math.random() * 20);
+                break;
+            case 4:
+                azar = (int) (Math.random() * 19);
+                break;
+            case 5:
+                azar = (int) (Math.random() * 18);
+                break;
+            case 6:
+                azar = (int) (Math.random() * 17);
+                break;
+            case 7:
+                azar = (int) (Math.random() * 16);
+                break;
+            case 8:
+                azar = (int) (Math.random() * 15);
+                break;
+            case 9:
+                azar = (int) (Math.random() * 14);
+                break;
+            case 10:
+                azar = (int) (Math.random() * 13);
+                break;
+            case 11:
+                azar = (int) (Math.random() * 12);
+                break;
+            case 12:
+                azar = (int) (Math.random() * 11);
+                break;
+
+        }
+
+        int carta = (int) numeros.get(azar);
+        numeros.remove(azar);
+        return carta;
     }
 
     public void empezandoPartida(){
@@ -9860,17 +9956,19 @@ public class MainActivity extends Activity
     public void cargarPublicidad(){
         mInterstitialAd = new InterstitialAd(this);
         mInterstitialAd.setAdUnitId(getString(R.string.ad_unit_id));
-        AdRequest adRequest = new AdRequest.Builder().build();
+        AdRequest adRequest = new AdRequest.Builder()
+                .addTestDevice("TEST_EMULATOR")
+                .build();
         mInterstitialAd.loadAd(adRequest);
 
         mInterstitialAd.setAdListener(new AdListener() {
             @Override
             public void onAdClosed() {
-               button_return1.setVisibility(View.VISIBLE);
+                button_return1.setVisibility(View.VISIBLE);
                 button_return2.setVisibility(View.VISIBLE);
                 button_return3.setVisibility(View.VISIBLE);
                 button_return4.setVisibility(View.VISIBLE);
-               cargarPublicidad();
+                cargarPublicidad();
             }
         });
 
@@ -9880,7 +9978,7 @@ public class MainActivity extends Activity
         if (mInterstitialAd != null && mInterstitialAd.isLoaded()) {
             mInterstitialAd.show();
         }
-        //A?adir c?digo para mostrar el bot?n
+
     }
 
     public void comprobarMareaAzul(Carta carta1, Carta carta2, Carta carta3){
