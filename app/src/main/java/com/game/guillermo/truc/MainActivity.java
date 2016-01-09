@@ -2701,11 +2701,6 @@ public class MainActivity extends Activity
         numeros.clear();
         numeros.addAll(numerosAux);
 
-        button_return1.setVisibility(View.INVISIBLE);
-        button_return2.setVisibility(View.INVISIBLE);
-        button_return3.setVisibility(View.INVISIBLE);
-        button_return4.setVisibility(View.INVISIBLE);
-
         if (numeroJugadores == 2) {
             ponerCartaRecta();
 
@@ -9964,10 +9959,6 @@ public class MainActivity extends Activity
         mInterstitialAd.setAdListener(new AdListener() {
             @Override
             public void onAdClosed() {
-                button_return1.setVisibility(View.VISIBLE);
-                button_return2.setVisibility(View.VISIBLE);
-                button_return3.setVisibility(View.VISIBLE);
-                button_return4.setVisibility(View.VISIBLE);
                 cargarPublicidad();
             }
         });
