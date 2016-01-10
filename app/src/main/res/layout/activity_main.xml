@@ -25,6 +25,7 @@
             android:id="@+id/button_sign_in"
             style="@style/SignInButton"
             android:layout_marginTop="40dp"/>
+
     </LinearLayout>
 
     <!--SCREEN MENU PRINCIPAL -->
@@ -142,6 +143,14 @@
 
             </LinearLayout>
 
+        <com.google.android.gms.ads.AdView
+            android:id="@+id/adView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            fab:adSize="SMART_BANNER"
+            fab:adUnitId="@string/ad_banner_id">
+        </com.google.android.gms.ads.AdView>
+
     </LinearLayout>
 
     <!-- INVITATION POPUP -->
@@ -169,26 +178,52 @@
         android:layout_width="match_parent"
         android:id="@+id/screen_wait"
         android:orientation="vertical"
-        android:visibility="visible">
-        <ImageView
-            android:id="@+id/carta_espera"
-            android:layout_width="65dp"
-            android:layout_height="103dp"
-            android:layout_marginTop="180dp"
-            android:layout_gravity="center"
-            android:background="@drawable/fondo_carta"
-            android:padding="3dp"/>
+        android:visibility="gone">
 
-        <TextView
-            android:id="@+id/textoFraseAleatoria"
+        <LinearLayout
+            android:layout_weight="0.3"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="30dp"
-            android:background="@drawable/fondo_boton"
-            android:padding="10dp"
-            android:textColor="@android:color/primary_text_dark"
-            android:textSize="12sp"
-            />
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <ImageView
+
+                android:id="@+id/carta_espera"
+                android:layout_width="65dp"
+                android:layout_height="103dp"
+                android:layout_marginTop="180dp"
+                android:layout_gravity="center"
+                android:background="@drawable/fondo_carta"
+                android:padding="3dp"/>
+
+            <TextView
+
+                android:id="@+id/textoFraseAleatoria"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="30dp"
+                android:background="@drawable/fondo_boton"
+                android:padding="10dp"
+                android:textColor="@android:color/primary_text_dark"
+                android:textSize="12sp"
+                />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="bottom"
+            android:orientation="vertical">
+            <com.google.android.gms.ads.AdView
+                android:id="@+id/adViewWait"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                fab:adSize="SMART_BANNER"
+                fab:adUnitId="@string/ad_banner_id">
+            </com.google.android.gms.ads.AdView>
+        </LinearLayout>
 
     </LinearLayout>
 
@@ -1239,7 +1274,7 @@
             fbutton:shadowHeight="5dp"
             fbutton:cornerRadius="5dp"
             android:layout_margin="10dp"
-            android:visibility="invisible"/>
+            android:visibility="visible"/>
     </LinearLayout>
 
     <!-- PANTALLA HAS PERDIDO LA PARTIDA -->
@@ -1272,7 +1307,7 @@
             fbutton:shadowHeight="5dp"
             fbutton:cornerRadius="5dp"
             android:layout_margin="10dp"
-            android:visibility="invisible"/>
+            android:visibility="visible"/>
     </LinearLayout>
 
     <!-- PANTALLA TU COMPAÑERO SE HA DESCONECTADO -->
@@ -1313,7 +1348,7 @@
             fbutton:shadowHeight="5dp"
             fbutton:cornerRadius="5dp"
             android:layout_margin="10dp"
-            android:visibility="invisible"/>
+            android:visibility="visible"/>
     </LinearLayout>
 
     <!-- PANTALLA RIVAL SE HA DESCONECTADO -->
@@ -1354,7 +1389,7 @@
             fbutton:shadowHeight="5dp"
             fbutton:cornerRadius="5dp"
             android:layout_margin="10dp"
-            android:visibility="invisible"/>
+            android:visibility="visible"/>
     </LinearLayout>
 
 </FrameLayout>

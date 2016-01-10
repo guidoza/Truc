@@ -52,6 +52,8 @@ import com.dd.CircularProgressButton;
 import com.github.alexkolpa.fabtoolbar.FabToolbar;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdSize;
+import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.InterstitialAd;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -480,6 +482,9 @@ public class MainActivity extends Activity
     Typeface custom_font;
 
     private InterstitialAd mInterstitialAd;
+    private AdView banner;
+    private AdView bannerWait;
+    private FrameLayout mAdFrameLayout;
     ImageView carta;
     int cartaEspera = 0;
     int contador = 0;
@@ -527,6 +532,9 @@ public class MainActivity extends Activity
                 .build();
 
         setContentView(R.layout.activity_main);
+
+        cargarBannerMenuPrincipal();
+        cargarBannerWait();
 
         preferencias = getSharedPreferences("MisPreferencias", Activity.MODE_PRIVATE);
         editor = preferencias.edit();
@@ -928,6 +936,40 @@ public class MainActivity extends Activity
             findViewById(id).setOnClickListener(this);
         }
 
+    }
+
+    private void cargarBannerMenuPrincipal(){
+        if (banner != null) {
+            banner.destroy();
+        }
+
+        banner = (AdView) findViewById(R.id.adView);
+        banner.loadAd(new AdRequest.Builder()
+                .addTestDevice("TEST_EMULATOR")
+                .build());
+        banner.setAdListener(new AdListener() {
+            @Override
+            public void onAdClosed() {
+                cargarBannerMenuPrincipal();
+            }
+        });
+    }
+
+    private void cargarBannerWait(){
+        if (bannerWait != null) {
+            bannerWait.destroy();
+        }
+
+        bannerWait = (AdView) findViewById(R.id.adViewWait);
+        bannerWait.loadAd(new AdRequest.Builder()
+                .addTestDevice("TEST_EMULATOR")
+                .build());
+        bannerWait.setAdListener(new AdListener() {
+            @Override
+            public void onAdClosed() {
+                cargarBannerWait();
+            }
+        });
     }
 
     private void showSingleChoiceAlertEnvid(String title, int array) {
@@ -2093,6 +2135,33 @@ public class MainActivity extends Activity
         Games.RealTimeMultiplayer.join(mGoogleApiClient, roomConfigBuilder.build());
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        // Resume the AdView.
+        if(banner!=null){
+            banner.resume();
+        }
+        if(bannerWait!=null){
+            bannerWait.resume();
+        }
+
+    }
+
+    @Override
+    public void onDestroy() {
+        // Destroy the AdView.
+        if(banner!=null){
+            banner.destroy();
+        }
+        if(bannerWait!=null){
+            bannerWait.destroy();
+        }
+
+        super.onDestroy();
+    }
+
     // Activity is going to the background. We have to leave the current room.
     //Mirar si es preferible hacerlo en onStop
     @Override
@@ -2118,7 +2187,12 @@ public class MainActivity extends Activity
         if(mCurScreen == R.id.screen_wait)findViewById(mCurScreen).setVisibility(View.GONE);
         //fondo = decodeSampledBitmapFromResource(getResources(), R.drawable.fondo_menu, 100, 100);
        // frame.setBackground(new BitmapDrawable(getResources(), fondo));
-
+        if(banner!=null){
+            banner.pause();
+        }
+        if(bannerWait!=null){
+            bannerWait.pause();
+        }
         super.onPause();
     }
 
@@ -8098,8 +8172,9 @@ public class MainActivity extends Activity
         }
 
         else if(screenId == R.id.screen_wait){
-        ///*
-        if(fondo == null){
+
+            ///*
+            if(fondo == null){
                 fondo = decodeSampledBitmapFromResource(getResources(), R.drawable.fondo_menu, 100, 100);
                 frame.setBackground(new BitmapDrawable(getResources(), fondo));
             }else {
@@ -8114,6 +8189,7 @@ public class MainActivity extends Activity
         }
         ///*
         else if(screenId == R.id.screen_game || screenId == R.id.screen_game_4_jugadores){
+
             if(metrics.densityDpi > 200){
                 fondo.recycle();
                 int f = 0;
@@ -8141,13 +8217,9 @@ public class MainActivity extends Activity
         if(mCurScreen == R.id.screen_lost || mCurScreen == R.id.screen_win
                 || mCurScreen == R.id.screen_lost_companyero_desconectado
                 || mCurScreen == R.id.screen_win_rival_desconectado){
-            Handler handler = new Handler();
-            handler.postDelayed(new Runnable() {
-                public void run() {
-                    // acciones que se ejecutan tras los milisegundos
-                    mostrarPublicidad();
-                }
-            }, 2200);
+
+            mostrarPublicidad();
+
         }
         // should we show the invitation popup?
         boolean showInvPopup;
