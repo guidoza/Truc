@@ -7,14 +7,14 @@ android {
     compileSdkVersion 22
     buildToolsVersion "22.0.1"
     compileOptions {
-        encoding "UTF-8"
+        encoding "ISO-8859-1"
     }
     defaultConfig {
         applicationId "com.game.guillermo.truc"
         minSdkVersion 14
         targetSdkVersion 22
-        versionCode 5
-        versionName "1.1"
+        versionCode 6
+        versionName "1.2"
     }
     buildTypes {
         release {
@@ -41,4 +41,6 @@ dependencies {
         transitive = true
     }
 }
+
+
 
