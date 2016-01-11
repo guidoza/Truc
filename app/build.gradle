@@ -3,16 +3,28 @@ apply plugin: 'com.google.gms.google-services'
 
 android {
     signingConfigs {
+        ReleaseConfig {
+            keyAlias 'RetruqueReleaseKey'
+            keyPassword 'elclubdelosgilis'
+            storeFile file('/Users/guillermo/Desktop/APK Signed/retruque.release.jks')
+            storePassword 'elclubdelosgilis'
+        }
     }
-    compileSdkVersion 22
-    buildToolsVersion "22.0.1"
+    lintOptions {
+        checkReleaseBuilds false
+        // Or, if you prefer, you can continue to check for errors in release builds,
+        // but continue the build even when errors are found:
+        abortOnError false
+    }
+    compileSdkVersion 23
+    buildToolsVersion "23.0.2"
     compileOptions {
         encoding "ISO-8859-1"
     }
     defaultConfig {
         applicationId "com.game.guillermo.truc"
         minSdkVersion 14
-        targetSdkVersion 22
+        targetSdkVersion 23
         versionCode 6
         versionName "1.2"
     }
@@ -26,7 +38,7 @@ android {
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile 'com.android.support:appcompat-v7:22.2.1'
+    compile 'com.android.support:appcompat-v7:23.1.1'
     compile 'com.google.android.gms:play-services:8.3.0'
     compile 'com.google.android.gms:play-services-ads:8.3.0'
     compile 'com.google.android.gms:play-services-analytics:8.3.0'

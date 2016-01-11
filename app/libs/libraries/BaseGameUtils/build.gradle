@@ -22,21 +22,23 @@ dependencies {
     if (!hasProperty('gms_library_version')) {
         ext.gms_library_version = '6.5+'
     }
-
-    compile "com.android.support:appcompat-v7:${appcompat_library_version}"
-    compile "com.android.support:support-v4:${support_library_version}"
-    compile "com.google.android.gms:play-services:${gms_library_version}"
+    compile "com.android.support:appcompat-v7:23.1.1"
+    compile "com.android.support:support-v4:23.1.1"
+    compile "com.google.android.gms:play-services:7.5.0"
 }
 
 android {
     // Set defaults so that BaseGameUtils can be used outside of BasicSamples
+    signingConfigs {
+        config {
+        }
+    }
     if (!hasProperty('android_compile_version')) {
-        ext.android_compile_version = 20
+        ext.android_compile_version = 23
     }
     if (!hasProperty('android_version')) {
-        ext.android_version = '20'
+        ext.android_version = '23'
     }
-
     compileSdkVersion android_compile_version
     buildToolsVersion android_version
 }

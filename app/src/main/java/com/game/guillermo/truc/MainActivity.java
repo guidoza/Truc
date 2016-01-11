@@ -945,7 +945,7 @@ public class MainActivity extends Activity
 
         banner = (AdView) findViewById(R.id.adView);
         banner.loadAd(new AdRequest.Builder()
-                .addTestDevice("TEST_EMULATOR")
+                //.addTestDevice("TEST_EMULATOR")
                 .build());
         banner.setAdListener(new AdListener() {
             @Override
@@ -962,7 +962,7 @@ public class MainActivity extends Activity
 
         bannerWait = (AdView) findViewById(R.id.adViewWait);
         bannerWait.loadAd(new AdRequest.Builder()
-                .addTestDevice("TEST_EMULATOR")
+                //.addTestDevice("TEST_EMULATOR")
                 .build());
         bannerWait.setAdListener(new AdListener() {
             @Override
@@ -1910,7 +1910,9 @@ public class MainActivity extends Activity
                 String invitarTourShown = preferencias.getString("tour", "nunca");
                 if (invitarTourShown != null) {
                     if(invitarTourShown.equals("mostrandoInvitaciones")){
-                        invitarTour.cleanUp();
+                        if(invitarTour!=null){
+                            invitarTour.cleanUp();
+                        }
                         editor.putString("tour", "segundoTour");
                         editor.commit();
                     }
@@ -1927,7 +1929,9 @@ public class MainActivity extends Activity
                 String verInvitacionesTourShown = preferencias.getString("tour", "nunca");
                 if (verInvitacionesTourShown != null) {
                     if(verInvitacionesTourShown.equals("mostrandoSegundo")){
-                        verInvitacionesTour.cleanUp();
+                        if(verInvitacionesTour!=null){
+                            verInvitacionesTour.cleanUp();
+                        }
                         editor.putString("tour", "acabado");
                         editor.commit();
                     }
@@ -10024,7 +10028,7 @@ public class MainActivity extends Activity
         mInterstitialAd = new InterstitialAd(this);
         mInterstitialAd.setAdUnitId(getString(R.string.ad_unit_id));
         AdRequest adRequest = new AdRequest.Builder()
-                .addTestDevice("TEST_EMULATOR")
+                //.addTestDevice("TEST_EMULATOR")
                 .build();
         mInterstitialAd.loadAd(adRequest);
 
