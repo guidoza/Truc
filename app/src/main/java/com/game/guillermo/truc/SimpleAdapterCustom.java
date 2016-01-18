@@ -13,12 +13,12 @@ import static com.game.guillermo.truc.R.drawable.common_google_signin_btn_icon_d
 /**
  * @author alessandro.balocco
  */
-public class SimpleAdapter extends BaseAdapter {
+public class SimpleAdapterCustom extends BaseAdapter {
 
     private LayoutInflater layoutInflater;
     private Context context;
 
-    public SimpleAdapter(Context context) {
+    public SimpleAdapterCustom(Context context) {
         this.context = context;
         layoutInflater = LayoutInflater.from(context);
     }

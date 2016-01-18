@@ -2,6 +2,7 @@ package com.game.guillermo.truc;
 
 import android.animation.Animator;
 
+import android.animation.AnimatorListenerAdapter;
 import android.app.Activity;
 import android.app.AlertDialog;
 
@@ -27,17 +28,23 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewAnimationUtils;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.SimpleAdapter;
 import android.widget.BaseAdapter;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -52,7 +59,6 @@ import com.dd.CircularProgressButton;
 import com.github.alexkolpa.fabtoolbar.FabToolbar;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.InterstitialAd;
 import com.google.android.gms.common.ConnectionResult;
@@ -105,7 +111,6 @@ import tourguide.tourguide.Overlay;
 import tourguide.tourguide.Pointer;
 import tourguide.tourguide.ToolTip;
 import tourguide.tourguide.TourGuide;
-
 
 public class MainActivity extends Activity
         implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,
@@ -514,6 +519,13 @@ public class MainActivity extends Activity
     FButton button_return3 = null;
     FButton button_return4 = null;
     int apilLevel = 0;
+    private ListView chatList = null;
+    private SimpleAdapter adapterChat = null;
+    private LinearLayout mRevealView = null;
+    Button button_chat = null;
+    ArrayList mensajesChat = null;
+    EditText textoMensaje = null;
+    FButton buttonEnviarMensajeChat = null;
 
 
     @Override
@@ -689,14 +701,14 @@ public class MainActivity extends Activity
 
                     case R.id.frases:
                         Holder holder = new ListHolder();
-                        SimpleAdapter adapter = new SimpleAdapter(MainActivity.this);
+                        SimpleAdapterCustom adapter = new SimpleAdapterCustom(MainActivity.this);
                         showOnlyContentDialog(holder, Gravity.BOTTOM, adapter, true);
                         actionButton.hide();
                         break;
 
                     case R.id.frases_4J:
                         Holder holder_4J = new ListHolder();
-                        SimpleAdapter adapter_4J = new SimpleAdapter(MainActivity.this);
+                        SimpleAdapterCustom adapter_4J = new SimpleAdapterCustom(MainActivity.this);
                         showOnlyContentDialog(holder_4J, Gravity.BOTTOM, adapter_4J, true);
                         actionButton_4J.hide();
                         break;
@@ -931,11 +943,148 @@ public class MainActivity extends Activity
         button_return3.setTypeface(Typefaces.get(this, "Signika-Regular.ttf"));
         button_return4.setTypeface(Typefaces.get(this, "Signika-Regular.ttf"));
 
+        textoMensaje = (EditText) findViewById(R.id.textoMensaje);
+        buttonEnviarMensajeChat = (FButton) findViewById(R.id.enviarMensajeChat);
+        buttonEnviarMensajeChat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                enviarMensajeChat(textoMensaje.getText().toString());
+                setMiMensajeChatTags(textoMensaje.getText().toString());
+                chatList.setAdapter(adapterChat);
+                chatList.smoothScrollToPosition(chatList.getScrollBarSize());
+                textoMensaje.setText("");
+            }
+        });
+
+        mensajesChat = new ArrayList();
+        HashMap aux = new HashMap<>();
+        aux.put("mensaje_chat", "No hay mensajes");
+        mensajesChat.add(aux);
+        chatList =  (ListView) findViewById(R.id.chat_list);
+        //adapterChat = new ArrayAdapter<>(this, R.layout.elemento_chat, R.id.mensaje_chat, mensajesChat);
+        adapterChat = new SimpleAdapter(this, mensajesChat, R.layout.elemento_chat,
+                new String[]{"icono", "nombre_jugador_chat", "mensaje_chat"},
+                new int[]{ R.id.icono, R.id.nombre_jugador_chat, R.id.mensaje_chat});
+
+        adapterChat.setViewBinder(new SimpleAdapter.ViewBinder() {
+
+            @Override
+            public boolean setViewValue(View view, Object data,
+                                        String textRepresentation) {
+                if ((view instanceof ImageView) & (data instanceof Bitmap)) {
+                    ImageView iv = (ImageView) view;
+                    Bitmap bm = (Bitmap) data;
+                    iv.setImageBitmap(bm);
+                    return true;
+                }
+                return false;
+            }});
+
+        chatList.setAdapter(adapterChat);
+
+
+        mRevealView = (LinearLayout) findViewById(R.id.reveal_items);
+        mRevealView.setVisibility(View.INVISIBLE);
+
+        button_chat = (Button) findViewById(R.id.button_chat);
+        button_chat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mostrarChat();
+            }
+        });
+
         //Listener para todos los elementos
         for (int id : CLICKABLES) {
             findViewById(id).setOnClickListener(this);
         }
 
+    }
+
+    private void enviarMensajeChat(String mensaje){
+        byte[] messageChat = ("P--%%--" + mensaje).getBytes();
+        for (Participant p : mParticipants) {
+            if (!p.getParticipantId().equals(mMyId)) {
+                Games.RealTimeMultiplayer.sendReliableMessage(mGoogleApiClient, null, messageChat,
+                        mRoomId, p.getParticipantId());
+            }
+        }
+    }
+
+    private void mostrarChat(){
+        // finding X and Y co-ordinates
+        int cx = (mRevealView.getLeft());
+        int cy = (mRevealView.getTop());
+
+        // to find  radius when icon is tapped for showing layout
+        int startradius=0;
+        int endradius = Math.max(mRevealView.getWidth(), mRevealView.getHeight());
+
+        // performing circular reveal when icon will be tapped
+        Animator animator = ViewAnimationUtils.createCircularReveal(mRevealView, cx, cy, startradius, endradius);
+        animator.setInterpolator(new AccelerateDecelerateInterpolator());
+        animator.setDuration(400);
+
+        //reverse animation
+        // to find radius when icon is tapped again for hiding layout
+        //  starting radius will be the radius or the extent to which circular reveal animation is to be shown
+
+        int reverse_startradius = Math.max(mRevealView.getWidth(),mRevealView.getHeight());
+
+        //endradius will be zero
+        int reverse_endradius=0;
+
+        // performing circular reveal for reverse animation
+        Animator animate = ViewAnimationUtils.createCircularReveal(mRevealView, cx, cy, reverse_startradius, reverse_endradius);
+        if(mRevealView.getVisibility() == View.INVISIBLE){
+            chatList.smoothScrollToPosition(chatList.getScrollBarSize());
+            // to show the layout when icon is tapped
+            mRevealView.setVisibility(View.VISIBLE);
+            animator.start();
+        }
+        else {
+            mRevealView.setVisibility(View.VISIBLE);
+
+            // to hide layout on animation end
+            animate.addListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    super.onAnimationEnd(animation);
+                    mRevealView.setVisibility(View.INVISIBLE);
+                }
+            });
+            animate.start();
+        }
+    }
+
+    private void setMiMensajeChatTags(String mensajeTexto){
+        HashMap datosMensajeChat = new HashMap();
+        String miNombre = "";
+
+        for(Participant participant : mParticipants){
+            if(participant.getParticipantId().equals(mMyId)){
+                miNombre = participant.getDisplayName();
+            }
+        }
+        datosMensajeChat.put("icono", ((BitmapDrawable)imgPerfil.getDrawable()).getBitmap());
+        datosMensajeChat.put("nombre_jugador_chat", miNombre);
+        datosMensajeChat.put("mensaje_chat", mensajeTexto);
+        mensajesChat.add(datosMensajeChat);
+    }
+
+    private void setRivalMensajeChatTags(String mensajeTexto){
+        HashMap datosMensajeChat = new HashMap();
+        String nombreRival = "";
+
+        for(Participant participant : mParticipants){
+            if(!participant.getParticipantId().equals(mMyId)){
+                nombreRival = participant.getDisplayName();
+            }
+        }
+        datosMensajeChat.put("icono", ((BitmapDrawable)imgPerfilRival.getDrawable()).getBitmap());
+        datosMensajeChat.put("nombre_jugador_chat", nombreRival);
+        datosMensajeChat.put("mensaje_chat", mensajeTexto);
+        mensajesChat.add(datosMensajeChat);
     }
 
     private void cargarBannerMenuPrincipal(){
@@ -7805,6 +7954,15 @@ public class MainActivity extends Activity
                     else if(!esDeMiEquipo(sender) && ganadorFinal.equals("RIVAL")) cerrarDialogoAndStartIfWin(4000, 0);
 
 
+                    break;
+
+                case 'P':
+                    String aux15 = new String(buf, "UTF-8");
+                    String otro12[] = aux15.split("--%%--");
+                    String mensajeChat = otro12[1];
+                    setRivalMensajeChatTags(mensajeChat);
+                    chatList.setAdapter(adapterChat);
+                    chatList.smoothScrollToPosition(chatList.getScrollBarSize());
                     break;
 
                 default:

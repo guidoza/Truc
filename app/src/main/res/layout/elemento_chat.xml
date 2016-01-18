@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="?android:attr/listPreferredItemHeight">
+    <ImageView android:id="@+id/icono"
+        android:layout_width="?android:attr/listPreferredItemHeight"
+        android:layout_height="match_parent"
+        android:layout_alignParentLeft="true"
+        android:layout_margin="5dp"
+        android:src="@drawable/common_google_signin_btn_icon_dark"/>
+    <TextView android:id="@+id/nombre_jugador_chat"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/icono"
+        android:layout_alignParentTop="true"
+        android:layout_margin="5dp"
+        android:singleLine="true" />
+    <TextView android:id="@+id/mensaje_chat"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_toRightOf="@id/icono"
+        android:layout_margin="5dp"
+        android:layout_below="@id/nombre_jugador_chat"
+        android:layout_alignParentBottom="true"
+        android:gravity="center"/>
+</RelativeLayout>

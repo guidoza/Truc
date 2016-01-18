@@ -234,19 +234,16 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:visibility="gone"
+        android:visibility="visible"
         >
-
 
         <FrameLayout
             android:id="@+id/marco"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="0.15"
-            >
+            android:layout_weight="0.15" >
 
-
-                            <RelativeLayout
+            <RelativeLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent">
 
@@ -403,6 +400,9 @@
                 android:background="@drawable/ic_dedo"
                 />
 
+
+
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="90dp"
@@ -515,6 +515,7 @@
                         android:gravity="center_vertical|center_horizontal" />
 
             </LinearLayout>
+
 
 
         <com.github.alexkolpa.fabtoolbar.FabToolbar
@@ -647,6 +648,21 @@
                 </LinearLayout>
             </HorizontalScrollView>
         </com.github.alexkolpa.fabtoolbar.FabToolbar>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <Button
+                android:id="@+id/button_chat"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_gravity="start"
+                android:background="@android:drawable/ic_menu_send"
+                />
+
+            <include layout="@layout/chat" />
+        </LinearLayout>
+
         </FrameLayout>
     </LinearLayout>
 
