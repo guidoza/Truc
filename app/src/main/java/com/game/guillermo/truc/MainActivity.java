@@ -948,11 +948,14 @@ public class MainActivity extends Activity
         buttonEnviarMensajeChat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                enviarMensajeChat(textoMensaje.getText().toString());
-                setMiMensajeChatTags(textoMensaje.getText().toString());
-                chatList.setAdapter(adapterChat);
-                chatList.smoothScrollToPosition(chatList.getScrollBarSize());
-                textoMensaje.setText("");
+                String mensaje = textoMensaje.getText().toString();
+                if(mensaje != null && !mensaje.isEmpty()){
+                    enviarMensajeChat(mensaje);
+                    setMiMensajeChatTags(mensaje);
+                    chatList.setAdapter(adapterChat);
+                    chatList.smoothScrollToPosition(chatList.getScrollBarSize());
+                    textoMensaje.setText("");
+                }
             }
         });
 
@@ -1059,30 +1062,30 @@ public class MainActivity extends Activity
 
     private void setMiMensajeChatTags(String mensajeTexto){
         HashMap datosMensajeChat = new HashMap();
-        String miNombre = "";
+        String miNombre[] = new String[0];
 
         for(Participant participant : mParticipants){
             if(participant.getParticipantId().equals(mMyId)){
-                miNombre = participant.getDisplayName();
+                miNombre = participant.getDisplayName().split(" ");
             }
         }
         datosMensajeChat.put("icono", ((BitmapDrawable)imgPerfil.getDrawable()).getBitmap());
-        datosMensajeChat.put("nombre_jugador_chat", miNombre);
+        datosMensajeChat.put("nombre_jugador_chat", miNombre[0]);
         datosMensajeChat.put("mensaje_chat", mensajeTexto);
         mensajesChat.add(datosMensajeChat);
     }
 
     private void setRivalMensajeChatTags(String mensajeTexto){
         HashMap datosMensajeChat = new HashMap();
-        String nombreRival = "";
+        String nombreRival[] = new String[0];
 
         for(Participant participant : mParticipants){
             if(!participant.getParticipantId().equals(mMyId)){
-                nombreRival = participant.getDisplayName();
+                nombreRival = participant.getDisplayName().split(" ");
             }
         }
         datosMensajeChat.put("icono", ((BitmapDrawable)imgPerfilRival.getDrawable()).getBitmap());
-        datosMensajeChat.put("nombre_jugador_chat", nombreRival);
+        datosMensajeChat.put("nombre_jugador_chat", nombreRival[0]);
         datosMensajeChat.put("mensaje_chat", mensajeTexto);
         mensajesChat.add(datosMensajeChat);
     }

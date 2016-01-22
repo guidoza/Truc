@@ -8,7 +8,7 @@
         android:id="@+id/reveal_items"
         android:layout_width="match_parent"
         android:layout_height="400dp"
-        android:background="#80FFFFFF"
+        android:background="@color/color_midnight_blue"
         android:orientation="vertical">
 
         <LinearLayout
@@ -25,7 +25,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="4dp"
-                android:background="#1ABC9C" />
+                android:background="#CC20B2AA" />
         </LinearLayout>
 
         <LinearLayout
@@ -41,7 +41,8 @@
                 android:layout_weight="0.25"
                 android:layout_gravity="center"
                 android:layout_margin="3dp"
-                android:maxLength="60"
+                android:maxLength="50"
+                android:textColor="@color/LightSeaGreen"
                 />
 
             <info.hoang8f.widget.FButton
@@ -51,9 +52,9 @@
                 android:layout_gravity="center"
                 android:layout_weight="1"
                 android:text="Enviar"
-                android:textColor="#1ABC9C"
-                fbutton:buttonColor="@color/cpb_white"
-                fbutton:shadowColor="@color/cpb_grey"
+                android:textColor="@color/cpb_white"
+                fbutton:buttonColor="@color/LightSeaGreen"
+                fbutton:shadowColor="@color/DarkCyan"
                 fbutton:shadowEnabled="true"
                 fbutton:shadowHeight="5dp"
                 fbutton:cornerRadius="5dp"
