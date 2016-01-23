@@ -8,7 +8,7 @@
         android:id="@+id/reveal_items"
         android:layout_width="match_parent"
         android:layout_height="400dp"
-        android:background="@color/color_midnight_blue"
+        android:background="#D92c3e50"
         android:orientation="vertical">
 
         <LinearLayout
@@ -25,7 +25,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="4dp"
-                android:background="#CC20B2AA" />
+                android:background="#20B2AA" />
         </LinearLayout>
 
         <LinearLayout

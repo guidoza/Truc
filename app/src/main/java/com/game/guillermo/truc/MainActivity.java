@@ -11,6 +11,7 @@ import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.PointF;
 import android.graphics.Typeface;
@@ -951,9 +952,7 @@ public class MainActivity extends Activity
                 String mensaje = textoMensaje.getText().toString();
                 if(mensaje != null && !mensaje.isEmpty()){
                     enviarMensajeChat(mensaje);
-                    setMiMensajeChatTags(mensaje);
-                    chatList.setAdapter(adapterChat);
-                    chatList.smoothScrollToPosition(chatList.getScrollBarSize());
+                    setMensajeChatTags(mensaje, "Yo");
                     textoMensaje.setText("");
                 }
             }
@@ -964,7 +963,6 @@ public class MainActivity extends Activity
         aux.put("mensaje_chat", "No hay mensajes");
         mensajesChat.add(aux);
         chatList =  (ListView) findViewById(R.id.chat_list);
-        //adapterChat = new ArrayAdapter<>(this, R.layout.elemento_chat, R.id.mensaje_chat, mensajesChat);
         adapterChat = new SimpleAdapter(this, mensajesChat, R.layout.elemento_chat,
                 new String[]{"icono", "nombre_jugador_chat", "mensaje_chat"},
                 new int[]{ R.id.icono, R.id.nombre_jugador_chat, R.id.mensaje_chat});
@@ -1060,34 +1058,35 @@ public class MainActivity extends Activity
         }
     }
 
-    private void setMiMensajeChatTags(String mensajeTexto){
+    private void setMensajeChatTags(String mensajeTexto, String caso){
         HashMap datosMensajeChat = new HashMap();
-        String miNombre[] = new String[0];
+        String nombreJugador[] = new String[0];
+        Bitmap icono = null;
 
         for(Participant participant : mParticipants){
-            if(participant.getParticipantId().equals(mMyId)){
-                miNombre = participant.getDisplayName().split(" ");
+            if(caso.equals("Rival") && !participant.getParticipantId().equals(mMyId)){
+                nombreJugador = participant.getDisplayName().split(" ");
+                icono = ((BitmapDrawable)imgPerfilRival.getDrawable()).getBitmap();
+            }else if(caso.equals("Yo") && participant.getParticipantId().equals(mMyId)){
+                nombreJugador = participant.getDisplayName().split(" ");
+                icono = ((BitmapDrawable)imgPerfil.getDrawable()).getBitmap();
             }
         }
-        datosMensajeChat.put("icono", ((BitmapDrawable)imgPerfil.getDrawable()).getBitmap());
-        datosMensajeChat.put("nombre_jugador_chat", miNombre[0]);
+
+        datosMensajeChat.put("icono", icono);
+        datosMensajeChat.put("nombre_jugador_chat", nombreJugador[0]);
         datosMensajeChat.put("mensaje_chat", mensajeTexto);
         mensajesChat.add(datosMensajeChat);
-    }
 
-    private void setRivalMensajeChatTags(String mensajeTexto){
-        HashMap datosMensajeChat = new HashMap();
-        String nombreRival[] = new String[0];
-
-        for(Participant participant : mParticipants){
-            if(!participant.getParticipantId().equals(mMyId)){
-                nombreRival = participant.getDisplayName().split(" ");
+        //chatList.setAdapter(adapterChat);
+        adapterChat.notifyDataSetChanged();
+        chatList.post(new Runnable() {
+            @Override
+            public void run() {
+                chatList.smoothScrollToPosition(chatList.getScrollBarSize());
+                chatList.setSelection(chatList.getScrollBarSize());
             }
-        }
-        datosMensajeChat.put("icono", ((BitmapDrawable)imgPerfilRival.getDrawable()).getBitmap());
-        datosMensajeChat.put("nombre_jugador_chat", nombreRival[0]);
-        datosMensajeChat.put("mensaje_chat", mensajeTexto);
-        mensajesChat.add(datosMensajeChat);
+        });
     }
 
     private void cargarBannerMenuPrincipal(){
@@ -7963,9 +7962,8 @@ public class MainActivity extends Activity
                     String aux15 = new String(buf, "UTF-8");
                     String otro12[] = aux15.split("--%%--");
                     String mensajeChat = otro12[1];
-                    setRivalMensajeChatTags(mensajeChat);
-                    chatList.setAdapter(adapterChat);
-                    chatList.smoothScrollToPosition(chatList.getScrollBarSize());
+                    setMensajeChatTags(mensajeChat, "Rival");
+
                     break;
 
                 default:
@@ -8358,8 +8356,13 @@ public class MainActivity extends Activity
             if(metrics.densityDpi > 200){
                 fondo.recycle();
                 int f = 0;
-                if(Math.random()<0.5) f = R.drawable.mesa2;
-                else f = R.drawable.mesa3;
+                if(Math.random()<0.5){
+                    f = R.drawable.mesa2;
+                    mRevealView.setBackgroundColor(Color.parseColor("#D9FFFFFF"));
+                }else{
+                    f = R.drawable.mesa3;
+                    mRevealView.setBackgroundColor(Color.parseColor("#D92c3e50"));
+                }
                 fondo = decodeSampledBitmapFromResource(getResources(), f, 350, 350);
                 frame.setBackground(new BitmapDrawable(getResources(), fondo));
             }
