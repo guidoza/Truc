@@ -4057,22 +4057,22 @@ public class MainActivity extends Activity
             }
         }else if(numeroJugadores == 4){
             if (progressBarAbajo.getVisibility() == View.VISIBLE) {
-                mCountDownTimerAbajo.cancel();
+                //mCountDownTimerAbajo.cancel();
                 segundos = 40;
                 segundos2 = 40;
                 iniciarBarraProgresoAbajo();
             } else if (progressBarDerecha.getVisibility() == View.VISIBLE) {
-                mCountDownTimerDerecha.cancel();
+                //mCountDownTimerDerecha.cancel();
                 segundos = 40;
                 segundos2 = 40;
                 iniciarBarraProgresoDerecha();
             } else if (progressBarArriba.getVisibility() == View.VISIBLE) {
-                mCountDownTimerArriba.cancel();
+                //mCountDownTimerArriba.cancel();
                 segundos = 40;
                 segundos2 = 40;
                 iniciarBarraProgresoArriba();
             } else if (progressBarIzq.getVisibility() == View.VISIBLE) {
-                mCountDownTimerIzq.cancel();
+                //mCountDownTimerIzq.cancel();
                 segundos = 40;
                 segundos2 = 40;
                 iniciarBarraProgresoIzq();
@@ -5073,6 +5073,7 @@ public class MainActivity extends Activity
                 } else if (idJugador4.equals(mano)) {
                     realizaCalculo = idJugador3;
                 }
+                bloquearCartas();
                 // Si tengo que calcular
                 if (!mMyId.equals(realizaCalculo)) {
                     cambiarTurno();
