@@ -524,6 +524,7 @@ public class MainActivity extends Activity
     private SimpleAdapter adapterChat = null;
     private LinearLayout mRevealView = null;
     Button button_chat = null;
+    Button button_chat_4J = null;
     ArrayList mensajesChat = null;
     EditText textoMensaje = null;
     FButton buttonEnviarMensajeChat = null;
@@ -950,7 +951,7 @@ public class MainActivity extends Activity
             @Override
             public void onClick(View v) {
                 String mensaje = textoMensaje.getText().toString();
-                if(mensaje != null && !mensaje.isEmpty()){
+                if (mensaje != null && !mensaje.isEmpty()) {
                     enviarMensajeChat(mensaje);
                     setMensajeChatTags(mensaje, "Yo");
                     textoMensaje.setText("");
@@ -958,31 +959,7 @@ public class MainActivity extends Activity
             }
         });
 
-        mensajesChat = new ArrayList();
-        HashMap aux = new HashMap<>();
-        aux.put("mensaje_chat", "No hay mensajes");
-        mensajesChat.add(aux);
-        chatList =  (ListView) findViewById(R.id.chat_list);
-        adapterChat = new SimpleAdapter(this, mensajesChat, R.layout.elemento_chat,
-                new String[]{"icono", "nombre_jugador_chat", "mensaje_chat"},
-                new int[]{ R.id.icono, R.id.nombre_jugador_chat, R.id.mensaje_chat});
-
-        adapterChat.setViewBinder(new SimpleAdapter.ViewBinder() {
-
-            @Override
-            public boolean setViewValue(View view, Object data,
-                                        String textRepresentation) {
-                if ((view instanceof ImageView) & (data instanceof Bitmap)) {
-                    ImageView iv = (ImageView) view;
-                    Bitmap bm = (Bitmap) data;
-                    iv.setImageBitmap(bm);
-                    return true;
-                }
-                return false;
-            }});
-
-        chatList.setAdapter(adapterChat);
-
+        inicializaChat(1);
 
         mRevealView = (LinearLayout) findViewById(R.id.reveal_items);
         mRevealView.setVisibility(View.INVISIBLE);
@@ -994,12 +971,55 @@ public class MainActivity extends Activity
                 mostrarChat();
             }
         });
+        button_chat_4J = (Button) findViewById(R.id.button_chat_4J);
+        button_chat_4J.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mostrarChat();
+            }
+        });
 
         //Listener para todos los elementos
         for (int id : CLICKABLES) {
             findViewById(id).setOnClickListener(this);
         }
 
+    }
+
+    private void inicializaChat(int vez){
+        if(vez == 1){
+            mensajesChat = new ArrayList();
+            HashMap aux = new HashMap<>();
+            aux.put("mensaje_chat", "No hay mensajes");
+            mensajesChat.add(aux);
+            chatList =  (ListView) findViewById(R.id.chat_list);
+            adapterChat = new SimpleAdapter(this, mensajesChat, R.layout.elemento_chat,
+                    new String[]{"icono", "nombre_jugador_chat", "mensaje_chat"},
+                    new int[]{ R.id.icono, R.id.nombre_jugador_chat, R.id.mensaje_chat});
+
+            adapterChat.setViewBinder(new SimpleAdapter.ViewBinder() {
+
+                @Override
+                public boolean setViewValue(View view, Object data,
+                                            String textRepresentation) {
+                    if ((view instanceof ImageView) & (data instanceof Bitmap)) {
+                        ImageView iv = (ImageView) view;
+                        Bitmap bm = (Bitmap) data;
+                        iv.setImageBitmap(bm);
+                        return true;
+                    }
+                    return false;
+                }});
+
+            chatList.setAdapter(adapterChat);
+
+        }else if(vez == 2){
+            mensajesChat.clear();
+            HashMap aux = new HashMap<>();
+            aux.put("mensaje_chat", "No hay mensajes");
+            mensajesChat.add(aux);
+            adapterChat.notifyDataSetChanged();
+        }
     }
 
     private void enviarMensajeChat(String mensaje){
@@ -8540,37 +8560,6 @@ public class MainActivity extends Activity
 
                 if (mMyId.equals(mano)) {
 
-                    /*
-                    list[0] = (int) (Math.random() * 22);
-                    int aux = (int) (Math.random() * 22);
-                    while (list[0] == aux) {
-                        aux = (int) (Math.random() * 22);
-                    }
-                    list[1] = aux;
-                    int aux2 = (int) (Math.random() * 22);
-                    while (list[0] == aux2 || list[1] == aux2) {
-                        aux2 = (int) Math.floor(Math.random() * 22);
-                    }
-                    list[2] = aux2;
-                    int aux3 = (int) (Math.random() * 22);
-                    while (list[0] == aux3 || list[1] == aux3 || list[2] == aux3) {
-                        aux3 = (int) Math.floor(Math.random() * 22);
-                    }
-                    list2[0] = aux3;
-                    int aux4 = (int) (Math.random() * 22);
-                    while (list[0] == aux4 || list[1] == aux4 || list[2] == aux4 || list2[0] == aux4) {
-                        aux4 = (int) Math.floor(Math.random() * 22);
-                    }
-                    list2[1] = aux4;
-                    int aux5 = (int) (Math.random() * 22);
-                    while (list[0] == aux5 || list[1] == aux5 || list[2] == aux5 || list2[0] == aux5 || list2[1] == aux5) {
-                        aux5 = (int) (Math.random() * 22);
-                    }
-                    list2[2] = aux5;
-
-                    sCartasJ2 = list2[0] + " " + list2[1] + " " + list2[2];
-                    */
-
                     list[0] = cogerCarta(1);
                     list[1] = cogerCarta(2);
                     list[2] = cogerCarta(3);
@@ -8586,97 +8575,6 @@ public class MainActivity extends Activity
 
             case 4:
                 if (mMyId.equals(mano)) {
-
-                    /*
-                    list[0] = (int) (Math.random() * 22);
-
-                    int aux = (int) (Math.random() * 22);
-                    while (list[0] == aux) {
-                        aux = (int) (Math.random() * 22);
-                    }
-                    list[1] = aux;
-
-                    int aux2 = (int) (Math.random() * 22);
-                    while (list[0] == aux2 || list[1] == aux2) {
-                        aux2 = (int) Math.floor(Math.random() * 22);
-                    }
-                    list[2] = aux2;
-
-                    int aux3 = (int) (Math.random() * 22);
-                    while (list[0] == aux3 || list[1] == aux3 || list[2] == aux3) {
-                        aux3 = (int) Math.floor(Math.random() * 22);
-                    }
-                    list2[0] = aux3;
-
-                    int aux4 = (int) (Math.random() * 22);
-                    while (list[0] == aux4 || list[1] == aux4 || list[2] == aux4 || list2[0] == aux4) {
-                        aux4 = (int) Math.floor(Math.random() * 22);
-                    }
-                    list2[1] = aux4;
-
-                    int aux5 = (int) (Math.random() * 22);
-                    while (list[0] == aux5 || list[1] == aux5 || list[2] == aux5 || list2[0] == aux5
-                            || list2[1] == aux5) {
-                        aux5 = (int) (Math.random() * 22);
-                    }
-                    list2[2] = aux5;
-
-                    int aux6 = (int) (Math.random() * 22);
-                    while (list[0] == aux6 || list[1] == aux6 || list[2] == aux6 || list2[0] == aux6
-                            || list2[1] == aux6 || list2[2] == aux6) {
-                        aux6 = (int) (Math.random() * 22);
-                    }
-                    list3[0] = aux6;
-
-                    int aux7 = (int) (Math.random() * 22);
-                    while (list[0] == aux7 || list[1] == aux7 || list[2] == aux7 || list2[0] == aux7
-                            || list2[1] == aux7 || list2[2] == aux7 || list3[0] == aux7) {
-                        aux7 = (int) (Math.random() * 22);
-                    }
-                    list3[1] = aux7;
-
-                    int aux8 = (int) (Math.random() * 22);
-                    while (list[0] == aux8 || list[1] == aux8 || list[2] == aux8 || list2[0] == aux8
-                            || list2[1] == aux8 || list2[2] == aux8 || list3[0] == aux8
-                            || list3[1] == aux8) {
-                        aux8 = (int) (Math.random() * 22);
-                    }
-                    list3[2] = aux8;
-
-                    int aux9 = (int) (Math.random() * 22);
-                    while (list[0] == aux9 || list[1] == aux9 || list[2] == aux9 || list2[0] == aux9
-                            || list2[1] == aux9 || list2[2] == aux9 || list3[0] == aux9
-                            || list3[1] == aux9 || list3[2] == aux9) {
-                        aux9 = (int) (Math.random() * 22);
-                    }
-                    list4[0] = aux9;
-
-                    int aux10 = (int) (Math.random() * 22);
-                    while (list[0] == aux10 || list[1] == aux10 || list[2] == aux10 || list2[0] == aux10
-                            || list2[1] == aux10 || list2[2] == aux10 || list3[0] == aux10
-                            || list3[1] == aux10 || list3[2] == aux10 || list4[0] == aux10) {
-                        aux10 = (int) (Math.random() * 22);
-                    }
-                    list4[1] = aux10;
-
-                    int aux11 = (int) (Math.random() * 22);
-                    while (list[0] == aux11 || list[1] == aux11 || list[2] == aux11 || list2[0] == aux11
-                            || list2[1] == aux11 || list2[2] == aux11 || list3[0] == aux11
-                            || list3[1] == aux11 || list3[2] == aux11 || list4[0] == aux11 || list4[1] == aux11) {
-                        aux11 = (int) (Math.random() * 22);
-                    }
-                    list4[2] = aux11;
-
-                    sCartasJ1 = list[0] + " " + list[1] + " " + list[2];
-                    sCartasJ2 = list2[0] + " " + list2[1] + " " + list2[2];
-                    sCartasJ3 = list3[0] + " " + list3[1] + " " + list3[2];
-                    sCartasJ4 = list4[0] + " " + list4[1] + " " + list4[2];
-
-                    //String ssBuf = new String(cartas, "UTF-8");
-
-                    String cartas = sCartasJ2 + " " + sCartasJ3 + " " + sCartasJ4 + " " + sCartasJ1;
-                    arrayCartasJugadores = cartas.split(" ");
-                    */
 
                     list[0] = cogerCarta(1);
                     list[1] = cogerCarta(2);
@@ -8766,6 +8664,7 @@ public class MainActivity extends Activity
     }
 
     public void empezandoPartida(){
+        inicializaChat(2);
         resetAll();
         inicializarMano();
     }
