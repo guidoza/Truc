@@ -961,6 +961,15 @@
                         android:progress="0"/>
                 </LinearLayout>
 
+                <ImageView
+                    android:id="@+id/es_mano_arriba"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginTop="110dp"
+                    android:layout_marginRight="25dp"
+                    android:background="@drawable/es_mano"/>
+
                 <TextView
                     android:id="@+id/bocadilloJ3"
                     android:layout_width="175dp"
@@ -1009,6 +1018,14 @@
                         android:progress="0"/>
                 </LinearLayout>
 
+                <ImageView
+                    android:id="@+id/es_mano_abajo"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginLeft="70dp"
+                    android:layout_marginBottom="10dp"
+                    android:background="@drawable/es_mano"/>
 
                 <LinearLayout
                     android:id="@+id/layDer"
@@ -1047,6 +1064,15 @@
                         android:max="40"
                         android:progress="0"/>
                 </LinearLayout>
+
+                <ImageView
+                    android:id="@+id/es_mano_derecha"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginTop="285dp"
+                    android:layout_marginRight="25dp"
+                    android:background="@drawable/es_mano"/>
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -1108,6 +1134,13 @@
                         android:max="40"
                         android:progress="0"/>
                 </LinearLayout>
+                <ImageView
+                    android:id="@+id/es_mano_izq"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginTop="285dp"
+                    android:layout_marginLeft="25dp"
+                    android:background="@drawable/es_mano"/>
             </RelativeLayout>
 
             <ImageView

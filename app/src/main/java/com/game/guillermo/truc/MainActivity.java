@@ -431,6 +431,10 @@ public class MainActivity extends Activity
     ImageView senyaArriba2;
     ImageView senyaDerecha;
     ImageView senyaIzq;
+    ImageView esManoArriba;
+    ImageView esManoDer;
+    ImageView esManoIzq;
+    ImageView esManoAbajo;
 
     //TextViews
     TextView bocadilloDerecha;
@@ -978,6 +982,12 @@ public class MainActivity extends Activity
                 mostrarChat();
             }
         });
+
+        //Imagenes para el que es mano en el modo 4J
+        esManoAbajo = (ImageView)findViewById(R.id.es_mano_abajo);
+        esManoArriba = (ImageView)findViewById(R.id.es_mano_arriba);
+        esManoDer = (ImageView)findViewById(R.id.es_mano_derecha);
+        esManoIzq = (ImageView)findViewById(R.id.es_mano_izq);
 
         //Listener para todos los elementos
         for (int id : CLICKABLES) {
@@ -3151,6 +3161,11 @@ public class MainActivity extends Activity
             senyaArriba2.setVisibility(View.INVISIBLE);
             senyaDerecha.setVisibility(View.INVISIBLE);
             senyaIzq.setVisibility(View.INVISIBLE);
+
+            esManoDer.setVisibility(View.INVISIBLE);
+            esManoIzq.setVisibility(View.INVISIBLE);
+            esManoArriba.setVisibility(View.INVISIBLE);
+            esManoAbajo.setVisibility(View.INVISIBLE);
 
             segundosSenyas = 21;
 
@@ -5617,6 +5632,7 @@ public class MainActivity extends Activity
             if (!p.getParticipantId().equals(mMyId)) {
                 Games.RealTimeMultiplayer.sendReliableMessage(mGoogleApiClient, null, messageRepartir,
                         mRoomId, p.getParticipantId());
+
 
             }
         }
@@ -8671,7 +8687,9 @@ public class MainActivity extends Activity
 
     public void inicializarMano() {
         //Preparando la partida
-        //resetAll();
+
+        //Fijar el icono de la mano al jugador que es mano en modo 4J
+        if(numeroJugadores == 4) asignarIconoMano();
 
         //Si soy mano reparto
         if (mMyId.equals(mano)) {
@@ -10183,6 +10201,33 @@ public class MainActivity extends Activity
                 return getResources().getString(R.string.amigos);
         }
          return getResources().getString(R.string.gusta);
+    }
+
+    public void asignarIconoMano(){
+        if(mano.equals(idJugador1)){
+            if (mMyId.equals(idJugador1)) esManoAbajo.setVisibility(View.VISIBLE);
+            else if (mMyId.equals(idJugador2)) esManoDer.setVisibility(View.VISIBLE);
+            else if (mMyId.equals(idJugador3)) esManoArriba.setVisibility(View.VISIBLE);
+            else if (mMyId.equals(idJugador4)) esManoIzq.setVisibility(View.VISIBLE);
+        }
+        else if(mano.equals(idJugador2)){
+            if (mMyId.equals(idJugador1)) esManoIzq.setVisibility(View.VISIBLE);
+            else if (mMyId.equals(idJugador2)) esManoAbajo.setVisibility(View.VISIBLE);
+            else if (mMyId.equals(idJugador3)) esManoDer.setVisibility(View.VISIBLE);
+            else if (mMyId.equals(idJugador4)) esManoArriba.setVisibility(View.VISIBLE);
+        }
+        else if(mano.equals(idJugador3)){
+            if (mMyId.equals(idJugador1)) esManoArriba.setVisibility(View.VISIBLE);
+            else if (mMyId.equals(idJugador2)) esManoIzq.setVisibility(View.VISIBLE);
+            else if (mMyId.equals(idJugador3)) esManoAbajo.setVisibility(View.VISIBLE);
+            else if (mMyId.equals(idJugador4)) esManoDer.setVisibility(View.VISIBLE);
+        }
+        else if(mano.equals(idJugador4)){
+            if (mMyId.equals(idJugador1)) esManoDer.setVisibility(View.VISIBLE);
+            else if (mMyId.equals(idJugador2)) esManoArriba.setVisibility(View.VISIBLE);
+            else if (mMyId.equals(idJugador3)) esManoIzq.setVisibility(View.VISIBLE);
+            else if (mMyId.equals(idJugador4)) esManoAbajo.setVisibility(View.VISIBLE);
+        }
     }
 
 }
