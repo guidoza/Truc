@@ -34,7 +34,7 @@
         android:layout_height="match_parent"
         android:layout_width="match_parent"
         android:orientation="vertical"
-        android:visibility="gone"
+        android:visibility="visible"
         >
 
             <ImageView
@@ -121,13 +121,70 @@
                 android:gravity="center">
                 <info.hoang8f.widget.FButton
                     android:layout_margin="10dp"
-                    android:id="@+id/button_sign_out"
-                    android:layout_width="200dp"
+                    android:id="@+id/button_facebook"
+                    android:layout_width="40dp"
                     android:layout_height="match_parent"
                     android:drawablePadding="0dp"
                     android:minHeight="80dp"
                     android:minWidth="250dp"
-                    android:paddingLeft="30dp"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="20dp"
+                    android:paddingTop="-5dp"
+                    android:layout_marginBottom="6dp"
+                    fbutton:buttonColor="#47639E"
+                    fbutton:shadowColor="#191970"
+                    fbutton:shadowEnabled="true"
+                    fbutton:shadowHeight="5dp"
+                    fbutton:cornerRadius="5dp"
+                    android:drawableLeft="@drawable/facebook_f"
+                    />
+                <info.hoang8f.widget.FButton
+                    android:layout_margin="10dp"
+                    android:id="@+id/button_twitter"
+                    android:layout_width="40dp"
+                    android:layout_height="match_parent"
+                    android:drawablePadding="0dp"
+                    android:minHeight="80dp"
+                    android:minWidth="250dp"
+                    android:paddingLeft="7dp"
+                    android:paddingRight="20dp"
+                    android:paddingTop="-5dp"
+                    android:layout_marginBottom="6dp"
+                    fbutton:buttonColor="#4596D3"
+                    fbutton:shadowColor="#4169E1"
+                    fbutton:shadowEnabled="true"
+                    fbutton:shadowHeight="5dp"
+                    fbutton:cornerRadius="5dp"
+                    android:drawableLeft="@drawable/twitter_pajaro"
+                    />
+                <info.hoang8f.widget.FButton
+                    android:layout_margin="10dp"
+                    android:id="@+id/button_web"
+                    android:layout_width="40dp"
+                    android:layout_height="match_parent"
+                    android:drawablePadding="0dp"
+                    android:minHeight="80dp"
+                    android:minWidth="250dp"
+                    android:paddingLeft="7dp"
+                    android:paddingRight="20dp"
+                    android:paddingTop="-5dp"
+                    android:layout_marginBottom="6dp"
+                    fbutton:buttonColor="#4596D3"
+                    fbutton:shadowColor="#4169E1"
+                    fbutton:shadowEnabled="true"
+                    fbutton:shadowHeight="5dp"
+                    fbutton:cornerRadius="5dp"
+                    android:drawableLeft="@drawable/web_icon"
+                    />
+                <info.hoang8f.widget.FButton
+                    android:layout_margin="10dp"
+                    android:id="@+id/button_sign_out"
+                    android:layout_width="40dp"
+                    android:layout_height="match_parent"
+                    android:drawablePadding="0dp"
+                    android:minHeight="80dp"
+                    android:minWidth="250dp"
+                    android:paddingLeft="7dp"
                     android:paddingRight="20dp"
                     android:paddingTop="-5dp"
                     android:layout_marginBottom="6dp"
@@ -138,7 +195,7 @@
                     fbutton:shadowEnabled="true"
                     fbutton:shadowHeight="5dp"
                     fbutton:cornerRadius="5dp"
-                    android:drawableLeft="@drawable/ic_google"
+                    android:drawableLeft="@drawable/exit_blanco"
                     />
 
             </LinearLayout>
@@ -673,7 +730,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:visibility="visible"
+        android:visibility="gone"
         >
 
         <FrameLayout

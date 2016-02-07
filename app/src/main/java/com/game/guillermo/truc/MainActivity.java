@@ -18,6 +18,7 @@ import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -532,6 +533,9 @@ public class MainActivity extends Activity
     ArrayList mensajesChat = null;
     EditText textoMensaje = null;
     FButton buttonEnviarMensajeChat = null;
+    FButton botonFacebook;
+    FButton botonTwitter;
+    FButton botonWeb;
 
 
     @Override
@@ -988,6 +992,37 @@ public class MainActivity extends Activity
         esManoArriba = (ImageView)findViewById(R.id.es_mano_arriba);
         esManoDer = (ImageView)findViewById(R.id.es_mano_derecha);
         esManoIzq = (ImageView)findViewById(R.id.es_mano_izq);
+
+        //Botón Facebook del menú principal
+        botonFacebook = (FButton) findViewById(R.id.button_facebook);
+        botonFacebook.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(Intent.ACTION_VIEW,
+                        Uri.parse("https://www.facebook.com/retruqueapp")));
+            }
+        });
+
+        //Botón Twitter del menú principal
+        botonTwitter = (FButton) findViewById(R.id.button_twitter);
+        botonTwitter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(Intent.ACTION_VIEW,
+                        Uri.parse("https://twitter.com/RetruqueApp")));
+            }
+        });
+
+        //Botón Web del menú principal
+        botonWeb = (FButton) findViewById(R.id.button_web);
+        botonWeb.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(Intent.ACTION_VIEW,
+                        Uri.parse("https://google.es")));
+            }
+        });
+
 
         //Listener para todos los elementos
         for (int id : CLICKABLES) {
