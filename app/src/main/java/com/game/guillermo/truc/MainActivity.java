@@ -52,6 +52,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.media.AudioManager;
 import android.media.SoundPool;
+import android.widget.Toast;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.GravityEnum;
@@ -536,6 +537,7 @@ public class MainActivity extends Activity
     FButton botonFacebook;
     FButton botonTwitter;
     FButton botonWeb;
+    FButton botonWhatsapp;
 
 
     @Override
@@ -1023,6 +1025,14 @@ public class MainActivity extends Activity
             }
         });
 
+        //Botón Whatsapp del menu principal
+        botonWhatsapp = (FButton) findViewById(R.id.button_whatsapp);
+        botonWhatsapp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                compartirWhatsapp();
+            }
+        });
 
         //Listener para todos los elementos
         for (int id : CLICKABLES) {
@@ -10263,6 +10273,14 @@ public class MainActivity extends Activity
             else if (mMyId.equals(idJugador3)) esManoIzq.setVisibility(View.VISIBLE);
             else if (mMyId.equals(idJugador4)) esManoAbajo.setVisibility(View.VISIBLE);
         }
+    }
+
+    public void compartirWhatsapp(){
+        Intent whatsappIntent = new Intent(Intent.ACTION_SEND);
+        whatsappIntent.setType("text/plain");
+        whatsappIntent.setPackage("com.whatsapp");
+        whatsappIntent.putExtra(Intent.EXTRA_TEXT, "The text you wanted to share");
+        startActivity(whatsappIntent);
     }
 
 }
