@@ -960,6 +960,7 @@ public class MainActivity extends Activity
         buttonEnviarMensajeChat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Toast.makeText(getApplicationContext(), "Enviar mensaje", Toast.LENGTH_SHORT).show();
                 String mensaje = textoMensaje.getText().toString();
                 if (mensaje != null && !mensaje.isEmpty()) {
                     enviarMensajeChat(mensaje);
@@ -985,6 +986,7 @@ public class MainActivity extends Activity
         button_chat_4J.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Toast.makeText(getApplicationContext(), "Mostrar chat", Toast.LENGTH_SHORT).show();
                 mostrarChat();
             }
         });

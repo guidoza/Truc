@@ -9,7 +9,8 @@
         android:layout_width="match_parent"
         android:layout_height="400dp"
         android:background="#D92c3e50"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:visibility="invisible">
 
         <LinearLayout
             android:layout_width="match_parent"
