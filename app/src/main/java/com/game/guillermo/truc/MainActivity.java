@@ -8,6 +8,7 @@ import android.app.AlertDialog;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -1002,8 +1003,7 @@ public class MainActivity extends Activity
         botonFacebook.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(Intent.ACTION_VIEW,
-                        Uri.parse("https://www.facebook.com/retruqueapp")));
+               abrirFacebook();
             }
         });
 
@@ -4714,6 +4714,9 @@ public class MainActivity extends Activity
                 asignarImagenCarta(carta2, tvJugador2_4J);
                 asignarImagenCarta(carta3, tvJugador3_4J);
                 aparecerCartas();
+
+                //Fijar el icono de la mano al jugador que es mano en modo 4J
+                asignarIconoMano();
 
                 icons = new Runnable() {
                     public void run() {
@@ -8735,9 +8738,6 @@ public class MainActivity extends Activity
     public void inicializarMano() {
         //Preparando la partida
 
-        //Fijar el icono de la mano al jugador que es mano en modo 4J
-        if(numeroJugadores == 4) asignarIconoMano();
-
         //Si soy mano reparto
         if (mMyId.equals(mano)) {
             repartir(crearAleatorio());
@@ -10283,6 +10283,18 @@ public class MainActivity extends Activity
         whatsappIntent.setPackage("com.whatsapp");
         whatsappIntent.putExtra(Intent.EXTRA_TEXT, "The text you wanted to share");
         startActivity(whatsappIntent);
+    }
+
+    public void abrirFacebook(){
+        PackageManager pm = getPackageManager();
+        try {
+            pm.getPackageInfo("com.facebook.katana", 0);
+            startActivity(new Intent(Intent.ACTION_VIEW,
+                    Uri.parse("fb://facewebmodal/f?href=https://www.facebook.com/retruqueapp")));
+        } catch (PackageManager.NameNotFoundException e) {
+            startActivity(new Intent(Intent.ACTION_VIEW,
+                    Uri.parse("https://www.facebook.com/retruqueapp")));
+        }
     }
 
 }
