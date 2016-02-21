@@ -737,7 +737,7 @@
                 android:layout_margin="5dp"
                 />
 
-            <include layout="@layout/chat" />
+           <!-- <include layout="@layout/chat" /> -->
         </LinearLayout>
 
         </FrameLayout>
