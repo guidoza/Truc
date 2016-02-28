@@ -1140,13 +1140,25 @@ public class MainActivity extends Activity
         String nombreJugador[] = new String[0];
         Bitmap icono = null;
 
-        for(Participant participant : mParticipants){
-            if(caso.equals("Rival") && !participant.getParticipantId().equals(mMyId)){
-                nombreJugador = participant.getDisplayName().split(" ");
-                icono = ((BitmapDrawable)imgPerfilRival.getDrawable()).getBitmap();
-            }else if(caso.equals("Yo") && participant.getParticipantId().equals(mMyId)){
-                nombreJugador = participant.getDisplayName().split(" ");
-                icono = ((BitmapDrawable)imgPerfil.getDrawable()).getBitmap();
+        if(numeroJugadores == 2){
+            for(Participant participant : mParticipants){
+                if(caso.equals("Rival") && !participant.getParticipantId().equals(mMyId)){
+                    nombreJugador = participant.getDisplayName().split(" ");
+                    icono = ((BitmapDrawable)imgPerfilRival.getDrawable()).getBitmap();
+                }else if(caso.equals("Yo") && participant.getParticipantId().equals(mMyId)){
+                    nombreJugador = participant.getDisplayName().split(" ");
+                    icono = ((BitmapDrawable)imgPerfil.getDrawable()).getBitmap();
+                }
+            }
+        }else {
+            for(Participant participant : mParticipants){
+                if(caso.equals("Rival") && !participant.getParticipantId().equals(mMyId)){
+                    nombreJugador = participant.getDisplayName().split(" ");
+                    icono = ((BitmapDrawable)imgPerfilDerecha.getDrawable()).getBitmap();
+                }else if(caso.equals("Yo") && participant.getParticipantId().equals(mMyId)){
+                    nombreJugador = participant.getDisplayName().split(" ");
+                    icono = ((BitmapDrawable)imgPerfilAbajo.getDrawable()).getBitmap();
+                }
             }
         }
 
