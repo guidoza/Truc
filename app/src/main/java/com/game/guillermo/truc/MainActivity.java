@@ -559,7 +559,7 @@ public class MainActivity extends Activity
         setContentView(R.layout.activity_main);
 
         cargarBannerMenuPrincipal();
-        cargarBannerWait();
+        //cargarBannerWait();
 
         preferencias = getSharedPreferences("MisPreferencias", Activity.MODE_PRIVATE);
         editor = preferencias.edit();
@@ -1201,11 +1201,11 @@ public class MainActivity extends Activity
         });
     }
 
+    /*
     private void cargarBannerWait(){
         if (bannerWait != null) {
             bannerWait.destroy();
         }
-
         bannerWait = (AdView) findViewById(R.id.adViewWait);
         bannerWait.loadAd(new AdRequest.Builder()
                 //.addTestDevice("TEST_EMULATOR")
@@ -1216,7 +1216,7 @@ public class MainActivity extends Activity
                 cargarBannerWait();
             }
         });
-    }
+    } */
 
     private void showSingleChoiceAlertEnvid(String title, int array) {
         materialDialog = new MaterialDialog.Builder(this)
@@ -2393,9 +2393,9 @@ public class MainActivity extends Activity
         if(banner!=null){
             banner.resume();
         }
-        if(bannerWait!=null){
+        /* if(bannerWait!=null){
             bannerWait.resume();
-        }
+        } */
 
     }
 
@@ -2405,9 +2405,9 @@ public class MainActivity extends Activity
         if(banner!=null){
             banner.destroy();
         }
-        if(bannerWait!=null){
+       /* if(bannerWait!=null){
             bannerWait.destroy();
-        }
+        } */
 
         super.onDestroy();
     }
@@ -2440,9 +2440,9 @@ public class MainActivity extends Activity
         if(banner!=null){
             banner.pause();
         }
-        if(bannerWait!=null){
+        /* if(bannerWait!=null){
             bannerWait.pause();
-        }
+        } */
         super.onPause();
     }
 

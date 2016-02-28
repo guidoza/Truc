@@ -286,7 +286,8 @@
 
         </LinearLayout>
 
-        <LinearLayout
+        <!-- Publicidad de la pantalla de espera -->
+       <!-- <LinearLayout
             android:layout_weight="1"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -299,7 +300,7 @@
                 fab:adSize="SMART_BANNER"
                 fab:adUnitId="@string/ad_banner_id">
             </com.google.android.gms.ads.AdView>
-        </LinearLayout>
+        </LinearLayout> -->
 
     </LinearLayout>
 
