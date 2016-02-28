@@ -10265,26 +10265,26 @@ public class MainActivity extends Activity
     public void asignarIconoMano(){
         if(mano.equals(idJugador1)){
             if (mMyId.equals(idJugador1)) esManoAbajo.setVisibility(View.VISIBLE);
-            else if (mMyId.equals(idJugador2)) esManoDer.setVisibility(View.VISIBLE);
+            else if (mMyId.equals(idJugador2)) esManoIzq.setVisibility(View.VISIBLE);
             else if (mMyId.equals(idJugador3)) esManoArriba.setVisibility(View.VISIBLE);
-            else if (mMyId.equals(idJugador4)) esManoIzq.setVisibility(View.VISIBLE);
+            else if (mMyId.equals(idJugador4)) esManoDer.setVisibility(View.VISIBLE);
         }
         else if(mano.equals(idJugador2)){
-            if (mMyId.equals(idJugador1)) esManoIzq.setVisibility(View.VISIBLE);
+            if (mMyId.equals(idJugador1)) esManoDer.setVisibility(View.VISIBLE);
             else if (mMyId.equals(idJugador2)) esManoAbajo.setVisibility(View.VISIBLE);
-            else if (mMyId.equals(idJugador3)) esManoDer.setVisibility(View.VISIBLE);
+            else if (mMyId.equals(idJugador3)) esManoIzq.setVisibility(View.VISIBLE);
             else if (mMyId.equals(idJugador4)) esManoArriba.setVisibility(View.VISIBLE);
         }
         else if(mano.equals(idJugador3)){
             if (mMyId.equals(idJugador1)) esManoArriba.setVisibility(View.VISIBLE);
-            else if (mMyId.equals(idJugador2)) esManoIzq.setVisibility(View.VISIBLE);
+            else if (mMyId.equals(idJugador2)) esManoDer.setVisibility(View.VISIBLE);
             else if (mMyId.equals(idJugador3)) esManoAbajo.setVisibility(View.VISIBLE);
-            else if (mMyId.equals(idJugador4)) esManoDer.setVisibility(View.VISIBLE);
+            else if (mMyId.equals(idJugador4)) esManoIzq.setVisibility(View.VISIBLE);
         }
         else if(mano.equals(idJugador4)){
-            if (mMyId.equals(idJugador1)) esManoDer.setVisibility(View.VISIBLE);
+            if (mMyId.equals(idJugador1)) esManoIzq.setVisibility(View.VISIBLE);
             else if (mMyId.equals(idJugador2)) esManoArriba.setVisibility(View.VISIBLE);
-            else if (mMyId.equals(idJugador3)) esManoIzq.setVisibility(View.VISIBLE);
+            else if (mMyId.equals(idJugador3)) esManoDer.setVisibility(View.VISIBLE);
             else if (mMyId.equals(idJugador4)) esManoAbajo.setVisibility(View.VISIBLE);
         }
     }
