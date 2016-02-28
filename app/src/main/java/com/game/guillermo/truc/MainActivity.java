@@ -1152,9 +1152,15 @@ public class MainActivity extends Activity
             }
         }else {
             for(Participant participant : mParticipants){
-                if(caso.equals("Rival") && !participant.getParticipantId().equals(mMyId)){
+                if(caso.equals("RivalIzquierda") && !participant.getParticipantId().equals(mMyId)){
+                    nombreJugador = participant.getDisplayName().split(" ");
+                    icono = ((BitmapDrawable)imgPerfilIzq.getDrawable()).getBitmap();
+                }else if(caso.equals("RivalDerecha") && !participant.getParticipantId().equals(mMyId)){
                     nombreJugador = participant.getDisplayName().split(" ");
                     icono = ((BitmapDrawable)imgPerfilDerecha.getDrawable()).getBitmap();
+                }else if(caso.equals("Companero") && !participant.getParticipantId().equals(mMyId)){
+                    nombreJugador = participant.getDisplayName().split(" ");
+                    icono = ((BitmapDrawable)imgPerfilArriba.getDrawable()).getBitmap();
                 }else if(caso.equals("Yo") && participant.getParticipantId().equals(mMyId)){
                     nombreJugador = participant.getDisplayName().split(" ");
                     icono = ((BitmapDrawable)imgPerfilAbajo.getDrawable()).getBitmap();
@@ -8061,7 +8067,18 @@ public class MainActivity extends Activity
                     String aux15 = new String(buf, "UTF-8");
                     String otro12[] = aux15.split("--%%--");
                     String mensajeChat = otro12[1];
-                    setMensajeChatTags(mensajeChat, "Rival");
+                    if(numeroJugadores == 2){
+                        setMensajeChatTags(mensajeChat, "Rival");
+                    }else{
+                        if(esDeMiEquipo(sender)){
+                            setMensajeChatTags(mensajeChat, "Companero");
+                        }else if(esRivalDerecha(sender)){
+                            setMensajeChatTags(mensajeChat, "RivalDerecha");
+                        }else if(esRivalIzquierda(sender)){
+                            setMensajeChatTags(mensajeChat, "RivalIzquierda");
+                        }
+                    }
+
 
                     break;
 
