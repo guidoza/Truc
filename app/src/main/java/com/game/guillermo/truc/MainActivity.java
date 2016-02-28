@@ -576,7 +576,7 @@ public class MainActivity extends Activity
         metrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(metrics);
         Log.d("JOJOJOJOJOJOJO", "Metrics de la pantalla: " + metrics.densityDpi);
-        Log.d("JOJOJOJOJOJOJO", "Metrics Medium: "+DisplayMetrics.DENSITY_LOW);
+        Log.d("JOJOJOJOJOJOJO", "Metrics Medium: " + DisplayMetrics.DENSITY_LOW);
 
 
         menuListener = new View.OnClickListener() {
@@ -925,6 +925,9 @@ public class MainActivity extends Activity
 
         fraseAleatoria = (TextView) findViewById(R.id.textoFraseAleatoria);
         fraseAleatoria.setTypeface(Typefaces.get(this, "Signika-Regular.ttf"));
+
+        textoPartidas4J = (TextView) findViewById(R.id.textoPartidas4J);
+        textoPartidas4J.setTypeface(Typefaces.get(this, "Signika-Regular.ttf"));
 
         //Carga el anuncio para que este listo para mostrarlo
         cargarPublicidad();
