@@ -122,6 +122,8 @@
     <string name="gusta">¿Te gusta el juego? Puntúalo en Google Play y deja algún comentario para ayudarnos a mejorar.</string>
     <string name="logros">¿Buscas nuevos desafíos? ¡Intenta conseguir todos los logros del juego!</string>
     <string name="invitaciones">Revisa tus invitaciones. Puede que algún amigo te haya desafiado.</string>
+    <string name="redes_sociales">Comparte nuestras páginas de Facebook y Twitter con tus amigos para ayudarnos a crecer y encontrar más jugadores.</string>
+    <string name="partidas_4J">Busca partidas de 4 jugadores: 14:30-15:30 y de 22:00-23:00</string>
 
     <!-- Frases para la guia -->
     <string name="invitar">¡Juega con amigos!</string>
@@ -129,5 +131,7 @@
     <string name="ver_invitaciones">¡Mira tus invitaciones!</string>
     <string name="ver_invitaciones_cuerpo">¿Te han invitado? Compruébalo aquí \ny demuestra quién es el mejor.</string>
 
+    <!-- Frase para compartir en WhatsApp-->
+    <string name="fraseWhatsapp" translatable="false">Te desafío a una partida de Truc con Retruque! y su modo multijugador. Descárgalo desde aquí: https://play.google.com/store/apps/details?id=com.game.guillermo.truc</string>
 
 </resources>

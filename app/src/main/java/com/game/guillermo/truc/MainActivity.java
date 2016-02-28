@@ -284,6 +284,7 @@ public class MainActivity extends Activity
     TextView nombreJugador1;
     TextView nombreJugador2;
     TextView fraseAleatoria;
+    TextView textoPartidas4J;
 
 
     //Otros objetos
@@ -8465,6 +8466,7 @@ public class MainActivity extends Activity
 
             animarEspera();
             fraseAleatoria.setText(calcularFraseAleatoria());
+            textoPartidas4J.setText(getResources().getString(R.string.partidas_4J));
         }
         ///*
         else if(screenId == R.id.screen_game || screenId == R.id.screen_game_4_jugadores){
@@ -10252,7 +10254,7 @@ public class MainActivity extends Activity
     }
 
     public String calcularFraseAleatoria(){
-        int frase = (int) (Math.random() * 9) + 1;
+        int frase = (int) (Math.random() * 10) + 1;
 
         switch (frase){
             case 0:
@@ -10275,8 +10277,10 @@ public class MainActivity extends Activity
                 return getResources().getString(R.string.gusta);
             case 9:
                 return getResources().getString(R.string.amigos);
+            case 10:
+                return getResources().getString(R.string.redes_sociales);
         }
-         return getResources().getString(R.string.gusta);
+         return getResources().getString(R.string.redes_sociales);
     }
 
     public void asignarIconoMano(){
@@ -10310,7 +10314,7 @@ public class MainActivity extends Activity
         Intent whatsappIntent = new Intent(Intent.ACTION_SEND);
         whatsappIntent.setType("text/plain");
         whatsappIntent.setPackage("com.whatsapp");
-        whatsappIntent.putExtra(Intent.EXTRA_TEXT, "The text you wanted to share");
+        whatsappIntent.putExtra(Intent.EXTRA_TEXT, getResources().getString(R.string.fraseWhatsapp));
         startActivity(whatsappIntent);
     }
 

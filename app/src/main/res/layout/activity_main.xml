@@ -34,7 +34,7 @@
         android:layout_height="match_parent"
         android:layout_width="match_parent"
         android:orientation="vertical"
-        android:visibility="visible"
+        android:visibility="invisible"
         >
 
             <ImageView
@@ -254,7 +254,7 @@
         android:layout_width="match_parent"
         android:id="@+id/screen_wait"
         android:orientation="vertical"
-        android:visibility="gone">
+        android:visibility="visible">
 
         <LinearLayout
             android:layout_weight="0.3"
@@ -279,6 +279,16 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="30dp"
                 android:background="@drawable/fondo_boton"
+                android:padding="10dp"
+                android:textColor="@android:color/primary_text_dark"
+                android:textSize="12sp"
+                />
+            <TextView
+                android:id="@+id/textoPartidas4J"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="30dp"
+                android:background="#F4FA58"
                 android:padding="10dp"
                 android:textColor="@android:color/primary_text_dark"
                 android:textSize="12sp"
@@ -750,7 +760,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:visibility="visible"
+        android:visibility="invisible"
         >
 
         <FrameLayout
