@@ -3,6 +3,8 @@ package com.game.guillermo.truc;
 import android.animation.Animator;
 
 import android.animation.AnimatorListenerAdapter;
+import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.app.AlertDialog;
 
@@ -14,6 +16,8 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Matrix;
+import android.graphics.Path;
+import android.graphics.PathMeasure;
 import android.graphics.PointF;
 import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
@@ -24,6 +28,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
+import android.support.design.widget.FloatingActionButton;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
@@ -540,6 +545,21 @@ public class MainActivity extends Activity
     FButton botonTwitter;
     FButton botonWeb;
     FButton botonWhatsapp;
+    private FrameLayout mRevealViewMenu;
+    private FloatingActionButton fab = null;
+    private FloatingActionButton fabFacebook = null;
+    private FloatingActionButton fabTwitter = null;
+    private FloatingActionButton fabWhatsapp = null;
+    private FloatingActionButton fabWeb = null;
+    private float altura = 0;
+    private FrameLayout revealFacebook = null;
+    private FrameLayout revealTwitter = null;
+    private FrameLayout revealWhatsapp = null;
+    private FrameLayout revealWeb = null;
+    private PointF fab1InitialPos = null;
+    private PointF fab2InitialPos = null;
+    private PointF fab3InitialPos = null;
+
 
 
     @Override
@@ -1040,11 +1060,258 @@ public class MainActivity extends Activity
             }
         });
 
+        fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG).setAction("Action", null).show();
+                if (mRevealView.getVisibility() == View.INVISIBLE) {
+                    fabFacebook.setY((mRevealViewMenu.getHeight() / 4) - (fabFacebook.getHeight() / 2));
+                    fabTwitter.setY((mRevealViewMenu.getHeight() / 4) - (fabTwitter.getHeight() / 2));
+                    fabWhatsapp.setY((mRevealViewMenu.getHeight() / 4) - (fabWhatsapp.getHeight() / 2));
+                    enterAnimateButton();
+                }
+            }
+        });
+
+        fabFacebook = (FloatingActionButton) findViewById(R.id.fab1);
+        fabFacebook.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG).setAction("Action", null).show();
+                if (fabFacebook.getVisibility() == View.INVISIBLE || fabTwitter.getVisibility() == View.INVISIBLE
+                        || fabWhatsapp.getVisibility() == View.INVISIBLE || fabWeb.getVisibility() == View.INVISIBLE) {
+                    reapearFab();
+                }
+                fab1InitialPos = new PointF(fabFacebook.getX(), fabFacebook.getY());
+                enterAnimateButtonRedSocial(fabFacebook, revealFacebook);
+            }
+        });
+
+        fabTwitter = (FloatingActionButton) findViewById(R.id.fab2);
+        fabTwitter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG).setAction("Action", null).show();
+                if (fabFacebook.getVisibility() == View.INVISIBLE || fabTwitter.getVisibility() == View.INVISIBLE
+                        || fabWhatsapp.getVisibility() == View.INVISIBLE || fabWeb.getVisibility() == View.INVISIBLE) {
+                    reapearFab();
+                }
+                fab2InitialPos = new PointF(fabTwitter.getX(), fabTwitter.getY());
+                enterAnimateButtonRedSocial(fabTwitter, revealTwitter);
+            }
+        });
+
+        fabWhatsapp = (FloatingActionButton) findViewById(R.id.fab3);
+        fabWhatsapp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG).setAction("Action", null).show();
+                if (fabFacebook.getVisibility() == View.INVISIBLE || fabTwitter.getVisibility() == View.INVISIBLE
+                        || fabWhatsapp.getVisibility() == View.INVISIBLE || fabWeb.getVisibility() == View.INVISIBLE) {
+                    reapearFab();
+                }
+                fab3InitialPos = new PointF(fabWhatsapp.getX(), fabWhatsapp.getY());
+                enterAnimateButtonRedSocial(fabWhatsapp, revealWhatsapp);
+            }
+        });
+
+        fabWeb = (FloatingActionButton) findViewById(R.id.fab4);
+        fabWeb.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG).setAction("Action", null).show();
+                if (fabFacebook.getVisibility() == View.INVISIBLE || fabTwitter.getVisibility() == View.INVISIBLE
+                        || fabWhatsapp.getVisibility() == View.INVISIBLE || fabWeb.getVisibility() == View.INVISIBLE) {
+                    reapearFab();
+                }
+                exitReveal(fabWeb, "aparecer");
+                enterRevealRedSocialLayout(revealWeb);
+            }
+        });
+
+        mRevealViewMenu = (FrameLayout) findViewById(R.id.reveal_items_menu);
+        altura = fab.getY();
+        revealFacebook = (FrameLayout) findViewById(R.id.reveal_facebook);
+        revealTwitter = (FrameLayout) findViewById(R.id.reveal_twitter);
+        revealWhatsapp = (FrameLayout) findViewById(R.id.reveal_whatsapp);
+        revealWeb = (FrameLayout) findViewById(R.id.reveal_web);
+
         //Listener para todos los elementos
         for (int id : CLICKABLES) {
             findViewById(id).setOnClickListener(this);
         }
 
+    }
+
+    private void enterReveal(View revealView){
+
+        // get the center for the clipping circle
+        int cx = revealView.getMeasuredWidth() / 2;
+        int cy = revealView.getMeasuredHeight() / 2;
+
+        // get the final radius for the clipping circle
+        int finalRadius = Math.max(revealView.getWidth(), revealView.getHeight()) / 2;
+
+        // create the animator for this view (the start radius is zero)
+        Animator anim =
+                ViewAnimationUtils.createCircularReveal(revealView, cx, cy, 0, finalRadius);
+        anim.setDuration(500);
+
+        // make the view visible and start the animation
+        revealView.setVisibility(View.VISIBLE);
+        anim.start();
+    }
+
+    private void exitReveal(final View revealView, final String caso) {
+
+        // get the center for the clipping circle
+        int cx = revealView.getMeasuredWidth() / 2;
+        int cy = revealView.getMeasuredHeight() / 2;
+
+        // get the initial radius for the clipping circle
+        int initialRadius = revealView.getWidth() / 2;
+
+        // create the animation (the final radius is zero)
+        Animator anim =
+                ViewAnimationUtils.createCircularReveal(revealView, cx, cy, initialRadius, 0);
+        anim.setDuration(500);
+
+        // make the view invisible when the animation is done
+        anim.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                super.onAnimationEnd(animation);
+                revealView.setVisibility(View.INVISIBLE);
+                if (caso.equals("desaparecer")) {
+                    enterReveal(fab);
+                    fab.setEnabled(false);
+                    fab.animate().translationY(altura).setDuration(300);
+                }
+            }
+        });
+
+        // start the animation
+        anim.start();
+    }
+
+    private void enterAnimateButton() {
+        oscurecerLayout((FrameLayout) findViewById(R.id.screen_to_darken));
+        float centerY = mRevealViewMenu.getY() + (mRevealViewMenu.getHeight()/2);
+        fab.animate()
+                .y(centerY)
+                .setDuration(300).setListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                super.onAnimationEnd(animation);
+                if (fab.isEnabled()) {
+                    exitReveal(fab, "aparecer");
+                    enterReveal(mRevealViewMenu);
+                } else {
+                    fab.setEnabled(true);
+                }
+            }
+        });
+    }
+
+    private void oscurecerLayout(final View layout){
+        Animation darkenAnim = new AlphaAnimation(0.0f, 0.8f);
+        darkenAnim.setDuration(350);
+        darkenAnim.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+                layout.setAlpha(0.0f);
+                layout.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                layout.setAlpha(0.8f);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+            }
+        });
+        layout.startAnimation(darkenAnim);
+    }
+
+    private void aclararLayout(final View layout){
+        Animation darkenAnim = new AlphaAnimation(0.8f, 0.0f);
+        darkenAnim.setDuration(350);
+        darkenAnim.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+                layout.setAlpha(0.8f);
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                layout.setAlpha(0.0f);
+                layout.setVisibility(View.INVISIBLE);
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+            }
+        });
+        layout.startAnimation(darkenAnim);
+    }
+
+    private void enterAnimateButtonRedSocial(final FloatingActionButton mFloatingButton, final View reveal) {
+        float centerX = reveal.getX() + (reveal.getWidth() /2) - (mFloatingButton.getWidth() /2);
+        float centerY = reveal.getY() + (reveal.getHeight()/2) - (mFloatingButton.getHeight()/2 - (mRevealViewMenu.getHeight()/2));
+
+        mFloatingButton.animate()
+                .x(centerX)
+                .y(centerY)
+                .setDuration(300)
+                .setListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        super.onAnimationEnd(animation);
+                        exitReveal(mFloatingButton, "aparecer");
+                        enterRevealRedSocialLayout(reveal);
+                    }
+                });
+
+    }
+
+    private void enterRevealRedSocialLayout(View revealView){
+        // finding X and Y co-ordinates
+        int cx = revealView.getMeasuredWidth() / 2;
+        int cy = revealView.getMeasuredHeight() / 2;
+
+        // to find  radius when icon is tapped for showing layout
+        int startradius=0;
+        int endradius = Math.max(revealView.getWidth(), revealView.getHeight());
+
+        // performing circular reveal when icon will be tapped
+        Animator animator = ViewAnimationUtils.createCircularReveal(revealView, cx, cy, startradius, endradius);
+        animator.setDuration(500);
+
+        revealView.bringToFront();
+        revealView.setVisibility(View.VISIBLE);
+        animator.start();
+    }
+
+    private void reapearFab(){
+        if(fabFacebook.getVisibility() == View.INVISIBLE){
+            fabFacebook.setX(fab1InitialPos.x);
+            fabFacebook.setY(fab1InitialPos.y);
+            enterReveal(fabFacebook);
+        }else if(fabTwitter.getVisibility() == View.INVISIBLE){
+            fabTwitter.setX(fab2InitialPos.x);
+            fabTwitter.setY(fab2InitialPos.y);
+            enterReveal(fabTwitter);
+        }else if(fabWhatsapp.getVisibility() == View.INVISIBLE){
+            fabWhatsapp.setX(fab3InitialPos.x);
+            fabWhatsapp.setY(fab3InitialPos.y);
+            enterReveal(fabWhatsapp);
+        }else if(fabWeb.getVisibility() == View.INVISIBLE){
+            enterReveal(fabWeb);
+        }
     }
 
     private void inicializaChat(int vez){
@@ -2494,7 +2761,12 @@ public class MainActivity extends Activity
                 //No hacer nada, puesto que despues se ejecuta el Activity result igualmente
             }
             else if(mCurScreen == R.id.screen_main){
-                if(!showingFrases) finish();
+                if(mRevealViewMenu.getVisibility() == View.VISIBLE){
+                    exitReveal(mRevealViewMenu, "desaparecer");
+                    aclararLayout((FrameLayout) findViewById(R.id.screen_to_darken));
+                }else{
+                    if(!showingFrases) finish();
+                }
             }
             else if(mCurScreen == R.id.screen_lost_companyero_desconectado){
 
