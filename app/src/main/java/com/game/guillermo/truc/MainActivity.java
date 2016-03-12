@@ -1,13 +1,9 @@
 package com.game.guillermo.truc;
 
 import android.animation.Animator;
-
 import android.animation.AnimatorListenerAdapter;
-import android.animation.ObjectAnimator;
-import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.app.AlertDialog;
-
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -16,12 +12,9 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Matrix;
-import android.graphics.Path;
-import android.graphics.PathMeasure;
 import android.graphics.PointF;
 import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
-
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -58,8 +51,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.media.AudioManager;
 import android.media.SoundPool;
-import android.widget.Toast;
-
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.GravityEnum;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -571,7 +562,6 @@ public class MainActivity extends Activity
     private PointF fab3InitialPos = null;
 
 
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -995,7 +985,6 @@ public class MainActivity extends Activity
         buttonEnviarMensajeChat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), "Enviar mensaje", Toast.LENGTH_SHORT).show();
                 String mensaje = textoMensaje.getText().toString();
                 if (mensaje != null && !mensaje.isEmpty()) {
                     enviarMensajeChat(mensaje);
@@ -1010,7 +999,6 @@ public class MainActivity extends Activity
         buttonEnviarMensajeChat_2J.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), textoMensaje_2J.getText().toString(), Toast.LENGTH_SHORT).show();
                 String mensaje = textoMensaje_2J.getText().toString();
                 if (mensaje != null && !mensaje.isEmpty()) {
                     enviarMensajeChat(mensaje);
@@ -1039,14 +1027,13 @@ public class MainActivity extends Activity
         button_chat_4J.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), "Mostrar chat", Toast.LENGTH_SHORT).show();
                 mostrarChat(mRevealView);
             }
         });
 
         //Imagenes para el que es mano en el modo 4J
         esManoAbajo = (ImageView)findViewById(R.id.es_mano_abajo);
-        esManoArriba = (ImageView)findViewById(R.id.es_mano_arriba);
+        //aesManoArriba = (ImageView)findViewById(R.id.es_mano_arriba);
         esManoDer = (ImageView)findViewById(R.id.es_mano_derecha);
         esManoIzq = (ImageView)findViewById(R.id.es_mano_izq);
 
@@ -1097,7 +1084,17 @@ public class MainActivity extends Activity
                     fabFacebook.setY((mRevealViewMenu.getHeight() / 4) - (fabFacebook.getHeight() / 2));
                     fabTwitter.setY((mRevealViewMenu.getHeight() / 4) - (fabTwitter.getHeight() / 2));
                     fabWhatsapp.setY((mRevealViewMenu.getHeight() / 4) - (fabWhatsapp.getHeight() / 2));
-                    enterAnimateButton();
+                    if(apilLevel == 1){
+                        enterAnimateButton();
+                    }else {
+                        if(mRevealViewMenu.getVisibility() == View.INVISIBLE){
+                            oscurecerLayout((FrameLayout) findViewById(R.id.screen_to_darken));
+                            mRevealViewMenu.setVisibility(View.VISIBLE);
+                        }
+                    }
+                    for (int id : CLICKABLES) {
+                        findViewById(id).setEnabled(false);
+                    }
                 }
             }
         });
@@ -1109,10 +1106,17 @@ public class MainActivity extends Activity
                 //Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG).setAction("Action", null).show();
                 if (fabFacebook.getVisibility() == View.INVISIBLE || fabTwitter.getVisibility() == View.INVISIBLE
                         || fabWhatsapp.getVisibility() == View.INVISIBLE || fabWeb.getVisibility() == View.INVISIBLE) {
-                    reapearFab();
+                    if(apilLevel == 1){
+                        reapearFab();
+                    }
                 }
-                fab1InitialPos = new PointF(fabFacebook.getX(), fabFacebook.getY());
-                enterAnimateButtonRedSocial(fabFacebook, revealFacebook);
+                if(apilLevel == 1){
+                    fab1InitialPos = new PointF(fabFacebook.getX(), fabFacebook.getY());
+                    enterAnimateButtonRedSocial(fabFacebook, revealFacebook);
+                }else {
+                    revealFacebook.bringToFront();
+                    revealFacebook.setVisibility(View.VISIBLE);
+                }
             }
         });
 
@@ -1123,10 +1127,17 @@ public class MainActivity extends Activity
                 //Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG).setAction("Action", null).show();
                 if (fabFacebook.getVisibility() == View.INVISIBLE || fabTwitter.getVisibility() == View.INVISIBLE
                         || fabWhatsapp.getVisibility() == View.INVISIBLE || fabWeb.getVisibility() == View.INVISIBLE) {
-                    reapearFab();
+                    if(apilLevel == 1){
+                        reapearFab();
+                    }
                 }
-                fab2InitialPos = new PointF(fabTwitter.getX(), fabTwitter.getY());
-                enterAnimateButtonRedSocial(fabTwitter, revealTwitter);
+                if(apilLevel == 1){
+                    fab2InitialPos = new PointF(fabTwitter.getX(), fabTwitter.getY());
+                    enterAnimateButtonRedSocial(fabTwitter, revealTwitter);
+                }else {
+                    revealTwitter.bringToFront();
+                    revealTwitter.setVisibility(View.VISIBLE);
+                }
             }
         });
 
@@ -1137,24 +1148,41 @@ public class MainActivity extends Activity
                 //Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG).setAction("Action", null).show();
                 if (fabFacebook.getVisibility() == View.INVISIBLE || fabTwitter.getVisibility() == View.INVISIBLE
                         || fabWhatsapp.getVisibility() == View.INVISIBLE || fabWeb.getVisibility() == View.INVISIBLE) {
-                    reapearFab();
+                    if(apilLevel == 1){
+                        reapearFab();
+                    }
                 }
-                fab3InitialPos = new PointF(fabWhatsapp.getX(), fabWhatsapp.getY());
-                enterAnimateButtonRedSocial(fabWhatsapp, revealWhatsapp);
+                if(apilLevel == 1){
+                    fab3InitialPos = new PointF(fabWhatsapp.getX(), fabWhatsapp.getY());
+                    enterAnimateButtonRedSocial(fabWhatsapp, revealWhatsapp);
+                }else {
+                    revealWhatsapp.bringToFront();
+                    revealWhatsapp.setVisibility(View.VISIBLE);
+                }
             }
         });
 
         fabWeb = (FloatingActionButton) findViewById(R.id.fab4);
+        if(apilLevel != 1){
+            fabWeb.setVisibility(View.VISIBLE);
+        }
         fabWeb.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG).setAction("Action", null).show();
                 if (fabFacebook.getVisibility() == View.INVISIBLE || fabTwitter.getVisibility() == View.INVISIBLE
                         || fabWhatsapp.getVisibility() == View.INVISIBLE || fabWeb.getVisibility() == View.INVISIBLE) {
-                    reapearFab();
+                    if(apilLevel == 1){
+                        reapearFab();
+                    }
                 }
-                exitReveal(fabWeb, "aparecer");
-                enterRevealRedSocialLayout(revealWeb);
+                if(apilLevel == 1){
+                    exitReveal(fabWeb, "aparecer");
+                    enterRevealRedSocialLayout(revealWeb);
+                }else {
+                    revealWeb.bringToFront();
+                    revealWeb.setVisibility(View.VISIBLE);
+                }
             }
         });
 
@@ -1435,53 +1463,70 @@ public class MainActivity extends Activity
 
     private void mostrarChat(final View chat){
 
-        // finding X and Y co-ordinates
-        int cx = (chat.getLeft());
-        int cy = (chat.getTop());
+        if(apilLevel == 1){
+            // finding X and Y co-ordinates
+            int cx = (chat.getLeft());
+            int cy = (chat.getTop());
 
-        // to find  radius when icon is tapped for showing layout
-        int startradius=0;
-        int endradius = Math.max(chat.getWidth(), chat.getHeight());
+            // to find  radius when icon is tapped for showing layout
+            int startradius=0;
+            int endradius = Math.max(chat.getWidth(), chat.getHeight());
 
-        // performing circular reveal when icon will be tapped
-        Animator animator = ViewAnimationUtils.createCircularReveal(chat, cx, cy, startradius, endradius);
-        animator.setInterpolator(new AccelerateDecelerateInterpolator());
-        animator.setDuration(400);
+            // performing circular reveal when icon will be tapped
+            Animator animator = ViewAnimationUtils.createCircularReveal(chat, cx, cy, startradius, endradius);
+            animator.setInterpolator(new AccelerateDecelerateInterpolator());
+            animator.setDuration(400);
 
-        //reverse animation
-        // to find radius when icon is tapped again for hiding layout
-        //  starting radius will be the radius or the extent to which circular reveal animation is to be shown
+            //reverse animation
+            // to find radius when icon is tapped again for hiding layout
+            //  starting radius will be the radius or the extent to which circular reveal animation is to be shown
 
-        int reverse_startradius = Math.max(chat.getWidth(),chat.getHeight());
+            int reverse_startradius = Math.max(chat.getWidth(),chat.getHeight());
 
-        //endradius will be zero
-        int reverse_endradius=0;
+            //endradius will be zero
+            int reverse_endradius=0;
 
-        // performing circular reveal for reverse animation
-        Animator animate = ViewAnimationUtils.createCircularReveal(chat, cx, cy, reverse_startradius, reverse_endradius);
-        if(chat.getVisibility() == View.INVISIBLE){
-            if(numeroJugadores == 2){
-                chatList_2J.smoothScrollToPosition(chatList_2J.getScrollBarSize());
-            }else{
-                chatList.smoothScrollToPosition(chatList.getScrollBarSize());
-            }
-            // to show the layout when icon is tapped
-            chat.setVisibility(View.VISIBLE);
-            animator.start();
-        }
-        else {
-            chat.setVisibility(View.VISIBLE);
-
-            // to hide layout on animation end
-            animate.addListener(new AnimatorListenerAdapter() {
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    super.onAnimationEnd(animation);
-                    chat.setVisibility(View.INVISIBLE);
+            // performing circular reveal for reverse animation
+            Animator animate = ViewAnimationUtils.createCircularReveal(chat, cx, cy, reverse_startradius, reverse_endradius);
+            if(chat.getVisibility() == View.INVISIBLE){
+                if(numeroJugadores == 2){
+                    chatList_2J.smoothScrollToPosition(chatList_2J.getScrollBarSize());
+                }else{
+                    chatList.smoothScrollToPosition(chatList.getScrollBarSize());
                 }
-            });
-            animate.start();
+                // to show the layout when icon is tapped
+                chat.setVisibility(View.VISIBLE);
+                animator.start();
+            }
+            else {
+                chat.setVisibility(View.VISIBLE);
+
+                // to hide layout on animation end
+                animate.addListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        super.onAnimationEnd(animation);
+                        chat.setVisibility(View.INVISIBLE);
+                    }
+                });
+                animate.start();
+            }
+        }else {
+            if(chat.getVisibility() == View.INVISIBLE){
+                if(numeroJugadores == 2){
+                    chatList_2J.smoothScrollToPosition(chatList_2J.getScrollBarSize());
+                }else{
+                    chatList.smoothScrollToPosition(chatList.getScrollBarSize());
+                }
+                chat.setVisibility(View.VISIBLE);
+            }
+            else {
+                chat.setVisibility(View.VISIBLE);
+                chat.setVisibility(View.INVISIBLE);
+            }
         }
+
+
     }
 
     private void setMensajeChatTags(String mensajeTexto, String caso){
@@ -2875,7 +2920,14 @@ public class MainActivity extends Activity
             }
             else if(mCurScreen == R.id.screen_main){
                 if(mRevealViewMenu.getVisibility() == View.VISIBLE){
-                    exitReveal(mRevealViewMenu, "desaparecer");
+                    if(apilLevel == 1){
+                        exitReveal(mRevealViewMenu, "desaparecer");
+                    }else{
+                        mRevealViewMenu.setVisibility(View.INVISIBLE);
+                    }
+                    for (int id : CLICKABLES) {
+                        findViewById(id).setEnabled(true);
+                    }
                     aclararLayout((FrameLayout) findViewById(R.id.screen_to_darken));
                 }else{
                     if(!showingFrases) finish();

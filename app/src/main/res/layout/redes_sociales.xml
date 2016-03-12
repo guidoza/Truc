@@ -50,6 +50,7 @@
                         android:orientation="horizontal"
                         android:background="@drawable/fondo_reveal_face">
 
+
                     </LinearLayout>
                 </FrameLayout>
 
@@ -123,7 +124,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:id="@+id/reveal_web"
-                    android:visibility="invisible">
+                    android:visibility="visible">
                     <FrameLayout
                         android:id="@+id/reveal_web_top"
                         android:layout_width="match_parent"
@@ -133,8 +134,33 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_gravity="center"
-                        android:orientation="horizontal"
+                        android:orientation="vertical"
                         android:background="@drawable/fondo_reveal_web">
+
+                        <ImageView
+                            android:layout_weight="1.2"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="center"
+                            android:src="@drawable/ic_webtruc"/>
+
+                        <info.hoang8f.widget.FButton
+                            android:layout_gravity="center"
+                            android:layout_weight="2.5"
+                            android:text="Visitala aquí"
+                            android:id="@+id/button_web"
+                            android:layout_width="150dp"
+                            android:layout_height="150dp"
+                            android:drawablePadding="0dp"
+                            android:paddingRight="4dp"
+                            android:layout_marginBottom="20dp"
+                            app:buttonColor="@color/pocket_color_1"
+                            app:shadowColor="@color/pocket_color_1"
+                            app:shadowEnabled="true"
+                            app:shadowHeight="0dp"
+                            app:cornerRadius="6dp"
+                            android:drawableRight="@drawable/web_icon"
+                            />
 
                     </LinearLayout>
                 </FrameLayout>
