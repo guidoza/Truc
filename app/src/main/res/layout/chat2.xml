@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:fbutton="http://schemas.android.com/apk/res-auto">
+
+    <LinearLayout
+        android:id="@+id/reveal_items_2J"
+        android:layout_width="match_parent"
+        android:layout_height="400dp"
+        android:background="#D92c3e50"
+        android:orientation="vertical"
+        android:visibility="invisible">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="0.3"
+            android:orientation="vertical">
+            <ListView
+                android:id="@+id/chat_list_2J"
+                android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                android:layout_weight="0.25">
+            </ListView>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="4dp"
+                android:background="#20B2AA" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/textoMensaje_2J"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.25"
+                android:layout_gravity="center"
+                android:layout_margin="3dp"
+                android:maxLength="50"
+                android:textColor="@color/LightSeaGreen"
+                />
+
+            <info.hoang8f.widget.FButton
+                android:id="@+id/enviarMensajeChat_2J"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:text="Enviar"
+                android:textColor="@color/cpb_white"
+                fbutton:buttonColor="@color/LightSeaGreen"
+                fbutton:shadowColor="@color/DarkCyan"
+                fbutton:shadowEnabled="true"
+                fbutton:shadowHeight="5dp"
+                fbutton:cornerRadius="5dp"
+                android:layout_margin="3dp"/>
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+</FrameLayout>

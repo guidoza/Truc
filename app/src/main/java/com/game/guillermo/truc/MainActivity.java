@@ -536,11 +536,17 @@ public class MainActivity extends Activity
     private ListView chatList = null;
     private SimpleAdapter adapterChat = null;
     private LinearLayout mRevealView = null;
+    private ListView chatList_2J = null;
+    private SimpleAdapter adapterChat_2J = null;
+    private LinearLayout mRevealView_2J = null;
     Button button_chat = null;
     Button button_chat_4J = null;
     ArrayList mensajesChat = null;
     EditText textoMensaje = null;
     FButton buttonEnviarMensajeChat = null;
+    ArrayList mensajesChat_2J = null;
+    EditText textoMensaje_2J = null;
+    FButton buttonEnviarMensajeChat_2J = null;
     FButton botonFacebook;
     FButton botonTwitter;
     FButton botonWeb;
@@ -995,16 +1001,34 @@ public class MainActivity extends Activity
             }
         });
 
+        textoMensaje_2J = (EditText) findViewById(R.id.textoMensaje_2J);
+        buttonEnviarMensajeChat_2J = (FButton) findViewById(R.id.enviarMensajeChat_2J);
+        buttonEnviarMensajeChat_2J.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getApplicationContext(), textoMensaje_2J.getText().toString(), Toast.LENGTH_SHORT).show();
+                String mensaje = textoMensaje_2J.getText().toString();
+                if (mensaje != null && !mensaje.isEmpty()) {
+                    enviarMensajeChat(mensaje);
+                    setMensajeChatTags(mensaje, "Yo");
+                    textoMensaje_2J.setText("");
+                }
+            }
+        });
+
         inicializaChat(1);
 
         mRevealView = (LinearLayout) findViewById(R.id.reveal_items);
         mRevealView.setVisibility(View.INVISIBLE);
 
-        button_chat = (Button) findViewById(R.id.button_chat);
+        mRevealView_2J = (LinearLayout) findViewById(R.id.reveal_items_2J);
+        mRevealView_2J.setVisibility(View.INVISIBLE);
+
+        button_chat = (Button) findViewById(R.id.button_chat_2J);
         button_chat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mostrarChat();
+                mostrarChat(mRevealView_2J);
             }
         });
         button_chat_4J = (Button) findViewById(R.id.button_chat_4J);
@@ -1012,7 +1036,7 @@ public class MainActivity extends Activity
             @Override
             public void onClick(View v) {
                 Toast.makeText(getApplicationContext(), "Mostrar chat", Toast.LENGTH_SHORT).show();
-                mostrarChat();
+                mostrarChat(mRevealView);
             }
         });
 
@@ -1187,6 +1211,7 @@ public class MainActivity extends Activity
                     enterReveal(fab);
                     fab.setEnabled(false);
                     fab.animate().translationY(altura).setDuration(300);
+                    reapearFab();
                 }
             }
         });
@@ -1301,15 +1326,18 @@ public class MainActivity extends Activity
             fabFacebook.setX(fab1InitialPos.x);
             fabFacebook.setY(fab1InitialPos.y);
             enterReveal(fabFacebook);
-        }else if(fabTwitter.getVisibility() == View.INVISIBLE){
+        }
+        if(fabTwitter.getVisibility() == View.INVISIBLE){
             fabTwitter.setX(fab2InitialPos.x);
             fabTwitter.setY(fab2InitialPos.y);
             enterReveal(fabTwitter);
-        }else if(fabWhatsapp.getVisibility() == View.INVISIBLE){
+        }
+        if(fabWhatsapp.getVisibility() == View.INVISIBLE){
             fabWhatsapp.setX(fab3InitialPos.x);
             fabWhatsapp.setY(fab3InitialPos.y);
             enterReveal(fabWhatsapp);
-        }else if(fabWeb.getVisibility() == View.INVISIBLE){
+        }
+        if(fabWeb.getVisibility() == View.INVISIBLE){
             enterReveal(fabWeb);
         }
     }
@@ -1317,15 +1345,32 @@ public class MainActivity extends Activity
     private void inicializaChat(int vez){
         if(vez == 1){
             mensajesChat = new ArrayList();
+            mensajesChat_2J = new ArrayList();
             HashMap aux = new HashMap<>();
             aux.put("mensaje_chat", "No hay mensajes");
             mensajesChat.add(aux);
+            mensajesChat_2J.add(aux);
             chatList =  (ListView) findViewById(R.id.chat_list);
+            chatList_2J =  (ListView) findViewById(R.id.chat_list_2J);
             adapterChat = new SimpleAdapter(this, mensajesChat, R.layout.elemento_chat,
                     new String[]{"icono", "nombre_jugador_chat", "mensaje_chat"},
                     new int[]{ R.id.icono, R.id.nombre_jugador_chat, R.id.mensaje_chat});
-
+            adapterChat_2J = new SimpleAdapter(this, mensajesChat_2J, R.layout.elemento_chat,
+                    new String[]{"icono", "nombre_jugador_chat", "mensaje_chat"},
+                    new int[]{ R.id.icono, R.id.nombre_jugador_chat, R.id.mensaje_chat});
             adapterChat.setViewBinder(new SimpleAdapter.ViewBinder() {
+                @Override
+                public boolean setViewValue(View view, Object data,
+                                            String textRepresentation) {
+                    if ((view instanceof ImageView) & (data instanceof Bitmap)) {
+                        ImageView iv = (ImageView) view;
+                        Bitmap bm = (Bitmap) data;
+                        iv.setImageBitmap(bm);
+                        return true;
+                    }
+                    return false;
+                }});
+            adapterChat_2J.setViewBinder(new SimpleAdapter.ViewBinder() {
 
                 @Override
                 public boolean setViewValue(View view, Object data,
@@ -1340,13 +1385,17 @@ public class MainActivity extends Activity
                 }});
 
             chatList.setAdapter(adapterChat);
+            chatList_2J.setAdapter(adapterChat_2J);
 
         }else if(vez == 2){
             mensajesChat.clear();
+            mensajesChat_2J.clear();
             HashMap aux = new HashMap<>();
             aux.put("mensaje_chat", "No hay mensajes");
             mensajesChat.add(aux);
+            mensajesChat_2J.add(aux);
             adapterChat.notifyDataSetChanged();
+            adapterChat_2J.notifyDataSetChanged();
         }
     }
 
@@ -1360,17 +1409,18 @@ public class MainActivity extends Activity
         }
     }
 
-    private void mostrarChat(){
+    private void mostrarChat(final View chat){
+
         // finding X and Y co-ordinates
-        int cx = (mRevealView.getLeft());
-        int cy = (mRevealView.getTop());
+        int cx = (chat.getLeft());
+        int cy = (chat.getTop());
 
         // to find  radius when icon is tapped for showing layout
         int startradius=0;
-        int endradius = Math.max(mRevealView.getWidth(), mRevealView.getHeight());
+        int endradius = Math.max(chat.getWidth(), chat.getHeight());
 
         // performing circular reveal when icon will be tapped
-        Animator animator = ViewAnimationUtils.createCircularReveal(mRevealView, cx, cy, startradius, endradius);
+        Animator animator = ViewAnimationUtils.createCircularReveal(chat, cx, cy, startradius, endradius);
         animator.setInterpolator(new AccelerateDecelerateInterpolator());
         animator.setDuration(400);
 
@@ -1378,28 +1428,32 @@ public class MainActivity extends Activity
         // to find radius when icon is tapped again for hiding layout
         //  starting radius will be the radius or the extent to which circular reveal animation is to be shown
 
-        int reverse_startradius = Math.max(mRevealView.getWidth(),mRevealView.getHeight());
+        int reverse_startradius = Math.max(chat.getWidth(),chat.getHeight());
 
         //endradius will be zero
         int reverse_endradius=0;
 
         // performing circular reveal for reverse animation
-        Animator animate = ViewAnimationUtils.createCircularReveal(mRevealView, cx, cy, reverse_startradius, reverse_endradius);
-        if(mRevealView.getVisibility() == View.INVISIBLE){
-            chatList.smoothScrollToPosition(chatList.getScrollBarSize());
+        Animator animate = ViewAnimationUtils.createCircularReveal(chat, cx, cy, reverse_startradius, reverse_endradius);
+        if(chat.getVisibility() == View.INVISIBLE){
+            if(numeroJugadores == 2){
+                chatList_2J.smoothScrollToPosition(chatList_2J.getScrollBarSize());
+            }else{
+                chatList.smoothScrollToPosition(chatList.getScrollBarSize());
+            }
             // to show the layout when icon is tapped
-            mRevealView.setVisibility(View.VISIBLE);
+            chat.setVisibility(View.VISIBLE);
             animator.start();
         }
         else {
-            mRevealView.setVisibility(View.VISIBLE);
+            chat.setVisibility(View.VISIBLE);
 
             // to hide layout on animation end
             animate.addListener(new AnimatorListenerAdapter() {
                 @Override
                 public void onAnimationEnd(Animator animation) {
                     super.onAnimationEnd(animation);
-                    mRevealView.setVisibility(View.INVISIBLE);
+                    chat.setVisibility(View.INVISIBLE);
                 }
             });
             animate.start();
@@ -1439,20 +1493,38 @@ public class MainActivity extends Activity
             }
         }
 
-        datosMensajeChat.put("icono", icono);
-        datosMensajeChat.put("nombre_jugador_chat", nombreJugador[0]);
-        datosMensajeChat.put("mensaje_chat", mensajeTexto);
-        mensajesChat.add(datosMensajeChat);
+        if(numeroJugadores == 2){
+            datosMensajeChat.put("icono", icono);
+            datosMensajeChat.put("nombre_jugador_chat", nombreJugador[0]);
+            datosMensajeChat.put("mensaje_chat", mensajeTexto);
+            mensajesChat_2J.add(datosMensajeChat);
+        }else{
+            datosMensajeChat.put("icono", icono);
+            datosMensajeChat.put("nombre_jugador_chat", nombreJugador[0]);
+            datosMensajeChat.put("mensaje_chat", mensajeTexto);
+            mensajesChat.add(datosMensajeChat);
+        }
 
         //chatList.setAdapter(adapterChat);
-        adapterChat.notifyDataSetChanged();
-        chatList.post(new Runnable() {
-            @Override
-            public void run() {
-                chatList.smoothScrollToPosition(chatList.getScrollBarSize());
-                chatList.setSelection(chatList.getScrollBarSize());
-            }
-        });
+        if(numeroJugadores == 2){
+            adapterChat_2J.notifyDataSetChanged();
+            chatList_2J.post(new Runnable() {
+                @Override
+                public void run() {
+                    chatList_2J.smoothScrollToPosition(chatList_2J.getScrollBarSize());
+                    chatList_2J.setSelection(chatList_2J.getScrollBarSize());
+                }
+            });
+        } else {
+            adapterChat.notifyDataSetChanged();
+            chatList.post(new Runnable() {
+                @Override
+                public void run() {
+                    chatList.smoothScrollToPosition(chatList.getScrollBarSize());
+                    chatList.setSelection(chatList.getScrollBarSize());
+                }
+            });
+        }
     }
 
     private void cargarBannerMenuPrincipal(){
