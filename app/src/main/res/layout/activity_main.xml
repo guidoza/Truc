@@ -318,7 +318,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="30dp"
-                android:background="#F4FA58"
+                android:background="#AEB404"
                 android:padding="10dp"
                 android:textColor="@android:color/primary_text_dark"
                 android:textSize="12sp"

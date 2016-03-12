@@ -107,4 +107,6 @@
     <string name="ad_banner_wait_id">ca-app-pub-4776780046370926/1566617499</string>
     <string name="redes_sociales">Comparteix les nostres pàgines de Facebook y Twitter amb els teus amics i ajuda`ns a creixer i trobar més jugadors.</string>
     <string name="partidas_4J">Busca partides de 4 jugadors: 14:30-15:30 i de 22:00-23:00</string>
+    <string name="actualizar">Actualitzar</string>
+    <string name="textoActualizar">Hi ha una nova versió de Retruque! Actualitza el joc per a poder jugar.</string>
 </resources>

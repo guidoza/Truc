@@ -91,6 +91,9 @@
     <string name="ciego">Ciego</string>
     <string name="senya_falsa">Seña falsa</string>
     <string name="proximamente">Próx. verás el envid rival</string>
+    <string name="actualizar">Actualizar</string>
+    <string name="textoActualizar">Hay una nueva versión de Retruque! Actualiza el juego para seguir jugando.</string>
+
 
 
     <!-- Frases del juego -->

@@ -95,6 +95,7 @@ import com.orhanobut.dialogplus.ListHolder;
 import com.orhanobut.dialogplus.OnBackPressListener;
 import com.orhanobut.dialogplus.OnItemClickListener;
 
+import org.jsoup.Jsoup;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
@@ -114,6 +115,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ExecutionException;
 
 import info.hoang8f.widget.FButton;
 import tourguide.tourguide.Overlay;
@@ -302,6 +304,7 @@ public class MainActivity extends Activity
     AlertDialog dialog;
     Carta aux;
     MaterialDialog.Builder materialDialog;
+    MaterialDialog.Builder versionDialog;
     MaterialDialog repartiendo;
     MaterialDialog dialogEnvid;
     MaterialDialog dialogTruc;
@@ -380,6 +383,7 @@ public class MainActivity extends Activity
     String senyaCompi2 = "";
     String senyaRivalDerecha = "";
     String senyaRivalIzq = "";
+    String versionPlayStore;
 
     //Boolean
     private boolean hayEmpate4J = false;
@@ -1161,6 +1165,26 @@ public class MainActivity extends Activity
         revealWhatsapp = (FrameLayout) findViewById(R.id.reveal_whatsapp);
         revealWeb = (FrameLayout) findViewById(R.id.reveal_web);
 
+        //Comprobar la última version de Play Store
+        try {
+            versionPlayStore = new ComprobarVersion().execute(versionPlayStore).get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+        Log.d("Versiones","Play Store: " + versionPlayStore);
+        Log.d("Versiones","Local: " + versionPlayStore);
+        String versionName = BuildConfig.VERSION_NAME;
+        if (versionPlayStore.equals(versionName)) {
+            Log.d("Versiones", "Misma version que Play Store: Si");
+        }
+        else{
+            Log.d("Versiones", "Misma version que Play Store: No");
+            showVersionAlert(getResources().getString(R.string.actualizar),
+                                getResources().getString(R.string.textoActualizar));
+        }
+
         //Listener para todos los elementos
         for (int id : CLICKABLES) {
             findViewById(id).setOnClickListener(this);
@@ -1910,6 +1934,23 @@ public class MainActivity extends Activity
                 .positiveText(getResources().getString(R.string.aceptar))
                 .cancelable(false);
         materialDialog.show();
+    }
+
+    private void showVersionAlert(String title, String message) {
+        versionDialog = new MaterialDialog.Builder(this)
+                .title(title)
+                .content(message)
+                .positiveText(getResources().getString(R.string.aceptar))
+                .cancelable(false)
+                .callback(new MaterialDialog.ButtonCallback() {
+                              @Override
+                              public void onPositive(MaterialDialog dialog) {
+                                  super.onPositive(dialog);
+                                  startActivity(new Intent(Intent.ACTION_VIEW,
+                                          Uri.parse("https://play.google.com/store/apps/details?id=com.game.guillermo.truc&hl=es")));
+                              }
+                          });
+        versionDialog.show();
     }
 
     private void showIconosAlert() {
@@ -10674,6 +10715,31 @@ public class MainActivity extends Activity
         } catch (PackageManager.NameNotFoundException e) {
             startActivity(new Intent(Intent.ACTION_VIEW,
                     Uri.parse("https://www.facebook.com/retruqueapp")));
+        }
+    }
+
+    public class ComprobarVersion extends AsyncTask<String,Void,String> {
+        String version;
+        protected String doInBackground(String... url){
+            try {
+                String newVersion = Jsoup
+                        .connect(
+                                "https://play.google.com/store/apps/details?id=com.game.guillermo.truc")
+                        .timeout(30000)
+                        .userAgent(
+                                "Mozilla/5.0 (Windows; U; WindowsNT 5.1; en-US; rv1.8.1.6) Gecko/20070725 Firefox/2.0.0.6")
+                        .referrer("http://www.google.com").get()
+                        .select("div[itemprop=softwareVersion]").first()
+                        .ownText();
+               // Log.e("new Version", newVersion);
+                return newVersion;
+            } catch (IOException ex) {
+                System.out.println(ex.toString());
+            }
+            return "";
+        }
+        protected void onPostExecute(String result) {
+            version = result;
         }
     }
 
