@@ -38,7 +38,7 @@
             android:layout_height="match_parent"
             android:layout_width="match_parent"
             android:orientation="vertical"
-            android:visibility="visible"
+            android:visibility="gone"
             >
 
                 <ImageView
@@ -351,7 +351,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:visibility="gone"
+        android:visibility="visible"
         >
 
         <FrameLayout
@@ -570,7 +570,7 @@
                         android:layout_height="20dp"
                         android:layout_gravity="center"
                         style="@android:style/Widget.DeviceDefault.Light.ProgressBar.Horizontal"
-                        android:max="40"
+                        android:max="20"
                         android:progress="0"/>
                 </LinearLayout>
             </LinearLayout>
@@ -617,7 +617,7 @@
                         android:layout_height="20dp"
                         android:layout_gravity="center"
                         style="@android:style/Widget.DeviceDefault.Light.ProgressBar.Horizontal"
-                        android:max="40"
+                        android:max="20"
                         android:progress="0"/>
                     </LinearLayout>
 
@@ -1074,7 +1074,7 @@
                         android:layout_height="20dp"
                         android:layout_gravity="center"
                         style="@android:style/Widget.DeviceDefault.Light.ProgressBar.Horizontal"
-                        android:max="40"
+                        android:max="20"
                         android:progress="0"/>
                 </LinearLayout>
 
@@ -1131,7 +1131,7 @@
                         android:layout_height="20dp"
                         android:layout_gravity="center"
                         style="@android:style/Widget.DeviceDefault.Light.ProgressBar.Horizontal"
-                        android:max="40"
+                        android:max="20"
                         android:progress="0"/>
                 </LinearLayout>
 
@@ -1178,7 +1178,7 @@
                         android:layout_height="20dp"
                         android:layout_gravity="center"
                         style="@android:style/Widget.DeviceDefault.Light.ProgressBar.Horizontal"
-                        android:max="40"
+                        android:max="20"
                         android:progress="0"/>
                 </LinearLayout>
 
@@ -1248,7 +1248,7 @@
                         android:layout_height="20dp"
                         android:layout_gravity="center"
                         style="@android:style/Widget.DeviceDefault.Light.ProgressBar.Horizontal"
-                        android:max="40"
+                        android:max="20"
                         android:progress="0"/>
                 </LinearLayout>
                 <ImageView
