@@ -2106,7 +2106,7 @@ public class MainActivity extends Activity
                     if (ganadorFinal.equals("YO")) {
 
                         //Actualiza el ranking sumando una victoria
-                        updateLeaderboards(mGoogleApiClient, LEADERBOARD_ID);
+                        updateLeaderboards4J(mGoogleApiClient, LEADERBOARD_ID);
                         Games.Achievements.unlock(mGoogleApiClient, PRIMERA_PARTIDA);
                         Games.Achievements.increment(mGoogleApiClient, TRIUNFADOR_PRINCIPIANTE, 1);
                         Games.Achievements.increment(mGoogleApiClient, TRIUNFADOR_AVANZADO, 1);
@@ -2160,7 +2160,7 @@ public class MainActivity extends Activity
                     if (ganadorFinal.equals("YO")) {
 
                         //Actualiza el ranking sumando una victoria
-                        updateLeaderboards(mGoogleApiClient, LEADERBOARD_ID);
+                        updateLeaderboards4J(mGoogleApiClient, LEADERBOARD_ID);
                         Games.Achievements.unlock(mGoogleApiClient, PRIMERA_PARTIDA);
                         Games.Achievements.increment(mGoogleApiClient, TRIUNFADOR_PRINCIPIANTE, 1);
                         Games.Achievements.increment(mGoogleApiClient, TRIUNFADOR_AVANZADO, 1);
@@ -3428,7 +3428,7 @@ public class MainActivity extends Activity
                         if(dialogIconos != null && dialogIconos.isShowing()) dialogIconos.dismiss();
                         handlerShowIconos.removeCallbacks(icons);
                         handlerIconos.removeCallbacks(trasIcon);
-                        updateLeaderboards(mGoogleApiClient, LEADERBOARD_ID);
+                        updateLeaderboards4J(mGoogleApiClient, LEADERBOARD_ID);
                         switchToScreen(R.id.screen_win_rival_desconectado);
                         reproducirSonidoGanador();
                         leaveRoom();
@@ -10513,6 +10513,31 @@ public class MainActivity extends Activity
         });
     }
 
+    private static void updateLeaderboards4J(final GoogleApiClient googleApiClient, final String leaderboardId) {
+        Games.Leaderboards.loadCurrentPlayerLeaderboardScore(
+                googleApiClient,
+                leaderboardId,
+                LeaderboardVariant.TIME_SPAN_ALL_TIME,
+                LeaderboardVariant.COLLECTION_PUBLIC
+        ).setResultCallback(new ResultCallback<Leaderboards.LoadPlayerScoreResult>() {
+
+            @Override
+            public void onResult(Leaderboards.LoadPlayerScoreResult loadPlayerScoreResult) {
+                if (loadPlayerScoreResult != null) {
+                    if (GamesStatusCodes.STATUS_OK == loadPlayerScoreResult.getStatus().getStatusCode()) {
+                        long score = 0;
+                        if (loadPlayerScoreResult.getScore() != null) {
+                            score = loadPlayerScoreResult.getScore().getRawScore();
+                        }
+                        score = score + 3;
+                        Games.Leaderboards.submitScore(googleApiClient, leaderboardId, score);
+                    }
+                }
+            }
+
+        });
+    }
+
     /* Funciones para el sonido del juego */
 
     public void comprobarSonidosCartas(Carta newCarta){
@@ -10687,7 +10712,7 @@ public class MainActivity extends Activity
     }
 
     public String calcularFraseAleatoria(){
-        int frase = (int) (Math.random() * 10) + 1;
+        int frase = (int) (Math.random() * 11) + 1;
 
         switch (frase){
             case 0:
@@ -10712,6 +10737,8 @@ public class MainActivity extends Activity
                 return getResources().getString(R.string.amigos);
             case 10:
                 return getResources().getString(R.string.redes_sociales);
+            case 11:
+                return getResources().getString(R.string.tres_puntos);
         }
          return getResources().getString(R.string.redes_sociales);
     }

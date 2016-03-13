@@ -109,4 +109,5 @@
     <string name="partidas_4J">Busca partides de 4 jugadors: 14:30-15:30 i de 22:00-23:00</string>
     <string name="actualizar">Actualitzar</string>
     <string name="textoActualizar">Hi ha una nova versió de Retruque! Actualitza el joc per a poder jugar.</string>
+    <string name="tres_puntos">Si guanyes una partida de 4 jugadors, obtindràs 3 punts al ranking. A per el primer!</string>
 </resources>
