@@ -1062,7 +1062,7 @@ public class MainActivity extends Activity
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(Intent.ACTION_VIEW,
-                        Uri.parse("https://google.es")));
+                        Uri.parse("http://www.retruque.com")));
             }
         });
 
@@ -1201,16 +1201,9 @@ public class MainActivity extends Activity
         } catch (ExecutionException e) {
             e.printStackTrace();
         }
-        Log.d("Versiones","Play Store: " + versionPlayStore);
-        Log.d("Versiones","Local: " + versionPlayStore);
         String versionName = BuildConfig.VERSION_NAME;
-        if (versionPlayStore.equals(versionName)) {
-            Log.d("Versiones", "Misma version que Play Store: Si");
-        }
-        else{
-            Log.d("Versiones", "Misma version que Play Store: No");
-            showVersionAlert(getResources().getString(R.string.actualizar),
-                                getResources().getString(R.string.textoActualizar));
+        if (!versionPlayStore.equals(versionName)) {
+            showVersionAlert(getResources().getString(R.string.actualizar), getResources().getString(R.string.textoActualizar));
         }
 
         //Listener para todos los elementos
@@ -10775,15 +10768,12 @@ public class MainActivity extends Activity
         protected String doInBackground(String... url){
             try {
                 String newVersion = Jsoup
-                        .connect(
-                                "https://play.google.com/store/apps/details?id=com.game.guillermo.truc")
+                        .connect("https://play.google.com/store/apps/details?id=com.game.guillermo.truc")
                         .timeout(30000)
-                        .userAgent(
-                                "Mozilla/5.0 (Windows; U; WindowsNT 5.1; en-US; rv1.8.1.6) Gecko/20070725 Firefox/2.0.0.6")
+                        .userAgent("Mozilla/5.0 (Windows; U; WindowsNT 5.1; en-US; rv1.8.1.6) Gecko/20070725 Firefox/2.0.0.6")
                         .referrer("http://www.google.com").get()
                         .select("div[itemprop=softwareVersion]").first()
                         .ownText();
-               // Log.e("new Version", newVersion);
                 return newVersion;
             } catch (IOException ex) {
                 System.out.println(ex.toString());
