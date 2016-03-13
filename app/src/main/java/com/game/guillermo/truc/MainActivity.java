@@ -1033,7 +1033,7 @@ public class MainActivity extends Activity
 
         //Imagenes para el que es mano en el modo 4J
         esManoAbajo = (ImageView)findViewById(R.id.es_mano_abajo);
-        //aesManoArriba = (ImageView)findViewById(R.id.es_mano_arriba);
+        esManoArriba = (ImageView)findViewById(R.id.es_mano_arriba);
         esManoDer = (ImageView)findViewById(R.id.es_mano_derecha);
         esManoIzq = (ImageView)findViewById(R.id.es_mano_izq);
 
