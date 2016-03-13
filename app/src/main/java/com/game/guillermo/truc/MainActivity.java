@@ -1092,6 +1092,16 @@ public class MainActivity extends Activity
                             mRevealViewMenu.setVisibility(View.VISIBLE);
                         }
                     }
+                    String verInvitacionesTourShown = preferencias.getString("tour", "nunca");
+                    if (verInvitacionesTourShown != null) {
+                        if(verInvitacionesTourShown.equals("mostrandoTercer")){
+                            if(verInvitacionesTour!=null){
+                                verInvitacionesTour.cleanUp();
+                            }
+                            editor.putString("tour", "acabado");
+                            editor.commit();
+                        }
+                    }
                     for (int id : CLICKABLES) {
                         findViewById(id).setEnabled(false);
                     }
@@ -2600,7 +2610,7 @@ public class MainActivity extends Activity
                         if(verInvitacionesTour!=null){
                             verInvitacionesTour.cleanUp();
                         }
-                        editor.putString("tour", "acabado");
+                        editor.putString("tour", "tercerTour");
                         editor.commit();
                     }
                 }
@@ -8878,6 +8888,18 @@ public class MainActivity extends Activity
                         .playOn(invitaciones);
 
                     editor.putString("tour", "mostrandoSegundo");
+                    editor.commit();
+
+                }else if(tour.equals("tercerTour")){
+                    verInvitacionesTour = TourGuide.init(this).with(TourGuide.Technique.Click)
+                            .setPointer(new Pointer().setGravity(Gravity.TOP))
+                            .setToolTip(new ToolTip().setTitle(getResources().
+                                    getString(R.string.compartir_title)).setDescription(getResources()
+                                    .getString(R.string.compartir_cuerpo)).setGravity(Gravity.TOP | Gravity.CENTER_VERTICAL))
+                            .setOverlay(new Overlay())
+                            .playOn(fab);
+
+                    editor.putString("tour", "mostrandoTercer");
                     editor.commit();
 
                 }

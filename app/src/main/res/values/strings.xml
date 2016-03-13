@@ -134,6 +134,8 @@
     <string name="invitar_cuerpo">Aquí puedes invitar a una partida \na tus amigos de Google+, añádelos\n a tus círculos y pásalo en grande.</string>
     <string name="ver_invitaciones">¡Mira tus invitaciones!</string>
     <string name="ver_invitaciones_cuerpo">¿Te han invitado? Compruébalo aquí \ny demuestra quién es el mejor.</string>
+    <string name="compartir_title">Comparte</string>
+    <string name="compartir_cuerpo">Comparte Retruque! por las redes sociales, y ayudanos a continuar con la tradición.</string>
 
     <!-- Frase para compartir en WhatsApp-->
     <string name="fraseWhatsapp" translatable="false">Te desafío a una partida de Truc con Retruque! y su modo multijugador. Descárgalo desde aquí: https://play.google.com/store/apps/details?id=com.game.guillermo.truc</string>
